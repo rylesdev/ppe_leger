@@ -1,0 +1,111 @@
+MCD
+    User (1,N) — passe — (N,1) Commande
+    Commande (1,N) — contient — (N,1) Livre
+
+    Insérer la commande dans table "commande".
+    -> Insérer l'idCommande dans la table "ligneCommande".
+
+    Jointures :
+        - livre (idLivre) -> ligneCommande (idLivre & idCommande) -> commande (idCommande)
+
+
+
+
+
+
+Problème à régler :
+
+    - Créer une table supplémentaire (stockage ?)
+
+    - Travailler le front-office (html / css / js) pour améliorer l'esthétique du site
+
+    - Pour le menu principal, afficher d'abord inscription puis connexion
+
+    - Problème des commandes lors d'un "création user"
+
+    - Supprimer la procédure de vérification de disponibilité
+
+    - Faire un système qui prépare la commande uniquement lorsque le user a payé sur Paypal (Procédure stockée peut-être)
+        Si il n'a pas payé la commande doit avoir le statut 'impayé', la dateCommande null, et la dateLivraison null.
+
+
+
+
+A FAIRE :
+    Front-Office
+        Connexion :
+            - Pour le menu principal, donner une value "email" au lieu du text à la case "email".
+            - Pour le menu principal, afficher d'abord inscription puis connexion.
+
+        Général :
+            - Travailler le front-office (html / css / js) pour améliorer l'esthétique du site.
+
+        NavBar :
+            - Changer les logos ou bien mettre des écritures à la place.
+
+        Menu :
+            - Section "à la une" présentant les livres
+                - les plus vendus
+                - recommandés
+                - en prommotion
+
+
+    Back-End
+        Page
+            - Créer une page Utilisateur où un utilisateur peut changer ses informations.
+
+        PHPMYADMIN
+            - Supprimer la procédure de vérification de disponibilité.
+            - Faire un système qui prépare la commande uniquement lorsque le user a payé sur Paypal (Procédure stockée peut-être)
+                Si il n'a pas payé la commande doit avoir le statut 'impayé', la dateCommande null, et la dateLivraison null.
+
+        Panier
+            - Problème des commandes dans la page panier lors d'un "création user".
+                Il y a déjà des commandes après avoir créé un nouvel utilisateur.
+
+
+
+
+
+
+Fait :
+        Acheter :
+            - Dans l'onglet "Panier", le client pourra :
+                    - Afficher (Modele->selectAllCommande):
+                        - Le nom des livres (livre.nomLivre)
+                        - Quantité des livres (ligneCommande.quantiteLigneCommande)
+                        - Tout en bas :
+                            - Récapitulatif du nom de tous les livres (livre)
+                            - (View) Montant total de tous les livres (livre et ligneCommande)
+                            - Adresse de livraison (user)
+                            - Date de livraison (commande)
+                            - Bouton pour payer (Paypal)
+
+            - Un client peut acheter un livre en appuyant directement sur un logo dans la colonne "opération".
+            - Le client pourra choisir le nombre d'exemplaire à acheter.
+
+            - Faire une opération pour qu'un client puisse supprimer un livre de son panier.
+                        Rajouter une colonne "opération" comme les admin pour supprimer un livre du panier.
+
+
+        Gestion de stocks :
+            - Créer une page "Stockage" qui permet aux admin d'augmenter le nombre d'exemplaire pour chaque livre.
+
+
+        BDD :
+            - Faire une View qui va calculer la somme totale de la commande
+                en faisant le produit de l'article et du nombre d'exemplaires.
+
+            - Faire une view qui va trier le prix maximum, minimum, l'ordre croissant, décroissant
+                pour chaque commande dans la page "panier"->récapitulatif de la commande.
+
+            - Trigger qui empêche une commande si la commande de ce livre existe déjà dans le panier
+
+            - Trigger qui empêche une commande si le stock = 0
+
+            - Trigger qui met à jour automatiquement le stock après une commande
+
+            - Trigger qui envoie une notification dans la table "notification" après chaque commande passée
+
+            - Procédure qui hash automatiquement les mdp
+
