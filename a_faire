@@ -1,29 +1,17 @@
-MCD
-    User (1,N) — passe — (N,1) Commande
-    Commande (1,N) — contient — (N,1) Livre
-
-    Insérer la commande dans table "commande".
-    -> Insérer l'idCommande dans la table "ligneCommande".
-
-    Jointures :
-        - livre (idLivre) -> ligneCommande (idLivre & idCommande) -> commande (idCommande)
-
-
-
-
-
-
 Problème à régler :
 
-    - Créer une table supplémentaire (stockage ?)
+    - Régler le problème de relation entre la table commande et ligneCommande.
+         (Commande 1,n -> (Composer) -> 1,1 LigneCommande).
 
-    - Travailler le front-office (html / css / js) pour améliorer l'esthétique du site
+    - Créer des tables supplémentaires (voir dans A Faire -> Back End -> PHPMYADMIN).
 
-    - Pour le menu principal, afficher d'abord inscription puis connexion
+    - Travailler le front-office (html / css / js) pour améliorer l'esthétique du site.
 
-    - Problème des commandes lors d'un "création user"
+    - Pour le menu principal, afficher d'abord inscription puis connexion.
 
-    - Supprimer la procédure de vérification de disponibilité
+    - Problème des commandes lors d'un "création user".
+
+    - Supprimer la procédure de vérification de disponibilité.
 
     - Faire un système qui prépare la commande uniquement lorsque le user a payé sur Paypal (Procédure stockée peut-être)
         Si il n'a pas payé la commande doit avoir le statut 'impayé', la dateCommande null, et la dateLivraison null.
@@ -52,9 +40,33 @@ A FAIRE :
 
     Back-End
         Page
-            - Créer une page Utilisateur où un utilisateur peut changer ses informations.
+            - Créer une page Utilisateur où un utilisateur peut changer ses informations (email, mdp, nom, etc...)
 
         PHPMYADMIN
+            - Modifier la table commande pour qu'elle contienne plusieurs ligneCommande (voir MCD).
+                Actuellement commande = ligneCommande, or il faut que commande < ligneCommande
+                ligneCommande = livre
+                commande = plusieurs livres
+                donc commande = 1 ou plusieurs ligneCommande (commande 1,n -> (Composer) -> 1,1 ligneCommande)
+
+            - Rajouter l'une de ces tables :
+                - Catégorie (relation avec Livre)
+                    Un Livre appartient à une catégorie (Histoire, Roman, Poème, etc...).
+                - Edition (relation avec Livre)
+                    Un Livre appartient à une maison d'édition.
+                - Promotion (Relation avec Livre)
+                    Gère les dates et les prix de promotions des livres en promotion.
+                - Avis (relation avec User)
+                    Un User peut mettre un avis. Plus tard, créer une view pour afficher les livres les mieux vendus.
+                - Abonnement (Relation avec User)
+                    Un User peut s'abonner pour avoir des avantages, comme 1 livre offert au bout de 5 livres achetés par exemple.
+
+                - Particulier (HERITAGE DE USER)
+                    Utiliser le trigger pour cet héritage (bureau)
+                - Société (HERITAGE DE USER)
+                    Utiliser le trigger pour cet héritage (bureau)
+
+
             - Supprimer la procédure de vérification de disponibilité.
             - Faire un système qui prépare la commande uniquement lorsque le user a payé sur Paypal (Procédure stockée peut-être)
                 Si il n'a pas payé la commande doit avoir le statut 'impayé', la dateCommande null, et la dateLivraison null.
@@ -62,6 +74,8 @@ A FAIRE :
         Panier
             - Problème des commandes dans la page panier lors d'un "création user".
                 Il y a déjà des commandes après avoir créé un nouvel utilisateur.
+
+
 
 
 
