@@ -218,10 +218,14 @@ DELIMITER ;
 --
 
 CREATE TABLE `ligneCommande` (
+  `idLigneCommande` int auto_increment not null,
   `idCommande` int NOT NULL,
   `idLivre` int NOT NULL,
-  `quantiteLigneCommande` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `quantiteLigneCommande` int NOT NULL DEFAULT '1',
+  primary key (idLigneCommande),
+  FOREIGN KEY (idCommande) REFERENCES commande(idCommande) ON DELETE CASCADE,
+  FOREIGN KEY (idLivre) REFERENCES livre(idLivre) ON DELETE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `ligneCommande`

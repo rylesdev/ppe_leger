@@ -2,6 +2,7 @@
 
 <?php
 if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="admin"){
+    $idUser = $_SESSION['idUser'];
 
     echo "<h3>Modifier le stockage des livres</h3>";
     echo "<br>";
@@ -21,7 +22,7 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="admin"){
 if (isset($_POST['Filtrer'])){
     $lesLivres = $unControleur->selectLikeLivres($_POST['filtre']);
 } else {
-    $lesLivres = $unControleur->selectAllLivres ();
+    $lesLivres = $unControleur->selectAllLivres ($idUser);
 }
 
 require_once("vue/vue_select_livre_stockage.php");

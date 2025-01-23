@@ -13,8 +13,8 @@
 
 		/****************** SELECT  ******************/
 
-		public function selectAllLivres (){
-			return $this->unModele->selectAllLivres();
+		public function selectAllLivres ($idUser){
+			return $this->unModele->selectAllLivres($idUser);
 		}
 
 		public function selectLikeLivres ($filtre){
@@ -27,6 +27,10 @@
 
 		public function selectAdresseUser ($idUser){
 			return $this->unModele->selectAdresseUser($idUser);
+		}
+
+		public function selectLigneCommande ($idCommande){
+			return $this->unModele->selectLigneCommande($idCommande);
 		}
 
 		public function selectDateLivraisonCommande($idUser) {

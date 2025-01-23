@@ -2,6 +2,7 @@
 
 <?php
 if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
+    $idUser = $_SESSION['idUser'];
 
     require_once("vue/vue_panier.php");
     if (isset($_GET['action']) && isset($_GET['idCommande']) ){
@@ -29,7 +30,7 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
     if (isset($_POST['Filtrer'])) {
         $lesLivres = $unControleur->selectLikeLivres($_POST['filtre']);
     } else {
-        $lesLivres = $unControleur->selectAllLivres();
+        $lesLivres = $unControleur->selectAllLivres($idUser);
     }
 
 } else {

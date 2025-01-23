@@ -19,13 +19,23 @@ if (isset($_GET['action']) && isset($_GET['idLivre']) ){
                             break;
 
         case "acheter" :    if (isset($quantiteLivre) && $quantiteLivre > 0) {
+                                /*$idCommande = $unControleur->insertCommande($idUser);
+                                $unControleur->insertLigneCommande($idCommande, $idLivre, $quantiteLivre);*/
                                 $idCommande = $unControleur->insertCommande($idUser);
-                                $unControleur->insertLigneCommande($idCommande, $idLivre, $quantiteLivre);
-                            } elseif (isset($quantiteLivre) && $quantiteLivre == null) {
+                                if ($idCommande) {
+                                    $lignesCommande = $unControleur->selectLigneCommande($idCommande);
+                                    foreach ($lignesCommande as $ligne) {
+                                        $idLivre = $ligne['idLivre'];
+                                        $unControleur->insertLigneCommande(153, 5, 5);
+                                    }
+                                } else {
+                                    echo "Erreur lors de l'insertion de la commande.";
+                                }
+                            } /*elseif (isset($quantiteLivre) && $quantiteLivre == null) {
                                 $quantiteLivre = 1;
                                 $idCommande = $unControleur->insertCommande($idUser);
                                 $unControleur->insertLigneCommande($idCommande, $idLivre, $quantiteLivre);
-                            }
+                            }*/
     }
 }
 
@@ -65,7 +75,8 @@ if (isset($_POST['Modifier'])) {
 if (isset($_POST['Filtrer'])) {
     $lesLivres = $unControleur->selectLikeLivres($_POST['filtre']);
 } else {
-    $lesLivres = $unControleur->selectAllLivres();
+    $idUser = $_SESSION['idUser'];
+    $lesLivres = $unControleur->selectAllLivres($idUser);
 }
 
 require_once("vue/vue_select_livre.php");

@@ -29,7 +29,7 @@
 
 		/**************** SELECT ****************/
 
-		public function selectAllLivres (){
+		public function selectAllLivres ($idUser){
 			$requete =  "select l.*
 				        from livre l;";
 			$exec = $this->unPdo->prepare ($requete);
@@ -77,6 +77,16 @@
             return $exec->fetch();
         }
 
+        public function selectLigneCommande($idCommande) {
+            $requete =  "select * 
+                        from ligneCommande 
+                        where idCommande = ?;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue (1, $idCommande, PDO::PARAM_STR);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
         public function selectDateLivraisonCommande($idUser) {
             $requete =  "select dateLivraisonCommande 
                         from commande
@@ -87,10 +97,12 @@
             return $exec->fetch();
         }
 
-        public function selectViewTotalLivre() {
+        public function selectViewTotalLivre($idUser) {
             $requete =  "select * 
-                        from vTotalLivre;";
+                        from vTotalLivre
+                        where idUser = ?;";
             $exec = $this->unPdo->prepare($requete);
+            $exec->bindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
             return $exec->fetchAll();
         }
@@ -100,7 +112,7 @@
                         from vTotalCommande   
                         where idUser = ?;";
             $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_STR);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
             return $exec->fetch();
         }
@@ -234,11 +246,10 @@
             return $exec->fetchAll();
 		}
 
-        public function insertLigneCommande($idCommande, $idLivre, $quantiteLivre)
-        {
+        public function insertLigneCommande($idCommande, $idLivre, $quantiteLivre) {
             try {
                 $requete = "insert into ligneCommande
-                            values (?, ?, ?);";
+                            values (null, ?, ?, ?);";
                 $execInsert = $this->unPdo->prepare($requete);
                 $execInsert->bindValue(1, $idCommande, PDO::PARAM_INT);
                 $execInsert->bindValue(2, $idLivre, PDO::PARAM_INT);
