@@ -87,6 +87,26 @@
             return $exec->fetchAll();
         }
 
+        public function selectCommandeEnCours($idUser) {
+            try {
+                $requete =  "select idCommande 
+                            from commande 
+                            where idUser = ? and statutCommande = 'en attente'";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $idUser, PDO::PARAM_INT);
+                $exec->execute();
+                $result = $exec->fetch(PDO::FETCH_ASSOC);
+                if ($result) {
+                    return $result['idCommande'];
+                } else {
+                    return null;
+                }
+            } catch (PDOException $exp) {
+                echo $exp->getMessage();
+                return null;
+            }
+        }
+
         public function selectDateLivraisonCommande($idUser) {
             $requete =  "select dateLivraisonCommande 
                         from commande

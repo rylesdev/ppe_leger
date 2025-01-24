@@ -9,14 +9,17 @@ if (!isset($_SESSION['commandeEnCours'])) {
 }
 
 if (isset($_GET['action']) && isset($_GET['idLivre']) ){
-    if (isset($_POST['QuantiteLivre'])) {
-        /*$_SESSION['panier'] = [];*/
-        $quantiteLivre = $_POST['insertQuantiteLivre'];
-    }
 
     $action  = $_GET['action'];
     $idLivre = $_GET['idLivre'];
     $idUser = $_SESSION['idUser'];
+
+    if (isset($_POST['QuantiteLivre'])) {
+        $_SESSION['quantiteLivre'] = $_POST['insertQuantiteLivre'];
+        $quantiteLivre = $_SESSION['quantiteLivre'];
+    } else {
+        $quantiteLivre = isset($_SESSION['quantiteLivre']) ? $_SESSION['quantiteLivre'] : 0;
+    }
 
     switch($action){
         case "sup"  :       $unControleur->deleteLivre($idLivre);
@@ -26,15 +29,18 @@ if (isset($_GET['action']) && isset($_GET['idLivre']) ){
                             break;
 
         case "acheter" :    if (isset($idLivre) && isset($quantiteLivre) && $quantiteLivre > 0) {
-                                if (($commandeEnCours === 0) || ($commandeEnCours === null)) {
+                                // Vérifiez si une commande en attente existe déjà pour cet utilisateur
+                                $idCommande = $unControleur->selectCommandeEnCours($idUser);
+
+                                if (!$idCommande) {
+                                    // Si aucune commande en attente, créez une nouvelle commande
                                     $idCommande = $unControleur->insertCommande($idUser);
                                     if ($idCommande) {
-                                        $commandeEnCours = $idCommande;
+                                        echo "<h3 style='color: green;'>Nouvelle commande créée.</h3>";
                                     } else {
-                                        echo "<h3 style='color: red;'>Erreur : Impossible de créer la commande.</h3>";
+                                        echo "<h3 style='color: red;'>Erreur : Impossible de créer une nouvelle commande.</h3>";
+                                        break;
                                     }
-                                } else {
-                                    $idCommande = $commandeEnCours;
                                 }
 
 // Le problème vient du fait que, malgré qu'il existe déjà une "$commandeEnCours", le "insertCommande" se fait tout de même.
@@ -42,17 +48,18 @@ if (isset($_GET['action']) && isset($_GET['idLivre']) ){
 // Or, il faudrait que la commande ne soit crée que si je clique sur "Acheter" pour la première fois.
 // commande -> 1,n (Contient) -> 1,1 ligneCommande
 
-                                $result = $unControleur->insertLigneCommande($idCommande, $idLivre, $quantiteLivre);
+            // Ajouter une ligne de commande pour ce livre
+                                    $result = $unControleur->insertLigneCommande($idCommande, $idLivre, $quantiteLivre);
 
-                                if ($result) {
-                                    echo "<h3 style='color: green;'>Livre ajouté à la commande avec succès.</h3>";
+                                    if ($result) {
+                                        echo "<h3 style='color: green;'>Livre ajouté à la commande avec succès.</h3>";
+                                    } else {
+                                        echo "<h3 style='color: red;'>Erreur : Impossible d'ajouter le livre à la commande.</h3>";
+                                    }
                                 } else {
-                                    echo "<h3 style='color: red;'>Erreur : Impossible d'ajouter le livre à la commande.</h3>";
+                                    echo "<h3 style='color: red;'>Erreur : Quantité non valide ou livre manquant.</h3>";
                                 }
-                            } else {
-                                echo "<h3 style='color: red;'>Erreur : Quantité non valide ou livre manquant.</h3>";
-                            }
-                                break;
+                                    break;
 
             /*if (isset($idLivre) && isset($quantiteLivre) && $quantiteLivre > 0) {
                                 if (!isset($_SESSION['panier'][$idLivre])) {

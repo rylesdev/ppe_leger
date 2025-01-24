@@ -19,6 +19,17 @@ Priorité :
     Or, il faudrait une seule "insertCommande" pour plusieurs "insertLigneCommande".
 
 
+    Réponse :
+        Faire une condition (if == 'en attente' where idUser = '?')
+        qui va vérifier pour le user en question, si il y a une commande qui est en attente (qui n'a pas été payée).
+        Si c'est le cas alors il faut que chaque nouvelle insertion de ligneCommande se fasse avec l'idCommande correspondant au statutCommande = 'en attente'.
+
+        Maintenant il faut juste faire un moyen pour que, quand le user clique sur Paypal,
+        la commande soit passée en 'expédiée' et que la dateCommande soit la date actuelle.
+
+
+
+
     - Problème de "Erreur : Livre déjà dans le panier. Veuillez modifier le nombre d'exemplaire."
         pour un nouveau user.
 

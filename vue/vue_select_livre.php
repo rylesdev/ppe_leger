@@ -43,8 +43,6 @@ $idUser = $_SESSION['idUser'];
 
             if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
                 echo "<td>";
-                echo "<a href='index.php?page=2&action=acheter&idLivre=".$unLivre['idLivre']."&idUser=".$idUser."'>"."Sélectionner ce livre  <img src='images/acheter.png' heigth='30' width='30' padding-left:'50'> </a>";
-
 ?>
 <form method="post">
     <table>
@@ -53,11 +51,12 @@ $idUser = $_SESSION['idUser'];
             <td> <input type="text" name="insertQuantiteLivre" style="width:30px"></td>
         </tr>
         <tr>
-            <td> <input type="submit" name="QuantiteLivre" value="Ajouter au panier" class="table-success"></td>
+            <td> <input type="submit" name="QuantiteLivre" value="Confirmer la quantité" class="table-success"></td>
         </tr>
     </table>
 </form>
 <?php
+                echo "<a href='index.php?page=2&action=acheter&idLivre=".$unLivre['idLivre']."&idUser=".$idUser."'>"."Ajouter au panier  <img src='images/acheter.png' heigth='30' width='30' padding-left:'50'> </a>";
                 echo "</td>";
             }
             echo "</tr>";

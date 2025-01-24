@@ -33,6 +33,10 @@
 			return $this->unModele->selectLigneCommande($idCommande);
 		}
 
+		public function selectCommandeEnCours($idUser) {
+			return $this->unModele->selectCommandeEnCours($idUser);
+		}
+
 		public function selectDateLivraisonCommande($idUser) {
 			return $this->unModele->selectDateLivraisonCommande($idUser);
 		}
