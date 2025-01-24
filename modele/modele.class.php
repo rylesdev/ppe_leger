@@ -51,7 +51,7 @@
 						            l.imageLivre, 
 						            l.exemplaireLivre, 
 						            l.prixLivre;";
-			$exec = $this->unPdo->prepare ($requete); 
+			$exec = $this->unPdo->prepare ($requete);
 			$donnees = array(":filtre"=>"%".$filtre."%");
 			$exec->execute ($donnees); 
 			return $exec->fetchAll(); 
@@ -255,7 +255,7 @@
 		public function insertCommande ($idUser) {
             try {
                 $requete =  "insert into commande 
-			                values (null, curdate(), 'en attente', DATE_ADD(CURDATE(), INTERVAL 7 DAY), ?);";
+			                values (null, null, 'en attente', null, ?);";
 			$exec = $this->unPdo->prepare ($requete);
 			$exec->BindValue (1, $idUser, PDO::PARAM_INT);
 			$exec->execute();
@@ -324,8 +324,10 @@
 
         public function updateCommande ($idCommande) {
             $requete =  "update commande
-                       set statutCommande = 'expédiée'
-                       where idCommande = ?;";
+                        set dateCommande = curdate(),
+                        statutCommande = 'expédiée', 
+                        dateLivraisonCommande = DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+                        where idCommande = ?;";
             $exec = $this->unPdo->prepare ($requete);
             $exec->BindValue (1, $idCommande, PDO::PARAM_INT);
             $exec->execute();

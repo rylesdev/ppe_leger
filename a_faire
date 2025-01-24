@@ -1,38 +1,4 @@
-idCommande (
-    idCommande
-    idLigneCommande
-    idUser
-)
-
-idLigneCommande (
-    idLigneCommande
-    idLivre
-    quantiteLivre
-)
-
-
-
 Priorité :
-
-    Régler le problème de l'insertion de ligneCommande et de commande.
-    Le problème provient du fait qu'il y a plusieurs "insertCommande" malgré plusieurs "insertLigneCommande".
-    Or, il faudrait une seule "insertCommande" pour plusieurs "insertLigneCommande".
-
-
-    Réponse :
-        Faire une condition (if == 'en attente' where idUser = '?')
-        qui va vérifier pour le user en question, si il y a une commande qui est en attente (qui n'a pas été payée).
-        Si c'est le cas alors il faut que chaque nouvelle insertion de ligneCommande se fasse avec l'idCommande correspondant au statutCommande = 'en attente'.
-
-        Maintenant il faut juste faire un moyen pour que, quand le user clique sur Paypal,
-        la commande soit passée en 'expédiée' et que la dateCommande soit la date actuelle.
-
-
-
-
-    - Problème de "Erreur : Livre déjà dans le panier. Veuillez modifier le nombre d'exemplaire."
-        pour un nouveau user.
-
 
 
 A FAIRE :
@@ -52,19 +18,21 @@ A FAIRE :
                 - recommandés
                 - en prommotion
 
+        Panier :
+            - (c_panier.php)Trouver un moyen pour que, quand le user clique sur Paypal,
+               l'utilisateur soit redirigé vers Paypal.
+               "header("Location: https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR");"
+
 
     Back-End
+        Livre
+            - Enlever tous les messages d'erreurs qui apparaissent pour rien.
+
         Page
             - Créer une page Utilisateur où un utilisateur peut changer ses informations (email, mdp, nom, etc...)
 
         PHPMYADMIN
-            - Modifier la table commande pour qu'elle contienne plusieurs ligneCommande (voir MCD).
-                Actuellement commande = ligneCommande, or il faut que commande < ligneCommande
-                ligneCommande = livre
-                commande = plusieurs livres
-                donc commande = 1 ou plusieurs ligneCommande (commande 1,n -> (Composer) -> 1,1 ligneCommande)
-
-            - Rajouter l'une de ces tables :
+            - Rajouter ces tables :
                 - Catégorie (relation avec Livre)
                     Un Livre appartient à une catégorie (Histoire, Roman, Poème, etc...).
                 - Edition (relation avec Livre)
@@ -81,27 +49,35 @@ A FAIRE :
                 - Société (HERITAGE DE USER)
                     Utiliser le trigger pour cet héritage (bureau)
 
-
-            - Supprimer la procédure de vérification de disponibilité.
-            - Faire un système qui prépare la commande uniquement lorsque le user a payé sur Paypal (Procédure stockée peut-être)
-                Si il n'a pas payé la commande doit avoir le statut 'impayé', la dateCommande null, et la dateLivraison null.
-
-            - Le "Nombre Exemplaire" des livres ne descend pas avec le user "Chouaki".
-
-            - Modifier tous les "insertCommande" et "insertLigneCommande" dans les vues.
-
         Panier
-            - Problème de "Erreur : Livre déjà dans le panier. Veuillez modifier le nombre d'exemplaire."
-                pour un nouveau user.
+            - Lorsque l'utilisateur appuie sur "Paypal" pour confirmer sa commande (et qu'elle passe en expédiée),
+                il faut qu'après, il n'y ai plus de livre dans le "Récapitulatif de la commande",
+                et il faut aussi que la "Somme à payer" passe à 0.
+                
+            - Le "Filtrer par" ne marche pas pour tous les user dans la page "panier" mais marche dans la page "livre".
 
-
-
+            - Pour un nouveau user :
+                - Quand je supprime un livre, tous les livres se suppriment.
+                - Quand j'ajoute un livre avec une quantité de 12 (par exemple), la quantité sélectionnée est 3.
+                    Probablement un problème de synchronisation entre les "Confirmer la quantité".
+                        La machine doit certainement prendre les valeurs que j'ai inséré auparavant.
+                - Quand je supprime un livre, la quantité du livre (exemplaireLivre) ne se met par à jour.
 
 
 
 
 
 Fait :
+- Faire un système qui prépare la commande uniquement lorsque le user a payé sur Paypal
+    Si il n'a pas payé la commande doit avoir le statut 'en attente', la dateCommande null, et la dateLivraison null.
+
+- Modifier la table commande pour qu'elle contienne plusieurs ligneCommande (voir MCD).
+    Actuellement commande = ligneCommande, or il faut que commande < ligneCommande
+    ligneCommande = livre
+    commande = plusieurs livres
+    donc commande = 1 ou plusieurs ligneCommande (commande 1,n -> (Composer) -> 1,1 ligneCommande)
+
+
         Acheter :
             - Dans l'onglet "Panier", le client pourra :
                     - Afficher (Modele->selectAllCommande):

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : dim. 12 jan. 2025 à 20:25
+-- Généré le : ven. 24 jan. 2025 à 17:36
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -39,19 +39,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `pHashMdpUser` (IN `p_idUser` INT(10
                             );
                         END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pVerifierDisponibiliteLivre` (IN `idLivre` INT, IN `quantiteDemandee` INT, OUT `disponible` BOOLEAN)   begin
-                            declare stock int;
-                            select exemplaireLivre
-                            into stock
-                            from livre
-                            WHERE idLivre = idLivre;
-                            if stock >= quantiteDemandee then
-                                set disponible = TRUE;
-                            else
-                                set disponible = FALSE;
-                            end if;
-                        end$$
-
 DELIMITER ;
 
 -- --------------------------------------------------------
@@ -73,64 +60,63 @@ CREATE TABLE `commande` (
 --
 
 INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLivraisonCommande`, `idUser`) VALUES
-(153, '2025-01-10', 'en attente', '2025-01-17', 2),
-(158, '2025-01-11', 'en attente', '2025-01-18', 2),
-(159, '2025-01-11', 'en attente', '2025-01-18', 2),
-(160, '2025-01-11', 'en attente', '2025-01-18', 2),
-(161, '2025-01-11', 'en attente', '2025-01-18', 2),
-(164, '2025-01-12', 'en attente', '2025-01-19', 2),
-(165, '2025-01-12', 'en attente', '2025-01-19', 2),
-(166, '2025-01-12', 'en attente', '2025-01-19', 2),
-(167, '2025-01-12', 'en attente', '2025-01-19', 2),
-(168, '2025-01-12', 'en attente', '2025-01-19', 2),
-(169, '2025-01-12', 'en attente', '2025-01-19', 2),
-(170, '2025-01-12', 'en attente', '2025-01-19', 2),
-(171, '2025-01-12', 'en attente', '2025-01-19', 2),
-(172, '2025-01-12', 'en attente', '2025-01-19', 2),
-(173, '2025-01-12', 'en attente', '2025-01-19', 2),
-(174, '2025-01-12', 'en attente', '2025-01-19', 2),
-(175, '2025-01-12', 'en attente', '2025-01-19', 2),
-(176, '2025-01-12', 'en attente', '2025-01-19', 2),
-(177, '2025-01-12', 'en attente', '2025-01-19', 2),
-(178, '2025-01-12', 'en attente', '2025-01-19', 2),
-(179, '2025-01-12', 'en attente', '2025-01-19', 2),
-(180, '2025-01-12', 'en attente', '2025-01-19', 2),
-(181, '2025-01-12', 'en attente', '2025-01-19', 2),
-(182, '2025-01-12', 'en attente', '2025-01-19', 2),
-(183, '2025-01-12', 'en attente', '2025-01-19', 2),
-(184, '2025-01-12', 'en attente', '2025-01-19', 2),
-(185, '2025-01-12', 'en attente', '2025-01-19', 2),
-(186, '2025-01-12', 'en attente', '2025-01-19', 2),
-(187, '2025-01-12', 'en attente', '2025-01-19', 2),
-(188, '2025-01-12', 'en attente', '2025-01-19', 2),
-(189, '2025-01-12', 'en attente', '2025-01-19', 2),
-(190, '2025-01-12', 'en attente', '2025-01-19', 2),
-(191, '2025-01-12', 'en attente', '2025-01-19', 2),
-(192, '2025-01-12', 'en attente', '2025-01-19', 2),
-(193, '2025-01-12', 'en attente', '2025-01-19', 2),
-(194, '2025-01-12', 'en attente', '2025-01-19', 2),
-(195, '2025-01-12', 'en attente', '2025-01-19', 2),
-(196, '2025-01-12', 'en attente', '2025-01-19', 2),
-(197, '2025-01-12', 'en attente', '2025-01-19', 2),
-(198, '2025-01-12', 'en attente', '2025-01-19', 2),
-(199, '2025-01-12', 'en attente', '2025-01-19', 2),
-(200, '2025-01-12', 'en attente', '2025-01-19', 2),
-(201, '2025-01-12', 'en attente', '2025-01-19', 2),
-(202, '2025-01-12', 'en attente', '2025-01-19', 2),
-(203, '2025-01-12', 'en attente', '2025-01-19', 2),
-(204, '2025-01-12', 'en attente', '2025-01-19', 2),
-(205, '2025-01-12', 'en attente', '2025-01-19', 2),
-(206, '2025-01-12', 'en attente', '2025-01-19', 2),
-(207, '2025-01-12', 'en attente', '2025-01-19', 2),
-(210, '2025-01-12', 'en attente', '2025-01-19', 2),
-(211, '2025-01-12', 'en attente', '2025-01-19', 2),
-(212, '2025-01-12', 'en attente', '2025-01-19', 2),
-(213, '2025-01-12', 'en attente', '2025-01-19', 2),
-(214, '2025-01-12', 'en attente', '2025-01-19', 2),
-(215, '2025-01-12', 'en attente', '2025-01-19', 2),
-(216, '2025-01-12', 'en attente', '2025-01-19', 2),
-(217, '2025-01-12', 'en attente', '2025-01-19', 2),
-(218, '2025-01-12', 'en attente', '2025-01-19', 2),
+(153, '2025-01-10', 'expédiée', '2025-01-17', 2),
+(158, '2025-01-11', 'expédiée', '2025-01-18', 2),
+(159, '2025-01-11', 'expédiée', '2025-01-18', 2),
+(160, '2025-01-11', 'expédiée', '2025-01-18', 2),
+(161, '2025-01-11', 'expédiée', '2025-01-18', 2),
+(164, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(165, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(166, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(167, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(168, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(169, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(170, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(171, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(172, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(173, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(174, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(175, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(176, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(177, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(178, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(179, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(180, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(181, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(182, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(183, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(184, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(185, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(186, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(187, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(188, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(189, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(190, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(191, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(192, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(193, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(194, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(195, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(196, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(197, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(198, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(199, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(200, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(201, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(202, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(203, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(204, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(205, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(206, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(207, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(210, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(211, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(212, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(213, '2025-01-12', 'expédiée', '2025-01-19', 2),
+(214, '2025-01-12', 'expédiée', '2025-01-24', 2),
+(215, '2025-01-24', 'expédiée', '2025-01-31', 2),
+(217, '2025-01-24', 'expédiée', '2025-01-31', 2),
+(218, '2025-01-24', 'expédiée', '2025-01-31', 2),
 (219, '2025-01-12', 'en attente', '2025-01-19', 2),
 (220, '2025-01-12', 'en attente', '2025-01-19', 2),
 (221, '2025-01-12', 'en attente', '2025-01-19', 2),
@@ -176,40 +162,67 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (261, '2025-01-12', 'en attente', '2025-01-19', 2),
 (262, '2025-01-12', 'en attente', '2025-01-19', 2),
 (263, '2025-01-12', 'en attente', '2025-01-19', 2),
-(264, '2025-01-12', 'en attente', '2025-01-19', 2);
-
---
--- Déclencheurs `commande`
---
-DELIMITER $$
-CREATE TRIGGER `tExemplaireLivreCommande` BEFORE INSERT ON `commande` FOR EACH ROW begin
-    declare compteurCommande int;
-    declare compteurLigneCommande int;
-
-    select count(idCommande)
-    into compteurCommande
-    from commande
-    where idCommande = NEW.idCommande;
-
-    select count(idCommande)
-    into compteurLigneCommande
-    from ligneCommande
-    where idCommande = NEW.idCommande;
-
-    if compteurCommande >= compteurLigneCommande then
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = "Erreur : Livre déjà dans le panier. Veuillez modifier le nombre d'exemplaire.";
-    end if;
-end
-$$
-DELIMITER ;
-DELIMITER $$
-CREATE TRIGGER `tInsertNotification` AFTER INSERT ON `commande` FOR EACH ROW begin
-insert into notification
-values (null, CONCAT('Nouvelle commande. ID : ', NEW.idCommande), curdate());
-end
-$$
-DELIMITER ;
+(264, '2025-01-12', 'en attente', '2025-01-19', 2),
+(271, '2025-01-24', 'expédiée', '2025-01-31', 23),
+(272, '2025-01-24', 'expédiée', '2025-01-31', 23),
+(273, '2025-01-24', 'expédiée', '2025-01-31', 23),
+(274, '2025-01-24', 'expédiée', '2025-01-31', 23),
+(275, '2025-01-23', 'en attente', '2025-01-30', 23),
+(276, '2025-01-23', 'en attente', '2025-01-30', 23),
+(277, '2025-01-23', 'en attente', '2025-01-30', 23),
+(278, '2025-01-23', 'en attente', '2025-01-30', 23),
+(279, '2025-01-23', 'en attente', '2025-01-30', 23),
+(280, '2025-01-23', 'en attente', '2025-01-30', 23),
+(281, '2025-01-23', 'en attente', '2025-01-30', 23),
+(282, '2025-01-23', 'en attente', '2025-01-30', 23),
+(283, '2025-01-23', 'en attente', '2025-01-30', 23),
+(284, '2025-01-23', 'en attente', '2025-01-30', 23),
+(286, '2025-01-24', 'en attente', '2025-01-31', 2),
+(289, '2025-01-24', 'en attente', '2025-01-31', 2),
+(290, '2025-01-24', 'en attente', '2025-01-31', 2),
+(291, '2025-01-24', 'en attente', '2025-01-31', 2),
+(292, '2025-01-24', 'en attente', '2025-01-31', 2),
+(293, '2025-01-24', 'en attente', '2025-01-31', 2),
+(294, '2025-01-24', 'en attente', '2025-01-31', 2),
+(295, '2025-01-24', 'en attente', '2025-01-31', 2),
+(296, '2025-01-24', 'en attente', '2025-01-31', 2),
+(297, '2025-01-24', 'en attente', '2025-01-31', 2),
+(298, '2025-01-24', 'en attente', '2025-01-31', 2),
+(299, '2025-01-24', 'en attente', '2025-01-31', 2),
+(300, '2025-01-24', 'en attente', '2025-01-31', 2),
+(301, '2025-01-24', 'en attente', '2025-01-31', 2),
+(302, '2025-01-24', 'en attente', '2025-01-31', 2),
+(303, '2025-01-24', 'en attente', '2025-01-31', 2),
+(304, '2025-01-24', 'en attente', '2025-01-31', 2),
+(305, '2025-01-24', 'en attente', '2025-01-31', 2),
+(306, '2025-01-24', 'en attente', '2025-01-31', 2),
+(307, '2025-01-24', 'en attente', '2025-01-31', 2),
+(308, '2025-01-24', 'en attente', '2025-01-31', 2),
+(309, '2025-01-24', 'en attente', '2025-01-31', 2),
+(310, '2025-01-24', 'en attente', '2025-01-31', 2),
+(311, '2025-01-24', 'en attente', '2025-01-31', 2),
+(312, '2025-01-24', 'en attente', '2025-01-31', 2),
+(313, '2025-01-24', 'en attente', '2025-01-31', 2),
+(314, '2025-01-24', 'en attente', '2025-01-31', 2),
+(315, '2025-01-24', 'en attente', '2025-01-31', 2),
+(316, '2025-01-24', 'en attente', '2025-01-31', 2),
+(317, '2025-01-24', 'en attente', '2025-01-31', 2),
+(318, '2025-01-24', 'en attente', '2025-01-31', 2),
+(319, '2025-01-24', 'en attente', '2025-01-31', 2),
+(320, '2025-01-24', 'en attente', '2025-01-31', 2),
+(321, '2025-01-24', 'en attente', '2025-01-31', 2),
+(322, '2025-01-24', 'en attente', '2025-01-31', 2),
+(323, '2025-01-24', 'en attente', '2025-01-31', 2),
+(324, '2025-01-24', 'en attente', '2025-01-31', 2),
+(325, '2025-01-24', 'en attente', '2025-01-31', 2),
+(326, '2025-01-24', 'en attente', '2025-01-31', 2),
+(327, '2025-01-24', 'en attente', '2025-01-31', 2),
+(328, '2025-01-24', 'en attente', '2025-01-31', 2),
+(329, '2025-01-24', 'en attente', '2025-01-31', 2),
+(330, '2025-01-24', 'en attente', '2025-01-31', 2),
+(331, '2025-01-24', 'en attente', '2025-01-31', 2),
+(332, '2025-01-24', 'en attente', '2025-01-31', 2),
+(333, '2025-01-24', 'en attente', NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -218,90 +231,117 @@ DELIMITER ;
 --
 
 CREATE TABLE `ligneCommande` (
-  `idLigneCommande` int auto_increment not null,
+  `idLigneCommande` int NOT NULL,
   `idCommande` int NOT NULL,
   `idLivre` int NOT NULL,
-  `quantiteLigneCommande` int NOT NULL DEFAULT '1',
-  primary key (idLigneCommande),
-  FOREIGN KEY (idCommande) REFERENCES commande(idCommande) ON DELETE CASCADE,
-  FOREIGN KEY (idLivre) REFERENCES livre(idLivre) ON DELETE CASCADE
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `quantiteLigneCommande` int NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `ligneCommande`
 --
 
-INSERT INTO `ligneCommande` (`idCommande`, `idLivre`, `quantiteLigneCommande`) VALUES
-(158, 1, 5),
-(159, 1, 1),
-(160, 4, 1),
-(161, 2, 1),
-(190, 1, 1),
-(191, 1, 1),
-(192, 1, 1),
-(198, 8, 3),
-(213, 1, 1),
-(214, 1, 1),
-(215, 1, 1),
-(216, 1, 1),
-(217, 1, 1),
-(218, 1, 1),
-(219, 1, 1),
-(220, 2, 1),
-(223, 1, 1),
-(227, 1, 1),
-(228, 1, 1),
-(235, 1, 1),
-(236, 1, 1),
-(238, 1, 1),
-(239, 1, 1),
-(240, 1, 1),
-(246, 1, 1),
-(247, 1, 1);
+INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quantiteLigneCommande`) VALUES
+(521, 289, 1, 32),
+(533, 290, 1, 3),
+(534, 291, 1, 5),
+(535, 292, 1, 4),
+(536, 293, 1, 2),
+(537, 294, 1, 2),
+(538, 295, 1, 3),
+(539, 296, 1, 3),
+(540, 297, 1, 3),
+(543, 298, 1, 3),
+(544, 299, 1, 6),
+(545, 300, 1, 6),
+(546, 301, 1, 3),
+(547, 302, 2, 3),
+(548, 303, 3, 3),
+(549, 304, 3, 3),
+(550, 305, 3, 3),
+(551, 306, 1, 3),
+(552, 307, 2, 3),
+(553, 308, 2, 3),
+(554, 309, 1, 2),
+(555, 310, 2, 2),
+(556, 311, 3, 2),
+(557, 312, 1, 3),
+(558, 313, 1, 2),
+(559, 314, 1, 2),
+(560, 315, 1, 3),
+(561, 316, 1, 3),
+(562, 317, 1, 3),
+(563, 318, 1, 3),
+(564, 319, 1, 3),
+(565, 320, 1, 3),
+(566, 321, 1, 3),
+(567, 322, 1, 3),
+(568, 323, 1, 3),
+(569, 324, 1, 3),
+(570, 325, 1, 3),
+(571, 330, 1, 3),
+(572, 331, 1, 3),
+(573, 332, 1, 3),
+(574, 153, 1, 3),
+(575, 153, 1, 3),
+(576, 153, 1, 3),
+(577, 153, 1, 3),
+(578, 153, 1, 5),
+(579, 159, 1, 5),
+(607, 271, 1, 5),
+(608, 271, 5, 5),
+(609, 274, 8, 3);
 
 --
 -- Déclencheurs `ligneCommande`
 --
 DELIMITER $$
 CREATE TRIGGER `tExemplaireLivreLigneCommande` BEFORE INSERT ON `ligneCommande` FOR EACH ROW begin
-declare existingQuantity int;
-select quantiteLigneCommande
-into existingQuantity
-from ligneCommande
-where idLivre = NEW.idLivre
-LIMIT 1;
-if existingQuantity is not null then
-    SIGNAL SQLSTATE "45000"
-    set MESSAGE_TEXT = "Erreur : Livre déjà dans le panier. Veuillez modifier le nombre d'exemplaire.";
-end if;
+    declare existingQuantity int;
+
+    select lc.quantiteLigneCommande
+    into existingQuantity
+    from ligneCommande lc
+    inner join commande c on lc.idCommande = c.idCommande
+    where lc.idLivre = NEW.idLivre
+      and c.idUser = (select idUser from commande where idCommande = NEW.idCommande LIMIT 1)
+    LIMIT 1;
+
+    if existingQuantity is not null then
+        SIGNAL SQLSTATE "45000"
+        SET MESSAGE_TEXT = "Erreur : Livre déjà dans le panier de cet utilisateur. Veuillez modifier le nombre d'exemplaires.";
+    end if;
 end
 $$
 DELIMITER ;
 DELIMITER $$
-CREATE TRIGGER `tInsertStockCommande` AFTER INSERT ON `ligneCommande` FOR EACH ROW BEGIN
-                        UPDATE livre
-                        SET exemplaireLivre = exemplaireLivre - NEW.quantiteLigneCommande
-                        WHERE idLivre = NEW.idLivre;
-                        END
+CREATE TRIGGER `tInsertStockCommande` AFTER INSERT ON `ligneCommande` FOR EACH ROW begin
+update livre
+set exemplaireLivre = exemplaireLivre - NEW.quantiteLigneCommande
+where idLivre = NEW.idLivre;
+end
 $$
 DELIMITER ;
 DELIMITER $$
-CREATE TRIGGER `tStockNull` BEFORE INSERT ON `ligneCommande` FOR EACH ROW begin 
-declare exemplaireLivreDisponible INT;
-select exemplaireLivre into exemplaireLivreDisponible from livre where idLivre = NEW.idLivre;
+CREATE TRIGGER `tStockNull` BEFORE INSERT ON `ligneCommande` FOR EACH ROW begin
+declare exemplaireLivreDisponible int;
+select exemplaireLivre
+into exemplaireLivreDisponible
+from livre
+where idLivre = NEW.idLivre;
 if exemplaireLivreDisponible < NEW.quantiteLigneCommande then
-                        SIGNAL SQLSTATE '45000'
-                        set MESSAGE_TEXT = 'Erreur : Stock insuffisant pour le livre.';
-end if;
+    SIGNAL SQLSTATE '45000'
+    set MESSAGE_TEXT = 'Erreur : Stock insuffisant pour le livre.';
+end IF;
 end
 $$
 DELIMITER ;
 DELIMITER $$
-CREATE TRIGGER `tUpdateStockCommande` AFTER UPDATE ON `ligneCommande` FOR EACH ROW BEGIN
-    UPDATE livre
-    SET exemplaireLivre = exemplaireLivre - (NEW.quantiteLigneCommande - OLD.quantiteLigneCommande)
-    WHERE idLivre = NEW.idLivre;
-END
+CREATE TRIGGER `tUpdateStockCommande` AFTER UPDATE ON `ligneCommande` FOR EACH ROW begin
+update livre
+set exemplaireLivre = exemplaireLivre - (NEW.quantiteLigneCommande - OLD.quantiteLigneCommande)
+where idLivre = NEW.idLivre;
+end
 $$
 DELIMITER ;
 
@@ -326,87 +366,14 @@ CREATE TABLE `livre` (
 --
 
 INSERT INTO `livre` (`idLivre`, `nomLivre`, `categorieLivre`, `auteurLivre`, `imageLivre`, `exemplaireLivre`, `prixLivre`) VALUES
-(1, 'Alcools', 'Recueil de Poèmes', 'Apollinaire', 'alcools.jpg', 41, 12.50),
-(2, 'Crime et Chatiment', 'Roman', 'Dostoïevski', 'crime_et_chatiment.jpg', 39, 15.00),
+(1, 'Alcools', 'Recueil de Poèmes', 'Apollinaire', 'alcools.jpg', 39, 12.50),
+(2, 'Crime et Chatiment', 'Roman', 'Dostoïevski', 'crime_et_chatiment.jpg', 0, 15.00),
 (3, 'l\'Etranger', 'Roman', 'Camus', 'l_etranger.jpg', 0, 10.00),
-(4, 'L\'Odyssée', 'Histoire', 'Homère', 'l_odyssee.jpg', 0, 13.50),
-(5, 'Les Fleurs du Mal', 'Recueil de Poèmes', 'Baudelaire', 'les_fleurs_du_mal.jpg', 75, 14.00),
-(6, 'PHP et MySQL pour les nuls', 'Programmation', 'Valade', 'php_et_mysql_pour_les_nuls.jpg', 0, 22.00),
+(4, 'L\'Odyssée', 'Histoire', 'Homère', 'l_odyssee.jpg', -4, 13.50),
+(5, 'Les Fleurs du Mal', 'Recueil de Poèmes', 'Baudelaire', 'les_fleurs_du_mal.jpg', 52, 14.00),
+(6, 'PHP et MySQL pour les nuls', 'Programmation', 'Valade', 'php_et_mysql_pour_les_nuls.jpg', -3, 22.00),
 (7, 'Programmer en Java', 'Programmation', 'Delannoy', 'programmer_en_java.jpg', 0, 25.00),
-(8, 'SPQR', 'Histoire', 'Beard', 'spqr.jpg', 28, 18.00);
-
--- --------------------------------------------------------
-
---
--- Structure de la table `notification`
---
-
-CREATE TABLE `notification` (
-  `idNotification` int NOT NULL,
-  `messageNotification` text,
-  `dateNotification` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Déchargement des données de la table `notification`
---
-
-INSERT INTO `notification` (`idNotification`, `messageNotification`, `dateNotification`) VALUES
-(1, 'Nouvelle commande ajoutée avec ID : 210', '2025-01-11 23:00:00'),
-(2, 'Nouvelle commande ajoutée avec ID : 211', '2025-01-11 23:00:00'),
-(3, 'Nouvelle commande. ID : 212', '2025-01-11 23:00:00'),
-(4, 'Nouvelle commande. ID : 213', '2025-01-11 23:00:00'),
-(5, 'Nouvelle commande. ID : 214', '2025-01-11 23:00:00'),
-(6, 'Nouvelle commande. ID : 215', '2025-01-11 23:00:00'),
-(7, 'Nouvelle commande. ID : 216', '2025-01-11 23:00:00'),
-(8, 'Nouvelle commande. ID : 217', '2025-01-11 23:00:00'),
-(9, 'Nouvelle commande. ID : 218', '2025-01-11 23:00:00'),
-(10, 'Nouvelle commande. ID : 219', '2025-01-11 23:00:00'),
-(11, 'Nouvelle commande. ID : 220', '2025-01-11 23:00:00'),
-(12, 'Nouvelle commande. ID : 221', '2025-01-11 23:00:00'),
-(13, 'Nouvelle commande. ID : 222', '2025-01-11 23:00:00'),
-(14, 'Nouvelle commande. ID : 223', '2025-01-11 23:00:00'),
-(15, 'Nouvelle commande. ID : 224', '2025-01-11 23:00:00'),
-(16, 'Nouvelle commande. ID : 225', '2025-01-11 23:00:00'),
-(17, 'Nouvelle commande. ID : 226', '2025-01-11 23:00:00'),
-(18, 'Nouvelle commande. ID : 227', '2025-01-11 23:00:00'),
-(19, 'Nouvelle commande. ID : 228', '2025-01-11 23:00:00'),
-(20, 'Nouvelle commande. ID : 229', '2025-01-11 23:00:00'),
-(21, 'Nouvelle commande. ID : 230', '2025-01-11 23:00:00'),
-(22, 'Nouvelle commande. ID : 231', '2025-01-11 23:00:00'),
-(23, 'Nouvelle commande. ID : 232', '2025-01-11 23:00:00'),
-(24, 'Nouvelle commande. ID : 233', '2025-01-11 23:00:00'),
-(25, 'Nouvelle commande. ID : 234', '2025-01-11 23:00:00'),
-(26, 'Nouvelle commande. ID : 235', '2025-01-11 23:00:00'),
-(27, 'Nouvelle commande. ID : 236', '2025-01-11 23:00:00'),
-(28, 'Nouvelle commande. ID : 237', '2025-01-11 23:00:00'),
-(29, 'Nouvelle commande. ID : 238', '2025-01-11 23:00:00'),
-(30, 'Nouvelle commande. ID : 239', '2025-01-11 23:00:00'),
-(31, 'Nouvelle commande. ID : 240', '2025-01-11 23:00:00'),
-(32, 'Nouvelle commande. ID : 241', '2025-01-11 23:00:00'),
-(33, 'Nouvelle commande. ID : 242', '2025-01-11 23:00:00'),
-(34, 'Nouvelle commande. ID : 243', '2025-01-11 23:00:00'),
-(35, 'Nouvelle commande. ID : 244', '2025-01-11 23:00:00'),
-(36, 'Nouvelle commande. ID : 245', '2025-01-11 23:00:00'),
-(37, 'Nouvelle commande. ID : 246', '2025-01-11 23:00:00'),
-(38, 'Nouvelle commande. ID : 247', '2025-01-11 23:00:00'),
-(39, 'Nouvelle commande. ID : 248', '2025-01-11 23:00:00'),
-(40, 'Nouvelle commande. ID : 249', '2025-01-11 23:00:00'),
-(41, 'Nouvelle commande. ID : 250', '2025-01-11 23:00:00'),
-(42, 'Nouvelle commande. ID : 251', '2025-01-11 23:00:00'),
-(43, 'Nouvelle commande. ID : 252', '2025-01-11 23:00:00'),
-(44, 'Nouvelle commande. ID : 253', '2025-01-11 23:00:00'),
-(45, 'Nouvelle commande. ID : 254', '2025-01-11 23:00:00'),
-(46, 'Nouvelle commande. ID : 255', '2025-01-11 23:00:00'),
-(47, 'Nouvelle commande. ID : 256', '2025-01-11 23:00:00'),
-(48, 'Nouvelle commande. ID : 257', '2025-01-11 23:00:00'),
-(49, 'Nouvelle commande. ID : 258', '2025-01-11 23:00:00'),
-(50, 'Nouvelle commande. ID : 259', '2025-01-11 23:00:00'),
-(51, 'Nouvelle commande. ID : 260', '2025-01-11 23:00:00'),
-(52, 'Nouvelle commande. ID : 261', '2025-01-11 23:00:00'),
-(53, 'Nouvelle commande. ID : 262', '2025-01-11 23:00:00'),
-(54, 'Nouvelle commande. ID : 263', '2025-01-11 23:00:00'),
-(55, 'Nouvelle commande. ID : 264', '2025-01-11 23:00:00');
+(8, 'SPQR', 'Histoire', 'Beard', 'spqr.jpg', 21, 18.00);
 
 -- --------------------------------------------------------
 
@@ -436,7 +403,8 @@ INSERT INTO `user` (`idUser`, `nomUser`, `prenomUser`, `emailUser`, `mdpUser`, `
 (13, 'jean', 'valjean', 'klza', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '', 'client', NULL),
 (14, 'poi', 'poi', 'poi', '8abcda2dba9a5c5c674e659333828582122c5f56', '', 'client', '2025-01-08'),
 (15, 'insert', 'insert', 'i', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '', 'client', '2025-01-09'),
-(16, 'insert', 'insert', 'i', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '', 'client', '2025-01-09');
+(16, 'insert', 'insert', 'i', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '', 'client', '2025-01-09'),
+(23, 'chouaki', 'chouaki', 'chouaki@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'chouaki', 'client', '2025-01-23');
 
 -- --------------------------------------------------------
 
@@ -651,7 +619,8 @@ ALTER TABLE `commande`
 -- Index pour la table `ligneCommande`
 --
 ALTER TABLE `ligneCommande`
-  ADD PRIMARY KEY (`idCommande`,`idLivre`),
+  ADD PRIMARY KEY (`idLigneCommande`),
+  ADD KEY `idCommande` (`idCommande`),
   ADD KEY `idLivre` (`idLivre`);
 
 --
@@ -662,12 +631,6 @@ ALTER TABLE `livre`
   ADD UNIQUE KEY `idlivre` (`idLivre`),
   ADD KEY `idLivre_2` (`idLivre`),
   ADD KEY `idLivre_3` (`idLivre`);
-
---
--- Index pour la table `notification`
---
-ALTER TABLE `notification`
-  ADD PRIMARY KEY (`idNotification`);
 
 --
 -- Index pour la table `user`
@@ -683,7 +646,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=265;
+  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=334;
+
+--
+-- AUTO_INCREMENT pour la table `ligneCommande`
+--
+ALTER TABLE `ligneCommande`
+  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=610;
 
 --
 -- AUTO_INCREMENT pour la table `livre`
@@ -692,16 +661,10 @@ ALTER TABLE `livre`
   MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
--- AUTO_INCREMENT pour la table `notification`
---
-ALTER TABLE `notification`
-  MODIFY `idNotification` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
-
---
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- Contraintes pour les tables déchargées
@@ -717,8 +680,8 @@ ALTER TABLE `commande`
 -- Contraintes pour la table `ligneCommande`
 --
 ALTER TABLE `ligneCommande`
-  ADD CONSTRAINT `lignecommande_ibfk_1` FOREIGN KEY (`idCommande`) REFERENCES `commande` (`idCommande`),
-  ADD CONSTRAINT `lignecommande_ibfk_2` FOREIGN KEY (`idLivre`) REFERENCES `livre` (`idLivre`);
+  ADD CONSTRAINT `lignecommande_ibfk_1` FOREIGN KEY (`idCommande`) REFERENCES `commande` (`idCommande`) ON DELETE CASCADE,
+  ADD CONSTRAINT `lignecommande_ibfk_2` FOREIGN KEY (`idLivre`) REFERENCES `livre` (`idLivre`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -43,6 +43,7 @@ $idUser = $_SESSION['idUser'];
 
             if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
                 echo "<td>";
+
 ?>
 <form method="post">
     <table>

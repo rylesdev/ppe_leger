@@ -20,7 +20,7 @@ on li.idLivre=l.idLivre
 group by c.idUser;
 
 
-create or replace view vNomMinLivre as
+create or replace view vNbMinLivre as
 select *
 from vTotalLivre
 order by totalLivre asc;
@@ -73,41 +73,17 @@ create trigger tExemplaireLivreLigneCommande
 before insert on ligneCommande
 for each row
 begin
-declare existingQuantity int;
-select quantiteLigneCommande
-into existingQuantity
-from ligneCommande
-where idLivre = NEW.idLivre
-LIMIT 1;
-if existingQuantity is not null then
-    SIGNAL SQLSTATE "45000"
-    set MESSAGE_TEXT = "Erreur : Livre déjà dans le panier. Veuillez modifier le nombre d'exemplaire.";
-end if;
-end $$
-delimiter ;
-
-
-delimiter $$
-create trigger tExemplaireLivreCommande
-before insert on commande
-for each row
-begin
-    declare compteurCommande int;
-    declare compteurLigneCommande int;
-
-    select count(idCommande)
-    into compteurCommande
-    from commande
-    where idCommande = NEW.idCommande;
-
-    select count(idCommande)
-    into compteurLigneCommande
-    from ligneCommande
-    where idCommande = NEW.idCommande;
-
-    if compteurCommande >= compteurLigneCommande then
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = "Erreur : Livre déjà dans le panier. Veuillez modifier le nombre d'exemplaire.";
+    declare existingQuantity int;
+    select lc.quantiteLigneCommande
+    into existingQuantity
+    from ligneCommande lc
+    inner join commande c on lc.idCommande = c.idCommande
+    where lc.idLivre = NEW.idLivre
+      and c.idUser = (select idUser from commande where idCommande = NEW.idCommande LIMIT 1)
+    LIMIT 1;
+    if existingQuantity is not null then
+        SIGNAL SQLSTATE "45000"
+        SET MESSAGE_TEXT = "Erreur : Livre déjà dans le panier de cet utilisateur. Veuillez modifier le nombre d'exemplaires.";
     end if;
 end $$
 delimiter ;
@@ -139,7 +115,7 @@ begin
 update livre
 set exemplaireLivre = exemplaireLivre - NEW.quantiteLigneCommande
 where idLivre = NEW.idLivre;
-end;
+end $$
 delimiter ;
 
 
@@ -151,17 +127,6 @@ begin
 update livre
 set exemplaireLivre = exemplaireLivre - (NEW.quantiteLigneCommande - OLD.quantiteLigneCommande)
 where idLivre = NEW.idLivre;
-end $$
-delimiter ;
-
-
-delimiter $$
-create trigger tInsertNotification
-after insert on commande
-for each row
-begin
-insert into notification
-values (null, CONCAT('Nouvelle commande. ID : ', NEW.idCommande), curdate());
 end $$
 delimiter ;
 
@@ -194,25 +159,3 @@ p_dateInscriptionUser
 );
 end $$
 delimiter ;
-
-
-(PAS FONCTIONNELLE)
-delimiter $$
-create procedure pVerifierDisponibiliteLivre(
-in idLivre int,
-                            in quantiteDemandee int,
-                            out disponible boolean
-                        )
-                        begin
-                            declare stock int;
-                            select exemplaireLivre
-                            into stock
-                            from livre
-                            WHERE idLivre = idLivre;
-                            if stock >= quantiteDemandee then
-                                set disponible = TRUE;
-                            else
-                                set disponible = FALSE;
-                            end if;
-                        end $$
-                        delimiter ;

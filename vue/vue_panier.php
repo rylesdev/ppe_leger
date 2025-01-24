@@ -127,7 +127,7 @@ $dateCommande = $dateCommande[0];
         </div>
         <div class="pay-button">
             <?php
-            echo "<a href='index.php?page=3&action=payer' onclick='payWithPaypal(event)'>Payer avec Paypal</a>";
+            echo "<a href='index.php?page=3&action=payer'> Payer avec Paypal </a>";
             ?>
         </div>
     </form>
@@ -214,15 +214,5 @@ $dateCommande = $dateCommande[0];
         </tbody>
     </table>
 </div>
-
-
-
-<script>
-    function payWithPaypal(event) {
-        event.preventDefault();
-        alert("Redirection vers PayPal...");
-        window.location.href = "https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR";
-    }
-</script>
 </body>
 </html>

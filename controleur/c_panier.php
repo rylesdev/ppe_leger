@@ -26,10 +26,16 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
                             break;
 
             case "payer" :  $idCommande = $unControleur->selectCommandeEnCours($idUser);
-                            var_dump($idCommande);
-                            $unControleur->updateCommande($idCommande);
-                            echo "<h3 style='color: green;'>Commande payée avec succès !</h3>";
+                            if ($idCommande) {
+                                $unControleur->updateCommande($idCommande);
+                                echo "<h3 style='color: green;'>Commande mise à jour avec succès. Redirection vers PayPal...</h3>";
+                                header("Location: https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR");
+                                exit();
+                            } else {
+                                echo "<h3 style='color: red;'>Erreur : Aucune commande en cours trouvée.</h3>";
+                            }
                             break;
+
         }
     }
 

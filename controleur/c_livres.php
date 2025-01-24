@@ -2,6 +2,7 @@
 
 <?php
 $leLivre = null;
+$idUser = $_SESSION['idUser'];
 
 if (!isset($_SESSION['commandeEnCours'])) {
     $_SESSION['commandeEnCours'] = 0;
@@ -12,7 +13,6 @@ if (isset($_GET['action']) && isset($_GET['idLivre']) ){
 
     $action  = $_GET['action'];
     $idLivre = $_GET['idLivre'];
-    $idUser = $_SESSION['idUser'];
 
     if (isset($_POST['QuantiteLivre'])) {
         $_SESSION['quantiteLivre'] = $_POST['insertQuantiteLivre'];
@@ -53,13 +53,9 @@ if (isset($_GET['action']) && isset($_GET['idLivre']) ){
 
                                     if ($result) {
                                         echo "<h3 style='color: green;'>Livre ajouté à la commande avec succès.</h3>";
-                                    } else {
-                                        echo "<h3 style='color: red;'>Erreur : Impossible d'ajouter le livre à la commande.</h3>";
                                     }
-                                } else {
-                                    echo "<h3 style='color: red;'>Erreur : Quantité non valide ou livre manquant.</h3>";
                                 }
-                                    break;
+                                break;
 
             /*if (isset($idLivre) && isset($quantiteLivre) && $quantiteLivre > 0) {
                                 if (!isset($_SESSION['panier'][$idLivre])) {
@@ -135,7 +131,6 @@ if (isset($_POST['Modifier'])) {
 if (isset($_POST['Filtrer'])) {
     $lesLivres = $unControleur->selectLikeLivres($_POST['filtre']);
 } else {
-    $idUser = $_SESSION['idUser'];
     $lesLivres = $unControleur->selectAllLivres($idUser);
 }
 
