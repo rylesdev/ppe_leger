@@ -122,6 +122,10 @@
 			$this->unModele->updateStockageLivre($exemplaireLivre, $nomLivre);
 		}
 
+		public function updateCommande($idCommande) {
+			$this->unModele->updateCommande($idCommande);
+		}
+
 		public function updateLigneCommande ($quantiteLigneCommande, $idCommande) {
 			$this->unModele->updateLigneCommande ($quantiteLigneCommande, $idCommande);
 		}

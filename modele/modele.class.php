@@ -322,6 +322,15 @@
 			$exec->execute();
 		}
 
+        public function updateCommande ($idCommande) {
+            $requete =  "update commande
+                       set statutCommande = 'expédiée'
+                       where idCommande = ?;";
+            $exec = $this->unPdo->prepare ($requete);
+            $exec->BindValue (1, $idCommande, PDO::PARAM_INT);
+            $exec->execute();
+        }
+
         public function updateLigneCommande ($quantiteLigneCommande, $idCommande) {
             $requete =  "update ligneCommande
                         set quantiteLigneCommande = ?

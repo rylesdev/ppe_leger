@@ -5,7 +5,7 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
     $idUser = $_SESSION['idUser'];
 
     require_once("vue/vue_panier.php");
-    if (isset($_GET['action']) && isset($_GET['idCommande']) ){
+    if (isset($_GET['action'])){
         $idCommande = $_GET['idCommande'];
         $action = $_GET['action'];
 
@@ -23,6 +23,12 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
                                 $unControleur->updateLigneCommande($quantiteLigneCommande, $idCommande);
                                 echo "<h3 style='color: green;'>Livre modifié avec succès !</h3>";
                             }
+                            break;
+
+            case "payer" :  $idCommande = $unControleur->selectCommandeEnCours($idUser);
+                            var_dump($idCommande);
+                            $unControleur->updateCommande($idCommande);
+                            echo "<h3 style='color: green;'>Commande payée avec succès !</h3>";
                             break;
         }
     }
