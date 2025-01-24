@@ -3,13 +3,20 @@
 <?php
 $leLivre = null;
 
+if (!isset($_SESSION['commandeEnCours'])) {
+    $_SESSION['commandeEnCours'] = 0;
+    $commandeEnCours = $_SESSION['commandeEnCours'];
+}
+
 if (isset($_GET['action']) && isset($_GET['idLivre']) ){
+    if (isset($_POST['QuantiteLivre'])) {
+        /*$_SESSION['panier'] = [];*/
+        $quantiteLivre = $_POST['insertQuantiteLivre'];
+    }
+
     $action  = $_GET['action'];
     $idLivre = $_GET['idLivre'];
     $idUser = $_SESSION['idUser'];
-    if (isset($_POST['QuantiteLivre'])) {
-        $quantiteLivre = $_POST['insertQuantiteLivre'];
-    }
 
     switch($action){
         case "sup"  :       $unControleur->deleteLivre($idLivre);
@@ -18,10 +25,57 @@ if (isset($_GET['action']) && isset($_GET['idLivre']) ){
         case "edit" :       $leLivre = $unControleur->selectWhereLivre($idLivre);
                             break;
 
-        case "acheter" :    if (isset($quantiteLivre) && $quantiteLivre > 0) {
-                                /*$idCommande = $unControleur->insertCommande($idUser);
-                                $unControleur->insertLigneCommande($idCommande, $idLivre, $quantiteLivre);*/
+        case "acheter" :    if (isset($idLivre) && isset($quantiteLivre) && $quantiteLivre > 0) {
+                                if (($commandeEnCours === 0) || ($commandeEnCours === null)) {
+                                    $idCommande = $unControleur->insertCommande($idUser);
+                                    if ($idCommande) {
+                                        $commandeEnCours = $idCommande;
+                                    } else {
+                                        echo "<h3 style='color: red;'>Erreur : Impossible de créer la commande.</h3>";
+                                    }
+                                } else {
+                                    $idCommande = $commandeEnCours;
+                                }
+
+// Le problème vient du fait que, malgré qu'il existe déjà une "$commandeEnCours", le "insertCommande" se fait tout de même.
+// Cela fait que, lorsque je sélectionne un livre, la commande est créée.
+// Or, il faudrait que la commande ne soit crée que si je clique sur "Acheter" pour la première fois.
+// commande -> 1,n (Contient) -> 1,1 ligneCommande
+
+                                $result = $unControleur->insertLigneCommande($idCommande, $idLivre, $quantiteLivre);
+
+                                if ($result) {
+                                    echo "<h3 style='color: green;'>Livre ajouté à la commande avec succès.</h3>";
+                                } else {
+                                    echo "<h3 style='color: red;'>Erreur : Impossible d'ajouter le livre à la commande.</h3>";
+                                }
+                            } else {
+                                echo "<h3 style='color: red;'>Erreur : Quantité non valide ou livre manquant.</h3>";
+                            }
+                                break;
+
+            /*if (isset($idLivre) && isset($quantiteLivre) && $quantiteLivre > 0) {
+                                if (!isset($_SESSION['panier'][$idLivre])) {
+                                    $_SESSION['panier']['idLivre'] = [];
+                                    $_SESSION['panier']['quantiteLivre'] = [];
+                                }
+                            $index = array_search($idLivre, $_SESSION['panier']['idLivre']);
+                            if ($index === false) {
+                                $_SESSION['panier']['idLivre'][] = $idLivre;
+                                $_SESSION['panier']['quantiteLivre'][] = $quantiteLivre;
+                            } else {
+                                $_SESSION['panier']['quantiteLivre'][$index] += $quantiteLivre;
+                            }
+                                echo "<h3 style='color: green;'>Livre ajouté au panier avec succès.</h3>";
+                            } else {
+                                echo "<h3 style='color: gray;'>Veuillez entrer la quantité, puis cliquer sur 'Ajouter au panier'.</h3>";
+                            }
+                            break;*/
+
+            /*if (isset($quantiteLivre) && $quantiteLivre > 0) {
                                 $idCommande = $unControleur->insertCommande($idUser);
+                                $unControleur->insertLigneCommande($idCommande, $idLivre, $quantiteLivre);*/
+                                /*$idCommande = $unControleur->insertCommande($idUser);
                                 if ($idCommande) {
                                     $lignesCommande = $unControleur->selectLigneCommande($idCommande);
                                     foreach ($lignesCommande as $ligne) {
@@ -30,13 +84,12 @@ if (isset($_GET['action']) && isset($_GET['idLivre']) ){
                                     }
                                 } else {
                                     echo "Erreur lors de l'insertion de la commande.";
-                                }
+                                }*/
                             } /*elseif (isset($quantiteLivre) && $quantiteLivre == null) {
                                 $quantiteLivre = 1;
                                 $idCommande = $unControleur->insertCommande($idUser);
                                 $unControleur->insertLigneCommande($idCommande, $idLivre, $quantiteLivre);
                             }*/
-    }
 }
 
 if (isset($_SESSION['roleUser']) && $_SESSION['roleUser'] == "admin") {

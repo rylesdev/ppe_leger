@@ -109,7 +109,13 @@ $dateCommande = $dateCommande[0];
     <form action="process_payment.php" method="POST">
         <div class="form-group">
             <label for="montant">Somme à payer</label>
-            <input type="text" id="montant" name="montant" value="<?php echo $sommeAPayer . '€'; ?>" readonly>
+            <input type="text" id="montant" name="montant" value="<?php
+            if ($sommeAPayer > 0) {
+                echo $sommeAPayer . '€';
+            } else {
+                echo '0€';
+            }
+            ?>" readonly>
         </div>
         <div class="form-group">
             <label for="adresse">Adresse de livraison</label>
@@ -158,7 +164,7 @@ $dateCommande = $dateCommande[0];
         </thead>
         <tbody>
         <?php
-        $lesCommandes = $unControleur->selectViewTotalLivre();
+        $lesCommandes = $unControleur->selectViewTotalLivre($idUser);
 
         $tri = isset($_POST['tri']) ? $_POST['tri'] : '';
         $idUser = $_SESSION['idUser'];

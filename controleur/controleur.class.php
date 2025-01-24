@@ -37,8 +37,8 @@
 			return $this->unModele->selectDateLivraisonCommande($idUser);
 		}
 
-		public function selectViewTotalLivre() {
-			return $this->unModele->selectViewTotalLivre();
+		public function selectViewTotalLivre($idUser) {
+			return $this->unModele->selectViewTotalLivre($idUser);
 		}
 
 		public function selectViewTotalCommande($idUser) {
@@ -81,7 +81,7 @@
 		}
 
 		public function deleteLigneCommande($idCommande){
-			return $this->unModele->deleteligneCommande($idCommande);
+			return $this->unModele->deleteLigneCommande($idCommande);
 		}
 
 		public function deleteCommande($idCommande){

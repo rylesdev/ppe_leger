@@ -185,7 +185,7 @@
 			$exec->execute();
 		}
 
-        public function deleteligneCommande($idCommande) {
+        public function deleteLigneCommande($idCommande) {
             $requete =  "delete from 
                         ligneCommande 
                         where idCommande = ?;";
@@ -241,7 +241,7 @@
 			$exec->execute();
 			return $this->unPdo->lastInsertId();
             } catch(PDOException $exp) {
-                $messageErreur = $exp->getMessage();
+                echo $exp->getMessage();
             }
             return $exec->fetchAll();
 		}
@@ -255,6 +255,7 @@
                 $execInsert->bindValue(2, $idLivre, PDO::PARAM_INT);
                 $execInsert->bindValue(3, $quantiteLivre, PDO::PARAM_INT);
                 $execInsert->execute();
+                return $execInsert->fetchAll();
             } catch (PDOException $exp) {
                 if ($exp->getCode() === '45000') {
                     $messageErreur = $exp->getMessage();

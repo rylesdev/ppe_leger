@@ -11,121 +11,16 @@ idLigneCommande (
 )
 
 
-Modifier tous les "insertCommande" et "insertLigneCommande" dans les vues.
-
-IMPORTANT
-    Quand on ajoute dans le panier il faut que le controleur active "insertLigneCommande".
-    C'est uniquement lorsque le user paye son panier (en appuyant sur un bouton, qui activera ensuite un POST
-    //(if (isset($_POST[]))//) que le insertCommande sera activé.
-
-
-
-CHATGPT :
-"
-Étapes pour corriger le problème
-Créer un panier temporaire pour chaque utilisateur
-Utilise une table ou une structure côté session pour stocker les livres sélectionnés avant qu'une commande soit validée.
-
-Insérer dans ligneCommande uniquement après validation
-L'insertion dans ligneCommande doit être déclenchée une fois que la commande est confirmée via un bouton.
-
-Réorganisation du flux :
-
-Lorsqu'un utilisateur ajoute un livre au panier, stocke les informations dans une table temporaire ou dans une session.
-Lorsque l'utilisateur valide son panier, insère une nouvelle commande dans la table commande et déplace les données du panier temporaire vers ligneCommande.
-Code PHP corrigé
-1. Gestion du panier en session
-Ajoute cette logique au début de ton fichier pour initialiser le panier :
-
-php
-Copier
-Modifier
-// Initialisation du panier s'il n'existe pas encore
-if (!isset($_SESSION['panier'])) {
-    $_SESSION['panier'] = [];
-}
-2. Ajouter un livre au panier
-Modifie la logique du bouton "Ajouter au panier" pour stocker les livres dans la session :
-
-php
-Copier
-Modifier
-case "ajouterPanier":
-    if (isset($idLivre) && isset($quantiteLivre) && $quantiteLivre > 0) {
-        // Ajouter au panier dans la session
-        if (!isset($_SESSION['panier'][$idLivre])) {
-            $_SESSION['panier'][$idLivre] = $quantiteLivre;
-        } else {
-            $_SESSION['panier'][$idLivre] += $quantiteLivre; // Incrémenter la quantité si déjà présent
-        }
-        echo "<h3 style='color: green;'>Livre ajouté au panier avec succès.</h3>";
-    } else {
-        echo "<h3 style='color: red;'>Erreur : Quantité non valide ou livre manquant.</h3>";
-    }
-    break;
-3. Valider le panier et créer une commande
-Ajoute un bouton pour valider la commande, qui déclenchera cette logique :
-
-php
-Copier
-Modifier
-if (isset($_POST['validerCommande'])) {
-    if (!empty($_SESSION['panier'])) {
-        // Insérer une nouvelle commande
-        $idCommande = $unControleur->insertCommande($idUser);
-
-        if ($idCommande) {
-            // Insérer chaque livre du panier dans ligneCommande
-            foreach ($_SESSION['panier'] as $idLivre => $quantiteLivre) {
-                $unControleur->insertLigneCommande($idCommande, $idLivre, $quantiteLivre);
-            }
-
-            // Vider le panier après validation
-            $_SESSION['panier'] = [];
-            echo "<h3 style='color: green;'>Commande validée avec succès.</h3>";
-        } else {
-            echo "<h3 style='color: red;'>Erreur : Impossible de créer la commande.</h3>";
-        }
-    } else {
-        echo "<h3 style='color: red;'>Erreur : Votre panier est vide.</h3>";
-    }
-}
-4. Afficher le panier
-Crée une section pour afficher les articles présents dans le panier :
-
-php
-Copier
-Modifier
-if (!empty($_SESSION['panier'])) {
-    echo "<h3>Votre panier :</h3><ul>";
-    foreach ($_SESSION['panier'] as $idLivre => $quantiteLivre) {
-        echo "<li>Livre ID : $idLivre | Quantité : $quantiteLivre</li>";
-    }
-    echo "</ul>";
-    echo '<form method="post">
-            <button type="submit" name="validerCommande">Valider la commande</button>
-          </form>';
-} else {
-    echo "<h3>Votre panier est vide.</h3>";
-}
-Résumé des changements
-Les livres sont ajoutés au panier via la session ($_SESSION['panier']).
-La table commande n'est utilisée que lorsqu'une commande est validée.
-Après validation, les livres sont déplacés de la session vers la table ligneCommande.
-"
-
-
-
 
 Priorité :
 
-    - Régler le problème de relation entre la table commande et ligneCommande.
-         (Commande 1,n -> (Composer) -> 1,1 LigneCommande).
+    Régler le problème de l'insertion de ligneCommande et de commande.
+    Le problème provient du fait qu'il y a plusieurs "insertCommande" malgré plusieurs "insertLigneCommande".
+    Or, il faudrait une seule "insertCommande" pour plusieurs "insertLigneCommande".
+
 
     - Problème de "Erreur : Livre déjà dans le panier. Veuillez modifier le nombre d'exemplaire."
         pour un nouveau user.
-
-
 
 
 
@@ -181,6 +76,8 @@ A FAIRE :
                 Si il n'a pas payé la commande doit avoir le statut 'impayé', la dateCommande null, et la dateLivraison null.
 
             - Le "Nombre Exemplaire" des livres ne descend pas avec le user "Chouaki".
+
+            - Modifier tous les "insertCommande" et "insertLigneCommande" dans les vues.
 
         Panier
             - Problème de "Erreur : Livre déjà dans le panier. Veuillez modifier le nombre d'exemplaire."
