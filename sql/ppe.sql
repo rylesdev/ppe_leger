@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : ven. 24 jan. 2025 à 17:36
+-- Généré le : sam. 25 jan. 2025 à 17:39
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -40,6 +40,72 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `pHashMdpUser` (IN `p_idUser` INT(10
                         END$$
 
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `abonnement`
+--
+
+CREATE TABLE `abonnement` (
+  `idAbonnement` int NOT NULL,
+  `idUser` int NOT NULL,
+  `dateDebutAbonnement` date NOT NULL,
+  `dateFinAbonnement` date DEFAULT NULL,
+  `livreAchete` int DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `abonnement`
+--
+
+INSERT INTO `abonnement` (`idAbonnement`, `idUser`, `dateDebutAbonnement`, `dateFinAbonnement`, `livreAchete`) VALUES
+(1, 2, '2025-01-01', '2025-12-31', 5),
+(3, 2, '2025-01-25', '2025-04-25', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `avis`
+--
+
+CREATE TABLE `avis` (
+  `idAvis` int NOT NULL,
+  `idLivre` int NOT NULL,
+  `idUser` int NOT NULL,
+  `commentaireAvis` text NOT NULL,
+  `noteAvis` tinyint NOT NULL,
+  `dateAvis` date NOT NULL
+) ;
+
+--
+-- Déchargement des données de la table `avis`
+--
+
+INSERT INTO `avis` (`idAvis`, `idLivre`, `idUser`, `commentaireAvis`, `noteAvis`, `dateAvis`) VALUES
+(1, 1, 2, 'Excellent livre, très captivant !', 5, '2025-01-25'),
+(2, 4, 23, 'Un peu long à démarrer, mais intéressant.', 3, '2025-01-25');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `categorie`
+--
+
+CREATE TABLE `categorie` (
+  `idCategorie` int NOT NULL,
+  `nomCategorie` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `categorie`
+--
+
+INSERT INTO `categorie` (`idCategorie`, `nomCategorie`) VALUES
+(1, 'Roman'),
+(2, 'Histoire'),
+(3, 'Recueil de Poèmes'),
+(4, 'Programmation');
 
 -- --------------------------------------------------------
 
@@ -167,8 +233,8 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (272, '2025-01-24', 'expédiée', '2025-01-31', 23),
 (273, '2025-01-24', 'expédiée', '2025-01-31', 23),
 (274, '2025-01-24', 'expédiée', '2025-01-31', 23),
-(275, '2025-01-23', 'en attente', '2025-01-30', 23),
-(276, '2025-01-23', 'en attente', '2025-01-30', 23),
+(275, '2025-01-24', 'expédiée', '2025-01-31', 23),
+(276, '2025-01-24', 'expédiée', '2025-01-31', 23),
 (277, '2025-01-23', 'en attente', '2025-01-30', 23),
 (278, '2025-01-23', 'en attente', '2025-01-30', 23),
 (279, '2025-01-23', 'en attente', '2025-01-30', 23),
@@ -242,7 +308,7 @@ CREATE TABLE `ligneCommande` (
 --
 
 INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quantiteLigneCommande`) VALUES
-(521, 289, 1, 32),
+(521, 289, 1, 33),
 (533, 290, 1, 3),
 (534, 291, 1, 5),
 (535, 292, 1, 4),
@@ -358,22 +424,72 @@ CREATE TABLE `livre` (
   `auteurLivre` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `imageLivre` varchar(50) NOT NULL,
   `exemplaireLivre` int DEFAULT NULL,
-  `prixLivre` float(10,2) NOT NULL
+  `prixLivre` float(10,2) NOT NULL,
+  `idCategorie` int DEFAULT NULL,
+  `idMaisonEdition` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `livre`
 --
 
-INSERT INTO `livre` (`idLivre`, `nomLivre`, `categorieLivre`, `auteurLivre`, `imageLivre`, `exemplaireLivre`, `prixLivre`) VALUES
-(1, 'Alcools', 'Recueil de Poèmes', 'Apollinaire', 'alcools.jpg', 39, 12.50),
-(2, 'Crime et Chatiment', 'Roman', 'Dostoïevski', 'crime_et_chatiment.jpg', 0, 15.00),
-(3, 'l\'Etranger', 'Roman', 'Camus', 'l_etranger.jpg', 0, 10.00),
-(4, 'L\'Odyssée', 'Histoire', 'Homère', 'l_odyssee.jpg', -4, 13.50),
-(5, 'Les Fleurs du Mal', 'Recueil de Poèmes', 'Baudelaire', 'les_fleurs_du_mal.jpg', 52, 14.00),
-(6, 'PHP et MySQL pour les nuls', 'Programmation', 'Valade', 'php_et_mysql_pour_les_nuls.jpg', -3, 22.00),
-(7, 'Programmer en Java', 'Programmation', 'Delannoy', 'programmer_en_java.jpg', 0, 25.00),
-(8, 'SPQR', 'Histoire', 'Beard', 'spqr.jpg', 21, 18.00);
+INSERT INTO `livre` (`idLivre`, `nomLivre`, `categorieLivre`, `auteurLivre`, `imageLivre`, `exemplaireLivre`, `prixLivre`, `idCategorie`, `idMaisonEdition`) VALUES
+(1, 'Alcools', 'test', 'Apollinaire', 'alcools.jpg', 99, 12.50, 3, 1),
+(2, 'Crime et Chatiment', 'test', 'Dostoïevski', 'crime_et_chatiment.jpg', 100, 15.00, 1, 2),
+(3, 'L\'Etranger', 'test', 'Camus', 'l_etranger.jpg', 100, 10.00, 1, 3),
+(4, 'L\'Odyssée', 'test', 'Homère', 'l_odyssee.jpg', 100, 13.50, 2, 4),
+(5, 'Les Fleurs du Mal', 'test', 'Baudelaire', 'les_fleurs_du_mal.jpg', 100, 14.00, 3, 5),
+(6, 'PHP et MySQL pour les nuls', 'test', 'Valade', 'php_et_mysql_pour_les_nuls.jpg', 100, 22.00, 4, 6),
+(7, 'Programmer en Java', 'test', 'Delannoy', 'programmer_en_java.jpg', 100, 25.00, 4, 7),
+(8, 'SPQR', 'test', 'Beard', 'spqr.jpg', 100, 18.00, 2, 8);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `maisonEdition`
+--
+
+CREATE TABLE `maisonEdition` (
+  `idMaisonEdition` int NOT NULL,
+  `nomMaisonEdition` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `maisonEdition`
+--
+
+INSERT INTO `maisonEdition` (`idMaisonEdition`, `nomMaisonEdition`) VALUES
+(1, 'Gallimard'),
+(2, 'Livre de Poche'),
+(3, 'Folio (Gallimard)'),
+(4, 'Les Belles Lettres'),
+(5, 'Le Livre de Poche'),
+(6, 'First Interactive'),
+(7, 'Eyrolles'),
+(8, 'Perrin');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `promotion`
+--
+
+CREATE TABLE `promotion` (
+  `idPromotion` int NOT NULL,
+  `idLivre` int NOT NULL,
+  `dateDebutPromotion` date NOT NULL,
+  `dateFinPromotion` date NOT NULL,
+  `prixPromotion` float(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `promotion`
+--
+
+INSERT INTO `promotion` (`idPromotion`, `idLivre`, `dateDebutPromotion`, `dateFinPromotion`, `prixPromotion`) VALUES
+(1, 3, '2025-01-05', '2025-01-20', 9.00),
+(2, 6, '2025-02-01', '2025-02-15', 19.80),
+(3, 1, '2025-03-01', '2025-03-10', 11.25);
 
 -- --------------------------------------------------------
 
@@ -398,7 +514,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`idUser`, `nomUser`, `prenomUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`, `dateInscriptionUser`) VALUES
 (1, 'AIT-MOHAMMED', 'Ryles', 'ryles@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '', 'admin', NULL),
-(2, 'DUBOIS', 'Jean', 'jean@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '17 rue des pommes', 'client', NULL),
+(2, 'Dubois', 'Jean', 'jean.dubois@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'Bois de Vincennes', 'client', NULL),
 (12, 'marie', 'm', 'm', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '', 'client', NULL),
 (13, 'jean', 'valjean', 'klza', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '', 'client', NULL),
 (14, 'poi', 'poi', 'poi', '8abcda2dba9a5c5c674e659333828582122c5f56', '', 'client', '2025-01-08'),
@@ -609,6 +725,27 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 
 --
+-- Index pour la table `abonnement`
+--
+ALTER TABLE `abonnement`
+  ADD PRIMARY KEY (`idAbonnement`),
+  ADD KEY `idUser` (`idUser`);
+
+--
+-- Index pour la table `avis`
+--
+ALTER TABLE `avis`
+  ADD PRIMARY KEY (`idAvis`),
+  ADD KEY `idLivre` (`idLivre`),
+  ADD KEY `idUser` (`idUser`);
+
+--
+-- Index pour la table `categorie`
+--
+ALTER TABLE `categorie`
+  ADD PRIMARY KEY (`idCategorie`);
+
+--
 -- Index pour la table `commande`
 --
 ALTER TABLE `commande`
@@ -630,7 +767,22 @@ ALTER TABLE `livre`
   ADD PRIMARY KEY (`idLivre`),
   ADD UNIQUE KEY `idlivre` (`idLivre`),
   ADD KEY `idLivre_2` (`idLivre`),
-  ADD KEY `idLivre_3` (`idLivre`);
+  ADD KEY `idLivre_3` (`idLivre`),
+  ADD KEY `idCategorie` (`idCategorie`),
+  ADD KEY `idMaisonEdition` (`idMaisonEdition`);
+
+--
+-- Index pour la table `maisonEdition`
+--
+ALTER TABLE `maisonEdition`
+  ADD PRIMARY KEY (`idMaisonEdition`);
+
+--
+-- Index pour la table `promotion`
+--
+ALTER TABLE `promotion`
+  ADD PRIMARY KEY (`idPromotion`),
+  ADD KEY `idLivre` (`idLivre`);
 
 --
 -- Index pour la table `user`
@@ -641,6 +793,24 @@ ALTER TABLE `user`
 --
 -- AUTO_INCREMENT pour les tables déchargées
 --
+
+--
+-- AUTO_INCREMENT pour la table `abonnement`
+--
+ALTER TABLE `abonnement`
+  MODIFY `idAbonnement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT pour la table `avis`
+--
+ALTER TABLE `avis`
+  MODIFY `idAvis` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `categorie`
+--
+ALTER TABLE `categorie`
+  MODIFY `idCategorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `commande`
@@ -661,6 +831,18 @@ ALTER TABLE `livre`
   MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
+-- AUTO_INCREMENT pour la table `maisonEdition`
+--
+ALTER TABLE `maisonEdition`
+  MODIFY `idMaisonEdition` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT pour la table `promotion`
+--
+ALTER TABLE `promotion`
+  MODIFY `idPromotion` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
@@ -669,6 +851,19 @@ ALTER TABLE `user`
 --
 -- Contraintes pour les tables déchargées
 --
+
+--
+-- Contraintes pour la table `abonnement`
+--
+ALTER TABLE `abonnement`
+  ADD CONSTRAINT `abonnement_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE CASCADE;
+
+--
+-- Contraintes pour la table `avis`
+--
+ALTER TABLE `avis`
+  ADD CONSTRAINT `avis_ibfk_1` FOREIGN KEY (`idLivre`) REFERENCES `livre` (`idLivre`) ON DELETE CASCADE,
+  ADD CONSTRAINT `avis_ibfk_2` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `commande`
@@ -682,6 +877,19 @@ ALTER TABLE `commande`
 ALTER TABLE `ligneCommande`
   ADD CONSTRAINT `lignecommande_ibfk_1` FOREIGN KEY (`idCommande`) REFERENCES `commande` (`idCommande`) ON DELETE CASCADE,
   ADD CONSTRAINT `lignecommande_ibfk_2` FOREIGN KEY (`idLivre`) REFERENCES `livre` (`idLivre`) ON DELETE CASCADE;
+
+--
+-- Contraintes pour la table `livre`
+--
+ALTER TABLE `livre`
+  ADD CONSTRAINT `livre_ibfk_1` FOREIGN KEY (`idCategorie`) REFERENCES `categorie` (`idCategorie`) ON DELETE SET NULL,
+  ADD CONSTRAINT `livre_ibfk_2` FOREIGN KEY (`idMaisonEdition`) REFERENCES `maisonEdition` (`idMaisonEdition`) ON DELETE SET NULL;
+
+--
+-- Contraintes pour la table `promotion`
+--
+ALTER TABLE `promotion`
+  ADD CONSTRAINT `promotion_ibfk_1` FOREIGN KEY (`idLivre`) REFERENCES `livre` (`idLivre`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
