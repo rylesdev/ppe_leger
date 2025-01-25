@@ -15,8 +15,8 @@ A FAIRE :
         Menu :
             - Section "à la une" présentant les livres
                 - les plus vendus
-                - recommandés
-                - en prommotion
+                - recommandés (view avis)
+                - en promotion
 
         Panier :
             - (c_panier.php)Trouver un moyen pour que, quand le user clique sur Paypal,
@@ -28,32 +28,50 @@ A FAIRE :
         Livre
             - Enlever tous les messages d'erreurs qui apparaissent pour rien.
 
+            - Pour le mode admin, il faut modifier le "categorieLivre" pour l'adapter avec la table "categorie"
+                et non la table "livre".
+
         Page
-            - Créer une page Utilisateur où un utilisateur peut changer ses informations (email, mdp, nom, etc...)
+            - Créer une page "Abonnement" où un utilisateur peut s'abonner et obtenir des avantages
+                visualisables dans la page d'accueil, comme 1 livre offert au bout de 5 livres achetés par exemple.
+
+            - Lorsque l'utilisateur clique sur l'abonnement, il faut qu'il soit redirigé vers Paypal.
+
+            - Lorsque l'utilisateur commande un livre,
+                il faut que chaque "ligneCommande" soit ajouté dans "livreAchete" de la table "abonnement".
 
         PHPMYADMIN
-            - Rajouter ces tables :
-                - Catégorie (relation avec Livre)
-                    Un Livre appartient à une catégorie (Histoire, Roman, Poème, etc...).
-                - Edition (relation avec Livre)
-                    Un Livre appartient à une maison d'édition.
-                - Promotion (Relation avec Livre)
-                    Gère les dates et les prix de promotions des livres en promotion.
-                - Avis (relation avec User)
-                    Un User peut mettre un avis. Plus tard, créer une view pour afficher les livres les mieux vendus.
-                - Abonnement (Relation avec User)
-                    Un User peut s'abonner pour avoir des avantages, comme 1 livre offert au bout de 5 livres achetés par exemple.
+            - Créer dans la bdd le "insert into" dans la table "abonnement"
+                par rapport à l'abonnement que le user a "submit".
 
+            - BDD
                 - Particulier (HERITAGE DE USER)
                     Utiliser le trigger pour cet héritage (bureau)
                 - Société (HERITAGE DE USER)
                     Utiliser le trigger pour cet héritage (bureau)
 
+            - Supprimer la colonne "categorieLivre" de la table "Livre".
+
+            - Faire des "view" ou des "trigger" ou quoi que ce soit pour enrichir le front-office
+                à partir de ces tables :
+                                            1. maisonEdition
+                                            2. promotion
+                                            3. avis
+                                            4. abonnement
+            - Idées :
+                        1. Jsp.
+                        2. Dans la page d'accueil il y aura une liste des livres en promotion.
+                        3. Dans la page "Livre", l'utilisateur pourra remplir des étoiles pour donner son avis sur un livre.
+                            Créer une view pour afficher les livres les mieux notés.
+                        4. Pour l'abonnement, mettre les avantages visualisables dans la page d'accueil,
+                            comme 1 livre offert au bout de 5 livres achetés par exemple.
+
+
         Panier
             - Lorsque l'utilisateur appuie sur "Paypal" pour confirmer sa commande (et qu'elle passe en expédiée),
                 il faut qu'après, il n'y ai plus de livre dans le "Récapitulatif de la commande",
                 et il faut aussi que la "Somme à payer" passe à 0.
-                
+
             - Le "Filtrer par" ne marche pas pour tous les user dans la page "panier" mais marche dans la page "livre".
 
             - Pour un nouveau user :

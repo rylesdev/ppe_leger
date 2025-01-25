@@ -59,14 +59,16 @@
 
 		if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
 		    echo '<a href="index.php?page=3"> <img src="images/panier.png" height="80" width="80" style="margin-right: 30px"> </a>';
+            echo '<a href="index.php?page=4"> <img src="images/abonnement.png" height="80" width="80" style="margin-right: 30px"> </a>';
+            echo '<a href="index.php?page=5"> <img src="images/utilisateur.png" height="80" width="80" style="margin-right: 30px"> </a>';
         }
 
     if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="admin") {
-        echo '<a href = "index.php?page=4" > <img src = "images/stockage.png" height = "80" width = "80" style = "margin-right: 30px"> </a>';
-        echo '<a href = "index.php?page=5" > <img src = "images/statistique.png" height = "80" width = "80" style = "margin-right: 30px"> </a>';
+        echo '<a href = "index.php?page=6" > <img src = "images/stockage.png" height = "80" width = "80" style = "margin-right: 30px"> </a>';
+        echo '<a href = "index.php?page=7" > <img src = "images/statistique.png" height = "80" width = "80" style = "margin-right: 30px"> </a>';
 		}
 
-    echo '<a href="index.php?page=6"> <img src="images/deconnexion.png" height="80" width="80" style="margin-right: 30px"> </a>
+    echo '<a href="index.php?page=8"> <img src="images/deconnexion.png" height="80" width="80" style="margin-right: 30px"> </a>
     </div>';
 
 		 
@@ -79,13 +81,15 @@
 			case 1 : require_once("controleur/home.php"); break;
 			case 2 : require_once("controleur/c_livres.php"); break;
 			case 3 : require_once("controleur/c_panier.php"); break;
-            case 4 : require_once("controleur/c_stockage.php"); break;
-            case 5 : require_once("controleur/c_statistique.php"); break;
-			case 6 : session_destroy(); unset($_SESSION['email']);
+            case 4 : require_once("controleur/c_abonnement.php"); break;
+            case 5 : require_once("controleur/c_utilisateur.php"); break;
+            case 6 : require_once("controleur/c_stockage.php"); break;
+            case 7 : require_once("controleur/c_statistique.php"); break;
+			case 8 : session_destroy(); unset($_SESSION['email']);
 					 header("Location: index.php"); 
 					 break;
 		}
-	} //fin du if session.
+	}
     ?>
     <br>
     <br>

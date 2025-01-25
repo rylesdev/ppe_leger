@@ -28,7 +28,7 @@ $idUser = $_SESSION['idUser'];
 			echo "<tr>";
             echo "<td><img src='images/livres/".$unLivre['imageLivre']."' height='150' width='100'></td>";
             echo "<td>".$unLivre['nomLivre']."</td>";
-            echo "<td>".$unLivre['categorieLivre']."</td>";
+            echo "<td>".$unLivre['nomCategorie']."</td>";
             echo "<td>".$unLivre['auteurLivre']."</td>";
             echo "<td>".$unLivre['exemplaireLivre']."</td>";
             echo "<td>".$unLivre['prixLivre']."€</td>";

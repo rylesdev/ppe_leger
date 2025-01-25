@@ -12,13 +12,20 @@
 		}
 
 		/****************** SELECT  ******************/
+		public function selectUser($idUser) {
+			return $this->unModele->selectUser($idUser);
+		}
 
-		public function selectAllLivres ($idUser){
-			return $this->unModele->selectAllLivres($idUser);
+		public function selectAllLivres (){
+			return $this->unModele->selectAllLivres();
 		}
 
 		public function selectLikeLivres ($filtre){
 			return $this->unModele->selectLikeLivres($filtre);
+		}
+
+		public function selectAllCategories ($nomCategorie){
+			return $this->unModele->selectAllCategories($nomCategorie);
 		}
 
 		public function selectWhereLivre($idLivre){
@@ -111,8 +118,24 @@
 			return $this->unModele->insertLigneCommande($idCommande, $idLivre, $quantiteLivre);
 		}
 
+		public function insertAbonnement1m($idUser){
+			$this->unModele->insertAbonnement1m($idUser);
+		}
+
+		public function insertAbonnement3m($idUser) {
+			$this->unModele->insertAbonnement3m($idUser);
+		}
+
+		public function insertAbonnement1a($idUser) {
+			$this->unModele->insertAbonnement1a($idUser);
+		}
+
 
 		/**************** UPDATE ****************/
+
+		public function updateUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser, $idUser) {
+			$this->unModele->updateUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser, $idUser);
+		}
 
 		public function updateLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $idLivre, $prixLivre){
 			$this->unModele->updateLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $idLivre, $prixLivre);
@@ -130,7 +153,8 @@
 			$this->unModele->updateLigneCommande ($quantiteLigneCommande, $idCommande);
 		}
 
-		public function procedureInsertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser) {
+		public function procedureInsertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser)
+		{
 			$this->unModele->procedureInsertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser);
 		}
 	}

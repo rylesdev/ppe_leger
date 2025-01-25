@@ -28,34 +28,59 @@
 
 
 		/**************** SELECT ****************/
+        public function selectUser($idUser) {
+            $requete =  "select * 
+                        from user
+                        where idUser = ?;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
 
-		public function selectAllLivres ($idUser){
-			$requete =  "select l.*
-				        from livre l;";
+		public function selectAllLivres (){
+			$requete =  "select l.*, c.nomCategorie
+				        from livre l
+				        inner join categorie c 
+				        on l.idCategorie=c.idCategorie;";
 			$exec = $this->unPdo->prepare ($requete);
-			$exec->execute (); 
-			return $exec->fetchAll(); 
+			$exec->execute ();
+			return $exec->fetchAll();
 		}
 
 		public function selectLikeLivres ($filtre){
-			$requete =  "select l.*
+			$requete =  "select l.*, c.nomCategorie
 						from livre l   
+						inner join categorie c 
+						on l.idCategorie=c.idCategorie
 						where l.idLivre like :filtre or 
 						l.nomLivre like :filtre or 
-						l.categorieLivre like :filtre or 
+						c.nomCategorie like :filtre or 
 						l.auteurLivre like :filtre
 						group by    l.idLivre, 
 						            l.nomLivre, 
-						            l.categorieLivre, 
+						            c.nomCategorie, 
 						            l.auteurLivre, 
 						            l.imageLivre, 
 						            l.exemplaireLivre, 
 						            l.prixLivre;";
 			$exec = $this->unPdo->prepare ($requete);
 			$donnees = array(":filtre"=>"%".$filtre."%");
-			$exec->execute ($donnees); 
-			return $exec->fetchAll(); 
+			$exec->execute ($donnees);
+			return $exec->fetchAll();
 		}
+
+        public function selectAllCategories($nomCategorie) {
+            $requete =  "select c.nomCategorie 
+                        from categorie c
+                        inner join livre l
+                        on c.idCategorie=l.idCategorie
+                        where idCategorie = ?;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue (1, $nomCategorie, PDO::PARAM_STR);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
 
 		public function selectWhereLivre ($idLivre){
 			$requete =  "select * 
@@ -290,9 +315,50 @@
             }
         }
 
+        public function insertAbonnement1m($idUser) {
+            $requete = 	"insert into abonnement
+						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 MONTH), null);";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+        }
+
+        public function insertAbonnement3m($idUser) {
+            $requete = 	"insert into abonnement
+						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 3 MONTH), null);";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+        }
+
+        public function insertAbonnement1a($idUser) {
+            $requete = 	"insert into abonnement
+						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR), null);";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+        }
+
 
 
         /**************** UPDATE ****************/
+        public function updateUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser, $idUser) {
+            $requete =  "update user 
+                        set nomUser = ?, 
+                        prenomUser = ?, 
+                        emailUser = ?, 
+                        mdpUser = sha1(?), 
+                        adresseUser = ? 
+                        where idUser = ?;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $nomUser, PDO::PARAM_STR);
+            $exec->BindValue(2, $prenomUser, PDO::PARAM_STR);
+            $exec->BindValue(3, $emailUser, PDO::PARAM_STR);
+            $exec->BindValue(4, $mdpUser, PDO::PARAM_STR);
+            $exec->BindValue(5, $adresseUser, PDO::PARAM_STR);
+            $exec->BindValue(6, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+        }
 
 		public function updateLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $idLivre, $prixLivre) {
 			$requete =  "update livre 
@@ -347,14 +413,15 @@
 
         /**************** PROCEDURE ****************/
 
-        public function procedureInsertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser) {
+        public function procedureInsertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser)
+        {
             $exec = $this->unPdo->prepare("CALL pHashMdpUser(null, ?, ?, ?, ?, ?, 'client', curdate())");
-            $exec->BindValue (1, $nomUser, PDO::PARAM_STR);
-            $exec->BindValue (2, $prenomUser, PDO::PARAM_STR);
-            $exec->BindValue (3, $emailUser, PDO::PARAM_STR);
-            $exec->BindValue (4, $mdpUser, PDO::PARAM_STR);
-            $exec->BindValue (5, $adresseUser, PDO::PARAM_STR);
+            $exec->BindValue(1, $nomUser, PDO::PARAM_STR);
+            $exec->BindValue(2, $prenomUser, PDO::PARAM_STR);
+            $exec->BindValue(3, $emailUser, PDO::PARAM_STR);
+            $exec->BindValue(4, $mdpUser, PDO::PARAM_STR);
+            $exec->BindValue(5, $adresseUser, PDO::PARAM_STR);
             $exec->execute();
         }
-	}
+    }
 ?>

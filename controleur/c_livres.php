@@ -131,7 +131,7 @@ if (isset($_POST['Modifier'])) {
 if (isset($_POST['Filtrer'])) {
     $lesLivres = $unControleur->selectLikeLivres($_POST['filtre']);
 } else {
-    $lesLivres = $unControleur->selectAllLivres($idUser);
+    $lesLivres = $unControleur->selectAllLivres();
 }
 
 require_once("vue/vue_select_livre.php");
