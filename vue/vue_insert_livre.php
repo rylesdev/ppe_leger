@@ -23,7 +23,7 @@
         <tr>
             <td> Prix du livre (. au lieu de ,)</td>
             <td> <input type="text" name="prixLivre"
-                        value="<?= ($leLivre!=null)? $leLivre['prixLivre'] : '' ?>"></td>
+                        value="<?= ($leLivre!=null)? $leLivre['priexLivre'] : '' ?>"></td>
         </tr>
 		<tr>
 			<td> <input type="reset" name="Annuler" value="Annuler" class="table-success"> </td>

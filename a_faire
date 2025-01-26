@@ -1,5 +1,9 @@
 Priorité :
 
+(c_livres.php) - Lorsque l'utilisateur commande un livre,
+    il faut que chaque "ligneCommande" soit incrémenté dans "livreAchete" de la table "abonnement".
+    Régler le problème de la quantité de livre qui ne se met pas à jour.
+
 
 A FAIRE :
     Front-Office
@@ -29,21 +33,18 @@ A FAIRE :
             - Enlever tous les messages d'erreurs qui apparaissent pour rien.
 
             - Pour le mode admin, il faut modifier le "categorieLivre" pour l'adapter avec la table "categorie"
-                et non la table "livre".
+                et non la table "livre". Il faut aussi rajouter la maison d'édition du livre.
 
         Page
+            - Lorsque l'utilisateur commande un livre,
+                il faut que chaque "ligneCommande" soit ajouté dans "livreAchete" de la table "abonnement".
+
             - Créer une page "Abonnement" où un utilisateur peut s'abonner et obtenir des avantages
                 visualisables dans la page d'accueil, comme 1 livre offert au bout de 5 livres achetés par exemple.
 
             - Lorsque l'utilisateur clique sur l'abonnement, il faut qu'il soit redirigé vers Paypal.
 
-            - Lorsque l'utilisateur commande un livre,
-                il faut que chaque "ligneCommande" soit ajouté dans "livreAchete" de la table "abonnement".
-
         PHPMYADMIN
-            - Créer dans la bdd le "insert into" dans la table "abonnement"
-                par rapport à l'abonnement que le user a "submit".
-
             - BDD
                 - Particulier (HERITAGE DE USER)
                     Utiliser le trigger pour cet héritage (bureau)
@@ -65,6 +66,9 @@ A FAIRE :
                             Créer une view pour afficher les livres les mieux notés.
                         4. Pour l'abonnement, mettre les avantages visualisables dans la page d'accueil,
                             comme 1 livre offert au bout de 5 livres achetés par exemple.
+                            Cette information pourra être obtenable à partir d'un trigger par exemple :
+                                Si il y a plus de x livres dans ligneCommande (whereidUser) alors offrir un livre (insertLigneCommande)
+                                et Afficher un message permanent dans l’accueil jusqu’à que le user appuie sur un bouton : Ok (qui le fait disparaître)
 
 
         Panier

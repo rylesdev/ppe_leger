@@ -85,6 +85,11 @@
 		}
 
 
+		public function selectAbonnement($idUser) {
+			return $this->unModele->selectAbonnement($idUser);
+		}
+
+
 		/**************** DELETE ****************/
 
 		public function deleteLivre($idLivre){
@@ -151,6 +156,10 @@
 
 		public function updateLigneCommande ($quantiteLigneCommande, $idCommande) {
 			$this->unModele->updateLigneCommande ($quantiteLigneCommande, $idCommande);
+		}
+
+		public function updateLivreAbonnement($idUser) {
+			$this->unModele->updateLivreAbonnement($idUser);
 		}
 
 		public function procedureInsertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser)
