@@ -162,9 +162,14 @@
 			$this->unModele->updateLivreAbonnement($idUser);
 		}
 
-		public function procedureInsertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser)
-		{
+
+		/**************** PROCEDURE ****************/
+		public function procedureInsertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser) {
 			$this->unModele->procedureInsertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser);
+		}
+
+		public function procedureInsertLivre($idUser) {
+			$this->unModele->procedureInsertLivre($idUser);
 		}
 	}
 ?>

@@ -434,15 +434,19 @@
 
 
         /**************** PROCEDURE ****************/
-
-        public function procedureInsertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser)
-        {
+        public function procedureInsertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser) {
             $exec = $this->unPdo->prepare("CALL pHashMdpUser(null, ?, ?, ?, ?, ?, 'client', curdate())");
             $exec->BindValue(1, $nomUser, PDO::PARAM_STR);
             $exec->BindValue(2, $prenomUser, PDO::PARAM_STR);
             $exec->BindValue(3, $emailUser, PDO::PARAM_STR);
             $exec->BindValue(4, $mdpUser, PDO::PARAM_STR);
             $exec->BindValue(5, $adresseUser, PDO::PARAM_STR);
+            $exec->execute();
+        }
+
+        public function procedureInsertLivre($idUser) {
+            $exec = $this->unPdo->prepare("CALL pOffrirLivre(null, ?,)");
+            $exec->BindValue(1, $idUser, PDO::PARAM_STR);
             $exec->execute();
         }
     }

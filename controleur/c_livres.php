@@ -4,9 +4,6 @@
 $leLivre = null;
 $idUser = $_SESSION['idUser'];
 
-echo "test";
-var_dump($unControleur->selectAbonnement(2));
-
 if (!isset($_SESSION['commandeEnCours'])) {
     $_SESSION['commandeEnCours'] = 0;
     $commandeEnCours = $_SESSION['commandeEnCours'];
@@ -56,11 +53,6 @@ if (isset($_GET['action']) && isset($_GET['idLivre']) ){
 
                                     if ($result) {
                                         echo "<h3 style='color: green;'>Livre ajouté à la commande avec succès.</h3>";
-
-                                        $selectAbonnement = $unControleur->selectAbonnement($idUser);
-                                        if(!empty($selectAbonnement)) {
-                                                $unControleur->updateLivreAbonnement($idUser);;
-                                        }
                                     }
                                 }
                                 break;

@@ -159,3 +159,40 @@ p_dateInscriptionUser
 );
 end $$
 delimiter ;
+
+
+
+DELIMITER $$
+
+CREATE PROCEDURE pOffrirLivre(
+    IN p_idUser INT
+)
+BEGIN
+    DECLARE totalQuantite INT;
+    DECLARE p_dateCommande DATETIME;
+    DECLARE p_dateLivraisonCommande DATE;
+    DECLARE idLivre INT DEFAULT 1;
+    DECLARE newIdCommande INT;
+
+    SELECT SUM(quantiteLigneCommande)
+    INTO totalQuantite
+    FROM ligneCommande l
+    inner join commande c
+    on l.idCommande = c.idCommande
+    WHERE c.statutCommande = 'expédiée' and c.idUser = p_idUser;
+
+    IF totalQuantite > 10 THEN
+        INSERT INTO commande (idCommande, dateCommande, statutCommande, dateLivraisonCommande, idUser)
+        VALUES (null, NOW(), 'expédiée', DATE_ADD(NOW(), INTERVAL 7 DAY), p_idUser);
+
+        SET newIdCommande = LAST_INSERT_ID();
+
+        INSERT INTO ligneCommande (idLigneCommande, idCommande, idLivre, quantiteLigneCommande)
+        VALUES (null, newIdCommande, 6, 1);
+
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Un livre vous a été offert et va vous être envoyé directement chez vous !';
+    END IF;
+END$$
+
+DELIMITER ;
