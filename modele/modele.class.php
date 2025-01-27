@@ -402,34 +402,35 @@
 		}
 
         public function updateCommande ($idCommande) {
-            $requete =  "update commande
-                        set dateCommande = curdate(),
-                        statutCommande = 'expédiée', 
-                        dateLivraisonCommande = DATE_ADD(CURDATE(), INTERVAL 7 DAY)
-                        where idCommande = ?;";
-            $exec = $this->unPdo->prepare ($requete);
-            $exec->BindValue (1, $idCommande, PDO::PARAM_INT);
-            $exec->execute();
+            try {
+                $requete =  "update commande
+                            set dateCommande = curdate(),
+                            statutCommande = 'expédiée', 
+                            dateLivraisonCommande = DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+                            where idCommande = ?;";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $idCommande, PDO::PARAM_INT);
+                $exec->execute();
+            } catch(PDOException $exp) {
+                if ($exp->getCode() === '45000') {
+                    $messageErreur = $exp->getMessage();
+                    if (strpos($messageErreur, 'Un livre vous a été offert') !== false) {
+                        $_SESSION['livreOffert'] = "Un livre vous a été offert et va vous être envoyé directement chez vous !";
+                    }
+                }
+            }
+            return $exec->fetchAll();
         }
 
         public function updateLigneCommande ($quantiteLigneCommande, $idCommande) {
             $requete =  "update ligneCommande
                         set quantiteLigneCommande = ?
-                        where idCommande = ?;";;
+                        where idCommande = ?;";
             $exec = $this->unPdo->prepare ($requete);
             $exec->BindValue (1, $quantiteLigneCommande, PDO::PARAM_INT);
             $exec->BindValue (2, $idCommande, PDO::PARAM_INT);
             $exec->execute();
             return $this->unPdo->lastInsertId();
-        }
-
-        public function updateLivreAbonnement($idUser) {
-            $requete =  "update abonnement
-                        set livreAchete = livreAchete + 1
-                        where idUser = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
         }
 
 
@@ -445,7 +446,7 @@
         }
 
         public function procedureInsertLivre($idUser) {
-            $exec = $this->unPdo->prepare("CALL pOffrirLivre(null, ?,)");
+            $exec = $this->unPdo->prepare("CALL pOffrirLivre(?)");
             $exec->BindValue(1, $idUser, PDO::PARAM_STR);
             $exec->execute();
         }

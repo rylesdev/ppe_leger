@@ -151,15 +151,11 @@
 		}
 
 		public function updateCommande($idCommande) {
-			$this->unModele->updateCommande($idCommande);
+			return $this->unModele->updateCommande($idCommande);
 		}
 
 		public function updateLigneCommande ($quantiteLigneCommande, $idCommande) {
 			$this->unModele->updateLigneCommande ($quantiteLigneCommande, $idCommande);
-		}
-
-		public function updateLivreAbonnement($idUser) {
-			$this->unModele->updateLivreAbonnement($idUser);
 		}
 
 

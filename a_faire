@@ -1,8 +1,9 @@
 Priorité :
 
-(c_livres.php) - Lorsque l'utilisateur commande un livre,
-    il faut que chaque "ligneCommande" soit incrémenté dans "livreAchete" de la table "abonnement".
-    Régler le problème de la quantité de livre qui ne se met pas à jour.
+// - Lorsque l'utilisateur paye une commande (update commande)
+                Procédure qui va gérer : si la somme des ligneCommande est supérieur à 10, alors un livre lui est offert.
+
+- Afficher le message du livre offert dans la page d'accueil.
 
 
 A FAIRE :
@@ -23,38 +24,42 @@ A FAIRE :
                 - en promotion
 
         Panier :
-            - (c_panier.php)Trouver un moyen pour que, quand le user clique sur Paypal,
+            - (c_panier.php) Trouver un moyen pour que, quand le user clique sur Paypal,
                l'utilisateur soit redirigé vers Paypal.
                "header("Location: https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR");"
+
+            - (c_abonnement.php) Lorsque l'utilisateur clique sur l'abonnement,
+                il faut qu'il soit redirigé vers Paypal.
+                "header("Location: https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR");"
 
 
     Back-End
         Livre
-            - Enlever tous les messages d'erreurs qui apparaissent pour rien.
-
             - Pour le mode admin, il faut modifier le "categorieLivre" pour l'adapter avec la table "categorie"
                 et non la table "livre". Il faut aussi rajouter la maison d'édition du livre.
 
         Page
-            /*- Lorsque l'utilisateur commande un livre,
-                il faut que chaque "ligneCommande" soit ajouté dans "livreAchete" de la table "abonnement".*/
-
             - Lorsque l'utilisateur paye une commande (update commande)
-                il faut que, si la somme des ligneCommande est supérieur à 10, alors un livre lui est offert.
-                Affichage de l'avantage sur la page d'accueil et "insert ligneCommande" ainsi que "insert commande",
-                avec une relation commande 1,1 -> Détient 1,1-> ligneCommande.
+                Procédure qui va gérer : si la somme des ligneCommande est supérieur à 10, alors un livre lui est offert.
+            - Afficher le message du livre offert dans la page d'accueil.
 
-            - Créer une page "Abonnement" où un utilisateur peut s'abonner et obtenir des avantages
-                visualisables dans la page d'accueil, comme 1 livre offert au bout de 5 livres achetés par exemple.
-
-            - Lorsque l'utilisateur clique sur l'abonnement, il faut qu'il soit redirigé vers Paypal.
+            - Lorsque les livres (ligneCommande) sont assignés comme expédiée dans la table commande,
+                alors ils doivent ne plus apparaître dans la page panier, mais doivent apparaître dans une page "Commande".
+                Il faut aussi que la "Somme à payer" passe à 0.
+            - Dans la page "Commande" il doit aussi apparaître les livres offerts.
 
         PHPMYADMIN
-            - BDD
-                - Particulier (HERITAGE DE USER)
-                    Utiliser le trigger pour cet héritage (bureau)
-                - Société (HERITAGE DE USER)
-                    Utiliser le trigger pour cet héritage (bureau)
+		    - Supprimer le enum "roleUser" et créer des tables avec des héritages à la place :
+	                - Particulier (HERITAGE DE USER)
+        	            Utiliser le trigger pour cet héritage (bureau)
+                	- Société (HERITAGE DE USER)
+	                    Utiliser le trigger pour cet héritage (bureau)
+
+            - Héritages :
+                - User (idUser, Email, MDP (Connexion uniquement)
+                    - Particulier (Nom, Prenom, Adresse, ...)
+                    - Entreprise (Num SIRET, RaisonSociale, ...)
+                - Admin (table à part)
 
             - Supprimer la colonne "categorieLivre" de la table "Livre".
 
@@ -75,13 +80,22 @@ A FAIRE :
                                 Si il y a plus de x livres dans ligneCommande (whereidUser) alors offrir un livre (insertLigneCommande)
                                 et Afficher un message permanent dans l’accueil jusqu’à que le user appuie sur un bouton : Ok (qui le fait disparaître)
 
+            - View :
+                Créer une view (SELECT c.idUser, SUM(l.quantiteLigneCommande)
+                                    FROM ligneCommande l
+                                    inner join commande c
+                                    on l.idCommande = c.idCommande
+                                    WHERE c.statutCommande = 'expédiée'
+                                    group by c.idUser;)
+                qui va afficher le nombre de livres achetés par chaque user.
+
 
         Panier
-            - Lorsque l'utilisateur appuie sur "Paypal" pour confirmer sa commande (et qu'elle passe en expédiée),
-                il faut qu'après, il n'y ai plus de livre dans le "Récapitulatif de la commande",
-                et il faut aussi que la "Somme à payer" passe à 0.
-
             - Le "Filtrer par" ne marche pas pour tous les user dans la page "panier" mais marche dans la page "livre".
+
+
+        Bug
+            - Quand je modifie la quantité d'un livre dans la page Panier, tous les livres sont modifiés.
 
             - Pour un nouveau user :
                 - Quand je supprime un livre, tous les livres se suppriment.

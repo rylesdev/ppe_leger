@@ -51,17 +51,16 @@ CREATE TABLE `abonnement` (
   `idAbonnement` int NOT NULL,
   `idUser` int NOT NULL,
   `dateDebutAbonnement` date NOT NULL,
-  `dateFinAbonnement` date DEFAULT NULL,
-  `livreAchete` int DEFAULT '0'
+  `dateFinAbonnement` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `abonnement`
 --
 
-INSERT INTO `abonnement` (`idAbonnement`, `idUser`, `dateDebutAbonnement`, `dateFinAbonnement`, `livreAchete`) VALUES
-(1, 2, '2025-01-01', '2025-12-31', 5),
-(3, 2, '2025-01-25', '2025-04-25', NULL);
+INSERT INTO `abonnement` (`idAbonnement`, `idUser`, `dateDebutAbonnement`, `dateFinAbonnement`) VALUES
+(1, 2, '2025-01-01', '2025-12-31'),
+(3, 2, '2025-01-25', '2025-04-25');
 
 -- --------------------------------------------------------
 
@@ -895,3 +894,26 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+
+CREATE TABLE particulier (
+    idUser INT PRIMARY KEY,
+    dateNaissance DATE,
+    FOREIGN KEY (idUser) REFERENCES user(idUser) ON DELETE CASCADE
+);
+
+
+CREATE TABLE entreprise (
+    idUser INT PRIMARY KEY,
+    nomEntreprise VARCHAR(255),
+    numeroSIRET VARCHAR(14),
+    FOREIGN KEY (idUser) REFERENCES user(idUser) ON DELETE CASCADE
+);
+
+
+CREATE TABLE admin (
+    idUser INT PRIMARY KEY,
+    dateNaissance DATE,
+    FOREIGN KEY (idUser) REFERENCES user(idUser) ON DELETE CASCADE
+);
