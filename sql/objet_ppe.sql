@@ -20,6 +20,42 @@ on li.idLivre=l.idLivre
 group by c.idUser;
 
 
+CREATE OR REPLACE VIEW vTotalLivreEnAttente AS
+SELECT
+    li.idCommande,
+    c.idUser,
+    l.nomLivre,
+    l.prixLivre,
+    li.quantiteLigneCommande,
+    (l.prixLivre * li.quantiteLigneCommande) AS totalLivre
+FROM
+    livre l
+INNER JOIN
+    ligneCommande li ON l.idLivre = li.idLivre
+INNER JOIN
+    commande c ON c.idCommande = li.idCommande
+WHERE
+    c.statutCommande = 'en attente';
+
+
+CREATE OR REPLACE VIEW vTotalLivreExpediee AS
+SELECT
+    li.idCommande,
+    c.idUser,
+    l.nomLivre,
+    l.prixLivre,
+    li.quantiteLigneCommande,
+    (l.prixLivre * li.quantiteLigneCommande) AS totalLivre
+FROM
+    livre l
+INNER JOIN
+    ligneCommande li ON l.idLivre = li.idLivre
+INNER JOIN
+    commande c ON c.idCommande = li.idCommande
+WHERE
+    c.statutCommande = 'expédiée';
+
+
 create or replace view vNbMinLivre as
 select *
 from vTotalLivre
@@ -171,12 +207,28 @@ BEGIN
     DECLARE p_dateLivraisonCommande DATE;
     DECLARE idLivre INT DEFAULT 1;
     DECLARE newIdCommande INT;
+    IF NOT EXISTS (
+        SELECT 1
+        FROM abonnement
+        WHERE idUser = p_idUser
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Vous devez être abonné pour bénéficier de cette offre.';
+    END IF;
+    IF NOT EXISTS (
+        SELECT 1
+        FROM abonnement
+        WHERE idUser = p_idUser AND dateFinAbonnement > CURDATE()
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Votre abonnement a expiré. Vous ne pouvez pas bénéficier de cette offre.';
+    END IF;
     SELECT SUM(quantiteLigneCommande)
     INTO totalQuantite
     FROM ligneCommande l
-    inner join commande c
-    on l.idCommande = c.idCommande
-    WHERE c.statutCommande = 'expédiée' and c.idUser = p_idUser;
+    INNER JOIN commande c
+        ON l.idCommande = c.idCommande
+    WHERE c.statutCommande = 'expédiée' AND c.idUser = p_idUser;
     IF totalQuantite > 10 THEN
         INSERT INTO commande (idCommande, dateCommande, statutCommande, dateLivraisonCommande, idUser)
         VALUES (null, NOW(), 'expédiée', DATE_ADD(NOW(), INTERVAL 7 DAY), p_idUser);

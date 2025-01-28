@@ -1,9 +1,16 @@
 <?php
-if (isset($_SESSION['message'])) {
-    echo $_SESSION['message'];
-    unset($_SESSION['message']);
+require_once("modele/modele.class.php");
+
+if (!isset($_SESSION['livreOffert'])) {
+    echo "Variable de session non définie.";
+} else {
+    echo "Variable définie : " . $_SESSION['livreOffert'];
 }
 
+if (isset($_SESSION['livreOffert'])) {
+    echo $_SESSION['livreOffert'];
+    unset($_SESSION['livreOffert']);
+}
 
 $prenomUser = $_SESSION['prenomUser'];
 $nomUser = $_SESSION['nomUser'];

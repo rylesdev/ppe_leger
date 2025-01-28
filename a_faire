@@ -1,9 +1,11 @@
 Priorité :
 
-// - Lorsque l'utilisateur paye une commande (update commande)
-                Procédure qui va gérer : si la somme des ligneCommande est supérieur à 10, alors un livre lui est offert.
+Dans la page "Commande", l'utilisateur pourra remplir des étoiles pour donner son avis sur un livre.
+    Les étoiles vont s'afficher uniquement si l'utilisateur a reçu le livre (if dateLivraisonLivre < curdate())
 
-- Afficher le message du livre offert dans la page d'accueil.
+(vue/insert_avis.php) et (vue_commande.php)
+Régler le problème de cette page. Le insertAvis ne fonctionne pas (surement à cause de idLivre).
+
 
 
 A FAIRE :
@@ -39,7 +41,7 @@ A FAIRE :
                 et non la table "livre". Il faut aussi rajouter la maison d'édition du livre.
 
         Page
-            - Lorsque l'utilisateur paye une commande (update commande)
+            // - Lorsque l'utilisateur paye une commande (update commande)
                 Procédure qui va gérer : si la somme des ligneCommande est supérieur à 10, alors un livre lui est offert.
             - Afficher le message du livre offert dans la page d'accueil.
 
@@ -49,13 +51,7 @@ A FAIRE :
             - Dans la page "Commande" il doit aussi apparaître les livres offerts.
 
         PHPMYADMIN
-		    - Supprimer le enum "roleUser" et créer des tables avec des héritages à la place :
-	                - Particulier (HERITAGE DE USER)
-        	            Utiliser le trigger pour cet héritage (bureau)
-                	- Société (HERITAGE DE USER)
-	                    Utiliser le trigger pour cet héritage (bureau)
-
-            - Héritages :
+		    - Créer des tables avec des héritages et utiliser les triggers :
                 - User (idUser, Email, MDP (Connexion uniquement)
                     - Particulier (Nom, Prenom, Adresse, ...)
                     - Entreprise (Num SIRET, RaisonSociale, ...)
@@ -72,16 +68,22 @@ A FAIRE :
             - Idées :
                         1. Jsp.
                         2. Dans la page d'accueil il y aura une liste des livres en promotion.
-                        3. Dans la page "Livre", l'utilisateur pourra remplir des étoiles pour donner son avis sur un livre.
-                            Créer une view pour afficher les livres les mieux notés.
+                        3. Dans la page "Commande", l'utilisateur pourra remplir des étoiles pour donner son avis sur un livre.
+                            Les étoiles vont s'afficher uniquement si l'utilisateur a reçu le livre (if dateLivraisonLivre < curdate())
+                           Créer une view pour afficher les livres les mieux notés.
                         4. Pour l'abonnement, mettre les avantages visualisables dans la page d'accueil,
                             comme 1 livre offert au bout de 5 livres achetés par exemple.
                             Cette information pourra être obtenable à partir d'un trigger par exemple :
                                 Si il y a plus de x livres dans ligneCommande (whereidUser) alors offrir un livre (insertLigneCommande)
                                 et Afficher un message permanent dans l’accueil jusqu’à que le user appuie sur un bouton : Ok (qui le fait disparaître)
 
+
+            - Page Promotion (Admin) :
+                - Créer une page qui va permettre à un admin de mettre des livres en promotion.
+                    (nomLivre, prixLivre, nouveauPrixLivre, etc...)
+
             - View :
-                Créer une view (SELECT c.idUser, SUM(l.quantiteLigneCommande)
+                - Créer une view (SELECT c.idUser, SUM(l.quantiteLigneCommande)
                                     FROM ligneCommande l
                                     inner join commande c
                                     on l.idCommande = c.idCommande
@@ -90,8 +92,16 @@ A FAIRE :
                 qui va afficher le nombre de livres achetés par chaque user.
 
 
+                - Supprimer toutes les view (nbMinLivre, nbMaxLivre, nomMinLivre, nomMaxLivre)
+                    car on les a remplacé par des méthodes dans le modele qui va ajouter "whereIduser" dans la requête SQL.
+
+
         Panier
             - Le "Filtrer par" ne marche pas pour tous les user dans la page "panier" mais marche dans la page "livre".
+
+
+        Commande
+            - Gérer le problème de "Somme payée" qui se met à jour alors qu'elle ne devrait pas.
 
 
         Bug

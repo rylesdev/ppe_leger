@@ -105,10 +105,10 @@ $dateCommande = $dateCommande[0];
 </head>
 <body>
 <div class="payment-container">
-    <h3>Paiement de la commande</h3>
+    <h3>Information de la commande</h3>
     <form action="process_payment.php" method="POST">
         <div class="form-group">
-            <label for="montant">Somme à payer</label>
+            <label for="montant">Somme payée</label>
             <input type="text" id="montant" name="montant" value="<?php
             if ($sommeAPayer > 0) {
                 echo $sommeAPayer . '€';
@@ -124,11 +124,6 @@ $dateCommande = $dateCommande[0];
         <div class="form-group">
             <label for="date-livraison">Date de livraison</label>
             <input type="date" id="date-livraison" name="date-livraison" value ="<?php echo $dateCommande ?>" readonly>
-        </div>
-        <div class="pay-button">
-            <?php
-            echo "<a href='index.php?page=3&action=payer'> Payer avec Paypal </a>";
-            ?>
         </div>
     </form>
 </div>
@@ -152,7 +147,7 @@ $dateCommande = $dateCommande[0];
     <table class="table">
         <thead class="table-success">
         <tr>
-            <th scope="col">Récapitulatif de la commande</th>
+            <th scope="col">Récapitulatif des commandes</th>
         </tr>
         <tr>
             <th scope="col">Nom</th>
@@ -161,28 +156,39 @@ $dateCommande = $dateCommande[0];
             <th scope="col">Quantité</th>
             <th scope="col"></th>
             <th scope="col">Total Livre</th>
-            <th scope="col">Opération</th>
+            <th scope="col">Avis</th>
         </tr>
         </thead>
         <tbody>
         <?php
-        $lesCommandes = $unControleur->selectViewTotalLivreEnAttente($idUser);
+        $lesCommandes = $unControleur->selectViewTotalLivreExpediee($idUser);
+        $dateLigneCommande = $unControleur->selectDateLigneCommande($idUser);
 
         $tri = isset($_POST['tri']) ? $_POST['tri'] : '';
         $idUser = $_SESSION['idUser'];
 
         if ($tri == 'prix_min') {
-            $lesCommandes = $unControleur->selectViewNbMinLivreEnAttente($idUser);
+            $lesCommandes = $unControleur->selectViewNbMinLivreExpediee($idUser);
         } elseif ($tri == 'prix_max') {
-            $lesCommandes = $unControleur->selectViewNbMaxLivreEnAttente($idUser);
+            $lesCommandes = $unControleur->selectViewNbMaxLivreExpediee($idUser);
         } elseif ($tri == 'ordre_croissant') {
-            $lesCommandes = $unControleur->selectViewNomMinLivreEnAttente($idUser);
+            $lesCommandes = $unControleur->selectViewNomMinLivreExpediee($idUser);
         } elseif ($tri == 'ordre_decroissant') {
-            $lesCommandes = $unControleur->selectViewNomMaxLivreEnAttente($idUser);
+            $lesCommandes = $unControleur->selectViewNomMaxLivreExpediee($idUser);
         }
 
         if (isset($lesCommandes)){
             foreach ($lesCommandes as $uneCommande) {
+                $jourRestant = null;
+                $idLivre = null;
+                foreach ($dateLigneCommande as $ligneCommande) {
+                    if ($ligneCommande['idLigneCommande'] == $uneCommande['idLigneCommande']) {
+                        $jourRestant = $ligneCommande['jourRestant'];
+                        $_SESSION['idLivre'] = $ligneCommande['idLivre'];
+                        break;
+                    }
+                }
+
                 echo "<tr>";
                 echo "<td>".$uneCommande['nomLivre']."</td>";
                 echo "<td>".$uneCommande['prixLivre']."€</td>";
@@ -190,23 +196,27 @@ $dateCommande = $dateCommande[0];
                 echo "<td>".$uneCommande['quantiteLigneCommande']."</td>";
                 echo "<td> = </td>";
                 echo "<td>".$uneCommande['totalLivre']."€</td>";
-                echo "<td>";
-                echo "<a href='index.php?page=3&action=sup&idCommande=" . $uneCommande['idCommande'] . "'>" . "<img src='images/supprimer.png' heigth='30' width='30'> </a>";
-                echo "<a href='index.php?page=3&action=edit&idCommande=" . $uneCommande['idCommande'] . "'>" . "<img src='images/editer.png' heigth='30' width='30'> </a>";
-                ?>
-                <form method="post">
-                    <table>
-                        <tr>
-                            <td> Modifier la quantité :</td> <br>
-                            <td> <input type="text" name="updateQuantiteLivre" style="width:30px"></td>
-                        </tr>
-                        <tr>
-                            <td> <input type="submit" name="QuantitePanier" value="Confirmer" class="table-success"></td>
-                        </tr>
-                    </table>
-                </form>
-        <?php
-                echo "</td>";
+
+                if ($jourRestant <= 0) {
+                    echo "<td>";
+                    echo "<form method='post'>";
+                    echo "<input type='hidden' name='idLivre' value='".$idLivre."'>";
+
+                    for ($i = 1; $i <= 5; $i++) {
+                        echo "<label>";
+                        echo "<input type='radio' name='noteAvis' value='".$i."' /> ★";
+                        echo "</label>";
+                    }
+
+                    echo "<textarea name='commentaireAvis' placeholder='Écrire un avis...'></textarea>";
+
+                    echo "<button type='submit'>Soumettre l'avis</button>";
+                    echo "</form>";
+                    echo "</td>";
+                } else {
+                    echo "<td>Aucun avis possible</td>";
+                }
+
                 echo "</tr>";
             }
         }

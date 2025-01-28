@@ -48,28 +48,48 @@
 			return $this->unModele->selectDateLivraisonCommande($idUser);
 		}
 
-		public function selectViewTotalLivre($idUser) {
-			return $this->unModele->selectViewTotalLivre($idUser);
-		}
-
 		public function selectViewTotalCommande($idUser) {
 			return $this->unModele->selectViewTotalCommande($idUser);
 		}
 
-		public function selectViewNbMinLivre() {
-			return $this->unModele->selectViewNbMinLivre();
+		public function selectViewTotalLivreEnAttente($idUser) {
+			return $this->unModele->selectViewTotalLivreEnAttente($idUser);
 		}
 
-		public function selectViewNbMaxLivre() {
-			return $this->unModele->selectViewNbMaxLivre();
+		public function selectViewTotalLivreExpediee($idUser) {
+			return $this->unModele->selectViewTotalLivreExpediee($idUser);
 		}
 
-		public function selectViewNomMinLivre() {
-			return $this->unModele->selectViewNomMinLivre();
+		public function selectViewNbMinLivreEnAttente($idUser) {
+			return $this->unModele->selectViewNbMinLivreEnAttente($idUser);
 		}
 
-		public function selectViewNomMaxLivre() {
-			return $this->unModele->selectViewNomMaxLivre();
+		public function selectViewNbMaxLivreEnAttente($idUser) {
+			return $this->unModele->selectViewNbMaxLivreEnAttente($idUser);
+		}
+
+		public function selectViewNomMinLivreEnAttente($idUser) {
+			return $this->unModele->selectViewNomMinLivreEnAttente($idUser);
+		}
+
+		public function selectViewNomMaxLivreEnAttente($idUser) {
+			return $this->unModele->selectViewNomMaxLivreEnAttente($idUser);
+		}
+
+		public function selectViewNbMinLivreExpediee($idUser) {
+			return $this->unModele->selectViewNbMinLivreExpediee($idUser);
+		}
+
+		public function selectViewNbMaxLivreExpediee($idUser) {
+			return $this->unModele->selectViewNbMaxLivreExpediee($idUser);
+		}
+
+		public function selectViewNomMinLivreExpediee($idUser) {
+			return $this->unModele->selectViewNomMinLivreExpediee($idUser);
+		}
+
+		public function selectViewNomMaxLivreExpediee($idUser) {
+			return $this->unModele->selectViewNomMaxLivreExpediee($idUser);
 		}
 
 		public function selectViewCommandesEnAttente() {
@@ -84,9 +104,12 @@
 			return $this->unModele->selectViewLivresEnStock();
 		}
 
+		public function selectDateAbonnement($idUser) {
+			return $this->unModele->selectDateAbonnement($idUser);
+		}
 
-		public function selectAbonnement($idUser) {
-			return $this->unModele->selectAbonnement($idUser);
+		public function selectDateLigneCommande($idUser) {
+			return $this->unModele->selectDateLigneCommande($idUser);
 		}
 
 
@@ -133,6 +156,10 @@
 
 		public function insertAbonnement1a($idUser) {
 			$this->unModele->insertAbonnement1a($idUser);
+		}
+
+		public function insertAvis($idLivre, $idUser, $commentaireAvis, $noteAvis) {
+			$this->unModele->insertAvis($idLivre, $idUser, $commentaireAvis, $noteAvis);
 		}
 
 

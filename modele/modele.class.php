@@ -142,16 +142,6 @@
             return $exec->fetch();
         }
 
-        public function selectViewTotalLivre($idUser) {
-            $requete =  "select * 
-                        from vTotalLivre
-                        where idUser = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->bindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
         public function selectViewTotalCommande($idUser) {
             $requete =  "select * 
                         from vTotalCommande   
@@ -162,34 +152,110 @@
             return $exec->fetch();
         }
 
-        public function selectViewNbMinLivre() {
+        public function selectViewTotalLivreEnAttente($idUser) {
             $requete =  "select * 
-                        from vNbMinLivre";
+                        from vTotalLivreEnAttente
+                        where idUser = ?;";
             $exec = $this->unPdo->prepare($requete);
+            $exec->bindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
             return $exec->fetchAll();
         }
 
-        public function selectViewNbMaxLivre() {
-        $requete =  "select * 
-                    from vNbMaxLivre;";
-        $exec = $this->unPdo->prepare($requete);
-        $exec->execute();
-        return $exec->fetchAll();
-        }
-
-        public function selectViewNomMinLivre() {
+        public function selectViewTotalLivreExpediee($idUser) {
             $requete =  "select * 
-                        from vNomMinLivre";
+                        from vTotalLivreExpediee
+                        where idUser = ?;";
             $exec = $this->unPdo->prepare($requete);
+            $exec->bindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
             return $exec->fetchAll();
         }
 
-        public function selectViewNomMaxLivre() {
-            $requete =  "select * 
-                        from vNomMaxLivre";
+        public function selectViewNbMinLivreEnAttente($idUser) {
+            $requete =  "select *
+                        from vTotalLivreEnAttente
+                        where idUser = ? 
+                        order by totalLivre asc;";
             $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function selectViewNbMaxLivreEnAttente($idUser) {
+            $requete =  "select *
+                        from vTotalLivreEnAttente
+                        where idUser = ?
+                        order by totalLivre desc";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function selectViewNomMinLivreEnAttente($idUser) {
+            $requete =  "select *
+                        from vTotalLivreEnAttente
+                        where idUser = ?
+                        order by nomLivre asc;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function selectViewNomMaxLivreEnAttente($idUser) {
+            $requete =  "select *
+                        from vTotalLivreEnAttente
+                        where idUser = ?
+                        order by nomLivre desc;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function selectViewNbMinLivreExpediee($idUser) {
+            $requete =  "select *
+                        from vTotalLivreExpediee
+                        where idUser = ? 
+                        order by totalLivre asc;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function selectViewNbMaxLivreExpediee($idUser) {
+            $requete =  "select *
+                        from vTotalLivreExpediee
+                        where idUser = ?
+                        order by totalLivre desc";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function selectViewNomMinLivreExpediee($idUser) {
+            $requete =  "select *
+                        from vTotalLivreExpediee
+                        where idUser = ?
+                        order by nomLivre asc;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function selectViewNomMaxLivreExpediee($idUser) {
+            $requete =  "select *
+                        from vTotalLivreExpediee
+                        where idUser = ?
+                        order by nomLivre desc;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
             return $exec->fetchAll();
         }
@@ -218,12 +284,24 @@
             return $exec->fetchAll();
         }
 
-        public function selectAbonnement($idUser) {
-            $requete =  "select idUser
-                        from abonnement 
-                        where dateFinAbonnement > curdate() and idUser = ?;";
+        public function selectDateAbonnement($idUser) {
+            $requete =  "select floor(DATEDIFF(dateFinAbonnement, CURDATE())) AS jourRestant
+                        from abonnement
+                        where idUser = ?;";
             $exec = $this->unPdo->prepare($requete);
-            $exec-> BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetch();
+        }
+
+        public function selectDateLigneCommande($idUser) {
+            $requete = "select li.idLigneCommande, floor(DATEDIFF(c.dateLivraisonCommande, CURDATE())) AS jourRestant
+                        from ligneCommande li
+                        inner join commande c 
+                        on li.idCommande=c.idCommande
+                        where c.idUser = ?;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
             return $exec->fetchAll();
         }
@@ -352,6 +430,17 @@
             $exec->execute();
         }
 
+        public function insertAvis($idLivre, $idUser, $commentaireAvis, $noteAvis) {
+            $requete =  "insert into avis
+                        values (null, ?, ?, ?, ?, curdate());";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->bindValue(1, $idLivre, PDO::PARAM_INT);
+            $exec->bindValue(2, $idUser, PDO::PARAM_INT);
+            $exec->bindValue(3, $commentaireAvis, PDO::PARAM_INT);
+            $exec->bindValue(4, $noteAvis, PDO::PARAM_INT);
+            $exec->execute();
+        }
+
 
 
         /**************** UPDATE ****************/
@@ -403,6 +492,7 @@
 
         public function updateCommande ($idCommande) {
             try {
+                $_SESSION['livreOffert'] = "Un livre vous a été offert et va vous être envoyé directement chez vous !";
                 $requete =  "update commande
                             set dateCommande = curdate(),
                             statutCommande = 'expédiée', 

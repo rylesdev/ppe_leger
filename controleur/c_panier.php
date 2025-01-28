@@ -1,4 +1,4 @@
-<h2> Votre panier </h2>
+<h2> Votre Panier </h2>
 
 <?php
 if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
