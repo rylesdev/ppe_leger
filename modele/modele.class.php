@@ -492,7 +492,8 @@
 
         public function updateCommande ($idCommande) {
             try {
-                $_SESSION['livreOffert'] = "Un livre vous a été offert et va vous être envoyé directement chez vous !";
+                // Régler le problème de l'affichage du "livreOffert"
+                // $_SESSION['livreOffert'] = "Un livre vous a été offert et va vous être envoyé directement chez vous !";
                 $requete =  "update commande
                             set dateCommande = curdate(),
                             statutCommande = 'expédiée', 

@@ -20,6 +20,19 @@ on li.idLivre=l.idLivre
 group by c.idUser;
 
 
+
+create or replace view vTotalCommandePayee as
+select c.idUser, sum(l.prixLivre * li.quantiteLigneCommande) as totalCommande
+from commande c
+inner join ligneCommande li
+on c.idCommande=li.idCommande
+inner join livre l
+on li.idLivre=l.idLivre
+where c.statutCommande = 'expédiée'
+group by c.idUser;
+
+
+
 CREATE OR REPLACE VIEW vTotalLivreEnAttente AS
 SELECT
     li.idCommande,
@@ -116,6 +129,7 @@ begin
     inner join commande c on lc.idCommande = c.idCommande
     where lc.idLivre = NEW.idLivre
       and c.idUser = (select idUser from commande where idCommande = NEW.idCommande LIMIT 1)
+      and c.statutCommande = 'en attente'
     LIMIT 1;
     if existingQuantity is not null then
         SIGNAL SQLSTATE "45000"
