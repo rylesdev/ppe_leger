@@ -3,7 +3,7 @@ error_reporting(0);
 
 $idUser = $_SESSION['idUser'];
 
-$totalCommande = $unControleur->selectViewTotalCommande($idUser);
+$totalCommande = $unControleur->selectViewTotalCommandeEnAttente($idUser);
 
 $sommeAPayer = $totalCommande['totalCommande'];
 

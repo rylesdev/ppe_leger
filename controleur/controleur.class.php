@@ -48,8 +48,12 @@
 			return $this->unModele->selectDateLivraisonCommande($idUser);
 		}
 
-		public function selectViewTotalCommande($idUser) {
-			return $this->unModele->selectViewTotalCommande($idUser);
+		public function selectViewTotalCommandeEnAttente($idUser) {
+			return $this->unModele->selectViewTotalCommandeEnAttente($idUser);
+		}
+
+		public function selectViewTotalCommandeExpediee($idUser) {
+			return $this->unModele->selectViewTotalCommandeExpediee($idUser);
 		}
 
 		public function selectViewTotalLivreEnAttente($idUser) {
@@ -150,16 +154,28 @@
 			$this->unModele->insertAbonnement1m($idUser);
 		}
 
+		public function updateAbonnement1m($idUser) {
+			return $this->unModele->updateAbonnement1m($idUser);
+		}
+
 		public function insertAbonnement3m($idUser) {
 			$this->unModele->insertAbonnement3m($idUser);
+		}
+
+		public function updateAbonnement3m($idUser) {
+			return $this->unModele->updateAbonnement3m($idUser);
 		}
 
 		public function insertAbonnement1a($idUser) {
 			$this->unModele->insertAbonnement1a($idUser);
 		}
 
-		public function insertAvis($idLivre, $idUser, $commentaireAvis, $noteAvis) {
-			$this->unModele->insertAvis($idLivre, $idUser, $commentaireAvis, $noteAvis);
+		public function updateAbonnement1a($idUser) {
+			return $this->unModele->updateAbonnement1a($idUser);
+		}
+
+		public function insertAvis($idLivre, $nomLivre, $idUser, $commentaireAvis, $noteAvis) {
+			$this->unModele->insertAvis($idLivre, $nomLivre, $idUser, $commentaireAvis, $noteAvis);
 		}
 
 
@@ -191,8 +207,8 @@
 			$this->unModele->procedureInsertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser);
 		}
 
-		public function procedureInsertLivre($idUser) {
-			$this->unModele->procedureInsertLivre($idUser);
+		public function procedureInsertLivre($idUser, $chiffre) {
+			$this->unModele->procedureInsertLivre($idUser, $chiffre);
 		}
 	}
 ?>

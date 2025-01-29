@@ -7,15 +7,33 @@ $idUser = $_SESSION['idUser'];
 require_once("vue/vue_abonnement.php");
 
     if (isset($_POST['Abonnement1m'])) {
-        $unControleur->insertAbonnement1m($idUser);
+        if (empty($unControleur->selectDateAbonnement($idUser)['jourRestant']) || $unControleur->selectDateAbonnement($idUser)['jourRestant'] < 0) {
+            $unControleur->insertAbonnement1m($idUser);
+            echo "Vous venez de souscrire à l'abonnement de 1 mois.";
+        } elseif ($unControleur->selectDateAbonnement($idUser)['jourRestant'] >= 0) {
+            $unControleur->updateAbonnement1m($idUser);
+            echo "Vous venez de modifier votre abonnement actuel pour l'abonnement de 1 mois.";
+        }
     }
 
     if (isset($_POST['Abonnement3m'])) {
-        $unControleur->insertAbonnement3m($idUser);
+        if (empty($unControleur->selectDateAbonnement($idUser)['jourRestant']) || $unControleur->selectDateAbonnement($idUser)['jourRestant'] < 0) {
+            $unControleur->insertAbonnement3m($idUser);
+            echo "Vous venez de souscrire à l'abonnement de 1 mois.";
+        } elseif ($unControleur->selectDateAbonnement($idUser)['jourRestant'] >= 0) {
+            $unControleur->updateAbonnement3m($idUser);
+            echo "Vous venez de modifier votre abonnement actuel pour l'abonnement de 3 mois.";
+        }
     }
 
     if (isset($_POST['Abonnement1a'])) {
-        $unControleur->insertAbonnement1a($idUser);
+        if (empty($unControleur->selectDateAbonnement($idUser)['jourRestant']) || $unControleur->selectDateAbonnement($idUser)['jourRestant'] < 0) {
+            $unControleur->insertAbonnement1a($idUser);
+            echo "Vous venez de souscrire à l'abonnement de 1 mois.";
+        } elseif ($unControleur->selectDateAbonnement($idUser)['jourRestant'] >= 0) {
+            $unControleur->updateAbonnement1a($idUser);
+            echo "Vous venez de modifier votre abonnement actuel pour l'abonnement de 1 an.";
+        }
     }
 
 

@@ -1,21 +1,12 @@
 Priorité :
 
-// - Lorsque les livres (ligneCommande) sont assignés comme expédiée dans la table commande,
-//  alors ils doivent ne plus apparaître dans la page panier, mais doivent apparaître dans une page "Commande".
+- Trouver un moyen pour que, lors de la procédure "pOffrirLivre",
+    le livre (idLivre = 6) qui est inséré dans les tables "commande" et "ligneCommande" ai le prixLivre de "0".
+Réponse possible : mettre le prixLivre à 0 dans la table "livre",
+    et l'associer à une "maisonEdition" qui est en collaboration avec la librairie,
+        et qui offre des livres gratuitement (grâce à la collaboration faite avec la librairie).
 
-- Après une commande, il faut que la "Somme à payer" passe à 0,
-    et que la "Somme payée" soit la somme de tous les livres achetés (ceux présent dans la page Commande).
-Réponse : Voir "vTotalCommandePayee" dans le fichier "objet_ppe.sql" et l'insérer dans la bdd.
-
-
-
-
-Dans la page "Commande", l'utilisateur pourra remplir des étoiles pour donner son avis sur un livre.
-    Les étoiles vont s'afficher uniquement si l'utilisateur a reçu le livre (if dateLivraisonLivre < curdate())
-
-(vue/insert_avis.php) et (vue_commande.php)
-Régler le problème de cette page. Le insertAvis ne fonctionne pas (surement à cause de idLivre).
-
+- Afficher le message du livre offert dans la page "Accueil".
 
 
 A FAIRE :
@@ -44,24 +35,24 @@ A FAIRE :
                 il faut qu'il soit redirigé vers Paypal.
                 "header("Location: https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR");"
 
+        Commande :
+            (vue_insert_avis.php) - Faire un truc plus beau pour les étoiles des avis.
+
 
     Back-End
         Livre
             - Pour le mode admin, il faut modifier le "categorieLivre" pour l'adapter avec la table "categorie"
                 et non la table "livre". Il faut aussi rajouter la maison d'édition du livre.
 
+            (A vérifier) - La sélection de la quantité de livre ne marche pas.
+
         Page
             // - Lorsque l'utilisateur paye une commande (update commande)
                 Procédure qui va gérer : si la somme des ligneCommande est supérieur à 10, alors un livre lui est offert.
             - Afficher le message du livre offert dans la page d'accueil.
 
-            // - Lorsque les livres (ligneCommande) sont assignés comme expédiée dans la table commande,
-                alors ils doivent ne plus apparaître dans la page panier, mais doivent apparaître dans une page "Commande".
-            - Il faut aussi que la "Somme à payer" passe à 0.
-            // - Dans la page "Commande" il doit aussi apparaître les livres offerts.
-
         PHPMYADMIN
-		    - Créer des tables avec des héritages et utiliser les triggers :
+            - Créer des tables avec des héritages et utiliser les triggers :
                 - User (idUser, Email, MDP (Connexion uniquement)
                     - Particulier (Nom, Prenom, Adresse, ...)
                     - Entreprise (Num SIRET, RaisonSociale, ...)
@@ -78,14 +69,12 @@ A FAIRE :
             - Idées :
                         1. Jsp.
                         2. Dans la page d'accueil il y aura une liste des livres en promotion.
-                        3. Dans la page "Commande", l'utilisateur pourra remplir des étoiles pour donner son avis sur un livre.
-                            Les étoiles vont s'afficher uniquement si l'utilisateur a reçu le livre (if dateLivraisonLivre < curdate())
+                        3. // Dans la page "Commande", l'utilisateur pourra remplir des étoiles pour donner son avis sur un livre.
+                            // Les étoiles vont s'afficher uniquement si l'utilisateur a reçu le livre (if statutCommande = 'expédiée')
                            Créer une view pour afficher les livres les mieux notés.
-                        4. Pour l'abonnement, mettre les avantages visualisables dans la page d'accueil,
-                            comme 1 livre offert au bout de 5 livres achetés par exemple.
-                            Cette information pourra être obtenable à partir d'un trigger par exemple :
-                                Si il y a plus de x livres dans ligneCommande (whereidUser) alors offrir un livre (insertLigneCommande)
-                                et Afficher un message permanent dans l’accueil jusqu’à que le user appuie sur un bouton : Ok (qui le fait disparaître)
+                        4. // Créer une procédure pour offrir un livre pour les abonnée.
+                            Trouver d'autres idées pour les avantages aux abonnés.
+                            Mettre les livres offerts (et d'autres avantages) visualisables dans la page d'accueil,
 
 
             - Page Promotion (Admin) :
@@ -111,21 +100,13 @@ A FAIRE :
 
 
         Commande
-            - Quand je paye un livre (Panier -> Commande),
-                la variable "$sommeAPayer" augmente alors que j'ai pas payé de livre en plus.
-            Réponse : Procédure pOffrirLivre qui ajoute à "sommeAPayer" le livre qui est offert.
-                Il faudrait que cette procédure offre un livre dont "prixLivre = 0" ou quelque chose du genre...
-
-            (A vérifier) - La procédure pOffrirLivre marche même pour les user qui ne sont pas abonnés.
+            (vue_insert_avis.php) - Quand on insère un avis, si le livre est "l'Etranger" ou "l'Odyssée'",
+                il n'y a que le "L" qui s'affiche.
+            Réponse : Cela provient du fait que le "nomLivre" est enfermé dans un $_POST comportant des "'".
 
 
         Bug
-            - Procédure pOffrirLivre s'active à chaque ligneCommande > 10.
-                Il faudrait rajouter une condition pour que le livre est offert plus "rarement".
-                Exemple : Ne pas faire de ligneCommande, mais "commande = 5 or commande = 10 or commande = 15".
-                            Pour que le user reçoive un livre offert à un nombre de commande fixe.
-                Exemplebis : "ligneCommande > 10 and ligneCommande < 15".
-
+            - Lorsque je mets un avis dans la page Commande, le cube "Information de la commande" disparait.
 
             - Quand je modifie la quantité d'un livre dans la page Panier, tous les livres sont modifiés.
 

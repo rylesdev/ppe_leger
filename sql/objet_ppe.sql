@@ -10,18 +10,18 @@ inner join commande c
 on c.idCommande=li.idCommande;
 
 
-create or replace view vTotalCommande as
+create or replace view vTotalCommandeEnAttente as
 select c.idUser, sum(l.prixLivre * li.quantiteLigneCommande) as totalCommande
 from commande c
 inner join ligneCommande li
 on c.idCommande=li.idCommande
 inner join livre l
 on li.idLivre=l.idLivre
+where c.statutCommande = 'en attente'
 group by c.idUser;
 
 
-
-create or replace view vTotalCommandePayee as
+create or replace view vTotalCommandeExpediee as
 select c.idUser, sum(l.prixLivre * li.quantiteLigneCommande) as totalCommande
 from commande c
 inner join ligneCommande li
@@ -30,7 +30,6 @@ inner join livre l
 on li.idLivre=l.idLivre
 where c.statutCommande = 'expédiée'
 group by c.idUser;
-
 
 
 CREATE OR REPLACE VIEW vTotalLivreEnAttente AS
@@ -52,21 +51,12 @@ WHERE
 
 
 CREATE OR REPLACE VIEW vTotalLivreExpediee AS
-SELECT
-    li.idCommande,
-    c.idUser,
-    l.nomLivre,
-    l.prixLivre,
-    li.quantiteLigneCommande,
-    (l.prixLivre * li.quantiteLigneCommande) AS totalLivre
-FROM
-    livre l
-INNER JOIN
-    ligneCommande li ON l.idLivre = li.idLivre
-INNER JOIN
-    commande c ON c.idCommande = li.idCommande
-WHERE
-    c.statutCommande = 'expédiée';
+SELECT li.idCommande, c.idUser, l.idLivre, l.nomLivre, l.prixLivre, li.quantiteLigneCommande, (l.prixLivre * li.quantiteLigneCommande) AS totalLivre
+FROM livre l
+INNER JOIN ligneCommande li
+ON l.idLivre = li.idLivre
+INNER JOIN commande c ON c.idCommande = li.idCommande
+WHERE c.statutCommande = 'expédiée';
 
 
 create or replace view vNbMinLivre as
@@ -249,6 +239,95 @@ BEGIN
         SET newIdCommande = LAST_INSERT_ID();
         INSERT INTO ligneCommande (idLigneCommande, idCommande, idLivre, quantiteLigneCommande)
         VALUES (null, newIdCommande, 6, 1);
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Un livre vous a été offert et va vous être envoyé directement chez vous !';
+    END IF;
+END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE PROCEDURE pOffrirLivre(
+    IN p_idUser INT
+)
+BEGIN
+    DECLARE totalQuantite INT;
+    DECLARE p_dateCommande DATETIME;
+    DECLARE p_dateLivraisonCommande DATE;
+    DECLARE idLivre INT DEFAULT 1;
+    DECLARE newIdCommande INT;
+    DECLARE seuil INT DEFAULT 10;
+    IF NOT EXISTS (
+        SELECT 1
+        FROM abonnement
+        WHERE idUser = p_idUser
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Vous devez être abonné pour bénéficier de cette offre.';
+    END IF;
+    IF NOT EXISTS (
+        SELECT 1
+        FROM abonnement
+        WHERE idUser = p_idUser AND dateFinAbonnement > CURDATE()
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Votre abonnement a expiré. Vous ne pouvez pas bénéficier de cette offre.';
+    END IF;
+    SELECT SUM(quantiteLigneCommande)
+    INTO totalQuantite
+    FROM ligneCommande l
+    INNER JOIN commande c
+        ON l.idCommande = c.idCommande
+    WHERE c.statutCommande = 'expédiée' AND c.idUser = p_idUser;
+    IF totalQuantite >= seuil AND (totalQuantite MOD seuil) = 0 THEN
+        INSERT INTO commande (idCommande, dateCommande, statutCommande, dateLivraisonCommande, idUser)
+        VALUES (null, NOW(), 'expédiée', DATE_ADD(NOW(), INTERVAL 7 DAY), p_idUser);
+        SET newIdCommande = LAST_INSERT_ID();
+        INSERT INTO ligneCommande (idLigneCommande, idCommande, idLivre, quantiteLigneCommande)
+        VALUES (null, newIdCommande, 6, 1);
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Un livre vous a été offert et va vous être envoyé directement chez vous !';
+    END IF;
+END$$
+DELIMITER ;
+
+
+
+DELIMITER $$
+CREATE PROCEDURE pOffrirLivre(
+    IN p_idUser INT,
+    IN chiffre INT
+)
+BEGIN
+    DECLARE newIdCommande INT;
+    IF NOT EXISTS (
+        SELECT 1
+        FROM abonnement
+        WHERE idUser = p_idUser
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Vous devez être abonné pour bénéficier de cette offre.';
+    END IF;
+    IF NOT EXISTS (
+        SELECT 1
+        FROM abonnement
+        WHERE idUser = p_idUser AND dateFinAbonnement > CURDATE()
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Votre abonnement a expiré. Vous ne pouvez pas bénéficier de cette offre.';
+    END IF;
+    IF chiffre = 5 THEN
+        UPDATE livre
+        SET prixLivre = 0
+        WHERE idLivre = 6;
+        INSERT INTO commande (idCommande, dateCommande, statutCommande, dateLivraisonCommande, idUser)
+        VALUES (null, NOW(), 'expédiée', DATE_ADD(NOW(), INTERVAL 7 DAY), p_idUser);
+        SET newIdCommande = LAST_INSERT_ID();
+        INSERT INTO ligneCommande (idLigneCommande, idCommande, idLivre, quantiteLigneCommande)
+        VALUES (null, newIdCommande, 6, 1);
+        UPDATE livre
+        SET prixLivre = 22.00
+        WHERE idLivre = 6;
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Un livre vous a été offert et va vous être envoyé directement chez vous !';
     END IF;

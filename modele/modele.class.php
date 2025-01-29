@@ -142,9 +142,19 @@
             return $exec->fetch();
         }
 
-        public function selectViewTotalCommande($idUser) {
+        public function selectViewTotalCommandeEnAttente($idUser) {
             $requete =  "select * 
-                        from vTotalCommande   
+                        from vTotalCommandeEnAttente
+                        where idUser = ?;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetch();
+        }
+
+        public function selectViewTotalCommandeExpediee($idUser) {
+            $requete =  "select * 
+                        from vTotalCommandeExpediee   
                         where idUser = ?;";
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $idUser, PDO::PARAM_INT);
@@ -407,37 +417,68 @@
 
         public function insertAbonnement1m($idUser) {
             $requete = 	"insert into abonnement
-						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 MONTH), 0);";
+						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 MONTH));";
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
         }
 
+        public function updateAbonnement1m($idUser) {
+            $requete =  "update abonnement 
+                        set dateFinAbonnement = DATE_ADD(CURDATE(), INTERVAL 1 MONTH)
+                        where idUser = ?;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue (1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
         public function insertAbonnement3m($idUser) {
             $requete = 	"insert into abonnement
-						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 3 MONTH), 0);";
+						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 3 MONTH));";
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
+        }
+
+        public function updateAbonnement3m($idUser) {
+            $requete =  "update abonnement 
+                        set dateFinAbonnement = DATE_ADD(CURDATE(), INTERVAL 3 MONTH)
+                        where idUser = ?;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue (1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
         }
 
         public function insertAbonnement1a($idUser)
         {
             $requete = "insert into abonnement
-						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 0);";
+						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR));";
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
         }
 
-        public function insertAvis($idLivre, $idUser, $commentaireAvis, $noteAvis) {
+        public function updateAbonnement1a($idUser) {
+            $requete =  "update abonnement 
+                        set dateFinAbonnement = DATE_ADD(CURDATE(), INTERVAL 1 YEAR)
+                        where idUser = ?;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue (1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function insertAvis($idLivre, $nomLivre, $idUser, $commentaireAvis, $noteAvis) {
             $requete =  "insert into avis
-                        values (null, ?, ?, ?, ?, curdate());";
+                        values (null, ?, ?, ?, ?, ?, curdate());";
             $exec = $this->unPdo->prepare($requete);
             $exec->bindValue(1, $idLivre, PDO::PARAM_INT);
-            $exec->bindValue(2, $idUser, PDO::PARAM_INT);
-            $exec->bindValue(3, $commentaireAvis, PDO::PARAM_INT);
-            $exec->bindValue(4, $noteAvis, PDO::PARAM_INT);
+            $exec->bindValue(2, $nomLivre, PDO::PARAM_STR);
+            $exec->bindValue(3, $idUser, PDO::PARAM_INT);
+            $exec->bindValue(4, $commentaireAvis, PDO::PARAM_STR);
+            $exec->bindValue(5, $noteAvis, PDO::PARAM_INT);
             $exec->execute();
         }
 
@@ -536,9 +577,10 @@
             $exec->execute();
         }
 
-        public function procedureInsertLivre($idUser) {
-            $exec = $this->unPdo->prepare("CALL pOffrirLivre(?)");
-            $exec->BindValue(1, $idUser, PDO::PARAM_STR);
+        public function procedureInsertLivre($idUser, $chiffre) {
+            $exec = $this->unPdo->prepare("CALL pOffrirLivre(?, ?)");
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->BindValue(2, $chiffre, PDO::PARAM_INT);
             $exec->execute();
         }
     }

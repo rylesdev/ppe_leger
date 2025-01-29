@@ -56,6 +56,7 @@
 <body>
 <div class="container">
     <h2>Abonnement</h2>
+    L'abonnement vous donne des avantages comme des livres offert après avoir acheté des livres (chance : 1/5)
     <table>
         <tr>
             <th>Durée</th>
@@ -66,7 +67,7 @@
             <td>1 mois</td>
             <td>10€</td>
             <td>
-                <form action="index.php?page=4" method="post" target="_top">
+                <form method="post">
                     <input type="hidden" name="cmd" value="_s-xclick">
                     <input type="hidden" name="hosted_button_id" value="YOUR_PAYPAL_BUTTON_ID_1_MONTH">
                     <input type="submit" name="Abonnement1m" value="S'abonner" class="btn btn-primary">
@@ -77,7 +78,7 @@
             <td>3 mois</td>
             <td>25€</td>
             <td>
-                <form action="index.php?page=4" method="post" target="_top">
+                <form method="post">
                     <input type="hidden" name="cmd" value="_s-xclick">
                     <input type="hidden" name="hosted_button_id" value="YOUR_PAYPAL_BUTTON_ID_3_MONTHS">
                     <input type="submit" name="Abonnement3m" value="S'abonner" class="btn btn-primary">
@@ -88,7 +89,7 @@
             <td>1 an</td>
             <td>80€</td>
             <td>
-                <form action="index.php?page=4" method="post" target="_top">
+                <form method="post">
                     <input type="hidden" name="cmd" value="_s-xclick">
                     <input type="hidden" name="hosted_button_id" value="YOUR_PAYPAL_BUTTON_ID_1_YEAR">
                     <input type="submit" name="Abonnement1a" value="S'abonner" class="btn btn-primary">

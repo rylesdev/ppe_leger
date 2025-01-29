@@ -30,7 +30,9 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
                                 $unControleur->updateCommande($idCommande);
                                 echo "<h3 style='color: green;'>Commande mise à jour avec succès. Redirection vers PayPal...</h3>";
 
-                                $unControleur->procedureInsertLivre($idUser);
+                                $chiffre = rand(5, 5);
+                                var_dump($chiffre);
+                                $unControleur->procedureInsertLivre($idUser, $chiffre);
 
                                 header("Location: https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR");
                                 exit();
