@@ -25,12 +25,30 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
                             }
                             break;
 
-            case "payer" :  $idCommande = $unControleur->selectCommandeEnCours($idUser);
+            case "payer" :  if(isset($_POST['PayerPoint'])) {
+                                $pointAbonnement = $_SESSION['pointAUtiliser'];
+                                var_dump($pointAbonnement);
+                                var_dump($unControleur->selectPointAbonnement($idUser));
+                                if ($unControleur->selectPointAbonnement($idUser)['pointAbonnement'] >= $pointAbonnement) {
+                                    $unControleur->enleverPointAbonnement($pointAbonnement, $idUser);
+                                } else if (empty($pointAbonnement) || $pointAbonnement < 0) {
+                                    echo "";
+                                }
+                            }
+
+                            $idCommande = $unControleur->selectCommandeEnCours($idUser);
                             if ($idCommande) {
                                 $unControleur->updateCommande($idCommande);
                                 echo "<h3 style='color: green;'>Commande mise à jour avec succès. Redirection vers PayPal...</h3>";
 
-                                $chiffre = rand(5, 5);
+                                if ($unControleur->selectDateAbonnement($idUser) > 0) {
+                                    $resultat = $unControleur->selectNbLigneCommande($idCommande);
+                                    $nombreLigneCommande = $resultat['nombreLigneCommande'];
+                                    $pointAbonnement = $nombreLigneCommande * 10;
+                                    $unControleur->ajouterPointAbonnement($pointAbonnement, $idUser);
+                                }
+
+                                $chiffre = rand(1, 5);
                                 var_dump($chiffre);
                                 $unControleur->procedureInsertLivre($idUser, $chiffre);
 

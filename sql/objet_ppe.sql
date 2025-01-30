@@ -171,9 +171,44 @@ end $$
 delimiter ;
 
 
+DELIMITER $$
+CREATE TRIGGER tInsertParticulier
+BEFORE INSERT ON particulier
+FOR EACH ROW
+BEGIN
+INSERT INTO user
+VALUES (new.emailUser, new.mdpUser, 'client');
+SET new.idUser = LAST_INSERT_ID();
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE TRIGGER tInsertEntreprise
+BEFORE INSERT ON entreprise
+FOR EACH ROW
+BEGIN
+INSERT INTO user (emailUser, mdpUser, roleUser)
+VALUES (new.emailUser, new.mdpUser, 'client');
+SET new.idUser = LAST_INSERT_ID();
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE TRIGGER tInsertAdmin
+BEFORE INSERT ON admin
+FOR EACH ROW
+BEGIN
+INSERT INTO user (emailUser, mdpUser, roleUser)
+VALUES (new.emailUser, new.mdpUser, 'admin');
+SET new.idUser = LAST_INSERT_ID();
+END $$
+DELIMITER ;
+
+
 
 PROCEDURES STOCKEES :
-
 delimiter $$
 create procedure pHashMdpUser(
 in p_idUser int (10),
@@ -203,103 +238,12 @@ delimiter ;
 
 DELIMITER $$
 CREATE PROCEDURE pOffrirLivre(
-    IN p_idUser INT
-)
-BEGIN
-    DECLARE totalQuantite INT;
-    DECLARE p_dateCommande DATETIME;
-    DECLARE p_dateLivraisonCommande DATE;
-    DECLARE idLivre INT DEFAULT 1;
-    DECLARE newIdCommande INT;
-    IF NOT EXISTS (
-        SELECT 1
-        FROM abonnement
-        WHERE idUser = p_idUser
-    ) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Vous devez être abonné pour bénéficier de cette offre.';
-    END IF;
-    IF NOT EXISTS (
-        SELECT 1
-        FROM abonnement
-        WHERE idUser = p_idUser AND dateFinAbonnement > CURDATE()
-    ) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Votre abonnement a expiré. Vous ne pouvez pas bénéficier de cette offre.';
-    END IF;
-    SELECT SUM(quantiteLigneCommande)
-    INTO totalQuantite
-    FROM ligneCommande l
-    INNER JOIN commande c
-        ON l.idCommande = c.idCommande
-    WHERE c.statutCommande = 'expédiée' AND c.idUser = p_idUser;
-    IF totalQuantite > 10 THEN
-        INSERT INTO commande (idCommande, dateCommande, statutCommande, dateLivraisonCommande, idUser)
-        VALUES (null, NOW(), 'expédiée', DATE_ADD(NOW(), INTERVAL 7 DAY), p_idUser);
-        SET newIdCommande = LAST_INSERT_ID();
-        INSERT INTO ligneCommande (idLigneCommande, idCommande, idLivre, quantiteLigneCommande)
-        VALUES (null, newIdCommande, 6, 1);
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Un livre vous a été offert et va vous être envoyé directement chez vous !';
-    END IF;
-END$$
-DELIMITER ;
-
-
-DELIMITER $$
-CREATE PROCEDURE pOffrirLivre(
-    IN p_idUser INT
-)
-BEGIN
-    DECLARE totalQuantite INT;
-    DECLARE p_dateCommande DATETIME;
-    DECLARE p_dateLivraisonCommande DATE;
-    DECLARE idLivre INT DEFAULT 1;
-    DECLARE newIdCommande INT;
-    DECLARE seuil INT DEFAULT 10;
-    IF NOT EXISTS (
-        SELECT 1
-        FROM abonnement
-        WHERE idUser = p_idUser
-    ) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Vous devez être abonné pour bénéficier de cette offre.';
-    END IF;
-    IF NOT EXISTS (
-        SELECT 1
-        FROM abonnement
-        WHERE idUser = p_idUser AND dateFinAbonnement > CURDATE()
-    ) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Votre abonnement a expiré. Vous ne pouvez pas bénéficier de cette offre.';
-    END IF;
-    SELECT SUM(quantiteLigneCommande)
-    INTO totalQuantite
-    FROM ligneCommande l
-    INNER JOIN commande c
-        ON l.idCommande = c.idCommande
-    WHERE c.statutCommande = 'expédiée' AND c.idUser = p_idUser;
-    IF totalQuantite >= seuil AND (totalQuantite MOD seuil) = 0 THEN
-        INSERT INTO commande (idCommande, dateCommande, statutCommande, dateLivraisonCommande, idUser)
-        VALUES (null, NOW(), 'expédiée', DATE_ADD(NOW(), INTERVAL 7 DAY), p_idUser);
-        SET newIdCommande = LAST_INSERT_ID();
-        INSERT INTO ligneCommande (idLigneCommande, idCommande, idLivre, quantiteLigneCommande)
-        VALUES (null, newIdCommande, 6, 1);
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Un livre vous a été offert et va vous être envoyé directement chez vous !';
-    END IF;
-END$$
-DELIMITER ;
-
-
-
-DELIMITER $$
-CREATE PROCEDURE pOffrirLivre(
     IN p_idUser INT,
     IN chiffre INT
 )
 BEGIN
     DECLARE newIdCommande INT;
+    DECLARE randomLivreId INT;
     IF NOT EXISTS (
         SELECT 1
         FROM abonnement
@@ -317,17 +261,21 @@ BEGIN
         SET MESSAGE_TEXT = 'Votre abonnement a expiré. Vous ne pouvez pas bénéficier de cette offre.';
     END IF;
     IF chiffre = 5 THEN
-        UPDATE livre
-        SET prixLivre = 0
-        WHERE idLivre = 6;
         INSERT INTO commande (idCommande, dateCommande, statutCommande, dateLivraisonCommande, idUser)
         VALUES (null, NOW(), 'expédiée', DATE_ADD(NOW(), INTERVAL 7 DAY), p_idUser);
         SET newIdCommande = LAST_INSERT_ID();
+        SELECT idLivre
+        INTO randomLivreId
+        FROM (
+            SELECT 9 AS idLivre UNION ALL
+            SELECT 10 UNION ALL
+            SELECT 11 UNION ALL
+            SELECT 12
+        ) AS livres
+        ORDER BY RAND()
+        LIMIT 1;
         INSERT INTO ligneCommande (idLigneCommande, idCommande, idLivre, quantiteLigneCommande)
-        VALUES (null, newIdCommande, 6, 1);
-        UPDATE livre
-        SET prixLivre = 22.00
-        WHERE idLivre = 6;
+        VALUES (null, newIdCommande, randomLivreId, 1);
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Un livre vous a été offert et va vous être envoyé directement chez vous !';
     END IF;

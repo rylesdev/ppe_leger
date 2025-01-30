@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : jeu. 30 jan. 2025 à 11:02
+-- Généré le : jeu. 30 jan. 2025 à 17:36
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -41,6 +41,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `pHashMdpUser` (IN `p_idUser` INT(10
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `pOffrirLivre` (IN `p_idUser` INT, IN `chiffre` INT)   BEGIN
     DECLARE newIdCommande INT;
+    DECLARE randomLivreId INT;
     IF NOT EXISTS (
         SELECT 1
         FROM abonnement
@@ -58,17 +59,21 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `pOffrirLivre` (IN `p_idUser` INT, I
         SET MESSAGE_TEXT = 'Votre abonnement a expiré. Vous ne pouvez pas bénéficier de cette offre.';
     END IF;
     IF chiffre = 5 THEN
-        UPDATE livre
-        SET prixLivre = 0
-        WHERE idLivre = 6;
         INSERT INTO commande (idCommande, dateCommande, statutCommande, dateLivraisonCommande, idUser)
         VALUES (null, NOW(), 'expédiée', DATE_ADD(NOW(), INTERVAL 7 DAY), p_idUser);
         SET newIdCommande = LAST_INSERT_ID();
+        SELECT idLivre
+        INTO randomLivreId
+        FROM (
+            SELECT 9 AS idLivre UNION ALL
+            SELECT 10 UNION ALL
+            SELECT 11 UNION ALL
+            SELECT 12
+        ) AS livres
+        ORDER BY RAND()
+        LIMIT 1;
         INSERT INTO ligneCommande (idLigneCommande, idCommande, idLivre, quantiteLigneCommande)
-        VALUES (null, newIdCommande, 6, 1);
-        UPDATE livre
-        SET prixLivre = 22.00
-        WHERE idLivre = 6;
+        VALUES (null, newIdCommande, randomLivreId, 1);
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Un livre vous a été offert et va vous être envoyé directement chez vous !';
     END IF;
@@ -86,18 +91,38 @@ CREATE TABLE `abonnement` (
   `idAbonnement` int NOT NULL,
   `idUser` int NOT NULL,
   `dateDebutAbonnement` date NOT NULL,
-  `dateFinAbonnement` date DEFAULT NULL
+  `dateFinAbonnement` date DEFAULT NULL,
+  `pointAbonnement` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `abonnement`
 --
 
-INSERT INTO `abonnement` (`idAbonnement`, `idUser`, `dateDebutAbonnement`, `dateFinAbonnement`) VALUES
-(1, 2, '2025-01-01', '2025-12-31'),
-(3, 23, '2025-01-25', '2025-04-25'),
-(4, 15, '2025-01-26', '2025-02-28'),
-(25, 24, '2025-01-29', '2025-02-28');
+INSERT INTO `abonnement` (`idAbonnement`, `idUser`, `dateDebutAbonnement`, `dateFinAbonnement`, `pointAbonnement`) VALUES
+(1, 2, '2025-01-01', '2025-12-31', 0),
+(3, 23, '2025-01-25', '2025-04-25', 0),
+(4, 15, '2025-01-26', '2025-02-28', 1000),
+(25, 24, '2025-01-29', '2025-02-28', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `admin`
+--
+
+CREATE TABLE `admin` (
+  `idAdmin` int NOT NULL,
+  `idUser` int DEFAULT NULL,
+  `niveauAdmin` enum('principal','junior','superadmin') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `admin`
+--
+
+INSERT INTO `admin` (`idAdmin`, `idUser`, `niveauAdmin`) VALUES
+(1, 1, 'principal');
 
 -- --------------------------------------------------------
 
@@ -413,7 +438,27 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (407, '2025-01-30', 'expédiée', '2025-02-06', 2),
 (408, '2025-01-30', 'expédiée', '2025-02-06', 2),
 (409, '2025-01-30', 'expédiée', '2025-02-06', 15),
-(410, '2025-01-30', 'expédiée', '2025-02-06', 15);
+(410, '2025-01-30', 'expédiée', '2025-02-06', 15),
+(411, '2025-01-30', 'expédiée', '2025-02-06', 15),
+(412, '2025-01-30', 'expédiée', '2025-02-06', 15),
+(413, '2025-01-30', 'expédiée', '2025-02-06', 15),
+(414, '2025-01-30', 'expédiée', '2025-02-06', 15),
+(415, '2025-01-30', 'expédiée', '2025-02-06', 15),
+(416, NULL, 'en attente', NULL, 15);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `entreprise`
+--
+
+CREATE TABLE `entreprise` (
+  `idEntreprise` int NOT NULL,
+  `idUser` int DEFAULT NULL,
+  `siretUser` varchar(20) NOT NULL,
+  `raisonSocialeUser` varchar(255) NOT NULL,
+  `capitalSocialUser` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -534,7 +579,13 @@ INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quanti
 (664, 408, 6, 1),
 (665, 409, 3, 1),
 (666, 409, 9, 1),
-(667, 410, 6, 1);
+(667, 410, 6, 1),
+(668, 411, 2, 1),
+(669, 412, 3, 1),
+(670, 413, 3, 1),
+(671, 414, 3, 1),
+(672, 415, 9, 1),
+(673, 416, 3, 1);
 
 --
 -- Déclencheurs `ligneCommande`
@@ -612,14 +663,14 @@ CREATE TABLE `livre` (
 
 INSERT INTO `livre` (`idLivre`, `nomLivre`, `categorieLivre`, `auteurLivre`, `imageLivre`, `exemplaireLivre`, `prixLivre`, `idCategorie`, `idMaisonEdition`) VALUES
 (1, 'Alcools', 'test', 'Apollinaire', 'alcools.png', 99, 12.50, 3, 1),
-(2, 'Crime et Chatiment', 'test', 'Dostoïevski', 'crime_et_chatiment.png', 1, 15.00, 1, 2),
-(3, 'L\'Etranger', 'test', 'Camus', 'l_etranger.png', 67, 10.00, 1, 3),
+(2, 'Crime et Chatiment', 'test', 'Dostoïevski', 'crime_et_chatiment.png', 0, 15.00, 1, 2),
+(3, 'L\'Etranger', 'test', 'Camus', 'l_etranger.png', 63, 10.00, 1, 3),
 (4, 'L\'Odyssée', 'test', 'Homère', 'l_odyssee.png', 89, 13.50, 2, 4),
 (5, 'Les Fleurs du Mal', 'test', 'Baudelaire', 'les_fleurs_du_mal.png', 100, 14.00, 3, 5),
 (6, 'PHP et MySQL pour les nuls', 'test', 'Valade', 'php_et_mysql_pour_les_nuls.png', 79, 22.00, 4, 6),
 (7, 'Programmer en Java', 'test', 'Delannoy', 'programmer_en_java.png', 100, 25.00, 4, 7),
 (8, 'SPQR', 'test', 'Beard', 'spqr.png', 99, 18.00, 2, 8),
-(9, 'À la recherche du temps perdu', 'test', 'Proust', 'a_la_recherche_du_temps_perdu.png', 99, 0.00, 1, 1),
+(9, 'À la recherche du temps perdu', 'test', 'Proust', 'a_la_recherche_du_temps_perdu.png', 98, 0.00, 1, 1),
 (10, 'Les Misérables', 'test', 'Hugo', 'les_miserables_I.png', 100, 0.00, 1, 2),
 (11, '1984', 'test', 'Orwell', '1984.png', 100, 0.00, 1, 3),
 (12, 'L\'Art d\'aimer', 'test', 'Ovide', 'l_art_d_aimer', 100, 0.00, 1, 4),
@@ -673,6 +724,22 @@ INSERT INTO `maisonEdition` (`idMaisonEdition`, `nomMaisonEdition`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `particulier`
+--
+
+CREATE TABLE `particulier` (
+  `idParticulier` int NOT NULL,
+  `idUser` int NOT NULL,
+  `nomUser` varchar(255) NOT NULL,
+  `prenomUser` varchar(255) NOT NULL,
+  `adresseUser` varchar(255) NOT NULL,
+  `dateNaissanceUser` date NOT NULL,
+  `sexeUser` enum('M','F') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `promotion`
 --
 
@@ -701,28 +768,24 @@ INSERT INTO `promotion` (`idPromotion`, `idLivre`, `dateDebutPromotion`, `dateFi
 
 CREATE TABLE `user` (
   `idUser` int NOT NULL,
-  `nomUser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `prenomUser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `emailUser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `mdpUser` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `adresseUser` varchar(50) NOT NULL,
-  `roleUser` enum('admin','client') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `dateInscriptionUser` date DEFAULT NULL
+  `roleUser` enum('admin','client') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `user`
 --
 
-INSERT INTO `user` (`idUser`, `nomUser`, `prenomUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`, `dateInscriptionUser`) VALUES
-(1, 'AIT-MOHAMMED', 'Ryles', 'ryles@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '', 'admin', NULL),
-(2, 'Dubois', 'Jean', 'jean@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'Bois de Vincennes', 'client', NULL),
-(12, 'marie', 'm', 'm', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '', 'client', NULL),
-(13, 'jean', 'valjean', 'klza', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '', 'client', NULL),
-(14, 'poi', 'poi', 'poi', '123', '', 'client', '2025-01-08'),
-(15, 'tAbonnement', 'insert', 'i', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '', 'client', '2025-01-09'),
-(23, 'chouaki', 'chouaki', 'chouaki@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'chouaki', 'client', '2025-01-23'),
-(24, 'abo', 'bo', 'bo@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'bo', 'client', '2025-01-29');
+INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `roleUser`) VALUES
+(1, 'ryles@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'admin'),
+(2, 'jean@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'client'),
+(12, 'm', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'client'),
+(13, 'klza', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'client'),
+(14, 'poi', '123', 'client'),
+(15, 'i', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'client'),
+(23, 'chouaki@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'client'),
+(24, 'bo@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'client');
 
 -- --------------------------------------------------------
 
@@ -741,10 +804,10 @@ CREATE TABLE `vcommandesenattente` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vlivresenstock` (
-`idLivre` int
+`exemplaireLivre` int
+,`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
-,`exemplaireLivre` int
 );
 
 -- --------------------------------------------------------
@@ -875,8 +938,8 @@ CREATE TABLE `vtotallivreenattente` (
 --
 CREATE TABLE `vtotallivreexpediee` (
 `idCommande` int
-,`idUser` int
 ,`idLivre` int
+,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
 ,`quantiteLigneCommande` int
@@ -1003,6 +1066,13 @@ ALTER TABLE `abonnement`
   ADD KEY `idUser` (`idUser`);
 
 --
+-- Index pour la table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`idAdmin`),
+  ADD KEY `idUser` (`idUser`);
+
+--
 -- Index pour la table `avis`
 --
 ALTER TABLE `avis`
@@ -1022,6 +1092,13 @@ ALTER TABLE `categorie`
 ALTER TABLE `commande`
   ADD PRIMARY KEY (`idCommande`),
   ADD KEY `fk_c` (`idUser`);
+
+--
+-- Index pour la table `entreprise`
+--
+ALTER TABLE `entreprise`
+  ADD PRIMARY KEY (`idEntreprise`),
+  ADD KEY `idUser` (`idUser`);
 
 --
 -- Index pour la table `ligneCommande`
@@ -1049,6 +1126,13 @@ ALTER TABLE `maisonEdition`
   ADD PRIMARY KEY (`idMaisonEdition`);
 
 --
+-- Index pour la table `particulier`
+--
+ALTER TABLE `particulier`
+  ADD PRIMARY KEY (`idParticulier`),
+  ADD KEY `idUser` (`idUser`);
+
+--
 -- Index pour la table `promotion`
 --
 ALTER TABLE `promotion`
@@ -1072,6 +1156,12 @@ ALTER TABLE `abonnement`
   MODIFY `idAbonnement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
+-- AUTO_INCREMENT pour la table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `idAdmin` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT pour la table `avis`
 --
 ALTER TABLE `avis`
@@ -1087,13 +1177,19 @@ ALTER TABLE `categorie`
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=411;
+  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=417;
+
+--
+-- AUTO_INCREMENT pour la table `entreprise`
+--
+ALTER TABLE `entreprise`
+  MODIFY `idEntreprise` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `ligneCommande`
 --
 ALTER TABLE `ligneCommande`
-  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=668;
+  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=674;
 
 --
 -- AUTO_INCREMENT pour la table `livre`
@@ -1106,6 +1202,12 @@ ALTER TABLE `livre`
 --
 ALTER TABLE `maisonEdition`
   MODIFY `idMaisonEdition` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT pour la table `particulier`
+--
+ALTER TABLE `particulier`
+  MODIFY `idParticulier` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `promotion`
@@ -1130,6 +1232,12 @@ ALTER TABLE `abonnement`
   ADD CONSTRAINT `abonnement_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE CASCADE;
 
 --
+-- Contraintes pour la table `admin`
+--
+ALTER TABLE `admin`
+  ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `User` (`idUser`);
+
+--
 -- Contraintes pour la table `avis`
 --
 ALTER TABLE `avis`
@@ -1141,6 +1249,12 @@ ALTER TABLE `avis`
 --
 ALTER TABLE `commande`
   ADD CONSTRAINT `fk_c` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`);
+
+--
+-- Contraintes pour la table `entreprise`
+--
+ALTER TABLE `entreprise`
+  ADD CONSTRAINT `entreprise_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `User` (`idUser`);
 
 --
 -- Contraintes pour la table `ligneCommande`
@@ -1155,6 +1269,12 @@ ALTER TABLE `ligneCommande`
 ALTER TABLE `livre`
   ADD CONSTRAINT `livre_ibfk_1` FOREIGN KEY (`idCategorie`) REFERENCES `categorie` (`idCategorie`) ON DELETE SET NULL,
   ADD CONSTRAINT `livre_ibfk_2` FOREIGN KEY (`idMaisonEdition`) REFERENCES `maisonEdition` (`idMaisonEdition`) ON DELETE SET NULL;
+
+--
+-- Contraintes pour la table `particulier`
+--
+ALTER TABLE `particulier`
+  ADD CONSTRAINT `particulier_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `User` (`idUser`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `promotion`

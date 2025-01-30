@@ -17,7 +17,9 @@
 <center>
 	<h1> Site Internet Librairie </h1>
 	<?php
-    if (isset($_SESSION['roleUser']) && $_SESSION['roleUser'] == 'admin') {
+    $isAdmin = $unControleur->selectAdminPrincipal($idUser);
+
+    if ($isAdmin['isAdmin'] > 0) {
         echo "/**************** Mode Admin ****************/";
     }
 

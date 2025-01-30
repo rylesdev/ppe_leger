@@ -1,3 +1,10 @@
+<?php
+require_once("controleur/controleur.class.php");
+$unControleur = new Controleur();
+
+$idUser = $_SESSION['idUser'];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,7 +63,10 @@
 <body>
 <div class="container">
     <h2>Abonnement</h2>
-    L'abonnement vous donne des avantages comme des livres offert après avoir acheté des livres (chance : 1/5)
+    <?php echo "<h3>Nombre de points : " . $unControleur->selectPointAbonnement($idUser)['pointAbonnement'] . "</h3>" ?>
+    L'abonnement vous donne des avantages comme : <br>
+        - des livres offert après avoir acheté des livres (chance : 1/5). <br>
+        - des points de fidélité à l'achat de chaque livre qui vous permettront d'obtenir des livres gratuitement.
     <table>
         <tr>
             <th>Durée</th>

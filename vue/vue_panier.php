@@ -4,8 +4,10 @@ error_reporting(0);
 $idUser = $_SESSION['idUser'];
 
 $totalCommande = $unControleur->selectViewTotalCommandeEnAttente($idUser);
-
 $sommeAPayer = $totalCommande['totalCommande'];
+
+$resultat = $unControleur->selectViewTotalCommandeEnAttentePoint($idUser);
+$pointAUtiliser = $resultat['totalCommandeMultiplie'];
 
 $adresseUser = $unControleur->selectAdresseUser($idUser);
 $adresseUser = $adresseUser['adresseUser'];
@@ -198,7 +200,7 @@ $dateCommande = $dateCommande[0];
 
     <div class="payment-container">
         <h3>Paiement de la commande</h3>
-        <form action="process_payment.php" method="POST">
+        <form action="index.php?page=4&action=payer" method="post">
             <div class="form-group">
                 <label for="montant">Somme à payer</label>
                 <input type="text" id="montant" name="montant" value="<?php
@@ -206,6 +208,17 @@ $dateCommande = $dateCommande[0];
                     echo $sommeAPayer . '€';
                 } else {
                     echo '0€';
+                }
+                ?>" readonly>
+            </div>
+            <div class="form-group">
+                <label for="montant">Points à utiliser</label>
+                <input type="text" id="point" name="point" value="<?php
+                if ($pointAUtiliser > 0) {
+                    echo $pointAUtiliser . ' points';
+                    $_SESSION['pointAUtiliser'] = $pointAUtiliser;
+                } else {
+                    echo '0 Point';
                 }
                 ?>" readonly>
             </div>
@@ -219,7 +232,8 @@ $dateCommande = $dateCommande[0];
             </div>
             <div class="pay-button">
                 <?php
-                echo "<a href='index.php?page=3&action=payer'> Payer avec Paypal </a>";
+                echo "<input type='submit' name='PayerPaypal' value='Payer avec Paypal' class='btn btn-primary' style='margin-right: 10px;'>";
+                echo "<input type='submit' name='PayerPoint' value='Payer avec points' class='btn btn-primary'>";
                 ?>
             </div>
         </form>

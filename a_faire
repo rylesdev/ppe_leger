@@ -1,21 +1,19 @@
 Priorité :
-- Faire un système de point, chaque livre acheté donne des points au user (Exemple : 10 point / 1 euro de livre acheté)
-    Faire un "insert" dans la table "abonnement" qui va insérer des points après avoir fait "case : 'payer'".
 
-- Le user pourra visualiser son nombre de points dans la page "Abonnement"
+- Pour l'héritage, modifier tous les "if (roleUser == 'admin')...",
+    et mettre des " $isAdmin = $unControleur->selectAdminPrincipal($idUser);" et if ($isAdmin['isAdmin'] > 0)"
 
-- Dans la page "Livre", le user pourra voir le nombre de points qu'il peut gagner en achetant chaque livre.
-- En dessous du "<input $sommeAPayer", il faudra mettre un "<input $pointAPayer>"
-- Dans la page "Panier", le user pourra payer, soit par Paypal, soit par points.
+- Pour l'héritage, modifier les "insertUser" (provenant de la méthode ou de la procédure "pHashMdpUser",
+    et mettre les trigger à la place) :
+        - public function insertTriggerParticulier
+        - public function insertTriggerEntreprise
+        - public function insertTriggerAdmin
 
 
-/*- Trouver un moyen pour que, lors de la procédure "pOffrirLivre",
-    le livre (idLivre = 6) qui est inséré dans les tables "commande" et "ligneCommande" ai le prixLivre de "0".
-Réponse possible : mettre le prixLivre à 0 dans la table "livre",
-    et l'associer à une "maisonEdition" qui est en collaboration avec la librairie,
-        et qui offre des livres gratuitement (grâce à la collaboration faite avec la librairie).
+- Essayer la procédure "pOffrirLivre" pour voir si elle marche.
+    Si le user reçoit bien un livre au hasard (chance : 1/5) parmis les 4 livres proposés (avec un prixLivre = 0).
 
-- Afficher le message du livre offert dans la page "Accueil".*/
+- Afficher le message du livre offert dans la page "Accueil".
 
 
 
@@ -41,8 +39,15 @@ A FAIRE :
                 - recommandés (view avis)
                 - en promotion
 
-        Livre :
-            - Afficher la maisonEdition pour chaque livre.
+        Général :
+            - Pour l'héritage, modifier tous les "if (roleUser == 'admin')...",
+                et mettre des " $isAdmin = $unControleur->selectAdminPrincipal($idUser);" et if ($isAdmin['isAdmin'] > 0)"
+
+            - Pour l'héritage, modifier les "insertUser" (provenant de la méthode ou de la procédure "pHashMdpUser",
+                et mettre les trigger à la place) :
+                    - public function insertTriggerParticulier
+                    - public function insertTriggerEntreprise
+                    - public function insertTriggerAdmin
 
         Panier :
             - (c_panier.php) Trouver un moyen pour que, quand le user clique sur Paypal,
@@ -52,6 +57,9 @@ A FAIRE :
             - (c_abonnement.php) Lorsque l'utilisateur clique sur l'abonnement,
                 il faut qu'il soit redirigé vers Paypal.
                 "header("Location: https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR");"
+
+            - Dans la page "Panier", le user pourra payer, soit par Paypal, soit par points.
+                Problème : La méthode "enleverPointAbonnement" ne marche pas quand le user clique sur "Utiliser les points".
 
         Commande :
             (vue_insert_avis.php) - Faire un truc plus beau pour les étoiles des avis.
@@ -65,18 +73,13 @@ A FAIRE :
             (A vérifier) - La sélection de la quantité de livre ne marche pas.
 
         Page
-            // - Lorsque l'utilisateur paye une commande (update commande)
-                Procédure qui va gérer : si la somme des ligneCommande est supérieur à 10, alors un livre lui est offert.
-            - Afficher le message du livre offert dans la page d'accueil.
+            - Essayer la procédure "pOffrirLivre" pour voir si elle marche.
+                Si le user reçoit bien un livre au hasard (chance : 1/5) parmis les 4 livres proposés (avec un prixLivre = 0).
+
+            - Afficher le message du livre offert dans la page "Accueil".
 
         PHPMYADMIN
             - Mettre toutes les images des nouveaux livres insérés (12 livres) dans le dossier "images".
-
-            - Créer des tables avec des héritages et utiliser les triggers :
-                - User (idUser, Email, MDP (Connexion uniquement)
-                    - Particulier (Nom, Prenom, Adresse, ...)
-                    - Entreprise (Num SIRET, RaisonSociale, ...)
-                - Admin (table à part)
 
             - Supprimer la colonne "categorieLivre" de la table "Livre".
 
@@ -140,6 +143,12 @@ A FAIRE :
 
 
 Fait :
+- Créer des tables avec des héritages et utiliser les triggers :
+                  - User (idUser, Email, MDP (Connexion uniquement))
+                      - Particulier (Nom, Prenom, Adresse, ...)
+                      - Entreprise (Num SIRET, RaisonSociale, ...)
+                  - Admin (table à part)
+
 - Faire un système qui prépare la commande uniquement lorsque le user a payé sur Paypal
     Si il n'a pas payé la commande doit avoir le statut 'en attente', la dateCommande null, et la dateLivraison null.
 

@@ -16,6 +16,10 @@
 			return $this->unModele->selectUser($idUser);
 		}
 
+		public function selectAdminPrincipal($idUser) {
+			return $this->unModele->selectAdminPrincipal($idUser);
+		}
+
 		public function selectAllLivres (){
 			return $this->unModele->selectAllLivres();
 		}
@@ -50,6 +54,10 @@
 
 		public function selectViewTotalCommandeEnAttente($idUser) {
 			return $this->unModele->selectViewTotalCommandeEnAttente($idUser);
+		}
+
+		public function selectViewTotalCommandeEnAttentePoint($idUser) {
+			return $this->unModele->selectViewTotalCommandeEnAttentePoint($idUser);
 		}
 
 		public function selectViewTotalCommandeExpediee($idUser) {
@@ -112,8 +120,16 @@
 			return $this->unModele->selectDateAbonnement($idUser);
 		}
 
+		public function selectPointAbonnement($idUser) {
+			return $this->unModele->selectPointAbonnement($idUser);
+		}
+
 		public function selectDateLigneCommande($idUser) {
 			return $this->unModele->selectDateLigneCommande($idUser);
+		}
+
+		public function selectNbLigneCommande($idCommande) {
+			return $this->unModele->selectNbLigneCommande($idCommande);
 		}
 
 
@@ -136,6 +152,18 @@
 
 		public function insertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser){
 			$this->unModele->insertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser);
+		}
+
+		public function insertTriggerParticulier ($emailParticulier, $mdpParticulier, $nomParticulier, $prenomParticulier, $adresseParticulier, $dateNaissanceParticulier, $sexeParticulier) {
+			$this->unModele->insertTriggerParticulier($emailParticulier, $mdpParticulier, $nomParticulier, $prenomParticulier, $adresseParticulier, $dateNaissanceParticulier, $sexeParticulier);
+		}
+
+		public function insertTriggerEntreprise($emailEntreprise, $mdpEntreprise, $siretEntreprise, $raisonSocialeEntreprise, $capitalSocialEntreprise) {
+			$this->unModele->insertTriggerEntreprise($emailEntreprise, $mdpEntreprise, $siretEntreprise, $raisonSocialeEntreprise, $capitalSocialEntreprise);
+		}
+
+		public function insertTriggerAdmin($emailAdmin, $mdpAdmin, $niveauAdmin) {
+			$this->unModele->insertTriggerAdmin($emailAdmin, $mdpAdmin, $niveauAdmin);
 		}
 
 		public function insertLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $prixLivre){
@@ -199,6 +227,14 @@
 
 		public function updateLigneCommande ($quantiteLigneCommande, $idCommande) {
 			$this->unModele->updateLigneCommande ($quantiteLigneCommande, $idCommande);
+		}
+
+		public function ajouterPointAbonnement($pointAbonnement, $idUser) {
+			$this->unModele->ajouterPointAbonnement($pointAbonnement, $idUser);
+		}
+
+		public function enleverPointAbonnement($pointAbonnement, $idUser) {
+			$this->unModele->enleverPointAbonnement($pointAbonnement, $idUser);
 		}
 
 

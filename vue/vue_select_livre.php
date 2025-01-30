@@ -9,10 +9,11 @@ Filtrer par : <input type="text" name="filtre">
 <table class="table" style="margin-left: 50px ; margin-right: 50px">
 	<thead class="table-success">
     <tr>
-        <th scope="col">Image</th>
+        <th scope="col"></th>
         <th scope="col">Nom</th>
-        <th scope="col">Categorie</th>
+        <th scope="col">Catégorie</th>
         <th scope="col">Auteur</th>
+        <th scope="col">Maison d'édition</th>
         <th scope="col">Nombre Exemplaires</th>
         <th scope="col">Prix</th>
         <th scope="col">Opérations</th>
@@ -30,6 +31,7 @@ $idUser = $_SESSION['idUser'];
             echo "<td>".$unLivre['nomLivre']."</td>";
             echo "<td>".$unLivre['nomCategorie']."</td>";
             echo "<td>".$unLivre['auteurLivre']."</td>";
+            echo "<td>".$unLivre['nomMaisonEdition']."</td>";
             echo "<td>".$unLivre['exemplaireLivre']."</td>";
             echo "<td>".$unLivre['prixLivre']."€</td>";
 

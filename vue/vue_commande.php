@@ -197,7 +197,7 @@ $dateCommande = $dateCommande[0];
 
     <div class="payment-container">
         <h3>Information de la commande</h3>
-        <form action="process_payment.php" method="POST">
+        <form method="POST">
             <div class="form-group">
                 <label for="montant">Somme payée</label>
                 <input type="text" id="montant" name="montant" value="<?php
