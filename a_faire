@@ -1,12 +1,22 @@
 Priorité :
+- Faire un système de point, chaque livre acheté donne des points au user (Exemple : 10 point / 1 euro de livre acheté)
+    Faire un "insert" dans la table "abonnement" qui va insérer des points après avoir fait "case : 'payer'".
 
-- Trouver un moyen pour que, lors de la procédure "pOffrirLivre",
+- Le user pourra visualiser son nombre de points dans la page "Abonnement"
+
+- Dans la page "Livre", le user pourra voir le nombre de points qu'il peut gagner en achetant chaque livre.
+- En dessous du "<input $sommeAPayer", il faudra mettre un "<input $pointAPayer>"
+- Dans la page "Panier", le user pourra payer, soit par Paypal, soit par points.
+
+
+/*- Trouver un moyen pour que, lors de la procédure "pOffrirLivre",
     le livre (idLivre = 6) qui est inséré dans les tables "commande" et "ligneCommande" ai le prixLivre de "0".
 Réponse possible : mettre le prixLivre à 0 dans la table "livre",
     et l'associer à une "maisonEdition" qui est en collaboration avec la librairie,
         et qui offre des livres gratuitement (grâce à la collaboration faite avec la librairie).
 
-- Afficher le message du livre offert dans la page "Accueil".
+- Afficher le message du livre offert dans la page "Accueil".*/
+
 
 
 A FAIRE :
@@ -20,11 +30,19 @@ A FAIRE :
         NavBar :
             - Changer les logos ou bien mettre des écritures à la place.
 
-        Menu :
-            - Section "à la une" présentant les livres
+        Accueil :
+            - Section "à la une" présentant les livres :
                 - les plus vendus
                 - recommandés (view avis)
                 - en promotion
+
+            - Barre de sélection des catégories qui va afficher les livres, selon la catégorie :
+                - les plus vendus
+                - recommandés (view avis)
+                - en promotion
+
+        Livre :
+            - Afficher la maisonEdition pour chaque livre.
 
         Panier :
             - (c_panier.php) Trouver un moyen pour que, quand le user clique sur Paypal,
@@ -52,6 +70,8 @@ A FAIRE :
             - Afficher le message du livre offert dans la page d'accueil.
 
         PHPMYADMIN
+            - Mettre toutes les images des nouveaux livres insérés (12 livres) dans le dossier "images".
+
             - Créer des tables avec des héritages et utiliser les triggers :
                 - User (idUser, Email, MDP (Connexion uniquement)
                     - Particulier (Nom, Prenom, Adresse, ...)
@@ -95,10 +115,6 @@ A FAIRE :
                     car on les a remplacé par des méthodes dans le modele qui va ajouter "whereIduser" dans la requête SQL.
 
 
-        Panier
-            - Le "Filtrer par" ne marche pas pour tous les user dans la page "panier" mais marche dans la page "livre".
-
-
         Commande
             (vue_insert_avis.php) - Quand on insère un avis, si le livre est "l'Etranger" ou "l'Odyssée'",
                 il n'y a que le "L" qui s'affiche.
@@ -106,6 +122,8 @@ A FAIRE :
 
 
         Bug
+            - La méthode "selectLikeLivres" qui sert à filtrer les livres ne marche pas.
+
             - Lorsque je mets un avis dans la page Commande, le cube "Information de la commande" disparait.
 
             - Quand je modifie la quantité d'un livre dans la page Panier, tous les livres sont modifiés.

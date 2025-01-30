@@ -20,4 +20,5 @@ echo "<h2> Bienvenue  " . $prenomUser . ' ' . $nomUser . "</h2>";
 
 <br>
 
-<img src="images/accueil.png" height="400" width="1000">
+<img src="images/livreOffert.png" height="500" width="450">
+<img src="images/accueil.png" height="400" width="800">

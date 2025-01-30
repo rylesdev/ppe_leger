@@ -42,18 +42,20 @@
 			$requete =  "select l.*, c.nomCategorie
 				        from livre l
 				        inner join categorie c 
-				        on l.idCategorie=c.idCategorie;";
+				        on l.idCategorie=c.idCategorie
+				        where prixLivre != 0;";
 			$exec = $this->unPdo->prepare ($requete);
 			$exec->execute ();
 			return $exec->fetchAll();
 		}
 
+        // La méthode "selectLikeLivres" ne marche pas.
 		public function selectLikeLivres ($filtre){
 			$requete =  "select l.*, c.nomCategorie
 						from livre l   
 						inner join categorie c 
 						on l.idCategorie=c.idCategorie
-						where l.idLivre like :filtre or 
+						where prixLivre !=  and l.idLivre like :filtre or 
 						l.nomLivre like :filtre or 
 						c.nomCategorie like :filtre or 
 						l.auteurLivre like :filtre

@@ -56,7 +56,7 @@
 	
 	if (isset($_SESSION['emailUser'])){
 		echo '<div id="navbar" style="background-Color: #f0f0f0">
-		<a href="index.php?page=1"> <img src="images/livre.jpeg" height="80" width="80" style="margin-right: 30px"> </a>
+		<a href="index.php?page=1"> <img src="images/logo.png" height="80" width="80" style="margin-right: 30px"> </a>
 
 		<a href="index.php?page=2"> <img src="images/rechercher.png" height="80" width="80" style="margin-right: 30px"> </a>';
 

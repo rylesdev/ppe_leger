@@ -1,5 +1,5 @@
 
-<img src="images/livre.jpeg" height="100" width="100"><h2> Connexion </h2>
+<img src="images/logo.png" height="100" width="100"><h2> Connexion </h2>
 
 
 <form method="post">
