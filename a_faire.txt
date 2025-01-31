@@ -1,5 +1,9 @@
 Priorité :
 
+URGENT :
+    - Régler le problème d'affichage pour les roles (pages Panier et Commande notamment).
+    Réponse : supprimer les "if(isset($_SESSION..." et mettre des "unContoleur->selectAdminPrincipal" à la place.
+
 - Supprimer la procédure "pHashMdpUser" si elle sert à rien (étant donné qu'on peut hasher dans le modele->requeteSQL).
 
 
