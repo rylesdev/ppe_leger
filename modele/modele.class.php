@@ -18,7 +18,7 @@
         public function verifConnexion($emailUser, $mdpUser) {
             $requete =  "select * 
                         from user 
-                        where emailUser = ? and mdpUser = ?;";
+                        where emailUser = ? and mdpUser = sha1(?);";
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $emailUser, PDO::PARAM_STR);
             $exec->BindValue(2, $mdpUser, PDO::PARAM_STR);
@@ -40,7 +40,7 @@
 
         public function selectAdminPrincipal($idUser) {
             $requete =  "select count(*) as isAdmin 
-                        from Admin 
+                        from admin 
                         where idUser = ? and niveauAdmin = 'principal';";
             $exec =$this->unPdo->prepare($requete);
             $exec->BindValue(1, $idUser, PDO::PARAM_INT);

@@ -1,0 +1,201 @@
+Priorité :
+
+- Pour l'héritage, modifier les "insertUser" (provenant de la méthode ou de la procédure "pHashMdpUser",
+    et mettre les trigger à la place) :
+        - public function insertTriggerParticulier
+        - public function insertTriggerEntreprise
+        - public function insertTriggerAdmin
+- Supprimer la procédure "pHashMdpUser" si elle sert à rien (étant donné qu'on peut hasher dans le modele->requeteSQL).
+
+
+- Essayer la procédure "pOffrirLivre" pour voir si elle marche.
+    Si le user reçoit bien un livre au hasard (chance : 1/5) parmis les 4 livres proposés (avec un prixLivre = 0).
+
+
+- Afficher le message du livre offert dans la page "Accueil".
+
+
+
+A FAIRE :
+    Front-Office
+        Connexion :
+            - Pour le menu principal, afficher d'abord la page d'accueil, et créer un logo "login-signup".
+            - Pour le menu principal, afficher d'abord inscription puis connexion.
+
+        Général :
+            - Travailler le front-office (html / css / js) pour améliorer l'esthétique du site.
+
+        NavBar :
+            - Changer les logos ou bien mettre des écritures à la place.
+
+        Accueil :
+            - Section "à la une" présentant les livres :
+                - les plus vendus
+                - recommandés (view avis)
+                - en promotion
+
+            - Barre de sélection des catégories qui va afficher les livres, selon la catégorie :
+                - les plus vendus
+                - recommandés (view avis)
+                - en promotion
+
+        Général :
+            - Pour l'héritage, modifier les "insertUser" provenant de la méthode ou de la procédure "pHashMdpUser",
+                et mettre les trigger à la place :
+                    - public function insertTriggerParticulier
+                    - public function insertTriggerEntreprise
+                    - public function insertTriggerAdmin
+            - Supprimer la procédure "pHashMdpUser" si elle sert à rien (étant donné qu'on peut hasher dans le modele->requeteSQL).
+
+        Panier :
+            - (c_panier.php) Trouver un moyen pour que, quand le user clique sur Paypal,
+               l'utilisateur soit redirigé vers Paypal.
+               "header("Location: https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR");"
+
+            - (c_abonnement.php) Lorsque l'utilisateur clique sur l'abonnement,
+                il faut qu'il soit redirigé vers Paypal.
+                "header("Location: https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR");"
+
+            - Dans la page "Panier", le user pourra payer, soit par Paypal, soit par points.
+                Problème : La méthode "enleverPointAbonnement" ne marche pas quand le user clique sur "Utiliser les points".
+
+        Commande :
+            (vue_insert_avis.php) - Faire un truc plus beau pour les étoiles des avis.
+
+
+    Back-End
+        Livre
+            - Pour le mode admin, il faut modifier le "categorieLivre" pour l'adapter avec la table "categorie"
+                et non la table "livre". Il faut aussi rajouter la maison d'édition du livre.
+
+            (A vérifier) - La sélection de la quantité de livre ne marche pas.
+
+        Page
+            - Essayer la procédure "pOffrirLivre" pour voir si elle marche.
+                Si le user reçoit bien un livre au hasard (chance : 1/5) parmis les 4 livres proposés (avec un prixLivre = 0).
+
+            - Afficher le message du livre offert dans la page "Accueil".
+
+        PHPMYADMIN
+            - Modifier la procédure "insertUser" (voire la supprimer) pour l'adapter avec les héritages.
+
+            - Mettre toutes les images des nouveaux livres insérés (12 livres) dans le dossier "images".
+
+            - Supprimer la colonne "categorieLivre" de la table "Livre".
+
+            - Faire des "view" ou des "trigger" ou quoi que ce soit pour enrichir le front-office
+                à partir de ces tables :
+                                            1. maisonEdition
+                                            2. promotion
+                                            3. avis
+                                            4. abonnement
+            - Idées :
+                        1. Jsp.
+                        2. Dans la page d'accueil il y aura une liste des livres en promotion.
+                        3. // Dans la page "Commande", l'utilisateur pourra remplir des étoiles pour donner son avis sur un livre.
+                            // Les étoiles vont s'afficher uniquement si l'utilisateur a reçu le livre (if statutCommande = 'expédiée')
+                           Créer une view pour afficher les livres les mieux notés.
+                        4. // Créer une procédure pour offrir un livre pour les abonnée.
+                            Trouver d'autres idées pour les avantages aux abonnés.
+                            Mettre les livres offerts (et d'autres avantages) visualisables dans la page d'accueil,
+
+
+            - Page Promotion (Admin) :
+                - Créer une page qui va permettre à un admin de mettre des livres en promotion.
+                    (nomLivre, prixLivre, nouveauPrixLivre, etc...)
+
+            - View :
+                - Créer une view (SELECT c.idUser, SUM(l.quantiteLigneCommande)
+                                    FROM ligneCommande l
+                                    inner join commande c
+                                    on l.idCommande = c.idCommande
+                                    WHERE c.statutCommande = 'expédiée'
+                                    group by c.idUser;)
+                qui va afficher le nombre de livres achetés par chaque user.
+
+
+                - Supprimer toutes les view (nbMinLivre, nbMaxLivre, nomMinLivre, nomMaxLivre)
+                    car on les a remplacé par des méthodes dans le modele qui va ajouter "whereIduser" dans la requête SQL.
+
+
+        Commande
+            (vue_insert_avis.php) - Quand on insère un avis, si le livre est "l'Etranger" ou "l'Odyssée'",
+                il n'y a que le "L" qui s'affiche.
+            Réponse : Cela provient du fait que le "nomLivre" est enfermé dans un $_POST comportant des "'".
+
+
+        Bug
+            - La méthode "selectLikeLivres" qui sert à filtrer les livres ne marche pas.
+
+            - Lorsque je mets un avis dans la page Commande, le cube "Information de la commande" disparait.
+
+            - Quand je modifie la quantité d'un livre dans la page Panier, tous les livres sont modifiés.
+
+            - Pour un nouveau user :
+                - Quand je supprime un livre, tous les livres se suppriment.
+                - Quand j'ajoute un livre avec une quantité de 12 (par exemple), la quantité sélectionnée est 3.
+                    Probablement un problème de synchronisation entre les "Confirmer la quantité".
+                        La machine doit certainement prendre les valeurs que j'ai inséré auparavant.
+                - Quand je supprime un livre, la quantité du livre (exemplaireLivre) ne se met par à jour.
+
+
+
+
+
+Fait :
+- Créer des tables avec des héritages et utiliser les triggers :
+                  - User (idUser, Email, MDP (Connexion uniquement))
+                      - Particulier (Nom, Prenom, Adresse, ...)
+                      - Entreprise (Num SIRET, RaisonSociale, ...)
+                  - Admin (table à part)
+
+- Faire un système qui prépare la commande uniquement lorsque le user a payé sur Paypal
+    Si il n'a pas payé la commande doit avoir le statut 'en attente', la dateCommande null, et la dateLivraison null.
+
+- Modifier la table commande pour qu'elle contienne plusieurs ligneCommande (voir MCD).
+    Actuellement commande = ligneCommande, or il faut que commande < ligneCommande
+    ligneCommande = livre
+    commande = plusieurs livres
+    donc commande = 1 ou plusieurs ligneCommande (commande 1,n -> (Composer) -> 1,1 ligneCommande)
+
+
+        Acheter :
+            - Dans l'onglet "Panier", le client pourra :
+                    - Afficher (Modele->selectAllCommande):
+                        - Le nom des livres (livre.nomLivre)
+                        - Quantité des livres (ligneCommande.quantiteLigneCommande)
+                        - Tout en bas :
+                            - Récapitulatif du nom de tous les livres (livre)
+                            - (View) Montant total de tous les livres (livre et ligneCommande)
+                            - Adresse de livraison (user)
+                            - Date de livraison (commande)
+                            - Bouton pour payer (Paypal)
+
+            - Un client peut acheter un livre en appuyant directement sur un logo dans la colonne "opération".
+            - Le client pourra choisir le nombre d'exemplaire à acheter.
+
+            - Faire une opération pour qu'un client puisse supprimer un livre de son panier.
+                        Rajouter une colonne "opération" comme les admin pour supprimer un livre du panier.
+
+
+        Gestion de stocks :
+            - Créer une page "Stockage" qui permet aux admin d'augmenter le nombre d'exemplaire pour chaque livre.
+
+
+        BDD :
+            - Faire une View qui va calculer la somme totale de la commande
+                en faisant le produit de l'article et du nombre d'exemplaires.
+
+            - Faire une view qui va trier le prix maximum, minimum, l'ordre croissant, décroissant
+                pour chaque commande dans la page "panier"->récapitulatif de la commande.
+
+            - Trigger qui empêche une commande si la commande de ce livre existe déjà dans le panier
+
+            - Trigger qui empêche une commande si le stock = 0
+
+            - Trigger qui met à jour automatiquement le stock après une commande
+
+            - Trigger qui envoie une notification dans la table "notification" après chaque commande passée
+
+            - Procédure qui hash automatiquement les mdp
+

@@ -8,7 +8,7 @@
 		}
 
 		public function verifConnexion ($emailUser, $mdpUser){
-			return $this->unModele->verifConnexion($emailUser, sha1($mdpUser));
+			return $this->unModele->verifConnexion($emailUser, $mdpUser);
 		}
 
 		/****************** SELECT  ******************/
@@ -248,8 +248,3 @@
 		}
 	}
 ?>
-
-
-
-
-
