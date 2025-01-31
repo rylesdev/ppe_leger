@@ -1,10 +1,5 @@
 Priorité :
 
-- Pour l'héritage, modifier les "insertUser" (provenant de la méthode ou de la procédure "pHashMdpUser",
-    et mettre les trigger à la place) :
-        - public function insertTriggerParticulier
-        - public function insertTriggerEntreprise
-        - public function insertTriggerAdmin
 - Supprimer la procédure "pHashMdpUser" si elle sert à rien (étant donné qu'on peut hasher dans le modele->requeteSQL).
 
 

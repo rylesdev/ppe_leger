@@ -106,7 +106,6 @@ where l.exemplaireLivre <= 5;
 
 
 TRIGGERS :
-
 delimiter $$
 create trigger tExemplaireLivreLigneCommande
 before insert on ligneCommande
@@ -176,9 +175,9 @@ CREATE TRIGGER tInsertParticulier
 BEFORE INSERT ON particulier
 FOR EACH ROW
 BEGIN
-INSERT INTO user
-VALUES (new.emailUser, new.mdpUser, 'client');
-SET new.idUser = LAST_INSERT_ID();
+    INSERT INTO user (emailUser, mdpUser, roleUser)
+    VALUES (NEW.emailUser, NEW.mdpUser, 'client');
+    SET NEW.idUser = LAST_INSERT_ID();
 END $$
 DELIMITER ;
 
@@ -188,21 +187,9 @@ CREATE TRIGGER tInsertEntreprise
 BEFORE INSERT ON entreprise
 FOR EACH ROW
 BEGIN
-INSERT INTO user (emailUser, mdpUser, roleUser)
-VALUES (new.emailUser, new.mdpUser, 'client');
-SET new.idUser = LAST_INSERT_ID();
-END $$
-DELIMITER ;
-
-
-DELIMITER $$
-CREATE TRIGGER tInsertAdmin
-BEFORE INSERT ON admin
-FOR EACH ROW
-BEGIN
-INSERT INTO user (emailUser, mdpUser, roleUser)
-VALUES (new.emailUser, new.mdpUser, 'admin');
-SET new.idUser = LAST_INSERT_ID();
+    INSERT INTO user (emailUser, mdpUser, roleUser)
+    VALUES (NEW.emailUser, NEW.mdpUser, 'client');
+    SET NEW.idUser = LAST_INSERT_ID();
 END $$
 DELIMITER ;
 

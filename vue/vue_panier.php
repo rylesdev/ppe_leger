@@ -3,10 +3,10 @@ error_reporting(0);
 
 $idUser = $_SESSION['idUser'];
 
-$totalCommande = $unControleur->selectViewTotalCommandeEnAttente($idUser);
+$totalCommande = $unControleur->viewSelectTotalCommandeEnAttente($idUser);
 $sommeAPayer = $totalCommande['totalCommande'];
 
-$resultat = $unControleur->selectViewTotalCommandeEnAttentePoint($idUser);
+$resultat = $unControleur->viewSelectTotalCommandeEnAttentePoint($idUser);
 $pointAUtiliser = $resultat['totalCommandeMultiplie'];
 
 $adresseUser = $unControleur->selectAdresseUser($idUser);
@@ -149,19 +149,19 @@ $dateCommande = $dateCommande[0];
             </thead>
             <tbody>
             <?php
-            $lesCommandes = $unControleur->selectViewTotalLivreEnAttente($idUser);
+            $lesCommandes = $unControleur->viewSelectTotalLivreEnAttente($idUser);
 
             $tri = isset($_POST['tri']) ? $_POST['tri'] : '';
             $idUser = $_SESSION['idUser'];
 
             if ($tri == 'prixMin') {
-                $lesCommandes = $unControleur->selectViewNbMinLivreEnAttente($idUser);
+                $lesCommandes = $unControleur->viewSelectNbMinLivreEnAttente($idUser);
             } elseif ($tri == 'prixMax') {
-                $lesCommandes = $unControleur->selectViewNbMaxLivreEnAttente($idUser);
+                $lesCommandes = $unControleur->viewSelectNbMaxLivreEnAttente($idUser);
             } elseif ($tri == 'ordreCroissant') {
-                $lesCommandes = $unControleur->selectViewNomMinLivreEnAttente($idUser);
+                $lesCommandes = $unControleur->viewSelectNomMinLivreEnAttente($idUser);
             } elseif ($tri == 'ordreDecroissant') {
-                $lesCommandes = $unControleur->selectViewNomMaxLivreEnAttente($idUser);
+                $lesCommandes = $unControleur->viewSelectNomMaxLivreEnAttente($idUser);
             }
 
             if (isset($lesCommandes)){

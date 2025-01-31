@@ -17,7 +17,11 @@
 
         public function verifConnexion($emailUser, $mdpUser) {
             $requete =  "select * 
-                        from user 
+                        from user u
+                        inner join particulier p
+                        on u.idUser=p.idUser
+                        inner join entreprise e 
+                        on u.idUser=e.idUser
                         where emailUser = ? and mdpUser = sha1(?);";
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $emailUser, PDO::PARAM_STR);
@@ -156,7 +160,7 @@
             return $exec->fetch();
         }
 
-        public function selectViewTotalCommandeEnAttente($idUser) {
+        public function viewSelectTotalCommandeEnAttente($idUser) {
             $requete =  "select *
                         from vTotalCommandeEnAttente
                         where idUser = ?;";
@@ -166,7 +170,7 @@
             return $exec->fetch();
         }
 
-        public function selectViewTotalCommandeEnAttentePoint($idUser) {
+        public function viewSelectTotalCommandeEnAttentePoint($idUser) {
             $requete =  "select idUser, totalCommande * 10 as totalCommandeMultiplie
                         from vTotalCommandeEnAttente
                         where idUser = ?;";
@@ -176,7 +180,7 @@
             return $exec->fetch();
         }
 
-        public function selectViewTotalCommandeExpediee($idUser) {
+        public function viewSelectTotalCommandeExpediee($idUser) {
             $requete =  "select * 
                         from vTotalCommandeExpediee   
                         where idUser = ?;";
@@ -186,7 +190,7 @@
             return $exec->fetch();
         }
 
-        public function selectViewTotalLivreEnAttente($idUser) {
+        public function viewSelectTotalLivreEnAttente($idUser) {
             $requete =  "select * 
                         from vTotalLivreEnAttente
                         where idUser = ?;";
@@ -196,7 +200,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectViewTotalLivreExpediee($idUser) {
+        public function viewSelectTotalLivreExpediee($idUser) {
             $requete =  "select * 
                         from vTotalLivreExpediee
                         where idUser = ?;";
@@ -206,7 +210,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectViewNbMinLivreEnAttente($idUser) {
+        public function viewSelectNbMinLivreEnAttente($idUser) {
             $requete =  "select *
                         from vTotalLivreEnAttente
                         where idUser = ? 
@@ -217,7 +221,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectViewNbMaxLivreEnAttente($idUser) {
+        public function viewSelectNbMaxLivreEnAttente($idUser) {
             $requete =  "select *
                         from vTotalLivreEnAttente
                         where idUser = ?
@@ -228,7 +232,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectViewNomMinLivreEnAttente($idUser) {
+        public function viewSelectNomMinLivreEnAttente($idUser) {
             $requete =  "select *
                         from vTotalLivreEnAttente
                         where idUser = ?
@@ -239,7 +243,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectViewNomMaxLivreEnAttente($idUser) {
+        public function viewSelectNomMaxLivreEnAttente($idUser) {
             $requete =  "select *
                         from vTotalLivreEnAttente
                         where idUser = ?
@@ -250,7 +254,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectViewNbMinLivreExpediee($idUser) {
+        public function viewSelectNbMinLivreExpediee($idUser) {
             $requete =  "select *
                         from vTotalLivreExpediee
                         where idUser = ? 
@@ -261,7 +265,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectViewNbMaxLivreExpediee($idUser) {
+        public function viewSelectNbMaxLivreExpediee($idUser) {
             $requete =  "select *
                         from vTotalLivreExpediee
                         where idUser = ?
@@ -272,7 +276,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectViewNomMinLivreExpediee($idUser) {
+        public function viewSelectNomMinLivreExpediee($idUser) {
             $requete =  "select *
                         from vTotalLivreExpediee
                         where idUser = ?
@@ -283,7 +287,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectViewNomMaxLivreExpediee($idUser) {
+        public function viewSelectNomMaxLivreExpediee($idUser) {
             $requete =  "select *
                         from vTotalLivreExpediee
                         where idUser = ?
@@ -294,7 +298,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectViewCommandesEnAttente() {
+        public function viewSelectCommandesEnAttente() {
             $requete =  "select * 
                         from vCommandesEnAttente";
             $exec = $this->unPdo->prepare($requete);
@@ -302,7 +306,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectViewMeilleuresVentes() {
+        public function viewSelectMeilleuresVentes() {
             $requete =  "select * 
                         from vMeilleuresVentes";
             $exec = $this->unPdo->prepare($requete);
@@ -310,7 +314,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectViewLivresEnStock() {
+        public function viewSelectLivresEnStock() {
             $requete =  "select * 
                         from vLivresEnStock";
             $exec = $this->unPdo->prepare($requete);
@@ -409,63 +413,44 @@
 			$exec->execute();
 		}
 
-        public function insertTriggerParticulier ($emailParticulier, $mdpParticulier, $nomParticulier, $prenomParticulier, $adresseParticulier, $dateNaissanceParticulier, $sexeParticulier) {
-            $requeteUser =  "insert into user (emailUser, mdpUser, roleUser) 
-                            values (?, ?, 'client');";
-            $execUser = $this->unPdo->prepare($requeteUser);
-            $execUser->bindValue(1, $emailParticulier, PDO::PARAM_STR);
-            $execUser->bindValue(2, $mdpParticulier, PDO::PARAM_STR);
-            $execUser->execute();
-            $idUser = $this->unPdo->lastInsertId();
+        public function triggerInsertParticulier($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser) {
+            try {
+                $requete =  "insert into particulier (idUser, emailUser, mdpUser, nomUser, prenomUser, adresseUser, dateNaissanceUser, sexeUser)
+                            values (null, ?, sha1(?), ?, ?, ?, ?, ?);";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $emailUser, PDO::PARAM_STR);
+                $exec->bindValue(2, $mdpUser, PDO::PARAM_STR);
+                $exec->bindValue(3, $nomUser, PDO::PARAM_STR);
+                $exec->bindValue(4, $prenomUser, PDO::PARAM_STR);
+                $exec->bindValue(5, $adresseUser, PDO::PARAM_STR);
+                $exec->bindValue(6, $dateNaissanceUser, PDO::PARAM_STR);
+                $exec->bindValue(7, $sexeUser, PDO::PARAM_STR);
+                $exec->execute();
 
-            $requeteParticulier =   "insert into particulier (idUser, nomUser, prenomUser, adresseUser, dateNaissanceUser, sexeUser)
-                                    values (?, ?, ?, ?, ?, ?);";
-            $execParticulier = $this->unPdo->prepare($requeteParticulier);
-            $execParticulier->bindValue(1, $idUser, PDO::PARAM_INT);
-            $execParticulier->bindValue(2, $nomParticulier, PDO::PARAM_STR);
-            $execParticulier->bindValue(3, $prenomParticulier, PDO::PARAM_STR);
-            $execParticulier->bindValue(4, $adresseParticulier, PDO::PARAM_STR);
-            $execParticulier->bindValue(5, $dateNaissanceParticulier, PDO::PARAM_STR);
-            $execParticulier->bindValue(6, $sexeParticulier, PDO::PARAM_STR);
-            $execParticulier->execute();
+                return $this->unPdo->lastInsertId();
+            } catch (PDOException $exp) {
+                echo $exp->getMessage();
+            }
         }
 
-        public function insertTriggerEntreprise($emailEntreprise, $mdpEntreprise, $siretEntreprise, $raisonSocialeEntreprise, $capitalSocialEntreprise) {
-            $requeteUser =  "insert into user (emailUser, mdpUser, roleUser) 
-                            values (?, ?, 'client');";
-            $execUser = $this->unPdo->prepare($requeteUser);
-            $execUser->bindValue(1, $emailEntreprise, PDO::PARAM_STR);
-            $execUser->bindValue(2, $mdpEntreprise, PDO::PARAM_STR);
-            $execUser->execute();
-            $idUser = $this->unPdo->lastInsertId();
 
-            $requeteEntreprise =    "insert into entreprise (idUser, siretUser, raisonSocialeUser, capitalSocialUser)
-                                    values (?, ?, ?, ?);";
-            $execEntreprise = $this->unPdo->prepare($requeteEntreprise);
-            $execEntreprise->bindValue(1, $idUser, PDO::PARAM_INT);
-            $execEntreprise->bindValue(2, $siretEntreprise, PDO::PARAM_STR);
-            $execEntreprise->bindValue(3, $raisonSocialeEntreprise, PDO::PARAM_STR);
-            $execEntreprise->bindValue(4, $capitalSocialEntreprise, PDO::PARAM_STR);
-            $execEntreprise->execute();
+        public function triggerInsertEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser) {
+            try {
+                $requete =  "insert into entreprise (idUser, emailUser, mdpUser, siretUser, raisonSocialeUser, capitalSocialUser)
+                            values (null, ?, sha1(?), ?, ?, ?);";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $emailUser, PDO::PARAM_STR);
+                $exec->bindValue(2, $mdpUser, PDO::PARAM_STR);
+                $exec->bindValue(3, $siretUser, PDO::PARAM_STR);
+                $exec->bindValue(4, $raisonSocialeUser, PDO::PARAM_STR);
+                $exec->bindValue(5, $capitalSocialUser, PDO::PARAM_STR);
+                $exec->execute();
+
+                return $this->unPdo->lastInsertId();
+            } catch (PDOException $exp) {
+                echo $exp->getMessage();
+            }
         }
-
-        public function insertTriggerAdmin($emailAdmin, $mdpAdmin, $niveauAdmin) {
-            $requeteUser =  "insert into user (emailUser, mdpUser, roleUser) 
-                            values (?, ?, 'admin');";
-            $execUser = $this->unPdo->prepare($requeteUser);
-            $execUser->bindValue(1, $emailAdmin, PDO::PARAM_STR);
-            $execUser->bindValue(2, $mdpAdmin, PDO::PARAM_STR);
-            $execUser->execute();
-            $idUser = $this->unPdo->lastInsertId();
-
-            $requeteAdmin =     "insert into admin (idUser, niveauAdmin)
-                                values (?, ?);";
-            $execAdmin = $this->unPdo->prepare($requeteAdmin);
-            $execAdmin->bindValue(1, $idUser, PDO::PARAM_INT);
-            $execAdmin->bindValue(2, $niveauAdmin, PDO::PARAM_STR);
-            $execAdmin->execute();
-        }
-
 
 
         public function insertLivre($nomLivre, $auteurLivre, $imageLivre, $prixLivre, $nomCategorie){

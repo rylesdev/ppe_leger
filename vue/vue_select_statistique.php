@@ -17,9 +17,9 @@
     <?php
     $idUser = $_SESSION['idUser'];
 
-    $vCommandesEnAttente = $unControleur->selectViewCommandesEnAttente();
-    $vMeilleuresVentes = $unControleur->selectViewMeilleuresVentes();
-    $vLivresEnStock = $unControleur->selectViewLivresEnStock();
+    $vCommandesEnAttente = $unControleur->viewSelectCommandesEnAttente();
+    $vMeilleuresVentes = $unControleur->viewSelectMeilleuresVentes();
+    $vLivresEnStock = $unControleur->viewSelectLivresEnStock();
 
     echo "<tr>";
     echo "<td>" . $vCommandesEnAttente[0]['nbCommandeEnAttente'] . "</td>";

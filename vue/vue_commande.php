@@ -3,7 +3,7 @@ error_reporting(0);
 
 $idUser = $_SESSION['idUser'];
 
-$totalCommande = $unControleur->selectViewTotalCommandeExpediee($idUser);
+$totalCommande = $unControleur->viewSelectTotalCommandeExpediee($idUser);
 
 $sommeAPayer = $totalCommande['totalCommande'];
 
@@ -144,20 +144,20 @@ $dateCommande = $dateCommande[0];
             </thead>
             <tbody>
             <?php
-            $lesCommandes = $unControleur->selectViewTotalLivreExpediee($idUser);
+            $lesCommandes = $unControleur->viewSelectTotalLivreExpediee($idUser);
             $dateLigneCommande = $unControleur->selectDateLigneCommande($idUser);
 
             $tri = isset($_POST['tri']) ? $_POST['tri'] : '';
             $idUser = $_SESSION['idUser'];
 
             if ($tri == 'prixMin') {
-                $lesCommandes = $unControleur->selectViewNbMinLivreExpediee($idUser);
+                $lesCommandes = $unControleur->viewSelectNbMinLivreExpediee($idUser);
             } elseif ($tri == 'prixMax') {
-                $lesCommandes = $unControleur->selectViewNbMaxLivreExpediee($idUser);
+                $lesCommandes = $unControleur->viewSelectNbMaxLivreExpediee($idUser);
             } elseif ($tri == 'ordreCroissant') {
-                $lesCommandes = $unControleur->selectViewNomMinLivreExpediee($idUser);
+                $lesCommandes = $unControleur->viewSelectNomMinLivreExpediee($idUser);
             } elseif ($tri == 'ordreDecroissant') {
-                $lesCommandes = $unControleur->selectViewNomMaxLivreExpediee($idUser);
+                $lesCommandes = $unControleur->viewSelectNomMaxLivreExpediee($idUser);
             }
 
             if (isset($lesCommandes)){

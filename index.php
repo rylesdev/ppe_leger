@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once("controleur/controleur.class.php");
-// Création d'une instance de la classe Controleur
+
 $unControleur = new Controleur();
 
 ?>
@@ -31,27 +31,54 @@ $unControleur = new Controleur();
 
         $unUser = $unControleur->verifConnexion($emailUser, $mdpUser);
         if ($unUser) {
+            // User mère :
             $_SESSION['idUser'] = $unUser['idUser'];
+            $_SESSION['emailUser'] = $_POST['emailUser'];
+            $_SESSION['mdpUser'] = $_POST['mdpUser'];
+            $_SESSION['roleUser'] = $unUser['roleUser'];
+
+            // Particulier fille :
             $_SESSION['nomUser'] = $unUser['nomUser'];
             $_SESSION['prenomUser'] = $unUser['prenomUser'];
-            $_SESSION['emailUser'] = $unUser['emailUser'];
-            $_SESSION['roleUser'] = $unUser['roleUser'];
+            $_SESSION['adresseUser'] = $unUser['emailUser'];
+            $_SESSION['dateNaissanceUser'] = $unUser['dateNaissanceUser'];
+            $_SESSION['sexeUser'] = $unUser['sexeUser'];
+
+            // Entreprise fille : 
+            $_SESSION['siretUser'] = $unUser['siretUser'];
+            $_SESSION['raisonSocialeUser'] = $unUser['raisonSocialeUser'];
+            $_SESSION['capitalSocialUser'] = $unUser['capitalSocialUser'];
+
             header("Location: index.php?page=1");
         } else {
             echo "<br> Vérifier les identifiants. ";
         }
     }
 
-    if (isset($_POST['Inscription'])) {
+    if (isset($_POST['InscriptionParticulier'])) {
         $emailUser = $_POST['emailUser'];
         $mdpUser = $_POST['mdpUser'];
 
         $nomUser = $_POST['nomUser'];
         $prenomUser = $_POST['prenomUser'];
         $adresseUser = $_POST['adresseUser'];
+        $dateNaissanceUser = $_POST['dateNaissanceUser'];
+        $sexeUser = $_POST['sexeUser'];
 
-        $unControleur->procedureInsertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser);
+        $unControleur->triggerInsertParticulier($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser);
     }
+
+    if (isset($_POST['InscriptionEntreprise'])) {
+        $emailUser = $_POST['emailUser'];
+        $mdpUser = $_POST['mdpUser'];
+
+        $siretUser = $_POST['siretUser'];
+        $raisonSocialeUser = $_POST['raisonSocialeUser'];
+        $capitalSocialUser = $_POST['capitalSocialUser'];
+
+        $unControleur->triggerInsertEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser);
+    }
+
 
     if (isset($_SESSION['emailUser'])) {
         echo '<div id="navbar" style="background-Color: #f0f0f0">

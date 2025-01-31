@@ -1,34 +1,17 @@
-
-<br>
 <h2> Inscription </h2>
 
+<?php
+echo '<a href="index.php?inscription=particulier">Vous êtes un particulier</a><br>';
+echo '<a href="index.php?inscription=entreprise">Vous êtes une entreprise</a><br>';
 
-<form method="post">
-    <table>
-        <tr>
-            <td> Nom </td>
-            <td><input type="text" name="nomUser"></td>
-        </tr>
-        <tr>
-            <td> Prenom </td>
-            <td><input type="text" name="prenomUser"></td>
-        </tr>
-        <tr>
-            <td> Email </td>
-            <td><input type="email" name="emailUser"></td>
-        </tr>
-        <tr>
-            <td> Adresse </td>
-            <td><input type="text" name="adresseUser"></td>
-        </tr>
-        <tr>
-            <td> MDP </td>
-            <td><input type="password" name="mdpUser"></td>
-        </tr>
-        <tr>
-            <td> <input type="reset" name="Annuler" value="Annuler" class="table-success"> </td>
-            <td><input type="submit" name="Inscription" value="Inscription" class="table-success"></td>
-        </tr>
-    </table>
+$inscription = isset($_GET['inscription']) ? $_GET['inscription'] : '';
 
-</form>
+switch ($inscription) {
+    case "particulier":
+        require_once("controleur/c_inscription_particulier.php");
+        break;
+    case "entreprise":
+        require_once("controleur/c_inscription_entreprise.php");
+        break;
+}
+    ?>

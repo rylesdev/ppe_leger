@@ -52,68 +52,68 @@
 			return $this->unModele->selectDateLivraisonCommande($idUser);
 		}
 
-		public function selectViewTotalCommandeEnAttente($idUser) {
-			return $this->unModele->selectViewTotalCommandeEnAttente($idUser);
+		public function viewSelectTotalCommandeEnAttente($idUser) {
+			return $this->unModele->viewSelectTotalCommandeEnAttente($idUser);
 		}
 
-		public function selectViewTotalCommandeEnAttentePoint($idUser) {
-			return $this->unModele->selectViewTotalCommandeEnAttentePoint($idUser);
+		public function viewSelectTotalCommandeEnAttentePoint($idUser) {
+			return $this->unModele->viewSelectTotalCommandeEnAttentePoint($idUser);
 		}
 
-		public function selectViewTotalCommandeExpediee($idUser) {
-			return $this->unModele->selectViewTotalCommandeExpediee($idUser);
+		public function viewSelectTotalCommandeExpediee($idUser) {
+			return $this->unModele->viewSelectTotalCommandeExpediee($idUser);
 		}
 
-		public function selectViewTotalLivreEnAttente($idUser) {
-			return $this->unModele->selectViewTotalLivreEnAttente($idUser);
+		public function viewSelectTotalLivreEnAttente($idUser) {
+			return $this->unModele->viewSelectTotalLivreEnAttente($idUser);
 		}
 
-		public function selectViewTotalLivreExpediee($idUser) {
-			return $this->unModele->selectViewTotalLivreExpediee($idUser);
+		public function viewSelectTotalLivreExpediee($idUser) {
+			return $this->unModele->viewSelectTotalLivreExpediee($idUser);
 		}
 
-		public function selectViewNbMinLivreEnAttente($idUser) {
-			return $this->unModele->selectViewNbMinLivreEnAttente($idUser);
+		public function viewSelectNbMinLivreEnAttente($idUser) {
+			return $this->unModele->viewSelectNbMinLivreEnAttente($idUser);
 		}
 
-		public function selectViewNbMaxLivreEnAttente($idUser) {
-			return $this->unModele->selectViewNbMaxLivreEnAttente($idUser);
+		public function viewSelectNbMaxLivreEnAttente($idUser) {
+			return $this->unModele->viewSelectNbMaxLivreEnAttente($idUser);
 		}
 
-		public function selectViewNomMinLivreEnAttente($idUser) {
-			return $this->unModele->selectViewNomMinLivreEnAttente($idUser);
+		public function viewSelectNomMinLivreEnAttente($idUser) {
+			return $this->unModele->viewSelectNomMinLivreEnAttente($idUser);
 		}
 
-		public function selectViewNomMaxLivreEnAttente($idUser) {
-			return $this->unModele->selectViewNomMaxLivreEnAttente($idUser);
+		public function viewSelectNomMaxLivreEnAttente($idUser) {
+			return $this->unModele->viewSelectNomMaxLivreEnAttente($idUser);
 		}
 
-		public function selectViewNbMinLivreExpediee($idUser) {
-			return $this->unModele->selectViewNbMinLivreExpediee($idUser);
+		public function viewSelectNbMinLivreExpediee($idUser) {
+			return $this->unModele->viewSelectNbMinLivreExpediee($idUser);
 		}
 
-		public function selectViewNbMaxLivreExpediee($idUser) {
-			return $this->unModele->selectViewNbMaxLivreExpediee($idUser);
+		public function viewSelectNbMaxLivreExpediee($idUser) {
+			return $this->unModele->viewSelectNbMaxLivreExpediee($idUser);
 		}
 
-		public function selectViewNomMinLivreExpediee($idUser) {
-			return $this->unModele->selectViewNomMinLivreExpediee($idUser);
+		public function viewSelectNomMinLivreExpediee($idUser) {
+			return $this->unModele->viewSelectNomMinLivreExpediee($idUser);
 		}
 
-		public function selectViewNomMaxLivreExpediee($idUser) {
-			return $this->unModele->selectViewNomMaxLivreExpediee($idUser);
+		public function viewSelectNomMaxLivreExpediee($idUser) {
+			return $this->unModele->viewSelectNomMaxLivreExpediee($idUser);
 		}
 
-		public function selectViewCommandesEnAttente() {
-			return $this->unModele->selectViewCommandesEnAttente();
+		public function viewSelectCommandesEnAttente() {
+			return $this->unModele->viewSelectCommandesEnAttente();
 		}
 
-		public function selectViewMeilleuresVentes() {
-			return $this->unModele->selectViewMeilleuresVentes();
+		public function viewSelectMeilleuresVentes() {
+			return $this->unModele->viewSelectMeilleuresVentes();
 		}
 
-		public function selectViewLivresEnStock() {
-			return $this->unModele->selectViewLivresEnStock();
+		public function viewSelectLivresEnStock() {
+			return $this->unModele->viewSelectLivresEnStock();
 		}
 
 		public function selectDateAbonnement($idUser) {
@@ -154,16 +154,12 @@
 			$this->unModele->insertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser);
 		}
 
-		public function insertTriggerParticulier ($emailParticulier, $mdpParticulier, $nomParticulier, $prenomParticulier, $adresseParticulier, $dateNaissanceParticulier, $sexeParticulier) {
-			$this->unModele->insertTriggerParticulier($emailParticulier, $mdpParticulier, $nomParticulier, $prenomParticulier, $adresseParticulier, $dateNaissanceParticulier, $sexeParticulier);
+		public function triggerInsertParticulier ($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser) {
+			$this->unModele->triggerInsertParticulier($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser);
 		}
 
-		public function insertTriggerEntreprise($emailEntreprise, $mdpEntreprise, $siretEntreprise, $raisonSocialeEntreprise, $capitalSocialEntreprise) {
-			$this->unModele->insertTriggerEntreprise($emailEntreprise, $mdpEntreprise, $siretEntreprise, $raisonSocialeEntreprise, $capitalSocialEntreprise);
-		}
-
-		public function insertTriggerAdmin($emailAdmin, $mdpAdmin, $niveauAdmin) {
-			$this->unModele->insertTriggerAdmin($emailAdmin, $mdpAdmin, $niveauAdmin);
+		public function triggerInsertEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser) {
+			$this->unModele->triggerInsertEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser);
 		}
 
 		public function insertLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $prixLivre){
