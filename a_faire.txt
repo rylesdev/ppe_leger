@@ -1,15 +1,13 @@
 Priorité :
+- Pour le mode admin, il faut modifier le "categorieLivre" pour l'adapter avec la table "categorie"
+    et non la table "livre". Il faut aussi rajouter la maison d'édition du livre.
 
-URGENT :
-    - Régler le problème d'affichage pour les roles (pages Panier et Commande notamment).
-    Réponse : supprimer les "if(isset($_SESSION..." et mettre des "unContoleur->selectAdminPrincipal" à la place.
+- Régler le problème du "updateParticulier" qui ne marche pas.
 
 - Supprimer la procédure "pHashMdpUser" si elle sert à rien (étant donné qu'on peut hasher dans le modele->requeteSQL).
 
-
 - Essayer la procédure "pOffrirLivre" pour voir si elle marche.
     Si le user reçoit bien un livre au hasard (chance : 1/5) parmis les 4 livres proposés (avec un prixLivre = 0).
-
 
 - Afficher le message du livre offert dans la page "Accueil".
 
@@ -39,11 +37,6 @@ A FAIRE :
                 - en promotion
 
         Général :
-            - Pour l'héritage, modifier les "insertUser" provenant de la méthode ou de la procédure "pHashMdpUser",
-                et mettre les trigger à la place :
-                    - public function insertTriggerParticulier
-                    - public function insertTriggerEntreprise
-                    - public function insertTriggerAdmin
             - Supprimer la procédure "pHashMdpUser" si elle sert à rien (étant donné qu'on peut hasher dans le modele->requeteSQL).
 
         Panier :
@@ -74,6 +67,9 @@ A FAIRE :
                 Si le user reçoit bien un livre au hasard (chance : 1/5) parmis les 4 livres proposés (avec un prixLivre = 0).
 
             - Afficher le message du livre offert dans la page "Accueil".
+
+        Utilisateur
+            - Régler le problème du "updateParticulier" qui ne marche pas.
 
         PHPMYADMIN
             - Modifier la procédure "insertUser" (voire la supprimer) pour l'adapter avec les héritages.

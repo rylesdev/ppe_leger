@@ -18,11 +18,7 @@
         public function verifConnexion($emailUser, $mdpUser) {
             $requete =  "select * 
                         from user u
-                        inner join particulier p
-                        on u.idUser=p.idUser
-                        inner join entreprise e 
-                        on u.idUser=e.idUser
-                        where emailUser = ? and mdpUser = sha1(?);";
+                        where u.emailUser = ? and u.mdpUser = sha1(?);";
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $emailUser, PDO::PARAM_STR);
             $exec->BindValue(2, $mdpUser, PDO::PARAM_STR);
@@ -30,8 +26,29 @@
             return $exec->fetch();
         }
 
+        public function selectParticulier($idUser) {
+            $requete =  "select * 
+                        from particulier
+                        where idUser = ?;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
 
-		/**************** SELECT ****************/
+        public function selectEntreprise($idUser) {
+            $requete =  "select * 
+                        from entreprise
+                        where idUser = ?;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+
+
+        /**************** SELECT ****************/
         public function selectUser($idUser) {
             $requete =  "select * 
                         from user
@@ -575,20 +592,42 @@
 
 
         /**************** UPDATE ****************/
-        public function updateUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser, $idUser) {
-            $requete =  "update user 
-                        set nomUser = ?, 
-                        prenomUser = ?, 
-                        emailUser = ?, 
+        public function updateParticulier($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser, $idUser) {
+            $requete =  "update particulier 
+                        set emailUser = ?, 
                         mdpUser = sha1(?), 
-                        adresseUser = ? 
+                        nomUser = ?, 
+                        prenomUser = ?,
+                        adresseUser = ?,
+                        dateNaissanceUser = ?,
+                        sexeUser = ? 
                         where idUser = ?;";
             $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $nomUser, PDO::PARAM_STR);
-            $exec->BindValue(2, $prenomUser, PDO::PARAM_STR);
-            $exec->BindValue(3, $emailUser, PDO::PARAM_STR);
-            $exec->BindValue(4, $mdpUser, PDO::PARAM_STR);
+            $exec->BindValue(1, $emailUser, PDO::PARAM_STR);
+            $exec->BindValue(2, $mdpUser, PDO::PARAM_STR);
+            $exec->BindValue(3, $nomUser, PDO::PARAM_STR);
+            $exec->BindValue(4, $prenomUser, PDO::PARAM_STR);
             $exec->BindValue(5, $adresseUser, PDO::PARAM_STR);
+            $exec->BindValue(6, $dateNaissanceUser, PDO::PARAM_STR);
+            $exec->BindValue(7, $sexeUser, PDO::PARAM_STR);
+            $exec->BindValue(8, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+        }
+
+        public function updateEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser, $idUser) {
+            $requete =  "update entreprise 
+                        set emailUser = ?, 
+                        mdpUser = sha1(?), 
+                        siretUser = ?, 
+                        raisonSocialeUser = ?,
+                        capitalSocialUser = ?
+                        where idUser = ?;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $emailUser, PDO::PARAM_STR);
+            $exec->BindValue(2, $mdpUser, PDO::PARAM_STR);
+            $exec->BindValue(3, $siretUser, PDO::PARAM_STR);
+            $exec->BindValue(4, $raisonSocialeUser, PDO::PARAM_STR);
+            $exec->BindValue(5, $capitalSocialUser, PDO::PARAM_STR);
             $exec->BindValue(6, $idUser, PDO::PARAM_INT);
             $exec->execute();
         }

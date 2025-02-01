@@ -35,16 +35,14 @@
             echo "<td>" . $unLivre['exemplaireLivre'] . "</td>";
             echo "<td>" . $unLivre['prixLivre'] . "€</td>";
 
-            // Vérification si l'utilisateur est un administrateur principal
-            if (isset($_SESSION['idUser']) && $unControleur->selectAdminPrincipal($_SESSION['idUser'])) {
+            if (isset($isAdmin) && $isAdmin == 1) {
                 echo "<td>";
                 echo "<a href='index.php?page=2&action=sup&idLivre=" . $unLivre['idLivre'] . "'>" . "<img src='images/supprimer.png' height='30' width='30'> </a>";
                 echo "<a href='index.php?page=2&action=edit&idLivre=" . $unLivre['idLivre'] . "'>" . "<img src='images/editer.png' height='30' width='30'> </a>";
                 echo "</td>";
             }
 
-            // Vérification si l'utilisateur est un client
-            if (isset($_SESSION['roleUser']) && $_SESSION['roleUser'] == "client") {
+            if (empty($isAdmin) || $isAdmin == 0) {
                 echo "<td>";
                 ?>
                 <form method="post">

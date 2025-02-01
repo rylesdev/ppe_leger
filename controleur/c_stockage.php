@@ -1,7 +1,7 @@
 <h2> Stockage des livres </h2>
 
 <?php
-if (isset($_SESSION['idUser']) && $unControleur->selectAdminPrincipal($_SESSION['idUser'])) {
+if (isset($isAdmin) && $isAdmin == 1) {
     $idUser = $_SESSION['idUser'];
 
     echo "<h3>Modifier le stockage des livres</h3>";

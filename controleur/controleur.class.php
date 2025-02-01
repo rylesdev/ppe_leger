@@ -16,6 +16,14 @@
 			return $this->unModele->selectUser($idUser);
 		}
 
+        public function selectParticulier($idUser) {
+            return $this->unModele->selectParticulier($idUser);
+        }
+
+        public function selectEntreprise($idUser) {
+            return $this->unModele->selectEntreprise($idUser);
+        }
+
 		public function selectAdminPrincipal($idUser) {
 			return $this->unModele->selectAdminPrincipal($idUser);
 		}
@@ -205,9 +213,13 @@
 
 		/**************** UPDATE ****************/
 
-		public function updateUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser, $idUser) {
-			$this->unModele->updateUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser, $idUser);
+		public function updateParticulier($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser, $idUser) {
+			$this->unModele->updateParticulier($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser, $idUser);
 		}
+
+        public function updateEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser, $idUser) {
+            $this->unModele->updateEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser, $idUser);
+        }
 
 		public function updateLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $idLivre, $prixLivre){
 			$this->unModele->updateLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $idLivre, $prixLivre);

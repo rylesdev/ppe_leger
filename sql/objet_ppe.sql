@@ -194,6 +194,30 @@ END $$
 DELIMITER ;
 
 
+DELIMITER $$
+CREATE TRIGGER tUpdateParticulier
+BEFORE UPDATE ON particulier
+FOR EACH ROW
+BEGIN
+    UPDATE user
+    SET emailUser = NEW.emailUser, mdpUser = NEW.mdpUser
+    WHERE idUser = OLD.idUser;
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE TRIGGER tUpdateEntreprise
+BEFORE UPDATE ON entreprise
+FOR EACH ROW
+BEGIN
+    UPDATE user
+    SET emailUser = NEW.emailUser, mdpUser = NEW.mdpUser
+    WHERE idUser = OLD.idUser;
+END $$
+DELIMITER ;
+
+
 
 PROCEDURES STOCKEES :
 delimiter $$

@@ -27,8 +27,6 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
 
             case "payer" :  if(isset($_POST['PayerPoint'])) {
                                 $pointAbonnement = $_SESSION['pointAUtiliser'];
-                                var_dump($pointAbonnement);
-                                var_dump($unControleur->selectPointAbonnement($idUser));
                                 if ($unControleur->selectPointAbonnement($idUser)['pointAbonnement'] >= $pointAbonnement) {
                                     $unControleur->enleverPointAbonnement($pointAbonnement, $idUser);
                                 } else if (empty($pointAbonnement) || $pointAbonnement < 0) {

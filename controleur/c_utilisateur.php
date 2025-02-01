@@ -4,21 +4,31 @@ $unControleur = new Controleur();
 
 $idUser = $_SESSION['idUser'];
 
-$user = $unControleur->selectUser($idUser);
-
-if ($user) {
-    require_once("vue/vue_select_user.php");
-}
+require_once("vue/vue_select_user.php");
 
 require_once ("vue/vue_update_user.php");
 
-if (isset($_POST['UpdateUser'])){
-    $nomUser = $_POST['nomUser'];
-    $prenomUser = $_POST['prenomUser'];
+if (isset($_POST['UpdateParticulier'])){
     $emailUser = $_POST['emailUser'];
     $mdpUser = $_POST['mdpUser'];
+    $nomUser = $_POST['nomUser'];
+    $prenomUser = $_POST['prenomUser'];
     $adresseUser = $_POST['adresseUser'];
+    $dateNaissanceUser = $_POST['dateNaissanceUser'];
+    $sexeUser = $_POST['sexeUser'];
+    var_dump($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser, $idUser);
 
-    $unControleur->updateUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser, $idUser);
+
+    $unControleur->updateParticulier($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser, $idUser);
+}
+
+if (isset($_POST['UpdateEntreprise'])){
+    $emailUser = $_POST['emailUser'];
+    $mdpUser = $_POST['mdpUser'];
+    $siretUser = $_POST['siretUser'];
+    $raisonSocialeUser = $_POST['raisonSocialeUser'];
+    $capitalSocialUser = $_POST['capitalSocialUser'];
+
+    $unControleur->updateEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser, $idUser);
 }
 ?>

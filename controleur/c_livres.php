@@ -1,7 +1,7 @@
 <h2> Acheter un livre </h2>
 
 <?php
-$leLivre = null;
+$leLivre = $unControleur->selectAllLivres();
 $idUser = $_SESSION['idUser'];
 
 if (!isset($_SESSION['commandeEnCours'])) {
@@ -45,7 +45,6 @@ if (isset($_GET['action']) && isset($_GET['idLivre'])) {
                     }
                 }
 
-                // Ajouter une ligne de commande pour ce livre
                 $result = $unControleur->insertLigneCommande($idCommande, $idLivre, $quantiteLivre);
 
                 if ($result) {
@@ -56,7 +55,7 @@ if (isset($_GET['action']) && isset($_GET['idLivre'])) {
     }
 }
 
-if (isset($_SESSION['idUser']) && $unControleur->selectAdminPrincipal($_SESSION['idUser'])) {
+if (isset($isAdmin) && $isAdmin == 1) {
     echo "<h3>Ajout d'un livre</h3>";
     echo "<br>";
 

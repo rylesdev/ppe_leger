@@ -1,8 +1,12 @@
 <?php
 session_start();
+error_reporting(0);
 require_once("controleur/controleur.class.php");
 
 $unControleur = new Controleur();
+
+$result = $unControleur->selectAdminPrincipal($_SESSION['idUser']);
+$isAdmin = $result[0][0];
 
 ?>
 <!DOCTYPE html>
@@ -16,7 +20,7 @@ $unControleur = new Controleur();
 <center>
     <h1> Site Internet Librairie </h1>
     <?php
-    if (isset($_SESSION['idUser']) && $unControleur->selectAdminPrincipal($_SESSION['idUser'])) {
+    if (isset($isAdmin) && $isAdmin == 1) {
         echo "/**************** Mode Admin ****************/";
     }
 
@@ -37,6 +41,7 @@ $unControleur = new Controleur();
             $_SESSION['mdpUser'] = $_POST['mdpUser'];
             $_SESSION['roleUser'] = $unUser['roleUser'];
 
+
             // Particulier fille :
             $_SESSION['nomUser'] = $unUser['nomUser'];
             $_SESSION['prenomUser'] = $unUser['prenomUser'];
@@ -44,7 +49,7 @@ $unControleur = new Controleur();
             $_SESSION['dateNaissanceUser'] = $unUser['dateNaissanceUser'];
             $_SESSION['sexeUser'] = $unUser['sexeUser'];
 
-            // Entreprise fille : 
+            // Entreprise fille :
             $_SESSION['siretUser'] = $unUser['siretUser'];
             $_SESSION['raisonSocialeUser'] = $unUser['raisonSocialeUser'];
             $_SESSION['capitalSocialUser'] = $unUser['capitalSocialUser'];
@@ -81,19 +86,20 @@ $unControleur = new Controleur();
 
 
     if (isset($_SESSION['emailUser'])) {
+
         echo '<div id="navbar" style="background-Color: #f0f0f0">
 		<a href="index.php?page=1"> <img src="images/logo.png" height="80" width="80" style="margin-right: 30px"> </a>
 
 		<a href="index.php?page=2"> <img src="images/rechercher.png" height="80" width="80" style="margin-right: 30px"> </a>';
 
-        if (isset($_SESSION['roleUser']) && $_SESSION['roleUser'] == "client") {
+        if (empty($isAdmin) || $isAdmin == 0) {
             echo '<a href="index.php?page=3"> <img src="images/panier.png" height="80" width="80" style="margin-right: 30px"> </a>';
             echo '<a href="index.php?page=4"> <img src="images/commande.png" height="80" width="80" style="margin-right: 30px"> </a>';
             echo '<a href="index.php?page=5"> <img src="images/abonnement.png" height="80" width="80" style="margin-right: 30px"> </a>';
             echo '<a href="index.php?page=6"> <img src="images/utilisateur.png" height="80" width="80" style="margin-right: 30px"> </a>';
         }
 
-        if (isset($_SESSION['idUser']) && $unControleur->selectAdminPrincipal($_SESSION['idUser'])) {
+        if (isset($isAdmin) && $isAdmin == 1) {
             echo '<a href="index.php?page=7"> <img src="images/stockage.png" height="80" width="80" style="margin-right: 30px"> </a>';
             echo '<a href="index.php?page=8"> <img src="images/statistique.png" height="80" width="80" style="margin-right: 30px"> </a>';
         }
