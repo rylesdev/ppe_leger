@@ -417,19 +417,6 @@
 
 
 		/**************** INSERT ****************/
-
-		public function insertUser ($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser){
-			$requete =  "insert into user 
-			            values (?, ?, ?, ?, ?, ?, 'client', curdate()); ";
-			$exec = $this->unPdo->prepare ($requete);
-			$exec->BindValue (1, $nomUser, PDO::PARAM_STR);
-			$exec->BindValue (2, $prenomUser, PDO::PARAM_STR);
-			$exec->BindValue (3, $emailUser, PDO::PARAM_STR);
-			$exec->BindValue (4, $mdpUser, PDO::PARAM_STR);
-			$exec->BindValue (5, $adresseUser, PDO::PARAM_STR);
-			$exec->execute();
-		}
-
         public function triggerInsertParticulier($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser) {
             try {
                 $requete =  "insert into particulier (idUser, emailUser, mdpUser, nomUser, prenomUser, adresseUser, dateNaissanceUser, sexeUser)
@@ -468,22 +455,6 @@
                 echo $exp->getMessage();
             }
         }
-
-
-        public function insertLivre($nomLivre, $auteurLivre, $imageLivre, $prixLivre, $nomCategorie){
-			$requete =  "insert into livre (idLivre, nomLivre, auteurLivre, imageLivre, exemplaireLivre, prixLivre, idCategorie, idMaisonEdition)
-			            values (null, ?, ?, ?, null, ?, '', '');
-			            insert into categorie
-			            values (null, ?);";
-			$exec = $this->unPdo->prepare ($requete);
-			$exec->BindValue (1, $nomLivre, PDO::PARAM_STR);
-			$exec->BindValue (2, $auteurLivre, PDO::PARAM_STR);
-			$exec->BindValue (3, $imageLivre, PDO::PARAM_STR);
-			$exec->BindValue (4, $prixLivre, PDO::PARAM_STR);
-            $exec->BindValue (5, $nomCategorie, PDO::PARAM_STR);
-			$exec->execute ();
-			return $exec->fetchAll();
-		}
 
 		public function insertCommande ($idUser) {
             try {
@@ -661,9 +632,6 @@
 		}
 
         public function updateCommande ($idCommande) {
-            try {
-                // Régler le problème de l'affichage du "livreOffert"
-                // $_SESSION['livreOffert'] = "Un livre vous a été offert et va vous être envoyé directement chez vous !";
                 $requete =  "update commande
                             set dateCommande = curdate(),
                             statutCommande = 'expédiée', 
@@ -672,14 +640,6 @@
                 $exec = $this->unPdo->prepare($requete);
                 $exec->BindValue(1, $idCommande, PDO::PARAM_INT);
                 $exec->execute();
-            } catch(PDOException $exp) {
-                if ($exp->getCode() === '45000') {
-                    $messageErreur = $exp->getMessage();
-                    if (strpos($messageErreur, 'Un livre vous a été offert') !== false) {
-                        $_SESSION['livreOffert'] = "Un livre vous a été offert et va vous être envoyé directement chez vous !";
-                    }
-                }
-            }
             return $exec->fetchAll();
         }
 
@@ -719,21 +679,26 @@
 
 
         /**************** PROCEDURE ****************/
-        public function procedureInsertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser) {
-            $exec = $this->unPdo->prepare("CALL pHashMdpUser(null, ?, ?, ?, ?, ?, 'client', curdate())");
-            $exec->BindValue(1, $nomUser, PDO::PARAM_STR);
-            $exec->BindValue(2, $prenomUser, PDO::PARAM_STR);
-            $exec->BindValue(3, $emailUser, PDO::PARAM_STR);
-            $exec->BindValue(4, $mdpUser, PDO::PARAM_STR);
-            $exec->BindValue(5, $adresseUser, PDO::PARAM_STR);
-            $exec->execute();
-        }
-
-        public function procedureInsertLivre($idUser, $chiffre) {
-            $exec = $this->unPdo->prepare("CALL pOffrirLivre(?, ?)");
+        public function procedureOffrirLivre($idUser, $chiffre) {
+            $requete = "CALL pOffrirLivre(?, ?)";
+            $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->BindValue(2, $chiffre, PDO::PARAM_INT);
             $exec->execute();
+        }
+
+        public function procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition) {
+            $requete =  "CALL pInsertLivre(?, ?, ?, ?, ?, ?, ?)";
+            $exec = $this->unPdo->prepare ($requete);
+            $exec->BindValue (1, $nomLivre, PDO::PARAM_STR);
+            $exec->BindValue (2, $auteurLivre, PDO::PARAM_STR);
+            $exec->BindValue (3, $imageLivre, PDO::PARAM_STR);
+            $exec->BindValue (4, $exemplaireLivre, PDO::PARAM_STR);
+            $exec->BindValue (5, $prixLivre, PDO::PARAM_STR);
+            $exec->BindValue (6, $nomCategorie, PDO::PARAM_STR);
+            $exec->BindValue (7, $nomMaisonEdition, PDO::PARAM_STR);
+            $exec->execute ();
+            return $exec->fetchAll();
         }
     }
 ?>

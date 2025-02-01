@@ -1,5 +1,4 @@
 VIEWS :
-
 create or replace view vTotalLivre AS
 SELECT li.idCommande, c.idUser, l.nomLivre, l.prixLivre, li.quantiteLigneCommande,
 (l.prixLivre * li.quantiteLigneCommande) AS totalLivre
@@ -170,26 +169,32 @@ end $$
 delimiter ;
 
 
+DROP TRIGGER IF EXISTS tInsertParticulier
 DELIMITER $$
-CREATE TRIGGER tInsertParticulier
+CREATE TRIGGER insert_particulier
 BEFORE INSERT ON particulier
 FOR EACH ROW
 BEGIN
-    INSERT INTO user (emailUser, mdpUser, roleUser)
-    VALUES (NEW.emailUser, NEW.mdpUser, 'client');
-    SET NEW.idUser = LAST_INSERT_ID();
+    IF NEW.idUser IS NULL OR NEW.idUser NOT IN (SELECT idUser FROM user) THEN
+        SET NEW.idUser = IFNULL((SELECT MAX(idUser) FROM user), 0) + 1;
+    END IF;
+    INSERT INTO user (idUser, emailUser, mdpUser, adresseUser, roleUser)
+    VALUES (NEW.idUser, NEW.emailUser, NEW.mdpUser, NEW.adresseUser, 'client');
 END $$
 DELIMITER ;
 
 
+DROP TRIGGER IF EXISTS tInsertEntreprise;
 DELIMITER $$
-CREATE TRIGGER tInsertEntreprise
+CREATE TRIGGER insert_entreprise
 BEFORE INSERT ON entreprise
 FOR EACH ROW
 BEGIN
-    INSERT INTO user (emailUser, mdpUser, roleUser)
-    VALUES (NEW.emailUser, NEW.mdpUser, 'client');
-    SET NEW.idUser = LAST_INSERT_ID();
+    IF NEW.idUser IS NULL OR NEW.idUser NOT IN (SELECT idUser FROM user) THEN
+        SET NEW.idUser = IFNULL((SELECT MAX(idUser) FROM user), 0) + 1;
+    END IF;
+    INSERT INTO user (idUser, emailUser, mdpUser, adresseUser, roleUser)
+    VALUES (NEW.idUser, NEW.emailUser, NEW.mdpUser, NULL, 'entreprise');
 END $$
 DELIMITER ;
 
@@ -200,8 +205,10 @@ BEFORE UPDATE ON particulier
 FOR EACH ROW
 BEGIN
     UPDATE user
-    SET emailUser = NEW.emailUser, mdpUser = NEW.mdpUser
-    WHERE idUser = OLD.idUser;
+    SET emailUser = NEW.emailUser,
+        mdpUser = NEW.mdpUser,
+        adresseUser = NEW.adresseUser
+    WHERE idUser = NEW.idUser;
 END $$
 DELIMITER ;
 
@@ -220,6 +227,7 @@ DELIMITER ;
 
 
 PROCEDURES STOCKEES :
+/*
 delimiter $$
 create procedure pHashMdpUser(
 in p_idUser int (10),
@@ -245,12 +253,13 @@ p_dateInscriptionUser
 );
 end $$
 delimiter ;
+*/
 
 
 DELIMITER $$
 CREATE PROCEDURE pOffrirLivre(
     IN p_idUser INT,
-    IN chiffre INT
+    IN p_chiffre INT
 )
 BEGIN
     DECLARE newIdCommande INT;
@@ -271,7 +280,7 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Votre abonnement a expiré. Vous ne pouvez pas bénéficier de cette offre.';
     END IF;
-    IF chiffre = 5 THEN
+    IF p_chiffre = 5 THEN
         INSERT INTO commande (idCommande, dateCommande, statutCommande, dateLivraisonCommande, idUser)
         VALUES (null, NOW(), 'expédiée', DATE_ADD(NOW(), INTERVAL 7 DAY), p_idUser);
         SET newIdCommande = LAST_INSERT_ID();
@@ -291,4 +300,29 @@ BEGIN
         SET MESSAGE_TEXT = 'Un livre vous a été offert et va vous être envoyé directement chez vous !';
     END IF;
 END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE PROCEDURE pInsertLivre(
+    IN p_nomLivre VARCHAR(255),
+    IN p_auteurLivre VARCHAR(255),
+    IN p_imageLivre VARCHAR(255),
+    IN p_exemplaireLivre INT,
+    IN p_prixLivre DECIMAL(10, 2),
+    IN p_nomCategorie VARCHAR(255),
+    IN p_nomMaisonEdition VARCHAR(255)
+)
+BEGIN
+    DECLARE v_idCategorie INT;
+    DECLARE v_idMaisonEdition INT;
+    SELECT idCategorie INTO v_idCategorie
+    FROM categorie
+    WHERE nomCategorie = p_nomCategorie;
+    SELECT idMaisonEdition INTO v_idMaisonEdition
+    FROM maisonEdition
+    WHERE nomMaisonEdition = p_nomMaisonEdition;
+    INSERT INTO livre (nomLivre, auteurLivre, imageLivre, exemplaireLivre, prixLivre, idCategorie, idMaisonEdition)
+    VALUES (p_nomLivre, p_auteurLivre, p_imageLivre, p_exemplaireLivre, p_prixLivre, v_idCategorie, v_idMaisonEdition);
+END $$
 DELIMITER ;

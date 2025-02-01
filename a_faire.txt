@@ -1,15 +1,6 @@
 Priorité :
-- Pour le mode admin, il faut modifier le "categorieLivre" pour l'adapter avec la table "categorie"
+(vue_insert_livre.php) - Pour le mode admin, il faut modifier le "categorieLivre" pour l'adapter avec la table "categorie"
     et non la table "livre". Il faut aussi rajouter la maison d'édition du livre.
-
-- Régler le problème du "updateParticulier" qui ne marche pas.
-
-- Supprimer la procédure "pHashMdpUser" si elle sert à rien (étant donné qu'on peut hasher dans le modele->requeteSQL).
-
-- Essayer la procédure "pOffrirLivre" pour voir si elle marche.
-    Si le user reçoit bien un livre au hasard (chance : 1/5) parmis les 4 livres proposés (avec un prixLivre = 0).
-
-- Afficher le message du livre offert dans la page "Accueil".
 
 
 
@@ -26,6 +17,20 @@ A FAIRE :
             - Changer les logos ou bien mettre des écritures à la place.
 
         Accueil :
+            - Supprimer les :             "// Particulier fille :
+                                          $_SESSION['nomUser'] = $unUser['nomUser'];
+                                          $_SESSION['prenomUser'] = $unUser['prenomUser'];
+                                          $_SESSION['adresseUser'] = $unUser['emailUser'];
+
+                                          $_SESSION['dateNaissanceUser'] = $unUser['dateNaissanceUser'];
+                                          $_SESSION['sexeUser'] = $unUser['sexeUser'];
+
+                                          // Entreprise fille :
+                                          $_SESSION['siretUser'] = $unUser['siretUser'];
+                                          $_SESSION['raisonSocialeUser'] = $unUser['raisonSocialeUser'];
+                                          $_SESSION['capitalSocialUser'] = $unUser['capitalSocialUser'];"
+            qui ne marchent pas et servent à rien.
+
             - Section "à la une" présentant les livres :
                 - les plus vendus
                 - recommandés (view avis)
@@ -35,9 +40,6 @@ A FAIRE :
                 - les plus vendus
                 - recommandés (view avis)
                 - en promotion
-
-        Général :
-            - Supprimer la procédure "pHashMdpUser" si elle sert à rien (étant donné qu'on peut hasher dans le modele->requeteSQL).
 
         Panier :
             - (c_panier.php) Trouver un moyen pour que, quand le user clique sur Paypal,
@@ -57,26 +59,13 @@ A FAIRE :
 
     Back-End
         Livre
-            - Pour le mode admin, il faut modifier le "categorieLivre" pour l'adapter avec la table "categorie"
-                et non la table "livre". Il faut aussi rajouter la maison d'édition du livre.
+            (vue_insert_livre) - L'insertion de livre ne marche pas.
+                Au lieu d'avoir le bouton "Valider" avec l'insertion, on a un bouton "Modifier".
 
             (A vérifier) - La sélection de la quantité de livre ne marche pas.
 
-        Page
-            - Essayer la procédure "pOffrirLivre" pour voir si elle marche.
-                Si le user reçoit bien un livre au hasard (chance : 1/5) parmis les 4 livres proposés (avec un prixLivre = 0).
-
-            - Afficher le message du livre offert dans la page "Accueil".
-
-        Utilisateur
-            - Régler le problème du "updateParticulier" qui ne marche pas.
-
         PHPMYADMIN
-            - Modifier la procédure "insertUser" (voire la supprimer) pour l'adapter avec les héritages.
-
             - Mettre toutes les images des nouveaux livres insérés (12 livres) dans le dossier "images".
-
-            - Supprimer la colonne "categorieLivre" de la table "Livre".
 
             - Faire des "view" ou des "trigger" ou quoi que ce soit pour enrichir le front-office
                 à partir de ces tables :

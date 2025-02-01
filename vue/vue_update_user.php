@@ -37,8 +37,8 @@ if (isset($idUser)) {
                 <tr>
                     <td><label for="sexeUser">Sexe :</label></td>
                     <td><select class="form-control" id="sexeUser" name="sexeUser" required>
-                            <option value="Homme">Homme</option>
-                            <option value="Femme">Femme</option>
+                            <option value="M">M</option>
+                            <option value="F">F</option>
                         </select></td>
                 </tr>
                 <tr>

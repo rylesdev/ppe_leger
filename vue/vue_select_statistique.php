@@ -1,7 +1,3 @@
-<form method="post">
-    Filtrer par : <input type="text" name="filtre">
-    <input type="submit" name="Filtrer" value="Filtrer" class="table-success">
-</form>
 <br>
 
 <table class="table" style="margin-left: 50px ; margin-right: 50px">

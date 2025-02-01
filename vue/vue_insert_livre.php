@@ -8,7 +8,7 @@
 		<tr>
 			<td> Catégorie du livre  </td>
 			<td> <input type="text" name="categorieLivre"
-				value="<?= ($leLivre!=null)? $leLivre['categorieLivre'] : '' ?>"></td>
+				value="<?= ($leLivre!=null)? $leLivre['nomCategorie'] : '' ?>"></td>
 		</tr>
 		<tr>
 			<td> Auteur du livre </td>
@@ -21,9 +21,19 @@
                         value="<?= ($leLivre!=null)? $leLivre['imageLivre'] : '' ?>"></td>
         </tr>
         <tr>
+            <td> Maison d'Edition du livre </td>
+            <td> <input type="text" name="imageLivre"
+                        value="<?= ($leLivre!=null)? $leLivre['nomMaisonEdition'] : '' ?>"></td>
+        </tr>
+        <tr>
+            <td> Nombre d'exemplaires du livre </td>
+            <td> <input type="text" name="imageLivre"
+                        value="<?= ($leLivre!=null)? $leLivre['exemplaireLivre'] : '' ?>"></td>
+        </tr>
+        <tr>
             <td> Prix du livre (. au lieu de ,)</td>
             <td> <input type="text" name="prixLivre"
-                        value="<?= ($leLivre!=null)? $leLivre['priexLivre'] : '' ?>"></td>
+                        value="<?= ($leLivre!=null)? $leLivre['prixLivre'] : '' ?>"></td>
         </tr>
 		<tr>
 			<td> <input type="reset" name="Annuler" value="Annuler" class="table-success"> </td>

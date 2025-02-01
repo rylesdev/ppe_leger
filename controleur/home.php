@@ -12,9 +12,6 @@ if (isset($_SESSION['livreOffert'])) {
     unset($_SESSION['livreOffert']);
 }
 
-$prenomUser = $_SESSION['prenomUser'];
-$nomUser = $_SESSION['nomUser'];
-echo "<h2> Bienvenue  " . $prenomUser . ' ' . $nomUser . "</h2>";
 
 ?>
 

@@ -12,10 +12,6 @@
 		}
 
 		/****************** SELECT  ******************/
-		public function selectUser($idUser) {
-			return $this->unModele->selectUser($idUser);
-		}
-
         public function selectParticulier($idUser) {
             return $this->unModele->selectParticulier($idUser);
         }
@@ -36,20 +32,12 @@
 			return $this->unModele->selectLikeLivres($filtre);
 		}
 
-		public function selectAllCategories ($nomCategorie){
-			return $this->unModele->selectAllCategories($nomCategorie);
-		}
-
 		public function selectWhereLivre($idLivre){
 			return $this->unModele->selectWhereLivre($idLivre);
 		}
 
 		public function selectAdresseUser ($idUser){
 			return $this->unModele->selectAdresseUser($idUser);
-		}
-
-		public function selectLigneCommande ($idCommande){
-			return $this->unModele->selectLigneCommande($idCommande);
 		}
 
 		public function selectCommandeEnCours($idUser) {
@@ -157,21 +145,12 @@
 
 
 		/**************** INSERT ****************/
-
-		public function insertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser){
-			$this->unModele->insertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser);
-		}
-
 		public function triggerInsertParticulier ($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser) {
 			$this->unModele->triggerInsertParticulier($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser);
 		}
 
 		public function triggerInsertEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser) {
 			$this->unModele->triggerInsertEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser);
-		}
-
-		public function insertLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $prixLivre){
-			$this->unModele->insertLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $prixLivre);
 		}
 
 		public function insertCommande($idUser){
@@ -247,12 +226,12 @@
 
 
 		/**************** PROCEDURE ****************/
-		public function procedureInsertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser) {
-			$this->unModele->procedureInsertUser($nomUser, $prenomUser, $emailUser, $mdpUser, $adresseUser);
+		public function procedureOffrirLivre($idUser, $chiffre) {
+			$this->unModele->procedureOffrirLivre($idUser, $chiffre);
 		}
 
-		public function procedureInsertLivre($idUser, $chiffre) {
-			$this->unModele->procedureInsertLivre($idUser, $chiffre);
-		}
+        public function procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition) {
+            $this->unModele->procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition);
+        }
 	}
 ?>

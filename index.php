@@ -46,6 +46,7 @@ $isAdmin = $result[0][0];
             $_SESSION['nomUser'] = $unUser['nomUser'];
             $_SESSION['prenomUser'] = $unUser['prenomUser'];
             $_SESSION['adresseUser'] = $unUser['emailUser'];
+
             $_SESSION['dateNaissanceUser'] = $unUser['dateNaissanceUser'];
             $_SESSION['sexeUser'] = $unUser['sexeUser'];
 

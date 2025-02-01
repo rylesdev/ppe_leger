@@ -66,12 +66,15 @@ if (isset($isAdmin) && $isAdmin == 1) {
 
 if (isset($_POST['ValiderInsert'])) {
     $nomLivre = $_POST['nomLivre'];
-    $categorieLivre = $_POST['categorieLivre'];
+    $nomCategorie = $_POST['nomCategorie'];
     $auteurLivre = $_POST['auteurLivre'];
     $imageLivre = $_POST['imageLivre'];
+    $nomMaisonEdition = $_POST['nomMaisonEdition'];
+    $exemplaireLivre = $_POST['exemplaireLivre'];
     $prixLivre = $_POST['prixLivre'];
 
-    if ($unControleur->insertLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $prixLivre)) {
+
+    if ($unControleur->procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition)){
         echo "<br> Insertion réussie du livre <br>";
     }
 }
