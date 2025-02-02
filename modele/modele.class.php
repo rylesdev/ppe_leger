@@ -119,7 +119,11 @@
 
 		public function selectWhereLivre ($idLivre){
 			$requete =  "select * 
-			            from livre 
+			            from livre l
+			            inner join categorie c
+			            on l.idCategorie=c.idCategorie
+			            inner join maisonEdition m
+			            on l.idMaisonEdition=m.idMaisonEdition
 			            where idLivre = ?;";
 			$exec = $this->unPdo->prepare ($requete);
 			$exec->BindValue (1, $idLivre, PDO::PARAM_STR);
@@ -382,6 +386,32 @@
             $exec->BindValue(1, $idCommande, PDO::PARAM_INT);
             $exec->execute();
             return $exec->fetch();
+        }
+
+        public function selectLivrePromotion() {
+            $requete =  "select l.nomLivre, l.prixLivre, p.prixPromotion
+                        from promotion p
+                        inner join livre l
+                        on p.idLivre=l.idLivre;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function selectOffrirLivre($idUser) {
+            $requete =  "select l.nomLivre
+                        from ligneCommande li
+                        inner join commande c 
+                        on li.idCommande=c.idCommande
+                        inner join livre l
+                        on li.idLivre=l.idLivre
+                        where li.idLivre between 9 and 12 
+                        and c.idUser = ? 
+                        and c.dateLivraisonCommande > curdate();";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
         }
 
 
@@ -665,8 +695,9 @@
             return $exec->fetchAll();
         }
 
-        public function enleverPointAbonnement($pointAbonnement, $idUser) {
-            $requete =  "update abonnement 
+        public function enleverPointAbonnement($pointAbonnement, $idUser)
+        {
+            $requete = "update abonnement 
                         set pointAbonnement = pointAbonnement - ?
                         where idUser = ?;";
             $exec = $this->unPdo->prepare($requete);
@@ -697,6 +728,16 @@
             $exec->BindValue (5, $prixLivre, PDO::PARAM_STR);
             $exec->BindValue (6, $nomCategorie, PDO::PARAM_STR);
             $exec->BindValue (7, $nomMaisonEdition, PDO::PARAM_STR);
+            $exec->execute ();
+            return $exec->fetchAll();
+        }
+
+        public function procedureInsertOrUpdatePromotion($nomLivre, $prixPromotion, $dateFinPromotion) {
+            $requete = "CALL pInsertOrUpdatePromotion(?, ?, ?)";
+            $exec = $this->unPdo->prepare ($requete);
+            $exec->BindValue (1, $nomLivre, PDO::PARAM_STR);
+            $exec->BindValue (2, $prixPromotion, PDO::PARAM_STR);
+            $exec->BindValue (3, $dateFinPromotion, PDO::PARAM_STR);
             $exec->execute ();
             return $exec->fetchAll();
         }

@@ -1,6 +1,5 @@
 Priorité :
-(vue_insert_livre.php) - Pour le mode admin, il faut modifier le "categorieLivre" pour l'adapter avec la table "categorie"
-    et non la table "livre". Il faut aussi rajouter la maison d'édition du livre.
+
 
 
 
@@ -53,62 +52,24 @@ A FAIRE :
             - Dans la page "Panier", le user pourra payer, soit par Paypal, soit par points.
                 Problème : La méthode "enleverPointAbonnement" ne marche pas quand le user clique sur "Utiliser les points".
 
-        Commande :
-            (vue_insert_avis.php) - Faire un truc plus beau pour les étoiles des avis.
-
 
     Back-End
-        Livre
-            (vue_insert_livre) - L'insertion de livre ne marche pas.
-                Au lieu d'avoir le bouton "Valider" avec l'insertion, on a un bouton "Modifier".
-
-            (A vérifier) - La sélection de la quantité de livre ne marche pas.
-
         PHPMYADMIN
             - Mettre toutes les images des nouveaux livres insérés (12 livres) dans le dossier "images".
 
-            - Faire des "view" ou des "trigger" ou quoi que ce soit pour enrichir le front-office
-                à partir de ces tables :
-                                            1. maisonEdition
-                                            2. promotion
-                                            3. avis
-                                            4. abonnement
-            - Idées :
-                        1. Jsp.
-                        2. Dans la page d'accueil il y aura une liste des livres en promotion.
-                        3. // Dans la page "Commande", l'utilisateur pourra remplir des étoiles pour donner son avis sur un livre.
-                            // Les étoiles vont s'afficher uniquement si l'utilisateur a reçu le livre (if statutCommande = 'expédiée')
-                           Créer une view pour afficher les livres les mieux notés.
-                        4. // Créer une procédure pour offrir un livre pour les abonnée.
-                            Trouver d'autres idées pour les avantages aux abonnés.
-                            Mettre les livres offerts (et d'autres avantages) visualisables dans la page d'accueil,
-
-
-            - Page Promotion (Admin) :
-                - Créer une page qui va permettre à un admin de mettre des livres en promotion.
-                    (nomLivre, prixLivre, nouveauPrixLivre, etc...)
-
             - View :
-                - Créer une view (SELECT c.idUser, SUM(l.quantiteLigneCommande)
-                                    FROM ligneCommande l
-                                    inner join commande c
-                                    on l.idCommande = c.idCommande
-                                    WHERE c.statutCommande = 'expédiée'
-                                    group by c.idUser;)
-                qui va afficher le nombre de livres achetés par chaque user.
+                - Mettre la view "vNbLivreAcheteUser" dans la page "Statistique".
+                - Mettre la view "vMeilleursAvis" dans la page "Statistique".
 
 
-                - Supprimer toutes les view (nbMinLivre, nbMaxLivre, nomMinLivre, nomMaxLivre)
-                    car on les a remplacé par des méthodes dans le modele qui va ajouter "whereIduser" dans la requête SQL.
+        Bug
+            (A vérifier) - La sélection de la quantité de livre ne marche pas.
+            Réponse : Trouver un moyen pour mettre en avant le premier truc qui marche.
 
-
-        Commande
             (vue_insert_avis.php) - Quand on insère un avis, si le livre est "l'Etranger" ou "l'Odyssée'",
                 il n'y a que le "L" qui s'affiche.
             Réponse : Cela provient du fait que le "nomLivre" est enfermé dans un $_POST comportant des "'".
 
-
-        Bug
             - La méthode "selectLikeLivres" qui sert à filtrer les livres ne marche pas.
 
             - Lorsque je mets un avis dans la page Commande, le cube "Information de la commande" disparait.

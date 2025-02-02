@@ -101,11 +101,12 @@ $isAdmin = $result[0][0];
         }
 
         if (isset($isAdmin) && $isAdmin == 1) {
-            echo '<a href="index.php?page=7"> <img src="images/stockage.png" height="80" width="80" style="margin-right: 30px"> </a>';
-            echo '<a href="index.php?page=8"> <img src="images/statistique.png" height="80" width="80" style="margin-right: 30px"> </a>';
+            echo '<a href="index.php?page=7"> <img src="images/promotion.png" height="80" width="80" style="margin-right: 30px"> </a>';
+            echo '<a href="index.php?page=8"> <img src="images/stockage.png" height="80" width="80" style="margin-right: 30px"> </a>';
+            echo '<a href="index.php?page=9"> <img src="images/statistique.png" height="80" width="80" style="margin-right: 30px"> </a>';
         }
 
-        echo '<a href="index.php?page=9"> <img src="images/deconnexion.png" height="80" width="80" style="margin-right: 30px"> </a>
+        echo '<a href="index.php?page=10"> <img src="images/deconnexion.png" height="80" width="80" style="margin-right: 30px"> </a>
     </div>';
 
         if (isset($_GET['page'])) {
@@ -120,9 +121,10 @@ $isAdmin = $result[0][0];
             case 4: require_once("controleur/c_commande.php"); break;
             case 5: require_once("controleur/c_abonnement.php"); break;
             case 6: require_once("controleur/c_utilisateur.php"); break;
-            case 7: require_once("controleur/c_stockage.php"); break;
-            case 8: require_once("controleur/c_statistique.php"); break;
-            case 9: session_destroy(); unset($_SESSION['email']);
+            case 7: require_once("controleur/c_promotion.php"); break;
+            case 8: require_once("controleur/c_stockage.php"); break;
+            case 9: require_once("controleur/c_statistique.php"); break;
+            case 10: session_destroy(); unset($_SESSION['email']);
                 header("Location: index.php");
                 break;
         }

@@ -128,6 +128,14 @@
 			return $this->unModele->selectNbLigneCommande($idCommande);
 		}
 
+        public function selectLivrePromotion() {
+            return $this->unModele->selectLivrePromotion();
+        }
+
+        public function selectOffrirLivre($idUser) {
+            return $this->unModele->selectOffrirLivre($idUser);
+        }
+
 
 		/**************** DELETE ****************/
 
@@ -232,6 +240,10 @@
 
         public function procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition) {
             $this->unModele->procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition);
+        }
+
+        public function procedureInsertOrUpdatePromotion($nomLivre, $prixPromotion, $dateFinPromotion) {
+            $this->unModele->procedureInsertOrUpdatePromotion($nomLivre, $prixPromotion, $dateFinPromotion);
         }
 	}
 ?>

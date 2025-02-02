@@ -32,21 +32,14 @@ group by c.idUser;
 
 
 CREATE OR REPLACE VIEW vTotalLivreEnAttente AS
-SELECT
-    li.idCommande,
-    c.idUser,
-    l.nomLivre,
-    l.prixLivre,
-    li.quantiteLigneCommande,
-    (l.prixLivre * li.quantiteLigneCommande) AS totalLivre
-FROM
-    livre l
-INNER JOIN
-    ligneCommande li ON l.idLivre = li.idLivre
-INNER JOIN
-    commande c ON c.idCommande = li.idCommande
+SELECT li.idCommande, c.idUser, l.nomLivre, l.prixLivre, li.quantiteLigneCommande, (l.prixLivre * li.quantiteLigneCommande) AS totalLivre
+FROM livre l
+INNER JOIN ligneCommande li
+ON l.idLivre = li.idLivre
+INNER JOIN commande c
+ON c.idCommande = li.idCommande
 WHERE
-    c.statutCommande = 'en attente';
+c.statutCommande = 'en attente';
 
 
 CREATE OR REPLACE VIEW vTotalLivreExpediee AS
@@ -56,30 +49,6 @@ INNER JOIN ligneCommande li
 ON l.idLivre = li.idLivre
 INNER JOIN commande c ON c.idCommande = li.idCommande
 WHERE c.statutCommande = 'expédiée';
-
-
-create or replace view vNbMinLivre as
-select *
-from vTotalLivre
-order by totalLivre asc;
-
-
-create or replace view vNbMaxLivre as
-select *
-from vTotalLivre
-order by totalLivre desc
-
-
-create or replace view vNomMinLivre as
-select *
-from vTotalLivre
-order by nomLivre asc;
-
-
-create or replace view vNomMaxLivre as
-select *
-from vTotalLivre
-order by nomLivre desc;
 
 
 create or replace view vCommandesEnAttente as
@@ -101,6 +70,23 @@ create or replace view vLivresEnStock as
 select l.idLivre, l.nomLivre, l.prixLivre, l.exemplaireLivre
 from livre l
 where l.exemplaireLivre <= 5;
+
+create view vMeilleursAvis as
+select l.idLivre, l.nomLivre, avg(a.noteAvis) as moyenneNote
+from avis a
+inner join  livre l
+on a.idLivre = l.idLivre
+group by l.idLivre, l.nomLivre
+order by moyenneNote desc;
+
+
+create view vNbLivreAcheteUser as
+SELECT c.idUser, SUM(l.quantiteLigneCommande)
+FROM ligneCommande l
+inner join commande c
+on l.idCommande = c.idCommande
+WHERE c.statutCommande = 'expédiée'
+group by c.idUser;
 
 
 
@@ -169,9 +155,8 @@ end $$
 delimiter ;
 
 
-DROP TRIGGER IF EXISTS tInsertParticulier
 DELIMITER $$
-CREATE TRIGGER insert_particulier
+CREATE TRIGGER tInsertParticulier
 BEFORE INSERT ON particulier
 FOR EACH ROW
 BEGIN
@@ -184,9 +169,8 @@ END $$
 DELIMITER ;
 
 
-DROP TRIGGER IF EXISTS tInsertEntreprise;
 DELIMITER $$
-CREATE TRIGGER insert_entreprise
+CREATE TRIGGER tInsertEntreprise
 BEFORE INSERT ON entreprise
 FOR EACH ROW
 BEGIN
@@ -324,5 +308,30 @@ BEGIN
     WHERE nomMaisonEdition = p_nomMaisonEdition;
     INSERT INTO livre (nomLivre, auteurLivre, imageLivre, exemplaireLivre, prixLivre, idCategorie, idMaisonEdition)
     VALUES (p_nomLivre, p_auteurLivre, p_imageLivre, p_exemplaireLivre, p_prixLivre, v_idCategorie, v_idMaisonEdition);
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE PROCEDURE pInsertOrUpdatePromotion(
+    IN p_nomLivre VARCHAR(255),
+    IN p_prixPromotion DECIMAL(10,2),
+    IN p_dateFinPromotion date
+)
+BEGIN
+    DECLARE v_idLivre INT;
+    SELECT idLivre INTO v_idLivre FROM livre WHERE nomLivre = p_nomLivre LIMIT 1;
+    IF v_idLivre IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Le livre spécifié n\'existe pas.';
+    END IF;
+    IF EXISTS (SELECT 1 FROM promotion WHERE idLivre = v_idLivre) THEN
+        UPDATE promotion
+        SET prixPromotion = p_prixPromotion
+        WHERE idLivre = v_idLivre;
+    ELSE
+        INSERT INTO promotion (idPromotion, idLivre, dateDebutPromotion, dateFinPromotion, prixPromotion)
+        VALUES (null, v_idLivre, curdate(), p_dateFinPromotion, p_prixPromotion);
+    END IF;
 END $$
 DELIMITER ;

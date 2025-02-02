@@ -46,7 +46,7 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
                         $unControleur->ajouterPointAbonnement($pointAbonnement, $idUser);
                     }
 
-                    $chiffre = rand(5, 5);
+                    $chiffre = rand(1, 5);
                     try{
                         $unControleur->procedureOffrirLivre($idUser, $chiffre);
                     } catch (PDOException $e) {

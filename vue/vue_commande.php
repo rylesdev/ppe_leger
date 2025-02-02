@@ -14,7 +14,6 @@ $dateCommande = $unControleur->selectDateLivraisonCommande($idUser);
 $dateCommande = $dateCommande[0];
 ?>
 
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -71,7 +70,12 @@ $dateCommande = $dateCommande[0];
 
         .payment-container h3 {
             text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
             margin-bottom: 20px;
+            border-bottom: 2px solid #0070ba;
+            padding-bottom: 10px;
         }
 
         .form-group {
@@ -106,6 +110,34 @@ $dateCommande = $dateCommande[0];
 
         .pay-button button:hover {
             background-color: #005a93;
+        }
+
+        .star-rating {
+            display: inline-block;
+            direction: rtl;
+            font-size: 20px;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            color: #ddd;
+            cursor: pointer;
+        }
+
+        .star-rating input:checked ~ label {
+            color: #ffcc00;
+        }
+
+        .star-rating input:checked + label {
+            color: #ffcc00;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #ffcc00;
         }
     </style>
 </head>
@@ -176,11 +208,12 @@ $dateCommande = $dateCommande[0];
                     echo "<form method='post'>";
                     echo "<input type='hidden' name='nomLivre' value='".$nomLivre."'>";
                     echo "<input type='hidden' name='idLivre' value='".$idLivre."'>";
-                    for ($i = 1; $i <= 5; $i++) {
-                        echo "<label>";
-                        echo "<input type='radio' name='noteAvis' value='".$i."' /> ★";
-                        echo "</label>";
+                    echo "<div class='star-rating'>";
+                    for ($i = 5; $i >= 1; $i--) {
+                        echo "<input type='radio' id='star$i' name='noteAvis' value='$i' />";
+                        echo "<label for='star$i'>★</label>";
                     }
+                    echo "</div>";
                     echo "<textarea name='commentaireAvis' placeholder='Écrire un avis...'></textarea>";
                     echo "<button type='submit' name='ValiderAvis'>Soumettre l'avis</button>";
                     echo "</form>";
