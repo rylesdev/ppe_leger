@@ -80,13 +80,13 @@ group by l.idLivre, l.nomLivre
 order by moyenneNote desc;
 
 
-create view vNbLivreAcheteUser as
-SELECT c.idUser, SUM(l.quantiteLigneCommande)
+CREATE VIEW vNbLivreAcheteUser AS
+SELECT u.emailUser, SUM(l.quantiteLigneCommande) AS nbLivreAchete
 FROM ligneCommande l
-inner join commande c
-on l.idCommande = c.idCommande
+INNER JOIN commande c ON l.idCommande = c.idCommande
+INNER JOIN user u ON c.idUser = u.idUser
 WHERE c.statutCommande = 'expédiée'
-group by c.idUser;
+GROUP BY u.emailUser;
 
 
 

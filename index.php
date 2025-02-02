@@ -18,7 +18,7 @@ $isAdmin = $result[0][0];
 </head>
 <body>
 <center>
-    <h1> Site Internet Librairie </h1>
+    <h1> Book'In </h1>
     <?php
     if (isset($isAdmin) && $isAdmin == 1) {
         echo "/**************** Mode Admin ****************/";
@@ -35,25 +35,10 @@ $isAdmin = $result[0][0];
 
         $unUser = $unControleur->verifConnexion($emailUser, $mdpUser);
         if ($unUser) {
-            // User mère :
             $_SESSION['idUser'] = $unUser['idUser'];
             $_SESSION['emailUser'] = $_POST['emailUser'];
             $_SESSION['mdpUser'] = $_POST['mdpUser'];
             $_SESSION['roleUser'] = $unUser['roleUser'];
-
-
-            // Particulier fille :
-            $_SESSION['nomUser'] = $unUser['nomUser'];
-            $_SESSION['prenomUser'] = $unUser['prenomUser'];
-            $_SESSION['adresseUser'] = $unUser['emailUser'];
-
-            $_SESSION['dateNaissanceUser'] = $unUser['dateNaissanceUser'];
-            $_SESSION['sexeUser'] = $unUser['sexeUser'];
-
-            // Entreprise fille :
-            $_SESSION['siretUser'] = $unUser['siretUser'];
-            $_SESSION['raisonSocialeUser'] = $unUser['raisonSocialeUser'];
-            $_SESSION['capitalSocialUser'] = $unUser['capitalSocialUser'];
 
             header("Location: index.php?page=1");
         } else {

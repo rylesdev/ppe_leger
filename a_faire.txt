@@ -16,20 +16,6 @@ A FAIRE :
             - Changer les logos ou bien mettre des écritures à la place.
 
         Accueil :
-            - Supprimer les :             "// Particulier fille :
-                                          $_SESSION['nomUser'] = $unUser['nomUser'];
-                                          $_SESSION['prenomUser'] = $unUser['prenomUser'];
-                                          $_SESSION['adresseUser'] = $unUser['emailUser'];
-
-                                          $_SESSION['dateNaissanceUser'] = $unUser['dateNaissanceUser'];
-                                          $_SESSION['sexeUser'] = $unUser['sexeUser'];
-
-                                          // Entreprise fille :
-                                          $_SESSION['siretUser'] = $unUser['siretUser'];
-                                          $_SESSION['raisonSocialeUser'] = $unUser['raisonSocialeUser'];
-                                          $_SESSION['capitalSocialUser'] = $unUser['capitalSocialUser'];"
-            qui ne marchent pas et servent à rien.
-
             - Section "à la une" présentant les livres :
                 - les plus vendus
                 - recommandés (view avis)
@@ -56,10 +42,6 @@ A FAIRE :
     Back-End
         PHPMYADMIN
             - Mettre toutes les images des nouveaux livres insérés (12 livres) dans le dossier "images".
-
-            - View :
-                - Mettre la view "vNbLivreAcheteUser" dans la page "Statistique".
-                - Mettre la view "vMeilleursAvis" dans la page "Statistique".
 
 
         Bug

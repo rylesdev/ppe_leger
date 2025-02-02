@@ -170,7 +170,7 @@ $livresPromotion = $unControleur->selectLivrePromotion();
     <div class="livre-offert-section">
         <?php
         $livresOfferts = $unControleur->selectOffrirLivre($_SESSION['idUser']);
-        if (isset($livresOfferts)) {
+        if (isset($livresOfferts) && $livresOfferts != null) {
             echo "<h2>Félicitations ! Vous avez un/des livre(s) offert(s) : </h2>";
             foreach ($livresOfferts as $livre) {
                 $result = $unControleur->selectOffrirLivre($_SESSION['idUser']);

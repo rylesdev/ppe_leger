@@ -112,6 +112,14 @@
 			return $this->unModele->viewSelectLivresEnStock();
 		}
 
+        public function viewMeilleursAvis() {
+            return $this->unModele->viewMeilleursAvis();
+        }
+
+        public function viewNbLivreAcheteUser() {
+            return $this->unModele->viewNbLivreAcheteUser();
+        }
+
 		public function selectDateAbonnement($idUser) {
 			return $this->unModele->selectDateAbonnement($idUser);
 		}

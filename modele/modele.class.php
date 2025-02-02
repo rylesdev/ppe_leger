@@ -343,6 +343,22 @@
             return $exec->fetchAll();
         }
 
+        public function viewMeilleursAvis() {
+            $requete =  "select *
+                        from vMeilleursAvis;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function viewNbLivreAcheteUser() {
+            $requete =  "select *
+                        from vNbLivreAcheteUser;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
         public function selectDateAbonnement($idUser) {
             $requete =  "select floor(DATEDIFF(dateFinAbonnement, CURDATE())) AS jourRestant
                         from abonnement
