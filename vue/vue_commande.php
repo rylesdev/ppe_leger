@@ -1,14 +1,49 @@
+<header style="background-color: #2E6E49; color: white; text-align: center; padding: 15px; font-size: 24px; font-weight: bold;">
+Vos Commandes
+</header>
 <?php
 error_reporting(0);
 
 $idUser = $_SESSION['idUser'];
 
-$totalCommande = $unControleur->viewSelectTotalCommandeExpediee($idUser);
-$sommeAPayer = $totalCommande['totalCommande'];
+// Récupérer les livres en promotion
+$livresPromotion = $unControleur->selectLivrePromotion();
 
+// Récupérer les livres commandés
+$lesCommandes = $unControleur->viewSelectTotalLivreExpediee($idUser);
+
+// Initialiser le montant total ajusté avec les promotions
+$sommeAPayer = 0;
+
+// Parcourir les livres commandés pour appliquer les promotions
+foreach ($lesCommandes as $uneCommande) {
+    $idLivre = $uneCommande['idLivre'];
+    $prixLivre = $uneCommande['prixLivre'];
+    $quantite = $uneCommande['quantiteLigneCommande'];
+
+    // Vérifier si une promotion existe pour ce livre
+    $promotion = null;
+    foreach ($livresPromotion as $promo) {
+        if ($promo['idLivre'] === $idLivre) {
+            $promotion = $promo;
+            break;
+        }
+    }
+
+    if ($promotion && isset($promotion['prixPromotion'])) {
+        // Appliquer le prix promotionnel
+        $sommeAPayer += $promotion['prixPromotion'] * $quantite;
+    } else {
+        // Utiliser le prix normal
+        $sommeAPayer += $prixLivre * $quantite;
+    }
+}
+
+// Récupérer l'adresse de l'utilisateur
 $adresseUser = $unControleur->selectAdresseUser($idUser);
 $adresseUser = $adresseUser['adresseUser'];
 
+// Récupérer la date de livraison
 $dateCommande = $unControleur->selectDateLivraisonCommande($idUser);
 $dateCommande = $dateCommande[0];
 ?>
@@ -64,7 +99,8 @@ $dateCommande = $dateCommande[0];
         }
 
         .table-success {
-            background-color: #d4edda;
+            background-color: #2E6E49 !important;
+            color: white !important;
         }
 
         .payment-container h3 {
@@ -161,6 +197,38 @@ $dateCommande = $dateCommande[0];
         button[type='submit']:hover {
             background-color: #218838;
         }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #777;
+        }
+
+        .promo-price {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .footer {
+            background-color: #2c6e49;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        .footer-banner-img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -216,13 +284,37 @@ $dateCommande = $dateCommande[0];
 
             if (isset($lesCommandes)) {
                 foreach ($lesCommandes as $uneCommande) {
+                    $promotionTrouvee = false;
+                    $prixPromotion = null;
+
+                    foreach ($livresPromotion as $promo) {
+                        if ($promo['idLivre'] === $uneCommande['idLivre']) {
+                            $promotionTrouvee = true;
+                            $prixPromotion = $promo['prixPromotion'];
+                            break;
+                        }
+                    }
+
+                    if ($promotionTrouvee && isset($prixPromotion)) {
+                        $totalLivre = $prixPromotion * $uneCommande['quantiteLigneCommande'];
+                    } else {
+                        $totalLivre = $uneCommande['prixLivre'] * $uneCommande['quantiteLigneCommande'];
+                    }
+
                     echo "<tr>";
                     echo "<td>" . $uneCommande['nomLivre'] . "</td>";
-                    echo "<td>" . $uneCommande['prixLivre'] . "€</td>";
+                    echo "<td>";
+                    if ($promotionTrouvee && isset($prixPromotion)) {
+                        echo "<span class='old-price'>" . $uneCommande['prixLivre'] . "€</span> ";
+                        echo "<span class='promo-price'>" . $prixPromotion . "€</span>";
+                    } else {
+                        echo $uneCommande['prixLivre'] . "€";
+                    }
+                    echo "</td>";
                     echo "<td> * </td>";
                     echo "<td>" . $uneCommande['quantiteLigneCommande'] . "</td>";
                     echo "<td> = </td>";
-                    echo "<td>" . $uneCommande['totalLivre'] . "€</td>";
+                    echo "<td>" . $totalLivre . "€</td>";
 
                     $nomLivre = $uneCommande['nomLivre'];
                     $idLivre = $uneCommande['idLivre'];
@@ -275,5 +367,8 @@ $dateCommande = $dateCommande[0];
         </form>
     </div>
 </div>
+<footer class="footer">
+    <p>&copy; 2025 Librairie en ligne - Tous droits réservés</p>
+</footer>
 </body>
 </html>

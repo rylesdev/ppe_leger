@@ -1,3 +1,6 @@
+<header style="background-color: #2E6E49; color: white; text-align: center; padding: 15px; font-size: 24px; font-weight: bold;">
+    Votre Panier
+</header>
 <?php
 error_reporting(0);
 
@@ -85,8 +88,10 @@ $dateCommande = $dateCommande[0];
         }
 
         .table-success {
-            background-color: #d4edda;
+            background-color: #2E6E49 !important;
+            color: white !important;
         }
+
 
         .payment-container {
             width: 400px;
@@ -129,7 +134,7 @@ $dateCommande = $dateCommande[0];
 
         .pay-button button {
             padding: 10px 20px;
-            background-color: #0070ba;
+            background-color: #2E6E49;
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -137,7 +142,7 @@ $dateCommande = $dateCommande[0];
         }
 
         .pay-button button:hover {
-            background-color: #005a93;
+            background-color: #245a3c;
         }
 
         .old-price {
@@ -149,6 +154,29 @@ $dateCommande = $dateCommande[0];
             color: #e74c3c;
             font-weight: bold;
         }
+
+        .footer {
+            background-color: #2c6e49;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        .footer-banner-img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -302,5 +330,8 @@ $dateCommande = $dateCommande[0];
         </form>
     </div>
 </div>
+<footer class="footer">
+    <p>&copy; 2025 Librairie en ligne - Tous droits réservés</p>
+</footer>
 </body>
 </html>

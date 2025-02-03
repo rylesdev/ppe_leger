@@ -7,6 +7,7 @@ A FAIRE :
     Front-Office
         Général :
             - Travailler le front-office (html / css / js) pour améliorer l'esthétique du site.
+            - Utiliser ChatGPT pour modifier visuellement toutes les pages du site (voir barre de favoris sur chrome).
 
         NavBar :
             - Changer les logos ou bien mettre des écritures à la place.
@@ -22,6 +23,9 @@ A FAIRE :
 
 
     Back-End
+        PHPMyAdmin
+            - Faire un système qui va bloquer l'inscription si le email existe déjà dans la table user.
+
         Bug
             - Je peux payer un livre de 100 points avec 70 points.
 

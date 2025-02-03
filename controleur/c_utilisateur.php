@@ -4,7 +4,7 @@ $unControleur = new Controleur();
 
 $idUser = $_SESSION['idUser'];
 
-require_once("vue/vue_select_user.php");
+require_once("vue/vue_utilisateur.php");
 
 require_once ("vue/vue_update_user.php");
 

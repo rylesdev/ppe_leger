@@ -1,3 +1,6 @@
+<header style="background-color: #2E6E49; color: white; text-align: center; padding: 15px; font-size: 24px; font-weight: bold;">
+    Abonnement
+</header>
 <?php
 require_once("controleur/controleur.class.php");
 $unControleur = new Controleur();
@@ -58,11 +61,37 @@ $idUser = $_SESSION['idUser'];
         .btn-primary:hover {
             background-color: #0056b3;
         }
+
+        .table-success {
+            background-color: #2E6E49 !important;
+            color: white !important;
+        }
+
+        .footer {
+            background-color: #2c6e49;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        .footer-banner-img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
 <div class="container">
-    <h2>Abonnement</h2>
     <?php echo "<h3>Nombre de points : " . $unControleur->selectPointAbonnement($idUser)['pointAbonnement'] . "</h3>" ?>
     L'abonnement vous donne des avantages comme : <br>
         - des livres offert après avoir acheté des livres (chance : 1/5). <br>
@@ -108,5 +137,8 @@ $idUser = $_SESSION['idUser'];
         </tr>
     </table>
 </div>
+<footer class="footer">
+    <p>&copy; 2025 Librairie en ligne - Tous droits réservés</p>
+</footer>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<header class="header">
+<header style="background-color: #2E6E49; color: white; text-align: center; padding: 15px; font-size: 24px; font-weight: bold;">
     <h2> Acheter un livre </h2>
 </header>
 <h3> Liste des livres (<?= count($lesLivres) ?>) </h3>
@@ -99,13 +99,6 @@
         margin: 0;
         padding: 0;
         padding-bottom: 70px; /* Pour éviter que le footer cache du contenu */
-    }
-
-    .header {
-            background-color: #2c6e49;
-            color: white;
-            text-align: center;
-            padding: 20px;
     }
 
     h3 {

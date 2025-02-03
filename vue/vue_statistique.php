@@ -1,4 +1,6 @@
-<h2> Statistiques </h2>
+<header style="background-color: #2E6E49; color: white; text-align: center; padding: 15px; font-size: 24px; font-weight: bold;">
+Statistiques
+</header>
 <table class="table" style="margin-left: 50px ; margin-right: 50px">
     <thead class="table-success">
     <tr>
@@ -50,5 +52,12 @@
 
     echo "</tr>";
     ?>
+    <style>
+        .table-success {
+        background-color: #2E6E49 !important;
+        color: white !important;
+        }
+    </style>
+
     </tbody>
 </table>

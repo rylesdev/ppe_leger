@@ -61,6 +61,7 @@ $isAdmin = $result[0][0];
         <img src="images/logo.png" height="100" width="100">
         <?php
         if (isset($isAdmin) && $isAdmin == 1) {
+            echo "<br>";
             echo "/**************** Mode Admin ****************/";
         }
 

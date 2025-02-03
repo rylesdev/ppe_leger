@@ -1,4 +1,6 @@
-<h2> Stockage des livres </h2>
+<header style="background-color: #2E6E49; color: white; text-align: center; padding: 15px; font-size: 24px; font-weight: bold;">
+Stockage des livres
+</header>
 <form method="post">
     <table>
         <tr>
@@ -18,6 +20,11 @@
     </table>
     <?= ($leLivre!=null) ? '<input type="hidden" name="idLivre" value="'.$leLivre['idLivre'].'">' : '' ?>
 </form>
-
+<style>
+        .table-success {
+        background-color: #2E6E49 !important;
+        color: white !important;
+        }
+</style>
 <br>
 <br>

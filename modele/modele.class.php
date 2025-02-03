@@ -26,6 +26,31 @@
             return $exec->fetch();
         }
 
+        /*public function selectEmailUser($emailUser) {
+            public function emailExists($emailUser) {
+                $requete = "SELECT COUNT(*) as count FROM user WHERE emailUser = ?";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $emailUser, PDO::PARAM_STR);
+                $exec->execute();
+                return $exec->fetchAll();
+
+                $requeteParticulier = "SELECT COUNT(*) as count FROM particulier WHERE emailUser = ?";
+                $execParticulier = $this->unPdo->prepare($requeteParticulier);
+                $execParticulier->bindValue(1, $emailUser, PDO::PARAM_STR);
+                $execParticulier->execute();
+                return $execParticulier->fetchAll();
+
+                $requeteEntreprise = "SELECT COUNT(*) as count FROM entreprise WHERE emailUser = ?";
+                $execEntreprise = $this->unPdo->prepare($sqlEntreprise);
+                $execEntreprise->bindValue(1, $emailUser, PDO::PARAM_STR);
+                $execEntreprise->execute();
+                return $execEntreprise->fetchAll();
+
+                // Si l'email existe dans au moins une des tables, retourner true
+                return ($exec['count'] > 0 || $execParticulier['count'] > 0 || $execEntreprise['count'] > 0);
+            }
+        }*/
+
         public function selectParticulier($idUser) {
             $requete =  "select * 
                         from particulier
@@ -549,7 +574,7 @@
 
         public function insertAbonnement1m($idUser) {
             $requete = 	"insert into abonnement
-						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 MONTH));";
+						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 MONTH), 0);";
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
@@ -567,7 +592,7 @@
 
         public function insertAbonnement3m($idUser) {
             $requete = 	"insert into abonnement
-						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 3 MONTH));";
+						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 3 MONTH)n 0);";
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
@@ -586,7 +611,7 @@
         public function insertAbonnement1a($idUser)
         {
             $requete = "insert into abonnement
-						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR));";
+						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 0);";
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();

@@ -1,3 +1,6 @@
+<header style="background-color: #2E6E49; color: white; text-align: center; padding: 15px; font-size: 24px; font-weight: bold;">
+    Ajouter une promotion
+</header>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -49,8 +52,6 @@
     </style>
 </head>
 <body>
-
-<h2>Ajouter une Promotion</h2>
 <form method="post">
     <label for="nomLivre">Nom du Livre :</label>
     <input type="text" name="nomLivre" required>

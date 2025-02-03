@@ -1,5 +1,3 @@
-<h2> Votre Panier </h2>
-
 <?php
 if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
     $idUser = $_SESSION['idUser'];
@@ -28,7 +26,7 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
 
             case "payer" :  if(isset($_POST['PayerPoint'])) {
                 $pointAbonnement = $_SESSION['pointAUtiliser'];
-                if ($unControleur->selectPointAbonnement($idUser)['pointAbonnement'] >= $pointAbonnement) {
+                if ($unControleur->selectPointAbonnement($idUser)['pointAbonnement'] > $pointAbonnement) {
                     $unControleur->enleverPointAbonnement($pointAbonnement, $idUser);
                 } else if (empty($pointAbonnement) || $pointAbonnement < 0) {
                     echo "";

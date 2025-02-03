@@ -1,5 +1,3 @@
-<h2> Vos Commandes </h2>
-
 <?php
 if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
     $idUser = $_SESSION['idUser'];
