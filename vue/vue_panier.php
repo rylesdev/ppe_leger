@@ -217,7 +217,6 @@ $dateCommande = $dateCommande[0];
 
                     if ($promotionTrouvee && isset($prixPromotion)) {
                         $totalLivre = $prixPromotion * $uneCommande['quantiteLigneCommande'];
-                        var_dump($totalLivre);
                     } else {
                         $totalLivre = $uneCommande['prixLivre'] * $uneCommande['quantiteLigneCommande'];
                     }
@@ -227,7 +226,6 @@ $dateCommande = $dateCommande[0];
                     echo "<td>";
                     if ($promotionTrouvee && isset($prixPromotion)) {
                         echo "<span class='old-price'>" . $uneCommande['prixLivre'] . "€</span> ";
-                        var_dump($prixPromotion);
                         echo "<span class='promo-price'>" . $prixPromotion . "€</span>";
                     } else {
                         echo $uneCommande['prixLivre'] . "€";

@@ -132,27 +132,23 @@ delimiter ;
 
 
 delimiter $$
-create trigger tInsertStockCommande
-after insert on ligneCommande
+create trigger tUpdateStockCommandeExpediee
+after update on commande
 for each row
 begin
-update livre
-set exemplaireLivre = exemplaireLivre - NEW.quantiteLigneCommande
-where idLivre = NEW.idLivre;
+    if OLD.statutCommande = 'en attente' and NEW.statutCommande = 'expédiée' then
+        update livre
+        set exemplaireLivre = exemplaireLivre - (
+            select sum(quantiteLigneCommande)
+            from ligneCommande
+            where idCommande = NEW.idCommande
+            and ligneCommande.idLivre = livre.idLivre
+        )
+        where idLivre in (select idLivre from ligneCommande where idCommande = NEW.idCommande);
+    end if;
 end $$
 delimiter ;
 
-
-delimiter $$
-create trigger tUpdateStockCommande
-after update on ligneCommande
-for each row
-begin
-update livre
-set exemplaireLivre = exemplaireLivre - (NEW.quantiteLigneCommande - OLD.quantiteLigneCommande)
-where idLivre = NEW.idLivre;
-end $$
-delimiter ;
 
 
 DELIMITER $$
@@ -211,35 +207,6 @@ DELIMITER ;
 
 
 PROCEDURES STOCKEES :
-/*
-delimiter $$
-create procedure pHashMdpUser(
-in p_idUser int (10),
-in p_nomUser varchar(50),
-in p_prenomUser varchar(50),
-in p_emailUser varchar(50),
-in p_mdpUser varchar(255),
-in p_adresseUser varchar(50),
-in p_roleUser enum('admin', 'client'),
-in p_dateInscriptionUser date
-)
-begin
-insert into user (idUser, nomUser, prenomUser, emailUser, mdpUser, adresseUser, roleUser, dateInscriptionUser)
-values (
-p_idUser,
-p_nomUser,
-p_prenomUser,
-p_emailUser,
-SHA1(p_mdpUser),
-p_adresseUser,
-p_roleUser,
-p_dateInscriptionUser
-);
-end $$
-delimiter ;
-*/
-
-
 DELIMITER $$
 CREATE PROCEDURE pOffrirLivre(
     IN p_idUser INT,

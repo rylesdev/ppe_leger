@@ -539,7 +539,7 @@
                     if (strpos($messageErreur, 'Stock insuffisant pour le livre') !== false) {
                         echo "<h3 style='color: red;'>Erreur : Stock insuffisant pour le livre. <br> Veuillez réduire la quantité ou choisir un autre livre. </h3>";
                     } elseif (strpos($messageErreur, 'Livre déjà dans le panier') !== false) {
-                        echo "<h3 style='color: red;'>Erreur : Livre déjà dans le panier. <br> Veuillez modifier le nombre d'exemplaire. </h3>";
+                        echo "<h3 style='color: green;'>Livre ajouté dans le panier. </h3>";
                     } else {
                         echo "<h3 style='color: red;'>Erreur : Un problème inattendu s'est produit.</h3>";
                     }

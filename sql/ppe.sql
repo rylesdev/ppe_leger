@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : jeu. 30 jan. 2025 à 17:36
+-- Généré le : lun. 03 fév. 2025 à 01:50
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -25,21 +25,37 @@ DELIMITER $$
 --
 -- Procédures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pHashMdpUser` (IN `p_idUser` INT(10), IN `p_nomUser` VARCHAR(50), IN `p_prenomUser` VARCHAR(50), IN `p_emailUser` VARCHAR(50), IN `p_mdpUser` VARCHAR(255), IN `p_adresseUser` VARCHAR(50), IN `p_roleUser` ENUM('admin','client'), IN `p_dateInscriptionUser` DATE)   BEGIN
-                            INSERT INTO user (idUser, nomUser, prenomUser, emailUser, mdpUser, adresseUser, roleUser, dateInscriptionUser)
-                            VALUES (
-                                p_idUser,
-                                p_nomUser,
-                                p_prenomUser,
-                                p_emailUser,
-                                SHA1(p_mdpUser), 
-                                p_adresseUser,
-                                p_roleUser,
-                                p_dateInscriptionUser
-                            );
-                        END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `pInsertLivre` (IN `p_nomLivre` VARCHAR(255), IN `p_auteurLivre` VARCHAR(255), IN `p_imageLivre` VARCHAR(255), IN `p_exemplaireLivre` INT, IN `p_prixLivre` DECIMAL(10,2), IN `p_nomCategorie` VARCHAR(255), IN `p_nomMaisonEdition` VARCHAR(255))   BEGIN
+    DECLARE v_idCategorie INT;
+    DECLARE v_idMaisonEdition INT;
+    SELECT idCategorie INTO v_idCategorie
+    FROM categorie
+    WHERE nomCategorie = p_nomCategorie;
+    SELECT idMaisonEdition INTO v_idMaisonEdition
+    FROM maisonEdition
+    WHERE nomMaisonEdition = p_nomMaisonEdition;
+    INSERT INTO livre (nomLivre, auteurLivre, imageLivre, exemplaireLivre, prixLivre, idCategorie, idMaisonEdition)
+    VALUES (p_nomLivre, p_auteurLivre, p_imageLivre, p_exemplaireLivre, p_prixLivre, v_idCategorie, v_idMaisonEdition);
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pOffrirLivre` (IN `p_idUser` INT, IN `chiffre` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `pInsertOrUpdatePromotion` (IN `p_nomLivre` VARCHAR(255), IN `p_prixPromotion` DECIMAL(10,2), IN `p_dateFinPromotion` DATE)   BEGIN
+    DECLARE v_idLivre INT;
+    SELECT idLivre INTO v_idLivre FROM livre WHERE nomLivre = p_nomLivre LIMIT 1;
+    IF v_idLivre IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Le livre spécifié n\'existe pas.';
+    END IF;
+    IF EXISTS (SELECT 1 FROM promotion WHERE idLivre = v_idLivre) THEN
+        UPDATE promotion
+        SET prixPromotion = p_prixPromotion
+        WHERE idLivre = v_idLivre;
+    ELSE
+        INSERT INTO promotion (idPromotion, idLivre, dateDebutPromotion, dateFinPromotion, prixPromotion)
+        VALUES (null, v_idLivre, curdate(), p_dateFinPromotion, p_prixPromotion);
+    END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `pOffrirLivre` (IN `p_idUser` INT, IN `p_chiffre` INT)   BEGIN
     DECLARE newIdCommande INT;
     DECLARE randomLivreId INT;
     IF NOT EXISTS (
@@ -58,7 +74,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `pOffrirLivre` (IN `p_idUser` INT, I
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Votre abonnement a expiré. Vous ne pouvez pas bénéficier de cette offre.';
     END IF;
-    IF chiffre = 5 THEN
+    IF p_chiffre = 5 THEN
         INSERT INTO commande (idCommande, dateCommande, statutCommande, dateLivraisonCommande, idUser)
         VALUES (null, NOW(), 'expédiée', DATE_ADD(NOW(), INTERVAL 7 DAY), p_idUser);
         SET newIdCommande = LAST_INSERT_ID();
@@ -102,8 +118,7 @@ CREATE TABLE `abonnement` (
 INSERT INTO `abonnement` (`idAbonnement`, `idUser`, `dateDebutAbonnement`, `dateFinAbonnement`, `pointAbonnement`) VALUES
 (1, 2, '2025-01-01', '2025-12-31', 0),
 (3, 23, '2025-01-25', '2025-04-25', 0),
-(4, 15, '2025-01-26', '2025-02-28', 1000),
-(25, 24, '2025-01-29', '2025-02-28', 0);
+(4, 15, '2025-01-26', '2025-02-28', 80);
 
 -- --------------------------------------------------------
 
@@ -161,7 +176,13 @@ INSERT INTO `avis` (`idAvis`, `idLivre`, `nomLivre`, `idUser`, `commentaireAvis`
 (22, 3, 'L', 15, 'bof', 3, '2025-01-29'),
 (23, 3, 'L', 15, 'bof', 3, '2025-01-29'),
 (24, 2, 'Crime et Chatiment', 15, 'surcôté', 3, '2025-01-29'),
-(25, 2, 'Crime et Chatiment', 15, 'surcôté', 3, '2025-01-29');
+(25, 2, 'Crime et Chatiment', 15, 'surcôté', 3, '2025-01-29'),
+(26, 8, 'SPQR', 15, 'masterclass', 5, '2025-02-02'),
+(27, 8, 'SPQR', 15, 'masterclass', 5, '2025-02-02'),
+(28, 2, 'Crime et Chatiment', 15, '3 étoiles', 3, '2025-02-02'),
+(29, 3, 'L', 15, 'test l\'', 4, '2025-02-02'),
+(30, 2, 'Crime et Chatiment', 15, 'cube information', 4, '2025-02-02'),
+(31, 3, 'L`Etranger', 15, 'test \'', 5, '2025-02-03');
 
 -- --------------------------------------------------------
 
@@ -289,8 +310,8 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (245, '2025-01-30', 'expédiée', '2025-02-06', 2),
 (246, '2025-01-30', 'expédiée', '2025-02-06', 2),
 (247, '2025-01-30', 'expédiée', '2025-02-06', 2),
-(248, '2025-01-12', 'en attente', '2025-01-19', 2),
-(249, '2025-01-12', 'en attente', '2025-01-19', 2),
+(248, '2025-02-02', 'expédiée', '2025-02-09', 2),
+(249, '2025-02-02', 'expédiée', '2025-02-09', 2),
 (250, '2025-01-12', 'en attente', '2025-01-19', 2),
 (251, '2025-01-12', 'en attente', '2025-01-19', 2),
 (252, '2025-01-12', 'en attente', '2025-01-19', 2),
@@ -444,7 +465,63 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (413, '2025-01-30', 'expédiée', '2025-02-06', 15),
 (414, '2025-01-30', 'expédiée', '2025-02-06', 15),
 (415, '2025-01-30', 'expédiée', '2025-02-06', 15),
-(416, NULL, 'en attente', NULL, 15);
+(417, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(418, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(419, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(420, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(421, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(422, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(423, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(424, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(425, '2025-02-02', 'expédiée', '2025-02-09', 24),
+(426, '2025-02-02', 'expédiée', '2025-02-09', 24),
+(427, '2025-02-02', 'expédiée', '2025-02-09', 2),
+(428, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(429, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(430, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(431, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(432, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(433, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(434, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(435, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(436, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(437, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(438, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(439, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(440, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(441, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(442, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(443, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(444, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(445, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(446, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(447, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(448, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(449, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(450, '2025-02-02', 'expédiée', '2025-02-09', 15),
+(452, '2025-02-03', 'expédiée', '2025-02-10', 15),
+(453, '2025-02-03', 'expédiée', '2025-02-10', 15),
+(454, '2025-02-03', 'expédiée', '2025-02-10', 15),
+(455, '2025-02-03', 'expédiée', '2025-02-10', 15);
+
+--
+-- Déclencheurs `commande`
+--
+DELIMITER $$
+CREATE TRIGGER `tUpdateStockCommandeExpediee` AFTER UPDATE ON `commande` FOR EACH ROW begin
+    if OLD.statutCommande = 'en attente' and NEW.statutCommande = 'expédiée' then
+        update livre
+        set exemplaireLivre = exemplaireLivre - (
+            select sum(quantiteLigneCommande)
+            from ligneCommande
+            where idCommande = NEW.idCommande
+            and ligneCommande.idLivre = livre.idLivre
+        )
+        where idLivre in (select idLivre from ligneCommande where idCommande = NEW.idCommande);
+    end if;
+end
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -453,12 +530,48 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 --
 
 CREATE TABLE `entreprise` (
-  `idEntreprise` int NOT NULL,
-  `idUser` int DEFAULT NULL,
-  `siretUser` varchar(20) NOT NULL,
-  `raisonSocialeUser` varchar(255) NOT NULL,
-  `capitalSocialUser` decimal(10,2) NOT NULL
+  `idUser` int NOT NULL,
+  `emailUser` varchar(255) NOT NULL,
+  `mdpUser` varchar(255) NOT NULL,
+  `siretUser` varchar(14) DEFAULT NULL,
+  `raisonSocialeUser` varchar(255) DEFAULT NULL,
+  `capitalSocialUser` decimal(15,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `entreprise`
+--
+
+INSERT INTO `entreprise` (`idUser`, `emailUser`, `mdpUser`, `siretUser`, `raisonSocialeUser`, `capitalSocialUser`) VALUES
+(26, 'entreprise@gmail.com', 'motdepasse', '123456789', 'Entreprise SARL', 10000.00),
+(27, 'entreprise@gmail.com', 'motdepasse', '123456789', 'Entreprise SARL', 10000.00),
+(30, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '123123123', 'yasser', 123123123.00),
+(31, 'entreprise@gmail.com', '123', '1298371892', '123', NULL),
+(32, 'test@gmail.com', '123', '123', '123', 123124.00),
+(33, 'yass@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '123123', '123123', 123123.00),
+(34, '987987@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '987987', '987987', 987987.00);
+
+--
+-- Déclencheurs `entreprise`
+--
+DELIMITER $$
+CREATE TRIGGER `tInsertEntreprise` BEFORE INSERT ON `entreprise` FOR EACH ROW BEGIN
+    IF NEW.idUser IS NULL OR NEW.idUser NOT IN (SELECT idUser FROM user) THEN
+        SET NEW.idUser = IFNULL((SELECT MAX(idUser) FROM user), 0) + 1;
+    END IF;
+    INSERT INTO user (idUser, emailUser, mdpUser, adresseUser, roleUser)
+    VALUES (NEW.idUser, NEW.emailUser, NEW.mdpUser, NULL, 'entreprise');
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `tUpdateEntreprise` BEFORE UPDATE ON `entreprise` FOR EACH ROW BEGIN
+    UPDATE user
+    SET emailUser = NEW.emailUser, mdpUser = NEW.mdpUser
+    WHERE idUser = OLD.idUser;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -585,7 +698,48 @@ INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quanti
 (670, 413, 3, 1),
 (671, 414, 3, 1),
 (672, 415, 9, 1),
-(673, 416, 3, 1);
+(674, 417, 2, 1),
+(675, 418, 12, 1),
+(676, 419, 2, 1),
+(677, 420, 12, 1),
+(678, 421, 2, 1),
+(679, 422, 9, 1),
+(680, 423, 3, 1),
+(681, 424, 12, 1),
+(682, 425, 2, 1),
+(683, 426, 3, 1),
+(684, 427, 10, 1),
+(685, 428, 2, 1),
+(686, 429, 11, 1),
+(687, 430, 2, 1),
+(688, 431, 2, 1),
+(689, 432, 11, 1),
+(690, 433, 2, 1),
+(691, 434, 11, 1),
+(692, 435, 2, 1),
+(693, 436, 12, 1),
+(694, 437, 2, 1),
+(695, 438, 12, 1),
+(696, 439, 2, 1),
+(697, 440, 11, 1),
+(698, 441, 2, 1),
+(699, 442, 12, 1),
+(700, 443, 2, 1),
+(701, 444, 12, 1),
+(702, 445, 2, 1),
+(703, 446, 12, 1),
+(704, 447, 2, 1),
+(705, 448, 9, 1),
+(706, 449, 2, 1),
+(707, 450, 11, 1),
+(712, 452, 3, 1),
+(713, 452, 2, 2),
+(714, 452, 14, 5),
+(715, 453, 2, 5),
+(716, 454, 2, 1),
+(717, 454, 3, 1),
+(718, 454, 13, 1),
+(720, 455, 2, 1);
 
 --
 -- Déclencheurs `ligneCommande`
@@ -609,14 +763,6 @@ end
 $$
 DELIMITER ;
 DELIMITER $$
-CREATE TRIGGER `tInsertStockCommande` AFTER INSERT ON `ligneCommande` FOR EACH ROW begin
-update livre
-set exemplaireLivre = exemplaireLivre - NEW.quantiteLigneCommande
-where idLivre = NEW.idLivre;
-end
-$$
-DELIMITER ;
-DELIMITER $$
 CREATE TRIGGER `tStockNull` BEFORE INSERT ON `ligneCommande` FOR EACH ROW begin
 declare exemplaireLivreDisponible int;
 select exemplaireLivre
@@ -630,14 +776,6 @@ end IF;
 end
 $$
 DELIMITER ;
-DELIMITER $$
-CREATE TRIGGER `tUpdateStockCommande` AFTER UPDATE ON `ligneCommande` FOR EACH ROW begin
-update livre
-set exemplaireLivre = exemplaireLivre - (NEW.quantiteLigneCommande - OLD.quantiteLigneCommande)
-where idLivre = NEW.idLivre;
-end
-$$
-DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -648,7 +786,6 @@ DELIMITER ;
 CREATE TABLE `livre` (
   `idLivre` int NOT NULL,
   `nomLivre` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `categorieLivre` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `auteurLivre` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `imageLivre` varchar(50) NOT NULL,
   `exemplaireLivre` int DEFAULT NULL,
@@ -661,40 +798,43 @@ CREATE TABLE `livre` (
 -- Déchargement des données de la table `livre`
 --
 
-INSERT INTO `livre` (`idLivre`, `nomLivre`, `categorieLivre`, `auteurLivre`, `imageLivre`, `exemplaireLivre`, `prixLivre`, `idCategorie`, `idMaisonEdition`) VALUES
-(1, 'Alcools', 'test', 'Apollinaire', 'alcools.png', 99, 12.50, 3, 1),
-(2, 'Crime et Chatiment', 'test', 'Dostoïevski', 'crime_et_chatiment.png', 0, 15.00, 1, 2),
-(3, 'L\'Etranger', 'test', 'Camus', 'l_etranger.png', 63, 10.00, 1, 3),
-(4, 'L\'Odyssée', 'test', 'Homère', 'l_odyssee.png', 89, 13.50, 2, 4),
-(5, 'Les Fleurs du Mal', 'test', 'Baudelaire', 'les_fleurs_du_mal.png', 100, 14.00, 3, 5),
-(6, 'PHP et MySQL pour les nuls', 'test', 'Valade', 'php_et_mysql_pour_les_nuls.png', 79, 22.00, 4, 6),
-(7, 'Programmer en Java', 'test', 'Delannoy', 'programmer_en_java.png', 100, 25.00, 4, 7),
-(8, 'SPQR', 'test', 'Beard', 'spqr.png', 99, 18.00, 2, 8),
-(9, 'À la recherche du temps perdu', 'test', 'Proust', 'a_la_recherche_du_temps_perdu.png', 98, 0.00, 1, 1),
-(10, 'Les Misérables', 'test', 'Hugo', 'les_miserables_I.png', 100, 0.00, 1, 2),
-(11, '1984', 'test', 'Orwell', '1984.png', 100, 0.00, 1, 3),
-(12, 'L\'Art d\'aimer', 'test', 'Ovide', 'l_art_d_aimer', 100, 0.00, 1, 4),
-(13, 'La Peste', 'test', 'Camus', 'la_peste.png', 100, 15.99, 1, 1),
-(14, 'Les Mémoires d\'Hadrien', 'test', 'Yourcenar', 'les_memoires_d_hadrien.png', 100, 12.99, 1, 1),
-(15, 'La Condition humaine', 'test', 'Malraux', 'la_condition_humaine.png', 100, 14.99, 1, 1),
-(16, 'Le Comte de Monte-Cristo', 'test', 'Dumas', 'le_comte_de_monte_cristo.png', 100, 9.99, 1, 2),
-(17, 'Orgueil et Préjugés', 'test', 'Austen', 'orgueil_et_prejuges.png', 100, 8.99, 1, 2),
-(18, 'Shining', 'test', 'King', 'shining.png', 100, 10.99, 1, 2),
-(19, 'Bel-Ami', 'test', 'Maupassant', 'bel_ami.png', 100, 11.99, 1, 3),
-(20, 'Fahrenheit 451', 'test', 'Bradbury', 'fahrenheit_451.png', 100, 9.99, 1, 3),
-(21, 'La Nuit des temps', 'test', 'Barjavel', 'la_nuit_des_temps.png', 100, 12.99, 1, 3),
-(22, 'L\'Énéide', 'test', 'Virgile', 'l_eneide.png', 100, 19.99, 3, 4),
-(23, 'Les Pensées', 'test', 'Aurèle', 'les_pensees.png', 100, 18.99, 3, 4),
-(24, 'Les Métamorphoses', 'test', 'Ovide', 'les_metamorphoses.png', 100, 20.99, 3, 4),
-(25, 'Le Petit Livre des citations latines', 'test', 'Delamaire', 'le_petit_livre_des_citations_latines.png', 100, 7.99, 3, 6),
-(43, 'Le Petit Livre des grandes coïncidences', 'test', 'Chiflet', 'le_petit_livre_des_grandes_coincidences.png', 100, 7.99, 3, 6),
-(44, 'Le Petit Livre des gros mensonges', 'test', 'Chiflet', 'le_petit_livre_des_gros_mensonges.png', 100, 7.99, 3, 6),
-(45, 'L\'Art de la guerre', 'test', 'Sun', 'l_art_de_la_guerre.png', 100, 12.99, 2, 7),
-(46, 'Apprendre à dessiner', 'test', 'Edwards', 'apprendre_a_dessiner.png', 100, 14.99, 4, 7),
-(47, 'Le Lean Startup', 'test', 'Ries', 'le_lean_startup.png', 100, 16.99, 4, 7),
-(48, 'Les Templiers', 'test', 'Demurger', 'les_templiers.png', 100, 18.99, 2, 8),
-(49, 'La Seconde Guerre mondiale', 'test', 'Beevor', 'la_seconde_guerre_mondiale.png', 100, 19.99, 2, 8),
-(50, 'Napoléon : Une ambition française', 'test', 'Tulard', 'napoleon_une_ambition_francaise.png', 100, 20.99, 2, 8);
+INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exemplaireLivre`, `prixLivre`, `idCategorie`, `idMaisonEdition`) VALUES
+(1, 'Alcools', 'Apollinaire', 'alcools.png', 99, 12.50, 3, 1),
+(2, 'Crime et Chatiment', 'Dostoïevski', 'crime_et_chatiment.png', 91, 15.00, 1, 2),
+(3, 'L`Etranger', 'Camus', 'l_etranger.png', 56, 10.00, 1, 3),
+(4, 'L`Odyssée', 'Homère', 'l_odyssee.png', 89, 13.50, 2, 4),
+(5, 'Les Fleurs du Mal', 'Baudelaire', 'les_fleurs_du_mal.png', 100, 14.00, 3, 5),
+(6, 'PHP et MySQL pour les nuls', 'Valade', 'php_et_mysql_pour_les_nuls.png', 79, 22.00, 4, 6),
+(7, 'Programmer en Java', 'Delannoy', 'programmer_en_java.png', 100, 25.00, 4, 7),
+(8, 'SPQR', 'Beard', 'spqr.png', 99, 18.00, 2, 8),
+(9, 'À la recherche du temps perdu', 'Proust', 'a_la_recherche_du_temps_perdu.png', 96, 0.00, 1, 1),
+(10, 'Les Misérables', 'Hugo', 'les_miserables_I.png', 99, 0.00, 1, 2),
+(11, '1984', 'Orwell', '1984.png', 95, 0.00, 1, 3),
+(12, 'L`Art d\'aimer', 'Ovide', 'l_art_d_aimer', 92, 0.00, 1, 4),
+(13, 'La Peste', 'Camus', 'la_peste.png', 98, 15.99, 1, 1),
+(14, 'Les Mémoires d\'Hadrien', 'Yourcenar', 'les_memoires_d_hadrien.png', 95, 12.99, 1, 1),
+(15, 'La Condition humaine', 'Malraux', 'la_condition_humaine.png', 100, 14.99, 1, 1),
+(16, 'Le Comte de Monte-Cristo', 'Dumas', 'le_comte_de_monte_cristo.png', 100, 9.99, 1, 2),
+(17, 'Orgueil et Préjugés', 'Austen', 'orgueil_et_prejuges.png', 100, 8.99, 1, 2),
+(18, 'Shining', 'King', 'shining.png', 100, 10.99, 1, 2),
+(19, 'Bel-Ami', 'Maupassant', 'bel_ami.png', 100, 11.99, 1, 3),
+(20, 'Fahrenheit 451', 'Bradbury', 'fahrenheit_451.png', 100, 9.99, 1, 3),
+(21, 'La Nuit des temps', 'Barjavel', 'la_nuit_des_temps.png', 100, 12.99, 1, 3),
+(22, 'L`Énéide', 'Virgile', 'l_eneide.png', 100, 19.99, 3, 4),
+(23, 'Les Pensées', 'Aurèle', 'les_pensees.png', 100, 18.99, 3, 4),
+(24, 'Les Métamorphoses', 'Ovide', 'les_metamorphoses.png', 100, 20.99, 3, 4),
+(25, 'Le Petit Livre des citations latines', 'Delamaire', 'le_petit_livre_des_citations_latines.png', 100, 7.99, 3, 6),
+(43, 'Le Petit Livre des grandes coïncidences', 'Chiflet', 'le_petit_livre_des_grandes_coincidences.png', 100, 7.99, 3, 6),
+(44, 'Le Petit Livre des gros mensonges', 'Chiflet', 'le_petit_livre_des_gros_mensonges.png', 100, 7.99, 3, 6),
+(45, 'L`Art de la guerre', 'Sun', 'l_art_de_la_guerre.png', 100, 12.99, 2, 7),
+(46, 'Apprendre à dessiner', 'Edwards', 'apprendre_a_dessiner.png', 100, 14.99, 4, 7),
+(47, 'Le Lean Startup', 'Ries', 'le_lean_startup.png', 100, 16.99, 4, 7),
+(48, 'Les Templiers', 'Demurger', 'les_templiers.png', 100, 18.99, 2, 8),
+(49, 'La Seconde Guerre mondiale', 'Beevor', 'la_seconde_guerre_mondiale.png', 100, 19.99, 2, 8),
+(50, 'Napoléon : Une ambition française', 'Tulard', 'napoleon_une_ambition_francaise.png', 100, 20.99, 2, 8),
+(51, 'dimanche', 'dimanche', 'dimanche.png', 180, 7.20, NULL, 3),
+(52, 'cate', 'cate', 'cate.png', 12, 12.00, NULL, 3),
+(53, 'fin', 'fin', 'fin.png', 360, 14.00, 4, 8);
 
 -- --------------------------------------------------------
 
@@ -728,14 +868,51 @@ INSERT INTO `maisonEdition` (`idMaisonEdition`, `nomMaisonEdition`) VALUES
 --
 
 CREATE TABLE `particulier` (
-  `idParticulier` int NOT NULL,
   `idUser` int NOT NULL,
-  `nomUser` varchar(255) NOT NULL,
-  `prenomUser` varchar(255) NOT NULL,
-  `adresseUser` varchar(255) NOT NULL,
-  `dateNaissanceUser` date NOT NULL,
-  `sexeUser` enum('M','F') NOT NULL
+  `emailUser` varchar(255) NOT NULL,
+  `mdpUser` varchar(255) NOT NULL,
+  `nomUser` varchar(255) DEFAULT NULL,
+  `prenomUser` varchar(255) DEFAULT NULL,
+  `adresseUser` varchar(255) DEFAULT 'adresse_inconnue',
+  `dateNaissanceUser` date DEFAULT NULL,
+  `sexeUser` enum('M','F') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `particulier`
+--
+
+INSERT INTO `particulier` (`idUser`, `emailUser`, `mdpUser`, `nomUser`, `prenomUser`, `adresseUser`, `dateNaissanceUser`, `sexeUser`) VALUES
+(28, 'michael@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'Arch', 'Michael', '23 rue de la Paix', '2001-12-12', 'M'),
+(29, 'ryles', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'ryles', 'ryles', '23 rue de la Paix', '2022-12-12', 'M'),
+(35, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'yasser', 'yasser', '23 rue de la Paix', '2010-12-21', 'M'),
+(36, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'yasser', 'yasser', '23 rue de la Paix', '2010-12-21', 'M'),
+(37, 'part@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'part', 'part', 'part', '2009-12-12', 'M'),
+(38, 'uy@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'uy', 'uy', 'uy', '2003-03-12', 'M');
+
+--
+-- Déclencheurs `particulier`
+--
+DELIMITER $$
+CREATE TRIGGER `tInsertParticulier` BEFORE INSERT ON `particulier` FOR EACH ROW BEGIN
+    IF NEW.idUser IS NULL OR NEW.idUser NOT IN (SELECT idUser FROM user) THEN
+        SET NEW.idUser = IFNULL((SELECT MAX(idUser) FROM user), 0) + 1;
+    END IF;
+    INSERT INTO user (idUser, emailUser, mdpUser, adresseUser, roleUser)
+    VALUES (NEW.idUser, NEW.emailUser, NEW.mdpUser, NEW.adresseUser, 'client');
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `tUpdateParticulier` BEFORE UPDATE ON `particulier` FOR EACH ROW BEGIN
+    UPDATE user
+    SET emailUser = NEW.emailUser,
+        mdpUser = NEW.mdpUser,
+        adresseUser = NEW.adresseUser
+    WHERE idUser = NEW.idUser;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -756,9 +933,10 @@ CREATE TABLE `promotion` (
 --
 
 INSERT INTO `promotion` (`idPromotion`, `idLivre`, `dateDebutPromotion`, `dateFinPromotion`, `prixPromotion`) VALUES
-(1, 3, '2025-01-05', '2025-01-20', 9.00),
+(1, 3, '2025-01-05', '2025-01-20', 12.00),
 (2, 6, '2025-02-01', '2025-02-15', 19.80),
-(3, 1, '2025-03-01', '2025-03-10', 11.25);
+(3, 1, '2025-03-01', '2025-03-10', 6.00),
+(6, 2, '2025-02-02', '2025-02-10', 10.00);
 
 -- --------------------------------------------------------
 
@@ -770,6 +948,7 @@ CREATE TABLE `user` (
   `idUser` int NOT NULL,
   `emailUser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `mdpUser` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `adresseUser` varchar(50) NOT NULL,
   `roleUser` enum('admin','client') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -777,15 +956,29 @@ CREATE TABLE `user` (
 -- Déchargement des données de la table `user`
 --
 
-INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `roleUser`) VALUES
-(1, 'ryles@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'admin'),
-(2, 'jean@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'client'),
-(12, 'm', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'client'),
-(13, 'klza', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'client'),
-(14, 'poi', '123', 'client'),
-(15, 'i', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'client'),
-(23, 'chouaki@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'client'),
-(24, 'bo@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'client');
+INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`) VALUES
+(1, 'ryles@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '123 Rue des Lilas', 'admin'),
+(2, 'jean@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '45 Avenue de la République', 'client'),
+(12, 'm', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '78 Boulevard Haussmann', 'client'),
+(13, 'klza', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '9 Place de la Liberté', 'client'),
+(14, 'poi', '123', '56 Rue Victor Hugo', 'client'),
+(15, 'i', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '34 Avenue Montaigne', 'client'),
+(23, 'chouaki@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '101 Rue Lafayette', 'client'),
+(24, 'bo@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '202 Avenue des Champs-Élysées', 'client'),
+(25, 'jean@gmail.com', 'motdepasse', '303 Boulevard Saint-Michel', 'client'),
+(26, 'entreprise@gmail.com', 'motdepasse', '404 Rue de Rivoli', 'client'),
+(27, 'entreprise@gmail.com', 'motdepasse', '505 Quai de la Tournelle', 'client'),
+(28, 'michael@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '89 Impasse des Cerisiers', 'client'),
+(29, 'ryles', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '102 Rue du Moulin', 'client'),
+(30, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '76 Avenue des Rosiers', 'client'),
+(31, 'entreprise@gmail.com', '123', '58 Chemin des Vignes', 'client'),
+(32, 'test@gmail.com', '123', '21 Boulevard de la Liberté', 'client'),
+(33, 'yass@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '34 Rue des Érables', 'client'),
+(34, '987987@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '47 Allée des Chênes', 'client'),
+(35, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '15 Route du Soleil', 'client'),
+(36, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '63 Place du Marché', 'client'),
+(37, 'part@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'part', 'client'),
+(38, 'uy@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'uy', 'client');
 
 -- --------------------------------------------------------
 
@@ -804,10 +997,10 @@ CREATE TABLE `vcommandesenattente` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vlivresenstock` (
-`exemplaireLivre` int
-,`idLivre` int
+`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
+,`exemplaireLivre` int
 );
 
 -- --------------------------------------------------------
@@ -825,57 +1018,24 @@ CREATE TABLE `vmeilleuresventes` (
 -- --------------------------------------------------------
 
 --
--- Doublure de structure pour la vue `vnbmaxlivre`
+-- Doublure de structure pour la vue `vmeilleursavis`
 -- (Voir ci-dessous la vue réelle)
 --
-CREATE TABLE `vnbmaxlivre` (
-`idUser` int
+CREATE TABLE `vmeilleursavis` (
+`idLivre` int
 ,`nomLivre` varchar(50)
-,`prixLivre` float(10,2)
-,`quantiteLigneCommande` int
-,`totalLivre` double(19,2)
+,`moyenneNote` decimal(7,4)
 );
 
 -- --------------------------------------------------------
 
 --
--- Doublure de structure pour la vue `vnbminlivre`
+-- Doublure de structure pour la vue `vnblivreacheteuser`
 -- (Voir ci-dessous la vue réelle)
 --
-CREATE TABLE `vnbminlivre` (
-`idUser` int
-,`nomLivre` varchar(50)
-,`prixLivre` float(10,2)
-,`quantiteLigneCommande` int
-,`totalLivre` double(19,2)
-);
-
--- --------------------------------------------------------
-
---
--- Doublure de structure pour la vue `vnommaxlivre`
--- (Voir ci-dessous la vue réelle)
---
-CREATE TABLE `vnommaxlivre` (
-`idUser` int
-,`nomLivre` varchar(50)
-,`prixLivre` float(10,2)
-,`quantiteLigneCommande` int
-,`totalLivre` double(19,2)
-);
-
--- --------------------------------------------------------
-
---
--- Doublure de structure pour la vue `vnomminlivre`
--- (Voir ci-dessous la vue réelle)
---
-CREATE TABLE `vnomminlivre` (
-`idUser` int
-,`nomLivre` varchar(50)
-,`prixLivre` float(10,2)
-,`quantiteLigneCommande` int
-,`totalLivre` double(19,2)
+CREATE TABLE `vnblivreacheteuser` (
+`emailUser` varchar(50)
+,`nbLivreAchete` decimal(32,0)
 );
 
 -- --------------------------------------------------------
@@ -922,7 +1082,9 @@ CREATE TABLE `vtotallivre` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vtotallivreenattente` (
-`idCommande` int
+`idLivre` int
+,`idCommande` int
+,`idLigneCommande` int
 ,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
@@ -938,8 +1100,8 @@ CREATE TABLE `vtotallivreenattente` (
 --
 CREATE TABLE `vtotallivreexpediee` (
 `idCommande` int
-,`idLivre` int
 ,`idUser` int
+,`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
 ,`quantiteLigneCommande` int
@@ -976,38 +1138,20 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
--- Structure de la vue `vnbmaxlivre`
+-- Structure de la vue `vmeilleursavis`
 --
-DROP TABLE IF EXISTS `vnbmaxlivre`;
+DROP TABLE IF EXISTS `vmeilleursavis`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vnbmaxlivre`  AS SELECT `vtotallivre`.`idUser` AS `idUser`, `vtotallivre`.`nomLivre` AS `nomLivre`, `vtotallivre`.`prixLivre` AS `prixLivre`, `vtotallivre`.`quantiteLigneCommande` AS `quantiteLigneCommande`, `vtotallivre`.`totalLivre` AS `totalLivre` FROM `vtotallivre` ORDER BY `vtotallivre`.`totalLivre` DESC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vmeilleursavis`  AS SELECT `l`.`idLivre` AS `idLivre`, `l`.`nomLivre` AS `nomLivre`, avg(`a`.`noteAvis`) AS `moyenneNote` FROM (`avis` `a` join `livre` `l` on((`a`.`idLivre` = `l`.`idLivre`))) GROUP BY `l`.`idLivre`, `l`.`nomLivre` ORDER BY `moyenneNote` DESC ;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la vue `vnbminlivre`
+-- Structure de la vue `vnblivreacheteuser`
 --
-DROP TABLE IF EXISTS `vnbminlivre`;
+DROP TABLE IF EXISTS `vnblivreacheteuser`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vnbminlivre`  AS SELECT `vtotallivre`.`idUser` AS `idUser`, `vtotallivre`.`nomLivre` AS `nomLivre`, `vtotallivre`.`prixLivre` AS `prixLivre`, `vtotallivre`.`quantiteLigneCommande` AS `quantiteLigneCommande`, `vtotallivre`.`totalLivre` AS `totalLivre` FROM `vtotallivre` ORDER BY `vtotallivre`.`totalLivre` ASC ;
-
--- --------------------------------------------------------
-
---
--- Structure de la vue `vnommaxlivre`
---
-DROP TABLE IF EXISTS `vnommaxlivre`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vnommaxlivre`  AS SELECT `vtotallivre`.`idUser` AS `idUser`, `vtotallivre`.`nomLivre` AS `nomLivre`, `vtotallivre`.`prixLivre` AS `prixLivre`, `vtotallivre`.`quantiteLigneCommande` AS `quantiteLigneCommande`, `vtotallivre`.`totalLivre` AS `totalLivre` FROM `vtotallivre` ORDER BY `vtotallivre`.`nomLivre` DESC ;
-
--- --------------------------------------------------------
-
---
--- Structure de la vue `vnomminlivre`
---
-DROP TABLE IF EXISTS `vnomminlivre`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vnomminlivre`  AS SELECT `vtotallivre`.`idUser` AS `idUser`, `vtotallivre`.`nomLivre` AS `nomLivre`, `vtotallivre`.`prixLivre` AS `prixLivre`, `vtotallivre`.`quantiteLigneCommande` AS `quantiteLigneCommande`, `vtotallivre`.`totalLivre` AS `totalLivre` FROM `vtotallivre` ORDER BY `vtotallivre`.`nomLivre` ASC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vnblivreacheteuser`  AS SELECT `u`.`emailUser` AS `emailUser`, sum(`l`.`quantiteLigneCommande`) AS `nbLivreAchete` FROM ((`lignecommande` `l` join `commande` `c` on((`l`.`idCommande` = `c`.`idCommande`))) join `user` `u` on((`c`.`idUser` = `u`.`idUser`))) WHERE (`c`.`statutCommande` = 'expédiée') GROUP BY `u`.`emailUser` ;
 
 -- --------------------------------------------------------
 
@@ -1043,7 +1187,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vtotallivreenattente`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vtotallivreenattente`  AS SELECT `li`.`idCommande` AS `idCommande`, `c`.`idUser` AS `idUser`, `l`.`nomLivre` AS `nomLivre`, `l`.`prixLivre` AS `prixLivre`, `li`.`quantiteLigneCommande` AS `quantiteLigneCommande`, (`l`.`prixLivre` * `li`.`quantiteLigneCommande`) AS `totalLivre` FROM ((`livre` `l` join `lignecommande` `li` on((`l`.`idLivre` = `li`.`idLivre`))) join `commande` `c` on((`c`.`idCommande` = `li`.`idCommande`))) WHERE (`c`.`statutCommande` = 'en attente') ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vtotallivreenattente`  AS SELECT `li`.`idLivre` AS `idLivre`, `li`.`idCommande` AS `idCommande`, `li`.`idLigneCommande` AS `idLigneCommande`, `c`.`idUser` AS `idUser`, `l`.`nomLivre` AS `nomLivre`, `l`.`prixLivre` AS `prixLivre`, `li`.`quantiteLigneCommande` AS `quantiteLigneCommande`, (`l`.`prixLivre` * `li`.`quantiteLigneCommande`) AS `totalLivre` FROM ((`livre` `l` join `lignecommande` `li` on((`l`.`idLivre` = `li`.`idLivre`))) join `commande` `c` on((`c`.`idCommande` = `li`.`idCommande`))) WHERE (`c`.`statutCommande` = 'en attente') ;
 
 -- --------------------------------------------------------
 
@@ -1097,8 +1241,7 @@ ALTER TABLE `commande`
 -- Index pour la table `entreprise`
 --
 ALTER TABLE `entreprise`
-  ADD PRIMARY KEY (`idEntreprise`),
-  ADD KEY `idUser` (`idUser`);
+  ADD PRIMARY KEY (`idUser`);
 
 --
 -- Index pour la table `ligneCommande`
@@ -1129,8 +1272,7 @@ ALTER TABLE `maisonEdition`
 -- Index pour la table `particulier`
 --
 ALTER TABLE `particulier`
-  ADD PRIMARY KEY (`idParticulier`),
-  ADD KEY `idUser` (`idUser`);
+  ADD PRIMARY KEY (`idUser`);
 
 --
 -- Index pour la table `promotion`
@@ -1177,25 +1319,25 @@ ALTER TABLE `categorie`
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=417;
+  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=456;
 
 --
 -- AUTO_INCREMENT pour la table `entreprise`
 --
 ALTER TABLE `entreprise`
-  MODIFY `idEntreprise` int NOT NULL AUTO_INCREMENT;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT pour la table `ligneCommande`
 --
 ALTER TABLE `ligneCommande`
-  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=674;
+  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=721;
 
 --
 -- AUTO_INCREMENT pour la table `livre`
 --
 ALTER TABLE `livre`
-  MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT pour la table `maisonEdition`
@@ -1207,19 +1349,19 @@ ALTER TABLE `maisonEdition`
 -- AUTO_INCREMENT pour la table `particulier`
 --
 ALTER TABLE `particulier`
-  MODIFY `idParticulier` int NOT NULL AUTO_INCREMENT;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT pour la table `promotion`
 --
 ALTER TABLE `promotion`
-  MODIFY `idPromotion` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idPromotion` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- Contraintes pour les tables déchargées
@@ -1254,7 +1396,7 @@ ALTER TABLE `commande`
 -- Contraintes pour la table `entreprise`
 --
 ALTER TABLE `entreprise`
-  ADD CONSTRAINT `entreprise_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `User` (`idUser`);
+  ADD CONSTRAINT `entreprise_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`);
 
 --
 -- Contraintes pour la table `ligneCommande`
@@ -1274,7 +1416,7 @@ ALTER TABLE `livre`
 -- Contraintes pour la table `particulier`
 --
 ALTER TABLE `particulier`
-  ADD CONSTRAINT `particulier_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `User` (`idUser`) ON DELETE CASCADE;
+  ADD CONSTRAINT `particulier_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`);
 
 --
 -- Contraintes pour la table `promotion`

@@ -16,8 +16,6 @@ if (isset($_POST['UpdateParticulier'])){
     $adresseUser = $_POST['adresseUser'];
     $dateNaissanceUser = $_POST['dateNaissanceUser'];
     $sexeUser = $_POST['sexeUser'];
-    var_dump($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser, $idUser);
-
 
     $unControleur->updateParticulier($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser, $idUser);
 }

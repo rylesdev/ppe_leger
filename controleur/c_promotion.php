@@ -9,7 +9,6 @@ if (isset($isAdmin) && $isAdmin == 1) {
         $nomLivre = $_POST['nomLivre'];
         $prixPromotion = $_POST['prixPromotion'];
         $dateFinPromotion = $_POST['dateFinPromotion'];
-        var_dump($nomLivre, $prixPromotion, $dateFinPromotion);
 
         $unControleur->procedureInsertOrUpdatePromotion($nomLivre, $prixPromotion, $dateFinPromotion);
     }

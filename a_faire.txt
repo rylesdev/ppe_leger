@@ -23,13 +23,13 @@ A FAIRE :
 
     Back-End
         Bug
+            - Je peux payer un livre de 100 points avec 70 points.
+
             - La méthode "selectLikeLivres" qui sert à filtrer les livres ne marche pas.
             Solution : Montrer au prof que le filtrage de la page Livre (le seul qui marche).
 
-            - Quand j'ajoute un livre avec une quantité de 12 (par exemple), la quantité sélectionnée est 3.
+            (Optionnel) - Quand j'ajoute un livre avec une quantité de 12 (par exemple), la quantité sélectionnée est 3.
             Réponse : Probablement un problème de synchronisation entre les "Confirmer la quantité".
-
-            - Quand je supprime un livre, la quantité du livre (exemplaireLivre) ne se met par à jour.
 
 
 
