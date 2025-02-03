@@ -11,8 +11,8 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
         $action = $_GET['action'];
 
         switch($action) {
-            case "sup" :    $unControleur->deleteLigneCommande($idCommande);
-                $unControleur->deleteCommande($idCommande);
+            case "sup" :    $unControleur->deleteLigneCommande($idLigneCommande);
+                //$unControleur->deleteCommande($idLigneCommande);
                 break;
 
             case "edit" :   if (isset($_POST['updateQuantiteLivre']) && $_POST['updateQuantiteLivre'] > 0) {

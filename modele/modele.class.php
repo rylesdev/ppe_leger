@@ -196,16 +196,6 @@
             return $exec->fetch();
         }
 
-        public function viewSelectTotalCommandeEnAttentePoint($idUser) {
-            $requete =  "select idUser, totalCommande * 10 as totalCommandeMultiplie
-                        from vTotalCommandeEnAttente
-                        where idUser = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetch();
-        }
-
         public function viewSelectTotalCommandeExpediee($idUser) {
             $requete =  "select * 
                         from vTotalCommandeExpediee   
@@ -410,7 +400,7 @@
         }
 
         public function selectLivrePromotion() {
-            $requete =  "select l.nomLivre, l.prixLivre, p.prixPromotion
+            $requete =  "select p.idLivre, l.nomLivre, l.prixLivre, p.prixPromotion
                         from promotion p
                         inner join livre l
                         on p.idLivre=l.idLivre;";
@@ -459,24 +449,24 @@
 			$exec->execute();
 		}
 
-        public function deleteLigneCommande($idCommande) {
+        public function deleteLigneCommande($idLigneCommande) {
             $requete =  "delete from 
                         ligneCommande 
-                        where idCommande = ?;";
+                        where idLigneCommande = ?;";
             $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue (1, $idCommande, PDO::PARAM_INT);
+            $exec->BindValue (1, $idLigneCommande, PDO::PARAM_INT);
             $exec->execute();
             return $exec->fetchAll();
         }
 
-        public function deleteCommande($idCommande) {
+        /*public function deleteCommande($idCommande) {
             $requete =  "delete 
                         from commande 
                         where idCommande = ?;";
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue (1, $idCommande, PDO::PARAM_INT);
             $exec->execute();
-        }
+        }*/
 
 
 		/**************** INSERT ****************/

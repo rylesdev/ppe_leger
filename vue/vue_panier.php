@@ -36,10 +36,6 @@ foreach ($lesCommandes as $uneCommande) {
     }
 }
 
-// Récupérer les points à utiliser
-$resultat = $unControleur->viewSelectTotalCommandeEnAttentePoint($idUser);
-$pointAUtiliser = $resultat['totalCommandeMultiplie'];
-
 // Récupérer l'adresse de l'utilisateur
 $adresseUser = $unControleur->selectAdresseUser($idUser);
 $adresseUser = $adresseUser['adresseUser'];
@@ -206,6 +202,7 @@ $dateCommande = $dateCommande[0];
             }
 
             if (isset($lesCommandes)) {
+
                 foreach ($lesCommandes as $uneCommande) {
                     $promotionTrouvee = false;
                     $prixPromotion = null;
@@ -218,13 +215,19 @@ $dateCommande = $dateCommande[0];
                         }
                     }
 
-                    $totalLivre = $promotionTrouvee && isset($prixPromotion) ? $prixPromotion * $uneCommande['quantiteLigneCommande'] : $uneCommande['prixLivre'] * $uneCommande['quantiteLigneCommande'];
+                    if ($promotionTrouvee && isset($prixPromotion)) {
+                        $totalLivre = $prixPromotion * $uneCommande['quantiteLigneCommande'];
+                        var_dump($totalLivre);
+                    } else {
+                        $totalLivre = $uneCommande['prixLivre'] * $uneCommande['quantiteLigneCommande'];
+                    }
 
                     echo "<tr>";
                     echo "<td>" . $uneCommande['nomLivre'] . "</td>";
                     echo "<td>";
                     if ($promotionTrouvee && isset($prixPromotion)) {
                         echo "<span class='old-price'>" . $uneCommande['prixLivre'] . "€</span> ";
+                        var_dump($prixPromotion);
                         echo "<span class='promo-price'>" . $prixPromotion . "€</span>";
                     } else {
                         echo $uneCommande['prixLivre'] . "€";
@@ -267,6 +270,7 @@ $dateCommande = $dateCommande[0];
                 <input type="text" id="montant" name="montant" value="<?php
                 if ($sommeAPayer > 0) {
                     echo $sommeAPayer . '€';
+                    $pointAUtiliser = $sommeAPayer * 10;
                 } else {
                     echo '0€';
                 }
@@ -294,7 +298,7 @@ $dateCommande = $dateCommande[0];
             <div class="pay-button">
                 <?php
                 echo "<input type='submit' name='PayerPaypal' value='Payer avec Paypal' class='btn btn-primary' style='margin-right: 10px;'>";
-                echo "<input type='submit' name='PayerStripe' value='Payer avec Stripe' class='btn btn-primary'>";
+                echo "<input type='submit' name='PayerPoint' value='Payer avec des points' class='btn btn-primary'>";
                 ?>
             </div>
         </form>

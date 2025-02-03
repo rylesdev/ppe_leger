@@ -56,10 +56,6 @@
 			return $this->unModele->viewSelectTotalCommandeEnAttente($idUser);
 		}
 
-		public function viewSelectTotalCommandeEnAttentePoint($idUser) {
-			return $this->unModele->viewSelectTotalCommandeEnAttentePoint($idUser);
-		}
-
 		public function viewSelectTotalCommandeExpediee($idUser) {
 			return $this->unModele->viewSelectTotalCommandeExpediee($idUser);
 		}
@@ -159,13 +155,13 @@
 			$this->unModele->deleteLivre($idLivre);
 		}
 
-		public function deleteLigneCommande($idCommande){
-			return $this->unModele->deleteLigneCommande($idCommande);
+		public function deleteLigneCommande($idLigneCommande){
+			return $this->unModele->deleteLigneCommande($idLigneCommande);
 		}
 
-		public function deleteCommande($idCommande){
-			$this->unModele->deleteCommande($idCommande);
-		}
+		/*public function deleteCommande($idLigneCommande){
+			$this->unModele->deleteCommande($idLigneCommande);
+		}*/
 
 
 		/**************** INSERT ****************/

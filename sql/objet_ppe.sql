@@ -32,7 +32,7 @@ group by c.idUser;
 
 
 CREATE OR REPLACE VIEW vTotalLivreEnAttente AS
-SELECT li.idCommande, li.idLigneCommande, c.idUser, l.nomLivre, l.prixLivre, li.quantiteLigneCommande, (l.prixLivre * li.quantiteLigneCommande) AS totalLivre
+SELECT li.idLivre, li.idCommande, li.idLigneCommande, c.idUser, l.nomLivre, l.prixLivre, li.quantiteLigneCommande, (l.prixLivre * li.quantiteLigneCommande) AS totalLivre
 FROM livre l
 INNER JOIN ligneCommande li
 ON l.idLivre = li.idLivre

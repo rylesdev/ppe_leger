@@ -22,32 +22,14 @@ A FAIRE :
 
 
     Back-End
-        PHPMYADMIN
-            - Mettre toutes les images des nouveaux livres insérés (12 livres) dans le dossier "images".
-
-
         Bug
-            (vue_panier.php) - Le prix des livres sont tous les mêmes.
-
-            - Les points ne sont pas mis à jour par rapport aux promotions des livres.
-
-            (vue_insert_avis.php) - Quand on insère un avis, si le livre est "l'Etranger" ou "l'Odyssée'",
-                il n'y a que le "L" qui s'affiche.
-            Réponse : La méthode "insertAvis" ferme lorsqu'il y a une single quote.
-
             - La méthode "selectLikeLivres" qui sert à filtrer les livres ne marche pas.
+            Solution : Montrer au prof que le filtrage de la page Livre (le seul qui marche).
 
-            (A vérifier) - La sélection de la quantité de livre ne marche pas.
-            Réponse : Trouver un moyen pour mettre en avant le premier truc qui marche.
+            - Quand j'ajoute un livre avec une quantité de 12 (par exemple), la quantité sélectionnée est 3.
+            Réponse : Probablement un problème de synchronisation entre les "Confirmer la quantité".
 
-            - Quand je modifie la quantité d'un livre dans la page Panier, tous les livres sont modifiés.
-
-            - Pour un nouveau user :
-                - Quand je supprime un livre, tous les livres se suppriment.
-                - Quand j'ajoute un livre avec une quantité de 12 (par exemple), la quantité sélectionnée est 3.
-                    Probablement un problème de synchronisation entre les "Confirmer la quantité".
-                        La machine doit certainement prendre les valeurs que j'ai inséré auparavant.
-                - Quand je supprime un livre, la quantité du livre (exemplaireLivre) ne se met par à jour.
+            - Quand je supprime un livre, la quantité du livre (exemplaireLivre) ne se met par à jour.
 
 
 
