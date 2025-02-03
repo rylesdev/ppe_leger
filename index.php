@@ -15,20 +15,63 @@ $isAdmin = $result[0][0];
     <title>PPE Book'In</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        h1 {
+            font-size: 3rem;
+            color: #2E6E49;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Style pour le rectangle de relief */
+        .relief-box {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background-color: #f9f9f9;
+            margin-top: 20px;
+            animation: slideIn 1s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Style pour les images dans la navbar */
+        #navbar img {
+            transition: transform 0.3s ease;
+        }
+
+        #navbar img:hover {
+            transform: scale(1.1);
+        }
+    </style>
 </head>
 <body>
 <center>
     <h1> Book'In </h1>
+    <div class="relief-box">
+        <img src="images/logo.png" height="100" width="100">
+        <?php
+        if (isset($isAdmin) && $isAdmin == 1) {
+            echo "/**************** Mode Admin ****************/";
+        }
+
+        if (!isset($_SESSION['emailUser'])) {
+            require_once("vue/vue_inscription.php");
+            require_once("vue/vue_connexion.php");
+        }
+        ?>
+    </div>
+
     <?php
-    if (isset($isAdmin) && $isAdmin == 1) {
-        echo "/**************** Mode Admin ****************/";
-    }
-
-    if (!isset($_SESSION['emailUser'])) {
-        require_once("vue/vue_connexion.php");
-        require_once("vue/vue_inscription.php");
-    }
-
     if (isset($_POST['Connexion'])) {
         $emailUser = $_POST['emailUser'];
         $mdpUser = $_POST['mdpUser'];
@@ -69,7 +112,6 @@ $isAdmin = $result[0][0];
 
         $unControleur->triggerInsertEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser);
     }
-
 
     if (isset($_SESSION['emailUser'])) {
 

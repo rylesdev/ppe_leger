@@ -5,7 +5,7 @@
 
 <form method="post">
     Filtrer par : <input type="text" name="filtre">
-    <input type="submit" name="Filtrer" value="Filtrer" class="table-success">
+    <input type="submit" name="FiltrerLivre" value="Filtrer" class="table-success">
 </form>
 <br>
 
@@ -25,23 +25,20 @@
     <tbody>
 
     <?php
-    // Appel de la méthode selectLivrePromotion() pour obtenir les promotions
     $livresPromotion = $unControleur->selectLivrePromotion();
 
     $idUser = $_SESSION['idUser'];
 
     if (isset($lesLivres)) {
         foreach ($lesLivres as $unLivre) {
-            // Vérification si le livre est en promotion
             $promotionTrouvee = false;
             $prixPromotion = null;
 
-            // On parcourt les livres en promotion pour vérifier si ce livre a une promotion
             foreach ($livresPromotion as $promo) {
                 if ($promo['nomLivre'] === $unLivre['nomLivre']) {
                     $promotionTrouvee = true;
-                    $prixPromotion = $promo['prixPromotion']; // Récupère le prix promotionnel
-                    break; // On a trouvé la promotion, on peut sortir de la boucle
+                    $prixPromotion = $promo['prixPromotion'];
+                    break;
                 }
             }
 
@@ -53,11 +50,9 @@
             echo "<td>" . $unLivre['nomMaisonEdition'] . "</td>";
             echo "<td>" . $unLivre['exemplaireLivre'] . "</td>";
 
-            // Si le livre est en promotion, afficher le prix promotionnel et barrer le prix normal
             if ($promotionTrouvee) {
                 echo "<td><del>" . $unLivre['prixLivre'] . "€</del> " . $prixPromotion . "€</td>";
             } else {
-                // Si pas de promotion, afficher le prix normal
                 echo "<td>" . $unLivre['prixLivre'] . "€</td>";
             }
 

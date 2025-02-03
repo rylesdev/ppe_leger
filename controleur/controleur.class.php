@@ -40,6 +40,10 @@
 			return $this->unModele->selectAdresseUser($idUser);
 		}
 
+        public function selectLigneCommande ($idUser){
+            return $this->unModele->selectLigneCommande($idCommande);
+        }
+
 		public function selectCommandeEnCours($idUser) {
 			return $this->unModele->selectCommandeEnCours($idUser);
 		}
@@ -140,6 +144,10 @@
             return $this->unModele->selectLivrePromotion();
         }
 
+        public function selectUnLivrePromotion($idLivre) {
+            return $this->unModele->selectUnLivrePromotion($idLivre);
+        }
+
         public function selectOffrirLivre($idUser) {
             return $this->unModele->selectOffrirLivre($idUser);
         }
@@ -228,8 +236,8 @@
 			return $this->unModele->updateCommande($idCommande);
 		}
 
-		public function updateLigneCommande ($quantiteLigneCommande, $idCommande) {
-			$this->unModele->updateLigneCommande ($quantiteLigneCommande, $idCommande);
+		public function updateLigneCommande ($quantiteLigneCommande, $idLigneCommande) {
+			$this->unModele->updateLigneCommande ($quantiteLigneCommande, $idLigneCommande);
 		}
 
 		public function ajouterPointAbonnement($pointAbonnement, $idUser) {

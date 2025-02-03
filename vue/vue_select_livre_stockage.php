@@ -2,7 +2,7 @@
 
 <form method="post">
     Filtrer par : <input type="text" name="filtre">
-    <input type="submit" name="Filtrer" value="Filtrer" class="table-success">
+    <input type="submit" name="FiltrerStockage" value="Filtrer" class="table-success">
 </form>
 <br>
 

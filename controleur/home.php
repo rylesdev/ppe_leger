@@ -1,21 +1,8 @@
 <?php
 require_once("modele/modele.class.php");
 
-session_start(); // Assurez-vous que la session est démarrée
+session_start();
 
-// Vérification et affichage de la variable de session
-if (!isset($_SESSION['livreOffert'])) {
-    echo "Variable de session non définie.";
-} else {
-    echo "Livre offert : " . $_SESSION['livreOffert'];
-}
-
-if (isset($_SESSION['livreOffert'])) {
-    echo $_SESSION['livreOffert'];
-    unset($_SESSION['livreOffert']);
-}
-
-// Récupérer les livres en promotion depuis le modèle
 $livresPromotion = $unControleur->selectLivrePromotion();
 ?>
 
@@ -34,10 +21,14 @@ $livresPromotion = $unControleur->selectLivrePromotion();
         }
 
         .header {
-            background-color: #2c6e49;
+            background-color: #2E6E49;
             color: white;
             text-align: center;
             padding: 20px;
+        }
+
+        .header h1 {
+            color: white !important;
         }
 
         .container {
@@ -200,6 +191,46 @@ $livresPromotion = $unControleur->selectLivrePromotion();
                 }
             } else {
                 echo "<p>Aucun livre en promotion pour le moment.</p>";
+            }
+            ?>
+        </div>
+    </div>
+
+    <!-- Nouvelle section : Livres les mieux vendus -->
+    <div class="promo-section">
+        <h2>Livres les mieux vendus</h2>
+        <div class="promo-books">
+            <?php
+            $vMeilleuresVentes = $unControleur->viewSelectMeilleuresVentes();
+            if (isset($vMeilleuresVentes) && count($vMeilleuresVentes) > 0) {
+                foreach ($vMeilleuresVentes as $livre) {
+                    echo "<div class='book-card'>";
+                    echo "<h3><a href='index.php?page=2'>" . $livre['nomLivre'] . "</a></h3>";
+                    echo "<p>Vendus : <strong>" . $livre['totalVendu'] . "</strong></p>";
+                    echo "</div>";
+                }
+            } else {
+                echo "<p>Aucune vente enregistrée.</p>";
+            }
+            ?>
+        </div>
+    </div>
+
+    <!-- Nouvelle section : Meilleurs avis -->
+    <div class="promo-section">
+        <h2>Livres les mieux notés</h2>
+        <div class="promo-books">
+            <?php
+            $vMeilleursAvis = $unControleur->viewMeilleursAvis();
+            if (isset($vMeilleursAvis) && count($vMeilleursAvis) > 0) {
+                foreach ($vMeilleursAvis as $livre) {
+                    echo "<div class='book-card'>";
+                    echo "<h3><a href='index.php?page=2'>" . $livre['nomLivre'] . "</a></h3>";
+                    echo "<p>Note moyenne : <strong>" . number_format($livre['moyenneNote'], 1) . "/5</strong></p>";
+                    echo "</div>";
+                }
+            } else {
+                echo "<p>Aucun avis disponible.</p>";
             }
             ?>
         </div>

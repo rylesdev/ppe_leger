@@ -7,7 +7,7 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
     require_once("vue/vue_commande.php");
 
 
-    if (isset($_POST['Filtrer'])) {
+    if (isset($_POST['FiltrerCommande'])) {
         $lesLivres = $unControleur->selectLikeLivres($_POST['filtre']);
     } else {
         $lesLivres = $unControleur->selectAllLivres($idUser);

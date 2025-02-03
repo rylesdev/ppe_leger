@@ -91,7 +91,7 @@ if (isset($_POST['Modifier'])) {
     header("Location: index.php?page=2");
 }
 
-if (isset($_POST['Filtrer'])) {
+if (isset($_POST['FiltrerLivre'])) {
     $lesLivres = $unControleur->selectLikeLivres($_POST['filtre']);
 } else {
     $lesLivres = $unControleur->selectAllLivres();

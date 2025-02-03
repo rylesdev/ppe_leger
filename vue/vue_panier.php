@@ -3,15 +3,48 @@ error_reporting(0);
 
 $idUser = $_SESSION['idUser'];
 
-$totalCommande = $unControleur->viewSelectTotalCommandeEnAttente($idUser);
-$sommeAPayer = $totalCommande['totalCommande'];
+// Récupérer les livres en promotion
+$livresPromotion = $unControleur->selectLivrePromotion();
 
+// Récupérer les livres dans le panier
+$lesCommandes = $unControleur->viewSelectTotalLivreEnAttente($idUser);
+
+// Initialiser le montant total ajusté avec les promotions
+$sommeAPayer = 0;
+
+// Parcourir les livres dans le panier pour appliquer les promotions
+foreach ($lesCommandes as $uneCommande) {
+    $idLivre = $uneCommande['idLivre'];
+    $prixLivre = $uneCommande['prixLivre'];
+    $quantite = $uneCommande['quantiteLigneCommande'];
+
+    // Vérifier si une promotion existe pour ce livre
+    $promotion = null;
+    foreach ($livresPromotion as $promo) {
+        if ($promo['idLivre'] === $idLivre) {
+            $promotion = $promo;
+            break;
+        }
+    }
+
+    if ($promotion && isset($promotion['prixPromotion'])) {
+        // Appliquer le prix promotionnel
+        $sommeAPayer += $promotion['prixPromotion'] * $quantite;
+    } else {
+        // Utiliser le prix normal
+        $sommeAPayer += $prixLivre * $quantite;
+    }
+}
+
+// Récupérer les points à utiliser
 $resultat = $unControleur->viewSelectTotalCommandeEnAttentePoint($idUser);
 $pointAUtiliser = $resultat['totalCommandeMultiplie'];
 
+// Récupérer l'adresse de l'utilisateur
 $adresseUser = $unControleur->selectAdresseUser($idUser);
 $adresseUser = $adresseUser['adresseUser'];
 
+// Récupérer la date de livraison
 $dateCommande = $unControleur->selectDateLivraisonCommande($idUser);
 $dateCommande = $dateCommande[0];
 ?>
@@ -60,8 +93,8 @@ $dateCommande = $dateCommande[0];
         }
 
         .payment-container {
-            width: 400px; /* Augmente la largeur */
-            height: 400px; /* Correspond à la largeur pour garder un carré */
+            width: 400px;
+            height: 400px;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 10px;
@@ -71,8 +104,6 @@ $dateCommande = $dateCommande[0];
             flex-direction: column;
             justify-content: space-between;
         }
-
-
 
         .payment-container h3 {
             text-align: center;
@@ -112,6 +143,16 @@ $dateCommande = $dateCommande[0];
         .pay-button button:hover {
             background-color: #005a93;
         }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #777;
+        }
+
+        .promo-price {
+            color: #e74c3c;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -120,7 +161,7 @@ $dateCommande = $dateCommande[0];
         <h3>Liste des livres</h3>
         <form method="post">
             Filtrer par : <input type="text" name="filtre">
-            <input type="submit" name="Filtrer" value="Filtrer" class="table-success">
+            <input type="submit" name="FiltrerPanier" value="Filtrer" class="table-success">
             <br><br>
             Trier par :
             <select name="tri" onchange="this.form.submit()">
@@ -164,18 +205,38 @@ $dateCommande = $dateCommande[0];
                 $lesCommandes = $unControleur->viewSelectNomMaxLivreEnAttente($idUser);
             }
 
-            if (isset($lesCommandes)){
+            if (isset($lesCommandes)) {
                 foreach ($lesCommandes as $uneCommande) {
+                    $promotionTrouvee = false;
+                    $prixPromotion = null;
+
+                    foreach ($livresPromotion as $promo) {
+                        if ($promo['idLivre'] === $uneCommande['idLivre']) {
+                            $promotionTrouvee = true;
+                            $prixPromotion = $promo['prixPromotion'];
+                            break;
+                        }
+                    }
+
+                    $totalLivre = $promotionTrouvee && isset($prixPromotion) ? $prixPromotion * $uneCommande['quantiteLigneCommande'] : $uneCommande['prixLivre'] * $uneCommande['quantiteLigneCommande'];
+
                     echo "<tr>";
-                    echo "<td>".$uneCommande['nomLivre']."</td>";
-                    echo "<td>".$uneCommande['prixLivre']."€</td>";
-                    echo "<td> * </td>";
-                    echo "<td>".$uneCommande['quantiteLigneCommande']."</td>";
-                    echo "<td> = </td>";
-                    echo "<td>".$uneCommande['totalLivre']."€</td>";
+                    echo "<td>" . $uneCommande['nomLivre'] . "</td>";
                     echo "<td>";
-                    echo "<a href='index.php?page=3&action=sup&idCommande=" . $uneCommande['idCommande'] . "'>" . "<img src='images/supprimer.png' heigth='30' width='30'> </a>";
-                    echo "<a href='index.php?page=3&action=edit&idCommande=" . $uneCommande['idCommande'] . "'>" . "<img src='images/editer.png' heigth='30' width='30'> </a>";
+                    if ($promotionTrouvee && isset($prixPromotion)) {
+                        echo "<span class='old-price'>" . $uneCommande['prixLivre'] . "€</span> ";
+                        echo "<span class='promo-price'>" . $prixPromotion . "€</span>";
+                    } else {
+                        echo $uneCommande['prixLivre'] . "€";
+                    }
+                    echo "</td>";
+                    echo "<td> * </td>";
+                    echo "<td>" . $uneCommande['quantiteLigneCommande'] . "</td>";
+                    echo "<td> = </td>";
+                    echo "<td>" . $totalLivre . "€</td>";
+                    echo "<td>";
+                    echo "<a href='index.php?page=3&action=sup&idCommande=" . $uneCommande['idCommande'] . "&idLigneCommande=" . $uneCommande['idLigneCommande'] . "'>" . "<img src='images/supprimer.png' height='30' width='30'> </a>";
+                    echo "<a href='index.php?page=3&action=edit&idCommande=" . $uneCommande['idCommande'] . "&idLigneCommande=" . $uneCommande['idLigneCommande'] . "'>" . "<img src='images/editer.png' height='30' width='30'> </a>";
                     ?>
                     <form method="post">
                         <table>
@@ -228,12 +289,12 @@ $dateCommande = $dateCommande[0];
             </div>
             <div class="form-group">
                 <label for="date-livraison">Date de livraison</label>
-                <input type="date" id="date-livraison" name="date-livraison" value ="<?php echo $dateCommande ?>" readonly>
+                <input type="date" id="date-livraison" name="date-livraison" value="<?php echo $dateCommande; ?>" readonly>
             </div>
             <div class="pay-button">
                 <?php
                 echo "<input type='submit' name='PayerPaypal' value='Payer avec Paypal' class='btn btn-primary' style='margin-right: 10px;'>";
-                echo "<input type='submit' name='PayerPoint' value='Payer avec points' class='btn btn-primary'>";
+                echo "<input type='submit' name='PayerStripe' value='Payer avec Stripe' class='btn btn-primary'>";
                 ?>
             </div>
         </form>

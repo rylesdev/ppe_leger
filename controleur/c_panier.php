@@ -7,6 +7,7 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
     require_once("vue/vue_panier.php");
     if (isset($_GET['action'])){
         $idCommande = $_GET['idCommande'];
+        $idLigneCommande = $_GET['idLigneCommande'];
         $action = $_GET['action'];
 
         switch($action) {
@@ -16,11 +17,11 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
 
             case "edit" :   if (isset($_POST['updateQuantiteLivre']) && $_POST['updateQuantiteLivre'] > 0) {
                 $quantiteLigneCommande = $_POST['updateQuantiteLivre'];
-                $unControleur->updateLigneCommande($quantiteLigneCommande, $idCommande);
+                $unControleur->updateLigneCommande($quantiteLigneCommande, $idLigneCommande);
                 echo "<h3 style='color: green;'>Livre modifié avec succès !</h3>";
             } elseif (isset($_POST['updateQuantiteLivre']) && $_POST['updateQuantiteLivre'] == null) {
                 $quantiteLigneCommande = 1;
-                $unControleur->updateLigneCommande($quantiteLigneCommande, $idCommande);
+                $unControleur->updateLigneCommande($quantiteLigneCommande, $idLigneCommande);
                 echo "<h3 style='color: green;'>Livre modifié avec succès !</h3>";
             }
                 break;
@@ -63,12 +64,11 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
         }
     }
 
-    if (isset($_POST['Filtrer'])) {
+    if (isset($_POST['FiltrerPanier'])) {
         $lesLivres = $unControleur->selectLikeLivres($_POST['filtre']);
     } else {
-        $lesLivres = $unControleur->selectAllLivres($idUser);
+        $lesLivres = $unControleur->selectAllLivres();
     }
-
 } else {
     echo "Page indisponible pour le rôle admin.";
 }

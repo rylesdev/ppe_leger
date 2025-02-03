@@ -26,7 +26,7 @@
             </td>
         </tr>
         <tr>
-            <td> Adresse EMail </td>
+            <td> Adresse Email </td>
             <td><input type="email" name="emailUser"></td>
         </tr>
         <tr>

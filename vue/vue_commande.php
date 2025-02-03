@@ -4,7 +4,6 @@ error_reporting(0);
 $idUser = $_SESSION['idUser'];
 
 $totalCommande = $unControleur->viewSelectTotalCommandeExpediee($idUser);
-
 $sommeAPayer = $totalCommande['totalCommande'];
 
 $adresseUser = $unControleur->selectAdresseUser($idUser);
@@ -139,6 +138,29 @@ $dateCommande = $dateCommande[0];
         .star-rating label:hover ~ label {
             color: #ffcc00;
         }
+
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 10px;
+            resize: vertical;
+        }
+
+        button[type='submit'] {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type='submit']:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
@@ -147,7 +169,7 @@ $dateCommande = $dateCommande[0];
         <h3>Liste des livres</h3>
         <form method="post">
             Filtrer par : <input type="text" name="filtre">
-            <input type="submit" name="Filtrer" value="Filtrer" class="table-success">
+            <input type="submit" name="FiltrerCommande" value="Filtrer" class="table-success">
             <br><br>
             Trier par :
             <select name="tri" onchange="this.form.submit()">
@@ -192,26 +214,27 @@ $dateCommande = $dateCommande[0];
                 $lesCommandes = $unControleur->viewSelectNomMaxLivreExpediee($idUser);
             }
 
-            if (isset($lesCommandes)){
+            if (isset($lesCommandes)) {
                 foreach ($lesCommandes as $uneCommande) {
                     echo "<tr>";
-                    echo "<td>".$uneCommande['nomLivre']."</td>";
-                    echo "<td>".$uneCommande['prixLivre']."€</td>";
+                    echo "<td>" . $uneCommande['nomLivre'] . "</td>";
+                    echo "<td>" . $uneCommande['prixLivre'] . "€</td>";
                     echo "<td> * </td>";
-                    echo "<td>".$uneCommande['quantiteLigneCommande']."</td>";
+                    echo "<td>" . $uneCommande['quantiteLigneCommande'] . "</td>";
                     echo "<td> = </td>";
-                    echo "<td>".$uneCommande['totalLivre']."€</td>";
+                    echo "<td>" . $uneCommande['totalLivre'] . "€</td>";
 
                     $nomLivre = $uneCommande['nomLivre'];
                     $idLivre = $uneCommande['idLivre'];
                     echo "<td>";
                     echo "<form method='post'>";
-                    echo "<input type='hidden' name='nomLivre' value='".$nomLivre."'>";
-                    echo "<input type='hidden' name='idLivre' value='".$idLivre."'>";
+                    echo "<input type='hidden' name='nomLivre' value='" . $nomLivre . "'>";
+                    echo "<input type='hidden' name='idLivre' value='" . $idLivre . "'>";
                     echo "<div class='star-rating'>";
                     for ($i = 5; $i >= 1; $i--) {
-                        echo "<input type='radio' id='star$i' name='noteAvis' value='$i' />";
-                        echo "<label for='star$i'>★</label>";
+                        $starId = 'star' . $i . '_' . $idLivre; // Ajout de l'ID du livre pour rendre l'ID unique
+                        echo "<input type='radio' id='$starId' name='noteAvis' value='$i' />";
+                        echo "<label for='$starId'>★</label>";
                     }
                     echo "</div>";
                     echo "<textarea name='commentaireAvis' placeholder='Écrire un avis...'></textarea>";
@@ -222,7 +245,7 @@ $dateCommande = $dateCommande[0];
                     echo "</tr>";
                 }
             }
-            require_once("vue/vue_insert_avis.php")
+            require_once("vue/vue_insert_avis.php");
             ?>
             </tbody>
         </table>

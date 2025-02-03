@@ -17,7 +17,7 @@ if (isset($isAdmin) && $isAdmin == 1) {
         }
     }
 
-if (isset($_POST['Filtrer'])){
+if (isset($_POST['FiltrerStockage'])){
     $lesLivres = $unControleur->selectLikeLivres($_POST['filtre']);
 } else {
     $lesLivres = $unControleur->selectAllLivres ($idUser);

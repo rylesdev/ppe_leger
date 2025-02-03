@@ -82,23 +82,28 @@
 			return $exec->fetchAll();
 		}
 
-        // La méthode "selectLikeLivres" ne marche pas.
 		public function selectLikeLivres ($filtre){
-			$requete =  "select l.*, c.nomCategorie
-						from livre l   
-						inner join categorie c 
-						on l.idCategorie=c.idCategorie
-						where prixLivre !=  and l.idLivre like :filtre or 
-						l.nomLivre like :filtre or 
-						c.nomCategorie like :filtre or 
-						l.auteurLivre like :filtre
-						group by    l.idLivre, 
-						            l.nomLivre, 
-						            c.nomCategorie, 
-						            l.auteurLivre, 
-						            l.imageLivre, 
-						            l.exemplaireLivre, 
-						            l.prixLivre;";
+			$requete =  "SELECT l.*, c.nomCategorie, m.nomMaisonEdition
+                        FROM livre l   
+                        INNER JOIN categorie c 
+                        ON l.idCategorie = c.idCategorie
+                        INNER JOIN maisonEdition m 
+                        ON l.idMaisonEdition = m.idMaisonEdition
+                        WHERE prixLivre != 0 
+                        AND (
+                            l.nomLivre LIKE :filtre OR 
+                            c.nomCategorie LIKE :filtre OR 
+                            l.auteurLivre LIKE :filtre OR
+                            m.nomMaisonEdition LIKE :filtre 
+                        )
+                        GROUP BY l.idLivre, 
+                                 l.nomLivre, 
+                                 c.nomCategorie, 
+                                 l.auteurLivre, 
+                                 m.nomMaisonEdition,
+                                 l.imageLivre, 
+                                 l.exemplaireLivre, 
+                                 l.prixLivre;";
 			$exec = $this->unPdo->prepare ($requete);
 			$donnees = array(":filtre"=>"%".$filtre."%");
 			$exec->execute ($donnees);
@@ -414,6 +419,18 @@
             return $exec->fetchAll();
         }
 
+        public function selectUnLivrePromotion($idLivre) {
+            $requete =  "select prixPromotion 
+                        from promotion 
+                        where idLivre = ? 
+                        and dateDebut <= curdate() 
+                        and dateFin >= curdate()";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idLivre, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
         public function selectOffrirLivre($idUser) {
             $requete =  "select l.nomLivre
                         from ligneCommande li
@@ -689,13 +706,13 @@
             return $exec->fetchAll();
         }
 
-        public function updateLigneCommande ($quantiteLigneCommande, $idCommande) {
+        public function updateLigneCommande ($quantiteLigneCommande, $idLigneCommande) {
             $requete =  "update ligneCommande
                         set quantiteLigneCommande = ?
-                        where idCommande = ?;";
+                        where idLigneCommande = ?;";
             $exec = $this->unPdo->prepare ($requete);
             $exec->BindValue (1, $quantiteLigneCommande, PDO::PARAM_INT);
-            $exec->BindValue (2, $idCommande, PDO::PARAM_INT);
+            $exec->BindValue (2, $idLigneCommande, PDO::PARAM_INT);
             $exec->execute();
             return $this->unPdo->lastInsertId();
         }
