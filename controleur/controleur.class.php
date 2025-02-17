@@ -20,6 +20,10 @@
             return $this->unModele->selectEntreprise($idUser);
         }
 
+        public function selectUser($idUser) {
+            return $this->unModele->selectUser($idUser);
+        }
+
 		public function selectAdminPrincipal($idUser) {
 			return $this->unModele->selectAdminPrincipal($idUser);
 		}

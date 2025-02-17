@@ -1,30 +1,74 @@
 Priorité :
 
+Chouaki :
+    - Mot de passe oublié dans la Page Connexion.
+        require_once("mdp_oublié")
+            form
+            ancien mdp
+            nouveau mdp
+            confirmer mdp
+            quand input, alors updateMdp dans le modele
 
+    - Renouvellement du mot de passe tous les 90 jours.
+        Lors de l'inscription il faut afficher un message de mdp d'une durée de 90 jours
+        après les 90 jours, il faudrait que l'utilisateur ne puisse plus se connecter
+
+    - Archiver toutes les commandes qui ont été expédiées avec le nom du client.
+        Archivage qui va select le idCommande, le nomUser where statutCommande = 'expédiée'
+
+    - Créer une view sur le nombre de livres vendus par catégorie
+        create view...
+
+    - Ajouter le champ "nbCom" sur la table user qui permet, après chaque achat d'un livre, d'incrémenter automatiquement le champ nbCom
+        view qui va count le nombre de ligneCommande where statutCommande='expédiée and idUser = ?'
 
 
 A FAIRE :
-    Front-Office
-        Général :
-            - Travailler le front-office (html / css / js) pour améliorer l'esthétique du site.
-            - Utiliser ChatGPT pour modifier visuellement toutes les pages du site (voir barre de favoris sur chrome).
+    FRONT-END
+Yasser
+        Page Connexion :
+            - Rendre la page plus esthétique
+            - Réduire la taille des boutons
+            - Mettre une image ou une couleur de fond qui sera la même que sur les autres pages du site
+            - Mettre les vues Inscription et Connexion dans un carré
+            - Changer la navbar pour mettre la page Panier, Commande, Abonnement, Informations, et Déconnexion sur le côté
+                            (Exemple : https://shop.labourseauxlivres.fr/ https://www.lalibrairie.com/)
 
-        NavBar :
-            - Changer les logos ou bien mettre des écritures à la place.
 
-        Panier :
+Ryles
+        Page du site :
+            - Mettre la liste des livres sur la page Accueil (page principale) et supprimer le logo de la liste des livres
+
+
+
+        Page Panier :
             - (c_panier.php) Trouver un moyen pour que, quand le user clique sur Paypal,
-               l'utilisateur soit redirigé vers Paypal.
-               "header("Location: https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR");"
+                l'utilisateur soit redirigé vers Paypal.
+                "header("Location: https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR");"
 
             - (c_abonnement.php) Lorsque l'utilisateur clique sur l'abonnement,
                 il faut qu'il soit redirigé vers Paypal.
                 "header("Location: https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR");"
 
 
-    Back-End
+
+    BACK-END
         PHPMyAdmin
             - Faire un système qui va bloquer l'inscription si le email existe déjà dans la table user.
+
+            - Prévenir à l’utilisateur, lors de l’inscription, que le mot de passe doit être renouvelé tous les 90 jours
+            - Tous les 3 mois le mot de passe doit être expiré et l’utilisateur devra le changer sinon il pourra pas se connecter
+            - Créer un bouton "mot de passe oublié" pour que le user puisse changer son mot de passe
+            - Envoyer un mail quand l’utilisateur a fait une commande pour le prévenir que sa commande est expédiée
+            - Envoyer un mail quand l’utilisateur a fait une commande pour le prévenir que sa commande est arrivée
+
+            - Modifier la base de donnée pour que les spécialisations de la table User soient correctement déclarées. C’est-à-dire que les champs de la table Particulier, par exemple, ne soient pas présents tel qu’ils le sont dans la table User.
+            - Suite à cela, modifier les triggers des héritages et le modele des héritages (Procédure, insert, select, etc…).
+            - Modifier la base de donnée pour qu’elle ai une logique de MCD correcte (notamment au niveau des clés étrangères qui sont au mauvais endroits (Abonnement et User par exemple)).
+
+            - Voir si le "statutCommande='annulée'" a une utilité dans le code.
+                Si ce n'est pas le cas alors le supprimer
+
 
         Bug
             - Je peux payer un livre de 100 points avec 70 points.
