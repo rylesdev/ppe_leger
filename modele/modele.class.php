@@ -5,7 +5,7 @@
 		public function __construct(){
 			try{
 				$serveur = "localhost:8889"; 
-				$bdd     = "ppe";
+				$bdd     = "ppe_leger";
 				$user    = "root"; 
 				$mdp     = "root"; 
 				$this->unPdo = new PDO("mysql:host=".$serveur.";dbname=".$bdd, $user, $mdp);
