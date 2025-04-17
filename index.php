@@ -1,6 +1,5 @@
 <?php
 session_start();
-error_reporting(0);
 require_once("controleur/controleur.class.php");
 
 $unControleur = new Controleur();

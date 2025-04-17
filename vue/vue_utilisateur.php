@@ -6,64 +6,8 @@ Informations de l'utilisateur
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="includes/css/vue_utilisateur.css">
     <title>Informations de l'utilisateur</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        .container {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .user-info {
-            margin-bottom: 20px;
-        }
-        .user-info label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .user-info span {
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        .table-success {
-            background-color: #2E6E49 !important;
-            color: white !important;
-        }
-
-        .footer {
-            background-color: #2c6e49;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 10px;
-        }
-
-        .footer-banner-img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-    </style>
 </head>
 
 <body>
@@ -95,8 +39,8 @@ Informations de l'utilisateur
     }
     ?>
 </div>
-<footer class="footer">
-    <p>&copy; 2025 Librairie en ligne - Tous droits réservés</p>
-</footer>
+<?php
+require_once("includes/footer.php");
+?>
 </body>
 </html>

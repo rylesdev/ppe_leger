@@ -1,4 +1,5 @@
 <h2> Inscription </h2>
+<link rel="stylesheet" href="includes/css/vue_inscription.css">
 
 <?php
 echo '<a href="index.php?inscription=particulier"><button class="btn-green">Vous êtes un particulier</button></a><br>';
@@ -15,24 +16,3 @@ switch ($inscription) {
         break;
 }
 ?>
-
-<style>
-    .btn-green {
-        background-color: #2E6E49;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-        border-radius: 5px;
-        font-size: 16px;
-        transition: background-color 0.3s ease;
-    }
-
-    .btn-green:hover {
-        background-color: #245c3d;
-    }
-
-    .btn-green:active {
-        background-color: #1b472f;
-    }
-</style>

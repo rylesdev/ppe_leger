@@ -1,4 +1,5 @@
 <header class="header">
+    <link rel="stylesheet" href="includes/css/vue_insert_livre.css">
     <h2> Ajout d'un livre </h2>
 </header>
 <form method="post">
@@ -56,12 +57,3 @@
 </form>
 
 <br><br>
-
-<style>
-    .header {
-            background-color: #2c6e49;
-            color: white;
-            text-align: center;
-            padding: 20px;
-    }
-</style>

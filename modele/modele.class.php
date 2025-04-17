@@ -425,10 +425,7 @@
         }
 
         public function selectLivrePromotion() {
-            $requete =  "select p.idLivre, l.nomLivre, l.prixLivre, p.prixPromotion
-                        from promotion p
-                        inner join livre l
-                        on p.idLivre=l.idLivre;";
+            $requete =  "select * from livre;";
             $exec = $this->unPdo->prepare($requete);
             $exec->execute();
             return $exec->fetchAll();

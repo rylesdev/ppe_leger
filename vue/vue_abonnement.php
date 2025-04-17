@@ -13,82 +13,8 @@ $idUser = $_SESSION['idUser'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="includes/css/vue_abonnement.css">
     <title>Abonnement</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            padding: 15px;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .btn-primary {
-            background-color: #007bff;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-
-        .table-success {
-            background-color: #2E6E49 !important;
-            color: white !important;
-        }
-
-        .footer {
-            background-color: #2c6e49;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 10px;
-        }
-
-        .footer-banner-img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-    </style>
 </head>
 <body>
 <div class="container">
@@ -137,8 +63,8 @@ $idUser = $_SESSION['idUser'];
         </tr>
     </table>
 </div>
-<footer class="footer">
-    <p>&copy; 2025 Librairie en ligne - Tous droits réservés</p>
-</footer>
+<?php
+require_once("includes/footer.php");
+?>
 </body>
 </html>

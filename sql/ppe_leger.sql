@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : jeu. 10 avr. 2025 à 18:28
+-- Généré le : jeu. 17 avr. 2025 à 10:42
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -802,7 +802,7 @@ CREATE TABLE `livre` (
 --
 
 INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exemplaireLivre`, `prixLivre`, `idCategorie`, `idMaisonEdition`, `idPromotion`) VALUES
-(1, 'Alcools', 'Apollinaire', 'alcools.png', 99, 12.50, 3, 1, NULL),
+(1, 'Alcools', 'Apollinaire', 'alcools.png', 99, 12.50, 3, 1, 1),
 (2, 'Crime et Chatiment', 'Dostoïevski', 'crime_et_chatiment.png', 89, 15.00, 1, 2, NULL),
 (3, 'L`Etranger', 'Camus', 'l_etranger.png', 56, 10.00, 1, 3, NULL),
 (4, 'L`Odyssée', 'Homère', 'l_odyssee.png', 89, 13.50, 2, 4, NULL),
@@ -944,7 +944,9 @@ INSERT INTO `promotion` (`idPromotion`, `nomPromotion`, `dateDebutPromotion`, `d
 (5, '50%', '2025-03-26', '2026-12-12', 50),
 (6, '60%', '2025-02-02', '2025-02-10', 60),
 (7, '70%', '2025-03-26', '2026-12-12', 70),
-(8, '80%', '2025-03-26', '2026-12-12', 80);
+(8, '80%', '2025-03-26', '2026-12-12', 80),
+(9, '90%', '2025-01-05', '2025-01-20', 90),
+(10, 'Aucune promotion', '2025-01-05', '2025-01-20', 0);
 
 -- --------------------------------------------------------
 
@@ -1006,10 +1008,10 @@ CREATE TABLE `vcommandesenattente` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vlivresenstock` (
-`idLivre` int
+`exemplaireLivre` int
+,`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
-,`exemplaireLivre` int
 );
 
 -- --------------------------------------------------------
@@ -1032,8 +1034,8 @@ CREATE TABLE `vmeilleuresventes` (
 --
 CREATE TABLE `vmeilleursavis` (
 `idLivre` int
-,`nomLivre` varchar(50)
 ,`moyenneNote` decimal(7,4)
+,`nomLivre` varchar(50)
 );
 
 -- --------------------------------------------------------
@@ -1091,9 +1093,9 @@ CREATE TABLE `vtotallivre` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vtotallivreenattente` (
-`idLivre` int
-,`idCommande` int
+`idCommande` int
 ,`idLigneCommande` int
+,`idLivre` int
 ,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
@@ -1109,8 +1111,8 @@ CREATE TABLE `vtotallivreenattente` (
 --
 CREATE TABLE `vtotallivreexpediee` (
 `idCommande` int
-,`idUser` int
 ,`idLivre` int
+,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
 ,`quantiteLigneCommande` int
@@ -1361,7 +1363,7 @@ ALTER TABLE `particulier`
 -- AUTO_INCREMENT pour la table `promotion`
 --
 ALTER TABLE `promotion`
-  MODIFY `idPromotion` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `idPromotion` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pour la table `user`

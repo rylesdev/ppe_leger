@@ -1,4 +1,5 @@
 <header style="background-color: #2E6E49; color: white; text-align: center; padding: 15px; font-size: 24px; font-weight: bold;">
+    <link rel="stylesheet" href="includes/css/vue_statistique.css">
 Statistiques
 </header>
 <table class="table" style="margin-left: 50px ; margin-right: 50px">
@@ -52,12 +53,5 @@ Statistiques
 
     echo "</tr>";
     ?>
-    <style>
-        .table-success {
-        background-color: #2E6E49 !important;
-        color: white !important;
-        }
-    </style>
-
     </tbody>
 </table>
