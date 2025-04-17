@@ -1,8 +1,6 @@
 <?php
 require_once("modele/modele.class.php");
 
-session_start();
-
 $livresPromotion = $unControleur->selectLivrePromotion();
 ?>
 
@@ -11,140 +9,8 @@ $livresPromotion = $unControleur->selectLivrePromotion();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="includes/css/home.css">
     <title>Librairie en ligne</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-
-        .header {
-            background-color: #2E6E49;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .header h1 {
-            color: white !important;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .images-container {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-        }
-
-        .image {
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .promo-section {
-            margin-top: 40px;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .promo-section h2 {
-            font-size: 2em;
-            text-align: center;
-            color: #5c4033; /* Marron clair */
-            margin-bottom: 20px;
-        }
-
-        .promo-books {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-        }
-
-        .book-card {
-            background-color: #fff;
-            border-radius: 8px;
-            width: 250px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-
-        .book-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .book-card img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-        }
-
-        .book-card h3 {
-            color: #2c6e49; /* Vert foncé */
-            font-size: 1.5em;
-            margin: 10px 0;
-        }
-
-        .book-card p {
-            color: #777;
-            font-size: 1em;
-            margin-bottom: 10px;
-        }
-
-        .book-card .price {
-            font-size: 1.2em;
-            color: #e74c3c; /* Rouge */
-            font-weight: bold;
-        }
-
-        .book-card .old-price {
-            font-size: 1.2em;
-            color: #777;
-            text-decoration: line-through;
-            margin-bottom: 10px;
-        }
-
-        .footer {
-            background-color: #2c6e49;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-        }
-
-        .button-offert {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #28a745; /* Vert */
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 1.2em;
-            margin-top: 20px;
-        }
-
-        .button-offert:hover {
-            background-color: #218838; /* Vert foncé */
-        }
-
-        .livre-offert-section {
-            text-align: center;
-            margin-top: 30px;
-        }
-    </style>
 </head>
 <body>
 
@@ -181,16 +47,33 @@ $livresPromotion = $unControleur->selectLivrePromotion();
         <h2>Livres actuellement en Promotion</h2>
         <div class="promo-books">
             <?php
-            if (isset($livresPromotion) && count($livresPromotion) > 0) {
+            if (!empty($livresPromotion)) {
+                $hasPromotions = false;
+
                 foreach ($livresPromotion as $livre) {
-                    echo "<div class='book-card'>";
-                    echo "<h3><a href='index.php?page=2'>" . $livre['nomLivre'] . "</a></h3>";
-                    echo "<p class='old-price'>" . $livre['prixLivre'] . "€</p>";
-                    echo "<p class='price'>" . $livre['prixPromotion'] . "€</p>";
-                    echo "</div>";
+                    if (!empty($livre['idPromotion'])) {
+                        $hasPromotions = true;
+
+                        $pourcentagePromo = $livre['idPromotion'];
+                        $pourcentagePromo = $pourcentagePromo * 10;
+
+                        $nouveauPrix = $livre['prixLivre'] * (1 - $pourcentagePromo / 100);
+
+                        echo "<div class='book-card'>";
+                        echo "<img src='".htmlspecialchars($livre['imageLivre'])."' alt='".htmlspecialchars($livre['nomLivre'])."'>";
+                        echo "<h3><a href='index.php?page=2&id=".$livre['idLivre']."'>" . htmlspecialchars($livre['nomLivre']) . "</a></h3>";
+                        echo "<p>Auteur: " . htmlspecialchars($livre['auteurLivre']) . "</p>";
+                        echo "<p class='old-price'>Ancien prix: " . number_format($livre['prixLivre'], 2) . "€</p>";
+                        echo "<p class='price'>Nouveau prix: " . number_format($nouveauPrix, 2) . "€ (-$pourcentagePromo%)</p>";
+                        echo "</div>";
+                    }
+                }
+
+                if (!$hasPromotions) {
+                    echo "<p>Aucun livre en promotion pour le moment.</p>";
                 }
             } else {
-                echo "<p>Aucun livre en promotion pour le moment.</p>";
+                echo "<p>Aucun livre disponible.</p>";
             }
             ?>
         </div>
@@ -236,10 +119,8 @@ $livresPromotion = $unControleur->selectLivrePromotion();
         </div>
     </div>
 </div>
-
-<footer class="footer">
-    <p>&copy; 2025 Librairie en ligne - Tous droits réservés</p>
-</footer>
-
+<?php
+    require_once("includes/footer.php");
+?>
 </body>
 </html>

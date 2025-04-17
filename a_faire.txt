@@ -1,44 +1,57 @@
+New :
+    - Warning: Undefined array key "idUser" in /Applications/MAMP/htdocs/2024-2025/ppe/ppe_leger/index.php on line 7
+        Enlever cette erreur inutile
+
+    - Faire une page lorsqu'on clique sur un livre
+        Récupération de l'idLivre avec un GET (ou POST),
+        $idLivre = $_GET['idLivre'] puis afficher les informations du livre (whereIdLivre($idLivre))
+
+
 Priorité :
+    - Si les champs lors de l'inscription ne sont pas tous remplis, alors il faut bloquer le "insertUser"
+    - Changer le input lorsque le user ajoute un livre au panier pour que ça fonctionne dès le premier coup
 
-Chouaki :
+
+Bug :
+    - ...
+
+
+MCD :
+    - Modifier le tables héritages "User", "Particulier" et "Entreprise" pour que les champs soient cohérents.
+    - Modifier le modele des héritages (Procédure, insert, select, etc…) pour les triggers notamment.
+    - Supprimer le “nomUser” de la table Avis et trouver un moyen pour régler la view "selectAvis".
+
+
+
+
+Autre :
+    - Rendre les code plus lisible et plus beau.
+
+
+Expression des besoins à faire et garder dans un dossier à part :
     - Mot de passe oublié dans la Page Connexion.
-        require_once("mdp_oublié")
-            form
-            ancien mdp
-            nouveau mdp
-            confirmer mdp
-            quand input, alors updateMdp dans le modele
-
     - Renouvellement du mot de passe tous les 90 jours.
-        Lors de l'inscription il faut afficher un message de mdp d'une durée de 90 jours
-        après les 90 jours, il faudrait que l'utilisateur ne puisse plus se connecter
-
     - Archiver toutes les commandes qui ont été expédiées avec le nom du client.
-        Archivage qui va select le idCommande, le nomUser where statutCommande = 'expédiée'
+    - Créer une view sur le nombre de livres vendus par catégorie.
+    - Ajouter le champ "nbCommandeUser" sur la table user qui permet, après chaque achat d'un livre, d'incrémenter automatiquement le champ "nbCommandeUser".
+    - Envoyer un mail quand l’utilisateur a fait une commande pour le prévenir que sa commande est expédiée
+    - Envoyer un mail quand l’utilisateur a fait une commande pour le prévenir que sa commande est arrivée
 
-    - Créer une view sur le nombre de livres vendus par catégorie
-        create view...
-
-    - Ajouter le champ "nbCom" sur la table user qui permet, après chaque achat d'un livre, d'incrémenter automatiquement le champ nbCom
-        view qui va count le nombre de ligneCommande where statutCommande='expédiée and idUser = ?'
 
 
 A FAIRE :
     FRONT-END
-Yasser
         Page Connexion :
             - Rendre la page plus esthétique
             - Réduire la taille des boutons
             - Mettre une image ou une couleur de fond qui sera la même que sur les autres pages du site
             - Mettre les vues Inscription et Connexion dans un carré
             - Changer la navbar pour mettre la page Panier, Commande, Abonnement, Informations, et Déconnexion sur le côté
-                            (Exemple : https://shop.labourseauxlivres.fr/ https://www.lalibrairie.com/)
+            Exemple : https://shop.labourseauxlivres.fr/ https://www.lalibrairie.com/
 
 
-Ryles
         Page du site :
             - Mettre la liste des livres sur la page Accueil (page principale) et supprimer le logo de la liste des livres
-
 
 
         Page Panier :
@@ -55,7 +68,7 @@ Ryles
     BACK-END
         PHPMyAdmin
             - Faire un système qui va bloquer l'inscription si le email existe déjà dans la table user.
-
+            - Faire un système qui va bloquer le "insertUser" si les champs lors de l'inscription ne sont pas tous remplis.
             - Prévenir à l’utilisateur, lors de l’inscription, que le mot de passe doit être renouvelé tous les 90 jours
             - Tous les 3 mois le mot de passe doit être expiré et l’utilisateur devra le changer sinon il pourra pas se connecter
             - Créer un bouton "mot de passe oublié" pour que le user puisse changer son mot de passe
