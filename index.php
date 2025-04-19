@@ -107,11 +107,11 @@ $isAdmin = $result[0][0];
         }
         switch ($page) {
             case 1: require_once("controleur/home.php"); break;
-            case 2: require_once("controleur/c_livres.php"); break;
+            case 2: require_once("controleur/c_livre.php"); break;
             case 3: require_once("controleur/c_panier.php"); break;
             case 4: require_once("controleur/c_commande.php"); break;
             case 5: require_once("controleur/c_abonnement.php"); break;
-            case 6: require_once("controleur/c_utilisateur.php"); break;
+            case 6: require_once("controleur/c_user.php"); break;
             case 7: require_once("controleur/c_promotion.php"); break;
             case 8: require_once("controleur/c_stockage.php"); break;
             case 9: require_once("controleur/c_statistique.php"); break;

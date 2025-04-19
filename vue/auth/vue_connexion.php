@@ -1,6 +1,6 @@
 <br>
 <h2> Connexion </h2>
-<link rel="stylesheet" href="includes/css/vue_connexion.css">
+<link rel="stylesheet" href="includes/css/auth/vue_connexion.css">
 
 <form method="post">
     <table>

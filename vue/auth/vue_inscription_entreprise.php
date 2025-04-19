@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="includes/css/auth/vue_inscription.css">
+
 <form method="post">
     <table>
         <tr>

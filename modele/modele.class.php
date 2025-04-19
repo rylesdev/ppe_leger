@@ -51,24 +51,28 @@
             }
         }*/
 
-        public function selectParticulier() {
-            $requete =  "select p.*, u.emailUser, u.adresseUser, u.roleUser
+        public function selectParticulier($idUser) {
+            $requete =  "select u.emailUser, u.mdpUser, u.adresseUser, p.nomUser, p.prenomUser, p.dateNaissanceUser, p.sexeUser
                         from particulier p
                         inner join user u 
-                        on p.idUser = u.idUser";
+                        on p.idUser = u.idUser
+                        where u.idUser = ?;";
             $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
-            return $exec->fetchAll(PDO::FETCH_ASSOC);
+            return $exec->fetchAll();
         }
 
-        public function selectEntreprise() {
-            $requete =  "select e.*, u.emailUser, u.adresseUser, u.roleUser
+        public function selectEntreprise($idUser) {
+            $requete =  "select u.emailUser, u.mdpUser, u.adresseUser, e.siretUser, e.raisonSocialeUser, e.capitalSocialUser
                         from entreprise e
                         inner join user u  
-                        on e.idUser = u.idUser";
+                        on e.idUser = u.idUser
+                        where u.idUser = ?;";
             $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
-            return $exec->fetchAll(PDO::FETCH_ASSOC);
+            return $exec->fetchAll();
         }
 
         /*public function selectEntreprise($idUser) {
@@ -503,17 +507,83 @@
             $exec->execute();
         }*/
 
+        public function archiverCommandeUtilisateur($idUser) {
+            try {
+                $this->unPdo->beginTransaction();
+
+                // 1. Archiver les commandes
+                $exec = $this->unPdo->prepare("
+            INSERT INTO archiveCommande 
+            (idCommande, dateCommande, statutCommande, dateLivraisonCommande, idUser, date_archivage)
+            SELECT 
+                idCommande, dateCommande, statutCommande, dateLivraisonCommande, idUser, NOW()
+            FROM commande 
+            WHERE idUser = :idUser
+        ");
+                $exec->bindValue(':idUser', $idUser, PDO::PARAM_INT);
+                $exec = $exec->execute();
+                if (!$exec) {
+                    throw new PDOException("Échec de l'archivage des commandes");
+                }
+
+                // 2. Archiver les lignes de commande associées
+                $exec = $this->unPdo->prepare("
+            INSERT INTO archiveLigneCommande
+            (idLigneCommande, idCommande, idLivre, quantiteLigneCommande, date_archivage)
+            SELECT 
+                lc.idLigneCommande, lc.idCommande, lc.idLivre, lc.quantiteLigneCommande, NOW()
+            FROM ligneCommande lc
+            JOIN commande c ON lc.idCommande = c.idCommande
+            WHERE c.idUser = :idUser
+        ");
+                $exec->bindValue(':idUser', $idUser, PDO::PARAM_INT);
+                $exec = $exec->execute();
+                if (!$exec) {
+                    throw new PDOException("Échec de l'archivage des lignes de commande");
+                }
+
+                // 3. Suppression dans l'ordre inverse des dépendances
+                $exec = $this->unPdo->prepare("
+            DELETE FROM ligneCommande 
+            WHERE idCommande IN (
+                SELECT idCommande FROM commande WHERE idUser = :idUser
+            )
+        ");
+                $exec->bindValue(':idUser', $idUser, PDO::PARAM_INT);
+                $exec = $exec->execute();
+                if (!$exec) {
+                    throw new PDOException("Échec de la suppression des lignes de commande");
+                }
+
+                $exec = $this->unPdo->prepare("
+            DELETE FROM commande WHERE idUser = :idUser
+        ");
+                $exec->bindValue(':idUser', $idUser, PDO::PARAM_INT);
+                $exec = $exec->execute();
+                if (!$exec) {
+                    throw new PDOException("Échec de la suppression des commandes");
+                }
+
+                $this->unPdo->commit();
+                return true;
+
+            } catch (PDOException $e) {
+                $this->unPdo->rollBack();
+                error_log("Erreur archivage commandes: " . $e->getMessage());
+                return false;
+            }
+        }
+
         public function deleteParticulier($idUser) {
             try {
                 $this->unPdo->beginTransaction();
 
-                $requete = "delete from particulier where idUser = ?";
+                $requete = "delete from particulier where idUser = ?;";
                 $exec = $this->unPdo->prepare($requete);
                 $exec->bindValue(1, $idUser, PDO::PARAM_INT);
                 $exec->execute();
 
-                // 2. Supprimer de la table user
-                $requete = "delete from user where idUser = ?";
+                $requete = "delete from user where idUser = ?;";
                 $exec = $this->unPdo->prepare($requete);
                 $exec->bindValue(1, $idUser, PDO::PARAM_INT);
                 $exec->execute();
@@ -536,7 +606,6 @@
                 $exec->bindValue(1, $idUser, PDO::PARAM_INT);
                 $exec->execute();
 
-                // Supprimer de la table user
                 $requete = "delete from user where idUser = ?";
                 $exec = $this->unPdo->prepare($requete);
                 $exec->bindValue(1, $idUser, PDO::PARAM_INT);
@@ -763,7 +832,7 @@
 
 
         /**************** UPDATE ****************/
-        public function updateParticulier($idUser, $emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser) {
+        public function updateParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser, $idUser) {
             try {
                 $this->unPdo->beginTransaction();
 
@@ -778,16 +847,6 @@
                     $exec->bindValue(2, $mdpUser, PDO::PARAM_STR);
                     $exec->bindValue(3, $adresseUser, PDO::PARAM_STR);
                     $exec->bindValue(4, $idUser, PDO::PARAM_INT);
-                    $exec->execute();
-                } else {
-                    $requete =  "update user set
-                                emailUser = ?,
-                                adresseUser = ?
-                                where idUser = ?";
-                    $exec = $this->unPdo->prepare($requete);
-                    $exec->bindValue(1, $emailUser, PDO::PARAM_STR);
-                    $exec->bindValue(2, $adresseUser, PDO::PARAM_STR);
-                    $exec->bindValue(3, $idUser, PDO::PARAM_INT);
                     $exec->execute();
                 }
 
@@ -814,7 +873,7 @@
             }
         }
 
-        public function updateEntreprise($idUser, $emailUser, $mdpUser, $adresseUser, $siretUser, $raisonSocialeUser, $capitalSocialUser) {
+        public function updateEntreprise($emailUser, $mdpUser, $adresseUser, $siretUser, $raisonSocialeUser, $capitalSocialUser, $idUser) {
             try {
                 $this->unPdo->beginTransaction();
 
@@ -823,22 +882,12 @@
                                 emailUser = ?,
                                 mdpUser = SHA1(?),
                                 adresseUser = ?
-                                where idUser = ?";
+                                where idUser = ?;";
                     $exec = $this->unPdo->prepare($requete);
                     $exec->bindValue(1, $emailUser, PDO::PARAM_STR);
                     $exec->bindValue(2, $mdpUser, PDO::PARAM_STR);
                     $exec->bindValue(3, $adresseUser, PDO::PARAM_STR);
                     $exec->bindValue(4, $idUser, PDO::PARAM_INT);
-                    $exec->execute();
-                } else {
-                    $requete =  "update user set
-                                emailUser = ?,
-                                adresseUser = ?
-                                where idUser = ?";
-                    $exec = $this->unPdo->prepare($requete);
-                    $exec->bindValue(1, $emailUser, PDO::PARAM_STR);
-                    $exec->bindValue(2, $adresseUser, PDO::PARAM_STR);
-                    $exec->bindValue(3, $idUser, PDO::PARAM_INT);
                     $exec->execute();
                 }
 
@@ -846,7 +895,7 @@
                             siretUser = ?,
                             raisonSocialeUser = ?,
                             capitalSocialUser = ?
-                            where idUser = ?";
+                            where idUser = ?;";
                 $exec = $this->unPdo->prepare($requete);
                 $exec->bindValue(1, $siretUser, PDO::PARAM_STR);
                 $exec->bindValue(2, $raisonSocialeUser, PDO::PARAM_STR);

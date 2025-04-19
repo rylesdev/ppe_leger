@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : sam. 19 avr. 2025 à 00:25
+-- Généré le : sam. 19 avr. 2025 à 21:20
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -138,6 +138,51 @@ CREATE TABLE `admin` (
 
 INSERT INTO `admin` (`idAdmin`, `idUser`, `niveauAdmin`) VALUES
 (1, 1, 'principal');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `archiveCommande`
+--
+
+CREATE TABLE `archiveCommande` (
+  `idCommande` int NOT NULL,
+  `dateCommande` datetime DEFAULT NULL,
+  `statutCommande` varchar(50) DEFAULT NULL,
+  `dateLivraisonCommande` datetime DEFAULT NULL,
+  `idUser` int DEFAULT NULL,
+  `date_archivage` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Archive des commandes';
+
+--
+-- Déchargement des données de la table `archiveCommande`
+--
+
+INSERT INTO `archiveCommande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLivraisonCommande`, `idUser`, `date_archivage`) VALUES
+(457, '2002-09-09 00:00:00', 'en attente', '2002-12-12 00:00:00', 40, '2025-04-19 20:10:36');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `archiveLigneCommande`
+--
+
+CREATE TABLE `archiveLigneCommande` (
+  `idLigneCommande` int NOT NULL,
+  `idCommande` int DEFAULT NULL,
+  `idLivre` int DEFAULT NULL,
+  `quantiteLigneCommande` int DEFAULT NULL,
+  `date_archivage` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Archive des lignes de commande';
+
+--
+-- Déchargement des données de la table `archiveLigneCommande`
+--
+
+INSERT INTO `archiveLigneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quantiteLigneCommande`, `date_archivage`) VALUES
+(724, 457, 3, 10, '2025-04-19 20:10:36'),
+(725, 457, 5, 20, '2025-04-19 20:10:36'),
+(726, 457, 4, 30, '2025-04-19 20:10:36');
 
 -- --------------------------------------------------------
 
@@ -502,8 +547,7 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (452, '2025-02-03', 'expédiée', '2025-02-10', 15),
 (453, '2025-02-03', 'expédiée', '2025-02-10', 15),
 (454, '2025-02-03', 'expédiée', '2025-02-10', 15),
-(455, '2025-02-03', 'expédiée', '2025-02-10', 15),
-(456, '2025-03-05', 'expédiée', '2025-03-12', 39);
+(455, '2025-02-03', 'expédiée', '2025-02-10', 15);
 
 --
 -- Déclencheurs `commande`
@@ -548,20 +592,7 @@ INSERT INTO `entreprise` (`idUser`, `siretUser`, `raisonSocialeUser`, `capitalSo
 (31, '1298371892', '123', NULL),
 (32, '123', '123', 123124.00),
 (33, '123123', '123123', 123123.00),
-(34, '987987', '987987', 987987.00),
-(41, '0901283', 'oidaj', 102938.00);
-
---
--- Déclencheurs `entreprise`
---
-DELIMITER $$
-CREATE TRIGGER `tUpdateEntreprise` BEFORE UPDATE ON `entreprise` FOR EACH ROW BEGIN
-    UPDATE user
-    SET emailUser = NEW.emailUser, mdpUser = NEW.mdpUser
-    WHERE idUser = OLD.idUser;
-END
-$$
-DELIMITER ;
+(34, '987987', '987987', 987987.00);
 
 -- --------------------------------------------------------
 
@@ -729,8 +760,7 @@ INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quanti
 (716, 454, 2, 1),
 (717, 454, 3, 1),
 (718, 454, 13, 1),
-(720, 455, 2, 1),
-(721, 456, 2, 2);
+(720, 455, 2, 1);
 
 --
 -- Déclencheurs `ligneCommande`
@@ -877,23 +907,7 @@ INSERT INTO `particulier` (`idUser`, `nomUser`, `prenomUser`, `dateNaissanceUser
 (35, 'yasser', 'yasser', '2010-12-21', 'M'),
 (36, 'yasser', 'yasser', '2010-12-21', 'M'),
 (37, 'part', 'part', '2009-12-12', 'M'),
-(38, 'uy', 'uy', '2003-03-12', 'M'),
-(39, 'clara', 'lea', '2000-02-20', 'F'),
-(40, 'test', 'test', '2005-11-11', 'M');
-
---
--- Déclencheurs `particulier`
---
-DELIMITER $$
-CREATE TRIGGER `tUpdateParticulier` BEFORE UPDATE ON `particulier` FOR EACH ROW BEGIN
-    UPDATE user
-    SET emailUser = NEW.emailUser,
-        mdpUser = NEW.mdpUser,
-        adresseUser = NEW.adresseUser
-    WHERE idUser = NEW.idUser;
-END
-$$
-DELIMITER ;
+(38, 'uy', 'uy', '2003-03-12', 'M');
 
 -- --------------------------------------------------------
 
@@ -965,10 +979,7 @@ INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`)
 (35, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '15 Route du Soleil', 'particulier'),
 (36, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '63 Place du Marché', 'particulier'),
 (37, 'part@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'part', 'particulier'),
-(38, 'uy@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'uy', 'particulier'),
-(39, 'lea@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '25 rue des pommiers', 'particulier'),
-(40, 'test@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'test', 'particulier'),
-(41, 'tset@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'tset', 'entreprise');
+(38, 'uy@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'uy', 'particulier');
 
 -- --------------------------------------------------------
 
@@ -987,10 +998,10 @@ CREATE TABLE `vcommandesenattente` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vlivresenstock` (
-`idLivre` int
+`exemplaireLivre` int
+,`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
-,`exemplaireLivre` int
 );
 
 -- --------------------------------------------------------
@@ -1013,8 +1024,8 @@ CREATE TABLE `vmeilleuresventes` (
 --
 CREATE TABLE `vmeilleursavis` (
 `idLivre` int
-,`nomLivre` varchar(50)
 ,`moyenneNote` decimal(7,4)
+,`nomLivre` varchar(50)
 );
 
 -- --------------------------------------------------------
@@ -1072,9 +1083,9 @@ CREATE TABLE `vtotallivre` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vtotallivreenattente` (
-`idLivre` int
-,`idCommande` int
+`idCommande` int
 ,`idLigneCommande` int
+,`idLivre` int
 ,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
@@ -1090,8 +1101,8 @@ CREATE TABLE `vtotallivreenattente` (
 --
 CREATE TABLE `vtotallivreexpediee` (
 `idCommande` int
-,`idUser` int
 ,`idLivre` int
+,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
 ,`quantiteLigneCommande` int
@@ -1207,6 +1218,22 @@ ALTER TABLE `admin`
   ADD KEY `idUser` (`idUser`);
 
 --
+-- Index pour la table `archiveCommande`
+--
+ALTER TABLE `archiveCommande`
+  ADD PRIMARY KEY (`idCommande`,`date_archivage`),
+  ADD KEY `idx_user` (`idUser`),
+  ADD KEY `idx_date_archivage` (`date_archivage`);
+
+--
+-- Index pour la table `archiveLigneCommande`
+--
+ALTER TABLE `archiveLigneCommande`
+  ADD PRIMARY KEY (`idLigneCommande`,`date_archivage`),
+  ADD KEY `idx_commande` (`idCommande`),
+  ADD KEY `idx_date_archivage` (`date_archivage`);
+
+--
 -- Index pour la table `avis`
 --
 ALTER TABLE `avis`
@@ -1306,7 +1333,7 @@ ALTER TABLE `categorie`
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=457;
+  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=458;
 
 --
 -- AUTO_INCREMENT pour la table `entreprise`
@@ -1318,7 +1345,7 @@ ALTER TABLE `entreprise`
 -- AUTO_INCREMENT pour la table `ligneCommande`
 --
 ALTER TABLE `ligneCommande`
-  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=722;
+  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=727;
 
 --
 -- AUTO_INCREMENT pour la table `livre`
