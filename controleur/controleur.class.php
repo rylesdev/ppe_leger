@@ -163,6 +163,18 @@
 			return $this->unModele->deleteLigneCommande($idLigneCommande);
 		}
 
+        public function archiverCommandeUtilisateur($idUser) {
+            return $this->unModele->archiverCommandeUtilisateur($idUser);
+        }
+
+        public function deleteParticulier($idUser) {
+            $this->unModele->deleteParticulier($idUser);
+        }
+
+        public function deleteEntreprise($idUser) {
+            $this->unModele->deleteEntreprise($idUser);
+        }
+
 		/*public function deleteCommande($idLigneCommande){
 			$this->unModele->deleteCommande($idLigneCommande);
 		}*/
@@ -226,12 +238,12 @@
 
 		/**************** UPDATE ****************/
 
-		public function updateParticulier($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser, $idUser) {
-			$this->unModele->updateParticulier($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser, $idUser);
+		public function updateParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser, $idUser) {
+			$this->unModele->updateParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser, $idUser);
 		}
 
-        public function updateEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser, $idUser) {
-            $this->unModele->updateEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser, $idUser);
+        public function updateEntreprise($emailUser, $mdpUser, $adresseUser, $siretUser, $raisonSocialeUser, $capitalSocialUser, $idUser) {
+            $this->unModele->updateEntreprise($emailUser, $mdpUser, $adresseUser, $siretUser, $raisonSocialeUser, $capitalSocialUser, $idUser);
         }
 
 		public function updateLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $idLivre, $prixLivre){

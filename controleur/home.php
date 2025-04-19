@@ -8,6 +8,7 @@ require_once("modele/modele.class.php");
 $livresPromotion = $unControleur->selectLivrePromotion();
 ?>
 
+<link rel="stylesheet" href="includes/css/home.css">
 <div class="container">
     <div class="images-container">
         <img src="images/livreOffert.png" height="500" width="450" class="image">

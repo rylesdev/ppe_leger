@@ -1,5 +1,4 @@
 <h2> Inscription </h2>
-<link rel="stylesheet" href="includes/css/vue_inscription.css">
 
 <?php
 echo '<a href="index.php?inscription=particulier"><button class="btn-green">Vous êtes un particulier</button></a><br>';

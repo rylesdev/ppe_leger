@@ -1,16 +1,12 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php
-    if (isset($cssPage)) {
-        echo "<link rel='stylesheet' href='includes/css/".$cssPage.".css'>";
-    }
-    ?>
-    <title><?php echo $titrePage ?? "Page"; ?></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><?= $titrePage ?></title>
+    <link rel="stylesheet" href="includes/css/style.css">
 </head>
 <body>
-<header class="header">
-    <h1><?php echo $titrePage ?? "Titre par défaut"; ?></h1>
-</header>
+<div class="header">
+    <?= $titrePage ?>
+</div>

@@ -1,13 +1,13 @@
 New :
-    - Mettre des requiere_once(header) pour chaque page en s'assurant que ça fonctionne bien
-    - Régler le problème du header qui ne s'affiche pas dans la page Informations de l'utilisateur
+    - Mettre à jour les trimmers dans le objet_ppe.sql
+    - Il faut que l'index.php nous fasse apparaitre par défaut sur la page d'accueil
+    - Il faut remplacer le logo du bouton "Quitter" par un logo "Authentification"
+        - Quand on appuie sur ce bouton ça nous emmène vers c_inscription et c_connexion
+    - Trier tous les fichiers .css et supprimer ceux qui sont inutiles
     - Régler le problème des admin en double (dans le roleUser et dans la table admin)
-    - Supprimer les triggers héritage puis essayer les nouvelles requetes héritage (insert, update, etc...)
     -  Faire une page lorsqu'on clique sur un livre
         Récupération de l'idLivre avec un GET (ou POST),
         $idLivre = $_GET['idLivre'] puis afficher les informations du livre (whereIdLivre($idLivre))
-
-    - Dans informations User, créer une ligne pour supprimer le compte (deleteParticulier / deleteEntreprise)
 
     - Mettre la requete "insertLigneCommande" dans la méthode "insertCommande"
         en stockant les valeurs de ligneCommande dans un tableau matriciel
@@ -35,8 +35,6 @@ Bug :
 
 
 MCD :
-    - Modifier le tables héritages "User", "Particulier" et "Entreprise" pour que les champs soient cohérents.
-    - Modifier le modele des héritages (Procédure, insert, select, etc…) pour les triggers notamment.
     - Supprimer le “nomUser” de la table Avis et trouver un moyen pour régler la view "selectAvis".
 
 
@@ -115,6 +113,11 @@ A FAIRE :
 
 
 Fait :
+- Supprimer les triggers héritage puis essayer les nouvelles requetes héritage
+        // - Insert
+        // - Update
+        // - Delete
+
 - Créer des tables avec des héritages et utiliser les triggers :
                   - User (idUser, Email, MDP (Connexion uniquement))
                       - Particulier (Nom, Prenom, Adresse, ...)

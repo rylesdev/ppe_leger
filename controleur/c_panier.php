@@ -2,7 +2,7 @@
 if (isset($_SESSION['roleUser']) && $_SESSION['roleUser'] !="admin") {
     $idUser = $_SESSION['idUser'];
 
-    require_once("vue/vue_panier.php");
+    require_once("vue/panier/vue_panier.php");
     if (isset($_GET['action'])){
         $idCommande = $_GET['idCommande'];
         $idLigneCommande = $_GET['idLigneCommande'];

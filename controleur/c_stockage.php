@@ -2,12 +2,9 @@
 if (isset($isAdmin) && $isAdmin == 1) {
     $idUser = $_SESSION['idUser'];
 
-    echo "<h3>Modifier le stockage des livres</h3>";
-    echo "<br>";
-
     $leLivre = null;
 
-    require_once("vue/vue_stockage.php");
+    require_once("vue/stockage/vue_stockage.php");
     if(isset($_POST['ValiderStockage'])){
         $exemplaireLivre = $_POST['exemplaireLivre'];
         $nomLivre = $_POST['nomLivre'];
@@ -23,6 +20,6 @@ if (isset($_POST['FiltrerStockage'])){
     $lesLivres = $unControleur->selectAllLivres ($idUser);
 }
 
-require_once("vue/vue_select_livre_stockage.php");
+require_once("vue/stockage/vue_select_livre_stockage.php");
 }
 ?>

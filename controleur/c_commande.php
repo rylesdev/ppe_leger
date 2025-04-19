@@ -2,7 +2,7 @@
 if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']!="admin") {
     $idUser = $_SESSION['idUser'];
 
-    require_once("vue/vue_commande.php");
+    require_once("vue/commande/vue_commande.php");
 
 
     if (isset($_POST['FiltrerCommande'])) {
