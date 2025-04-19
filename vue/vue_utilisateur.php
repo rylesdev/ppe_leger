@@ -1,16 +1,9 @@
-<header style="background-color: #2E6E49; color: white; text-align: center; padding: 15px; font-size: 24px; font-weight: bold;">
-Informations de l'utilisateur
-</header>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="includes/css/vue_utilisateur.css">
-    <title>Informations de l'utilisateur</title>
-</head>
+<?php
+$titrePage = "Informations de l'utilisateur";
+$cssPage = "vue_utilisateur";
+require_once("includes/header.php");
+?>
 
-<body>
 <div class="container">
     <?php
     if (isset($idUser)) {
@@ -39,6 +32,7 @@ Informations de l'utilisateur
     }
     ?>
 </div>
+
 <?php
 require_once("includes/footer.php");
 ?>

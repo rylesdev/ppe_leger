@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : jeu. 17 avr. 2025 à 10:42
+-- Généré le : sam. 19 avr. 2025 à 00:25
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -532,39 +532,28 @@ DELIMITER ;
 
 CREATE TABLE `entreprise` (
   `idUser` int NOT NULL,
-  `emailUser` varchar(255) NOT NULL,
-  `mdpUser` varchar(255) NOT NULL,
   `siretUser` varchar(14) DEFAULT NULL,
   `raisonSocialeUser` varchar(255) DEFAULT NULL,
-  `capitalSocialUser` decimal(15,2) DEFAULT NULL
+  `capitalSocialUser` float(15,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `entreprise`
 --
 
-INSERT INTO `entreprise` (`idUser`, `emailUser`, `mdpUser`, `siretUser`, `raisonSocialeUser`, `capitalSocialUser`) VALUES
-(26, 'entreprise@gmail.com', 'motdepasse', '123456789', 'Entreprise SARL', 10000.00),
-(27, 'entreprise@gmail.com', 'motdepasse', '123456789', 'Entreprise SARL', 10000.00),
-(30, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '123123123', 'yasser', 123123123.00),
-(31, 'entreprise@gmail.com', '123', '1298371892', '123', NULL),
-(32, 'test@gmail.com', '123', '123', '123', 123124.00),
-(33, 'yass@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '123123', '123123', 123123.00),
-(34, '987987@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '987987', '987987', 987987.00);
+INSERT INTO `entreprise` (`idUser`, `siretUser`, `raisonSocialeUser`, `capitalSocialUser`) VALUES
+(26, '123456789', 'Entreprise SARL', 10000.00),
+(27, '123456789', 'Entreprise SARL', 10000.00),
+(30, '123123123', 'yasser', 123123120.00),
+(31, '1298371892', '123', NULL),
+(32, '123', '123', 123124.00),
+(33, '123123', '123123', 123123.00),
+(34, '987987', '987987', 987987.00),
+(41, '0901283', 'oidaj', 102938.00);
 
 --
 -- Déclencheurs `entreprise`
 --
-DELIMITER $$
-CREATE TRIGGER `tInsertEntreprise` BEFORE INSERT ON `entreprise` FOR EACH ROW BEGIN
-    IF NEW.idUser IS NULL OR NEW.idUser NOT IN (SELECT idUser FROM user) THEN
-        SET NEW.idUser = IFNULL((SELECT MAX(idUser) FROM user), 0) + 1;
-    END IF;
-    INSERT INTO user (idUser, emailUser, mdpUser, adresseUser, roleUser)
-    VALUES (NEW.idUser, NEW.emailUser, NEW.mdpUser, NULL, 'entreprise');
-END
-$$
-DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `tUpdateEntreprise` BEFORE UPDATE ON `entreprise` FOR EACH ROW BEGIN
     UPDATE user
@@ -872,11 +861,8 @@ INSERT INTO `maisonEdition` (`idMaisonEdition`, `nomMaisonEdition`) VALUES
 
 CREATE TABLE `particulier` (
   `idUser` int NOT NULL,
-  `emailUser` varchar(255) NOT NULL,
-  `mdpUser` varchar(255) NOT NULL,
   `nomUser` varchar(255) DEFAULT NULL,
   `prenomUser` varchar(255) DEFAULT NULL,
-  `adresseUser` varchar(255) DEFAULT 'adresse_inconnue',
   `dateNaissanceUser` date DEFAULT NULL,
   `sexeUser` enum('M','F') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -885,28 +871,19 @@ CREATE TABLE `particulier` (
 -- Déchargement des données de la table `particulier`
 --
 
-INSERT INTO `particulier` (`idUser`, `emailUser`, `mdpUser`, `nomUser`, `prenomUser`, `adresseUser`, `dateNaissanceUser`, `sexeUser`) VALUES
-(28, 'michael@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'Arch', 'Michael', '23 rue de la Paix', '2001-12-12', 'M'),
-(29, 'ryles', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'ryles', 'ryles', '23 rue de la Paix', '2022-12-12', 'M'),
-(35, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'yasser', 'yasser', '23 rue de la Paix', '2010-12-21', 'M'),
-(36, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'yasser', 'yasser', '23 rue de la Paix', '2010-12-21', 'M'),
-(37, 'part@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'part', 'part', 'part', '2009-12-12', 'M'),
-(38, 'uy@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'uy', 'uy', 'uy', '2003-03-12', 'M'),
-(39, 'lea@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'clara', 'lea', '25 rue des pommiers', '2000-02-20', 'F');
+INSERT INTO `particulier` (`idUser`, `nomUser`, `prenomUser`, `dateNaissanceUser`, `sexeUser`) VALUES
+(28, 'Arch', 'Michael', '2001-12-12', 'M'),
+(29, 'ryles', 'ryles', '2022-12-12', 'M'),
+(35, 'yasser', 'yasser', '2010-12-21', 'M'),
+(36, 'yasser', 'yasser', '2010-12-21', 'M'),
+(37, 'part', 'part', '2009-12-12', 'M'),
+(38, 'uy', 'uy', '2003-03-12', 'M'),
+(39, 'clara', 'lea', '2000-02-20', 'F'),
+(40, 'test', 'test', '2005-11-11', 'M');
 
 --
 -- Déclencheurs `particulier`
 --
-DELIMITER $$
-CREATE TRIGGER `tInsertParticulier` BEFORE INSERT ON `particulier` FOR EACH ROW BEGIN
-    IF NEW.idUser IS NULL OR NEW.idUser NOT IN (SELECT idUser FROM user) THEN
-        SET NEW.idUser = IFNULL((SELECT MAX(idUser) FROM user), 0) + 1;
-    END IF;
-    INSERT INTO user (idUser, emailUser, mdpUser, adresseUser, roleUser)
-    VALUES (NEW.idUser, NEW.emailUser, NEW.mdpUser, NEW.adresseUser, 'client');
-END
-$$
-DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `tUpdateParticulier` BEFORE UPDATE ON `particulier` FOR EACH ROW BEGIN
     UPDATE user
@@ -959,7 +936,7 @@ CREATE TABLE `user` (
   `emailUser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `mdpUser` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `adresseUser` varchar(50) NOT NULL,
-  `roleUser` enum('admin','client') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
+  `roleUser` enum('admin','particulier','entreprise') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -968,28 +945,30 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`) VALUES
 (1, 'ryles@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '123 Rue des Lilas', 'admin'),
-(2, 'jean@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '45 Avenue de la République', 'client'),
-(12, 'm', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '78 Boulevard Haussmann', 'client'),
-(13, 'klza', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '9 Place de la Liberté', 'client'),
-(14, 'poi', '123', '56 Rue Victor Hugo', 'client'),
-(15, 'i', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '34 Avenue Montaigne', 'client'),
-(23, 'chouaki@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '101 Rue Lafayette', 'client'),
-(24, 'bo@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '202 Avenue des Champs-Élysées', 'client'),
-(25, 'jean@gmail.com', 'motdepasse', '303 Boulevard Saint-Michel', 'client'),
-(26, 'entreprise@gmail.com', 'motdepasse', '404 Rue de Rivoli', 'client'),
-(27, 'entreprise@gmail.com', 'motdepasse', '505 Quai de la Tournelle', 'client'),
-(28, 'michael@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '89 Impasse des Cerisiers', 'client'),
-(29, 'ryles', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '102 Rue du Moulin', 'client'),
-(30, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '76 Avenue des Rosiers', 'client'),
-(31, 'entreprise@gmail.com', '123', '58 Chemin des Vignes', 'client'),
-(32, 'test@gmail.com', '123', '21 Boulevard de la Liberté', 'client'),
-(33, 'yass@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '34 Rue des Érables', 'client'),
-(34, '987987@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '47 Allée des Chênes', 'client'),
-(35, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '15 Route du Soleil', 'client'),
-(36, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '63 Place du Marché', 'client'),
-(37, 'part@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'part', 'client'),
-(38, 'uy@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'uy', 'client'),
-(39, 'lea@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '25 rue des pommiers', 'client');
+(2, 'jean@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '45 Avenue de la République', 'particulier'),
+(12, 'm', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '78 Boulevard Haussmann', 'particulier'),
+(13, 'klza', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '9 Place de la Liberté', 'particulier'),
+(14, 'poi', '123', '56 Rue Victor Hugo', 'particulier'),
+(15, 'i', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '34 Avenue Montaigne', 'particulier'),
+(23, 'chouaki@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '101 Rue Lafayette', 'particulier'),
+(24, 'bo@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '202 Avenue des Champs-Élysées', 'particulier'),
+(25, 'jean@gmail.com', 'motdepasse', '303 Boulevard Saint-Michel', 'particulier'),
+(26, 'entreprise@gmail.com', 'motdepasse', '404 Rue de Rivoli', 'entreprise'),
+(27, 'entreprise@gmail.com', 'motdepasse', '505 Quai de la Tournelle', 'entreprise'),
+(28, 'michael@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '89 Impasse des Cerisiers', 'particulier'),
+(29, 'ryles', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '102 Rue du Moulin', 'particulier'),
+(30, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '76 Avenue des Rosiers', 'particulier'),
+(31, 'entreprise@gmail.com', '123', '58 Chemin des Vignes', 'entreprise'),
+(32, 'test@gmail.com', '123', '21 Boulevard de la Liberté', 'particulier'),
+(33, 'yass@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '34 Rue des Érables', 'particulier'),
+(34, '987987@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '47 Allée des Chênes', 'particulier'),
+(35, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '15 Route du Soleil', 'particulier'),
+(36, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '63 Place du Marché', 'particulier'),
+(37, 'part@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'part', 'particulier'),
+(38, 'uy@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'uy', 'particulier'),
+(39, 'lea@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '25 rue des pommiers', 'particulier'),
+(40, 'test@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'test', 'particulier'),
+(41, 'tset@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'tset', 'entreprise');
 
 -- --------------------------------------------------------
 
@@ -1008,10 +987,10 @@ CREATE TABLE `vcommandesenattente` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vlivresenstock` (
-`exemplaireLivre` int
-,`idLivre` int
+`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
+,`exemplaireLivre` int
 );
 
 -- --------------------------------------------------------
@@ -1034,8 +1013,8 @@ CREATE TABLE `vmeilleuresventes` (
 --
 CREATE TABLE `vmeilleursavis` (
 `idLivre` int
-,`moyenneNote` decimal(7,4)
 ,`nomLivre` varchar(50)
+,`moyenneNote` decimal(7,4)
 );
 
 -- --------------------------------------------------------
@@ -1093,9 +1072,9 @@ CREATE TABLE `vtotallivre` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vtotallivreenattente` (
-`idCommande` int
+`idLivre` int
+,`idCommande` int
 ,`idLigneCommande` int
-,`idLivre` int
 ,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
@@ -1111,8 +1090,8 @@ CREATE TABLE `vtotallivreenattente` (
 --
 CREATE TABLE `vtotallivreexpediee` (
 `idCommande` int
-,`idLivre` int
 ,`idUser` int
+,`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
 ,`quantiteLigneCommande` int
@@ -1333,7 +1312,7 @@ ALTER TABLE `commande`
 -- AUTO_INCREMENT pour la table `entreprise`
 --
 ALTER TABLE `entreprise`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT pour la table `ligneCommande`
@@ -1357,7 +1336,7 @@ ALTER TABLE `maisonEdition`
 -- AUTO_INCREMENT pour la table `particulier`
 --
 ALTER TABLE `particulier`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT pour la table `promotion`
@@ -1369,7 +1348,7 @@ ALTER TABLE `promotion`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- Contraintes pour les tables déchargées

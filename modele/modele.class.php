@@ -51,17 +51,27 @@
             }
         }*/
 
-        public function selectParticulier($idUser) {
-            $requete =  "select * 
-                        from particulier
-                        where idUser = ?;";
+        public function selectParticulier() {
+            $requete =  "select p.*, u.emailUser, u.adresseUser, u.roleUser
+                        from particulier p
+                        inner join user u 
+                        on p.idUser = u.idUser";
             $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
-            return $exec->fetchAll();
+            return $exec->fetchAll(PDO::FETCH_ASSOC);
         }
 
-        public function selectEntreprise($idUser) {
+        public function selectEntreprise() {
+            $requete =  "select e.*, u.emailUser, u.adresseUser, u.roleUser
+                        from entreprise e
+                        inner join user u  
+                        on e.idUser = u.idUser";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->execute();
+            return $exec->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        /*public function selectEntreprise($idUser) {
             $requete =  "select * 
                         from entreprise
                         where idUser = ?;";
@@ -69,7 +79,7 @@
             $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
             return $exec->fetchAll();
-        }
+        }*/
 
 
 
@@ -425,7 +435,10 @@
         }
 
         public function selectLivrePromotion() {
-            $requete =  "select * from livre;";
+            $requete =  "select l.*, p.reductionPromotion 
+                        from livre l
+                        inner join promotion p
+                        on l.idPromotion=p.idPromotion;";
             $exec = $this->unPdo->prepare($requete);
             $exec->execute();
             return $exec->fetchAll();
@@ -490,9 +503,57 @@
             $exec->execute();
         }*/
 
+        public function deleteParticulier($idUser) {
+            try {
+                $this->unPdo->beginTransaction();
+
+                $requete = "delete from particulier where idUser = ?";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $idUser, PDO::PARAM_INT);
+                $exec->execute();
+
+                // 2. Supprimer de la table user
+                $requete = "delete from user where idUser = ?";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $idUser, PDO::PARAM_INT);
+                $exec->execute();
+
+                $this->unPdo->commit();
+                return true;
+            } catch (PDOException $exp) {
+                $this->unPdo->rollBack();
+                error_log("Erreur suppression particulier: " . $exp->getMessage());
+                return false;
+            }
+        }
+
+        public function deleteEntreprise($idUser) {
+            try {
+                $this->unPdo->beginTransaction();
+
+                $requete = "delete from entreprise where idUser = ?";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $idUser, PDO::PARAM_INT);
+                $exec->execute();
+
+                // Supprimer de la table user
+                $requete = "delete from user where idUser = ?";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $idUser, PDO::PARAM_INT);
+                $exec->execute();
+
+                $this->unPdo->commit();
+                return true;
+            } catch (PDOException $exp) {
+                $this->unPdo->rollBack();
+                error_log("Erreur suppression entreprise: " . $exp->getMessage());
+                return false;
+            }
+        }
+
 
 		/**************** INSERT ****************/
-        public function triggerInsertParticulier($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser) {
+        /*public function triggerInsertParticulier($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser) {
             try {
                 $requete =  "insert into particulier (idUser, emailUser, mdpUser, nomUser, prenomUser, adresseUser, dateNaissanceUser, sexeUser)
                             values (null, ?, sha1(?), ?, ?, ?, ?, ?);";
@@ -510,10 +571,42 @@
             } catch (PDOException $exp) {
                 echo $exp->getMessage();
             }
+        }*/
+
+        public function insertParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser) {
+            try {
+                $this->unPdo->beginTransaction();
+
+                $requete =  "insert into user
+                            values (null, ?, SHA1(?), ?, 'client')";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $emailUser, PDO::PARAM_STR);
+                $exec->bindValue(2, $mdpUser, PDO::PARAM_STR);
+                $exec->bindValue(3, $adresseUser, PDO::PARAM_STR);
+                $exec->execute();
+                $idUser = $this->unPdo->lastInsertId();
+
+                $requete =  "insert into particulier
+                            values (?, ?, ?, ?, ?)";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $idUser, PDO::PARAM_INT);
+                $exec->bindValue(2, $nomUser, PDO::PARAM_STR);
+                $exec->bindValue(3, $prenomUser, PDO::PARAM_STR);
+                $exec->bindValue(4, $dateNaissanceUser, PDO::PARAM_STR);
+                $exec->bindValue(5, $sexeUser, PDO::PARAM_STR);
+                $exec->execute();
+
+                $this->unPdo->commit();
+
+                return $idUser;
+            } catch (PDOException $exp) {
+                $this->unPdo->rollBack();
+                error_log("Erreur insertion particulier: " . $exp->getMessage());
+                return false;
+            }
         }
 
-
-        public function triggerInsertEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser) {
+        /*public function triggerInsertEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser) {
             try {
                 $requete =  "insert into entreprise (idUser, emailUser, mdpUser, siretUser, raisonSocialeUser, capitalSocialUser)
                             values (null, ?, sha1(?), ?, ?, ?);";
@@ -528,6 +621,38 @@
                 return $this->unPdo->lastInsertId();
             } catch (PDOException $exp) {
                 echo $exp->getMessage();
+            }
+        }*/
+
+        public function insertEntreprise($emailUser, $mdpUser, $adresseUser, $siretUser, $raisonSocialeUser, $capitalSocialUser) {
+            try {
+                $this->unPdo->beginTransaction();
+
+                $requete =  "insert into user 
+                            values (null, ?, SHA1(?), ?, 'client')";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $emailUser, PDO::PARAM_STR);
+                $exec->bindValue(2, $mdpUser, PDO::PARAM_STR);
+                $exec->bindValue(3, $adresseUser, PDO::PARAM_STR);
+                $exec->execute();
+                $idUser = $this->unPdo->lastInsertId();
+
+                $requete =  "insert into entreprise
+                            values (?, ?, ?, ?)";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $idUser, PDO::PARAM_INT);
+                $exec->bindValue(2, $siretUser, PDO::PARAM_STR);
+                $exec->bindValue(3, $raisonSocialeUser, PDO::PARAM_STR);
+                $exec->bindValue(4, $capitalSocialUser, PDO::PARAM_STR);
+                $exec->execute();
+
+                $this->unPdo->commit();
+
+                return $idUser;
+            } catch (PDOException $exp) {
+                $this->unPdo->rollBack();
+                error_log("Erreur insertion entreprise: " . $exp->getMessage());
+                return false;
             }
         }
 
@@ -638,29 +763,107 @@
 
 
         /**************** UPDATE ****************/
-        public function updateParticulier($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser, $idUser) {
-            $requete =  "update particulier 
-                        set emailUser = ?, 
-                        mdpUser = sha1(?), 
-                        nomUser = ?, 
-                        prenomUser = ?,
-                        adresseUser = ?,
-                        dateNaissanceUser = ?,
-                        sexeUser = ? 
-                        where idUser = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $emailUser, PDO::PARAM_STR);
-            $exec->BindValue(2, $mdpUser, PDO::PARAM_STR);
-            $exec->BindValue(3, $nomUser, PDO::PARAM_STR);
-            $exec->BindValue(4, $prenomUser, PDO::PARAM_STR);
-            $exec->BindValue(5, $adresseUser, PDO::PARAM_STR);
-            $exec->BindValue(6, $dateNaissanceUser, PDO::PARAM_STR);
-            $exec->BindValue(7, $sexeUser, PDO::PARAM_STR);
-            $exec->BindValue(8, $idUser, PDO::PARAM_INT);
-            $exec->execute();
+        public function updateParticulier($idUser, $emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser) {
+            try {
+                $this->unPdo->beginTransaction();
+
+                if ($mdpUser) {
+                    $requete =  "update user set
+                                emailUser = ?,
+                                mdpUser = SHA1(?),
+                                adresseUser = ?
+                                where idUser = ?";
+                    $exec = $this->unPdo->prepare($requete);
+                    $exec->bindValue(1, $emailUser, PDO::PARAM_STR);
+                    $exec->bindValue(2, $mdpUser, PDO::PARAM_STR);
+                    $exec->bindValue(3, $adresseUser, PDO::PARAM_STR);
+                    $exec->bindValue(4, $idUser, PDO::PARAM_INT);
+                    $exec->execute();
+                } else {
+                    $requete =  "update user set
+                                emailUser = ?,
+                                adresseUser = ?
+                                where idUser = ?";
+                    $exec = $this->unPdo->prepare($requete);
+                    $exec->bindValue(1, $emailUser, PDO::PARAM_STR);
+                    $exec->bindValue(2, $adresseUser, PDO::PARAM_STR);
+                    $exec->bindValue(3, $idUser, PDO::PARAM_INT);
+                    $exec->execute();
+                }
+
+                $requete =  "update particulier set
+                            nomUser = ?,
+                            prenomUser = ?,
+                            dateNaissanceUser = ?,
+                            sexeUser = ?
+                            where idUser = ?";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $nomUser, PDO::PARAM_STR);
+                $exec->bindValue(2, $prenomUser, PDO::PARAM_STR);
+                $exec->bindValue(3, $dateNaissanceUser, PDO::PARAM_STR);
+                $exec->bindValue(4, $sexeUser, PDO::PARAM_STR);
+                $exec->bindValue(5, $idUser, PDO::PARAM_INT);
+                $exec->execute();
+
+                $this->unPdo->commit();
+                return true;
+            } catch (PDOException $exp) {
+                $this->unPdo->rollBack();
+                error_log("Erreur mise à jour particulier: " . $exp->getMessage());
+                return false;
+            }
         }
 
-        public function updateEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser, $idUser) {
+        public function updateEntreprise($idUser, $emailUser, $mdpUser, $adresseUser, $siretUser, $raisonSocialeUser, $capitalSocialUser) {
+            try {
+                $this->unPdo->beginTransaction();
+
+                if ($mdpUser) {
+                    $requete =  "update user set
+                                emailUser = ?,
+                                mdpUser = SHA1(?),
+                                adresseUser = ?
+                                where idUser = ?";
+                    $exec = $this->unPdo->prepare($requete);
+                    $exec->bindValue(1, $emailUser, PDO::PARAM_STR);
+                    $exec->bindValue(2, $mdpUser, PDO::PARAM_STR);
+                    $exec->bindValue(3, $adresseUser, PDO::PARAM_STR);
+                    $exec->bindValue(4, $idUser, PDO::PARAM_INT);
+                    $exec->execute();
+                } else {
+                    $requete =  "update user set
+                                emailUser = ?,
+                                adresseUser = ?
+                                where idUser = ?";
+                    $exec = $this->unPdo->prepare($requete);
+                    $exec->bindValue(1, $emailUser, PDO::PARAM_STR);
+                    $exec->bindValue(2, $adresseUser, PDO::PARAM_STR);
+                    $exec->bindValue(3, $idUser, PDO::PARAM_INT);
+                    $exec->execute();
+                }
+
+                $requete =  "update entreprise set
+                            siretUser = ?,
+                            raisonSocialeUser = ?,
+                            capitalSocialUser = ?
+                            where idUser = ?";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $siretUser, PDO::PARAM_STR);
+                $exec->bindValue(2, $raisonSocialeUser, PDO::PARAM_STR);
+                $exec->bindValue(3, $capitalSocialUser, PDO::PARAM_STR);
+                $exec->bindValue(4, $idUser, PDO::PARAM_INT);
+                $exec->execute();
+
+                $this->unPdo->commit();
+                return true;
+            } catch (PDOException $exp) {
+                $this->unPdo->rollBack();
+                error_log("Erreur mise à jour entreprise: " . $exp->getMessage());
+                return false;
+            }
+        }
+
+        /*public function updateEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser, $idUser) {
             $requete =  "update entreprise 
                         set emailUser = ?, 
                         mdpUser = sha1(?), 
@@ -676,7 +879,7 @@
             $exec->BindValue(5, $capitalSocialUser, PDO::PARAM_STR);
             $exec->BindValue(6, $idUser, PDO::PARAM_INT);
             $exec->execute();
-        }
+        }*/
 
 		public function updateLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $idLivre, $prixLivre) {
 			$requete =  "update livre 
