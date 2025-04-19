@@ -1,10 +1,28 @@
 New :
-    - Warning: Undefined array key "idUser" in /Applications/MAMP/htdocs/2024-2025/ppe/ppe_leger/index.php on line 7
-        Enlever cette erreur inutile
-
-    - Faire une page lorsqu'on clique sur un livre
+    - Mettre des requiere_once(header) pour chaque page en s'assurant que ça fonctionne bien
+    - Régler le problème du header qui ne s'affiche pas dans la page Informations de l'utilisateur
+    - Régler le problème des admin en double (dans le roleUser et dans la table admin)
+    - Supprimer les triggers héritage puis essayer les nouvelles requetes héritage (insert, update, etc...)
+    -  Faire une page lorsqu'on clique sur un livre
         Récupération de l'idLivre avec un GET (ou POST),
         $idLivre = $_GET['idLivre'] puis afficher les informations du livre (whereIdLivre($idLivre))
+
+    - Dans informations User, créer une ligne pour supprimer le compte (deleteParticulier / deleteEntreprise)
+
+    - Mettre la requete "insertLigneCommande" dans la méthode "insertCommande"
+        en stockant les valeurs de ligneCommande dans un tableau matriciel
+        Exemple : $lignesCommande = array(
+                      array(1, 10, 15.50, "Produit A"), // Chaque sous-tableau représente une ligne de commande
+                      array(2, 5, 20.00, "Produit B")
+                  );
+
+                  // Ajouter une nouvelle ligne de commande
+                  $lignesCommande[] = array(3, 7, 12.75, "Produit C");
+
+                  // Accéder aux informations
+                  foreach ($lignesCommande as $ligne) {
+                      echo "ID: " . $ligne[0] . ", Quantité: " . $ligne[1] . ", Prix: " . $ligne[2] . ", Description: " . $ligne[3] . "\n";
+                  }
 
 
 Priorité :

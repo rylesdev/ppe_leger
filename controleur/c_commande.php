@@ -1,5 +1,5 @@
 <?php
-if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']=="client") {
+if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']!="admin") {
     $idUser = $_SESSION['idUser'];
 
     require_once("vue/vue_commande.php");

@@ -1,55 +1,92 @@
+/* Reset de base */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Corps de la page */
 body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        .container {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .user-info {
-            margin-bottom: 20px;
-        }
-        .user-info label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .user-info span {
-            display: block;
-            margin-bottom: 10px;
-        }
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+}
 
-        .table-success {
-            background-color: #2E6E49 !important;
-            color: white !important;
-        }
+/* En-tête (barre verte) */
+.header {
+    background-color: #2E6E49;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 24px;
+    font-weight: bold;
+}
 
-        .footer {
-            background-color: #2c6e49;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-        }
+/* Conteneur central */
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 10px;
-        }
+/* Titres secondaires */
+h2, h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2E6E49;
+}
 
-        .footer-banner-img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
+/* Informations utilisateur */
+.user-info {
+    margin-bottom: 20px;
+}
+
+.user-info label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #2E6E49;
+}
+
+.user-info span {
+    display: block;
+    margin-bottom: 10px;
+    padding: 8px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+}
+
+/* Style tableau succès */
+.table-success {
+    background-color: #2E6E49 !important;
+    color: white !important;
+}
+
+/* Pied de page */
+.footer {
+    background-color: #2c6e49;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    font-size: 14px;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+/* Bannière image du footer */
+.footer-banner-img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
