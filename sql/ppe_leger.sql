@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : sam. 19 avr. 2025 à 21:20
+-- Généré le : dim. 20 avr. 2025 à 17:43
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -592,7 +592,8 @@ INSERT INTO `entreprise` (`idUser`, `siretUser`, `raisonSocialeUser`, `capitalSo
 (31, '1298371892', '123', NULL),
 (32, '123', '123', 123124.00),
 (33, '123123', '123123', 123123.00),
-(34, '987987', '987987', 987987.00);
+(34, '987987', '987987', 987987.00),
+(43, 'entauth', 'entauth', 12312.93);
 
 -- --------------------------------------------------------
 
@@ -907,7 +908,8 @@ INSERT INTO `particulier` (`idUser`, `nomUser`, `prenomUser`, `dateNaissanceUser
 (35, 'yasser', 'yasser', '2010-12-21', 'M'),
 (36, 'yasser', 'yasser', '2010-12-21', 'M'),
 (37, 'part', 'part', '2009-12-12', 'M'),
-(38, 'uy', 'uy', '2003-03-12', 'M');
+(38, 'uy', 'uy', '2003-03-12', 'M'),
+(42, 'partauth', 'partauth', '2005-02-20', 'M');
 
 -- --------------------------------------------------------
 
@@ -979,7 +981,9 @@ INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`)
 (35, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '15 Route du Soleil', 'particulier'),
 (36, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '63 Place du Marché', 'particulier'),
 (37, 'part@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'part', 'particulier'),
-(38, 'uy@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'uy', 'particulier');
+(38, 'uy@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'uy', 'particulier'),
+(42, 'partauth@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'partauth', 'particulier'),
+(43, 'entauth@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'entauth', 'entreprise');
 
 -- --------------------------------------------------------
 
@@ -1339,7 +1343,7 @@ ALTER TABLE `commande`
 -- AUTO_INCREMENT pour la table `entreprise`
 --
 ALTER TABLE `entreprise`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT pour la table `ligneCommande`
@@ -1363,7 +1367,7 @@ ALTER TABLE `maisonEdition`
 -- AUTO_INCREMENT pour la table `particulier`
 --
 ALTER TABLE `particulier`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT pour la table `promotion`
@@ -1375,7 +1379,7 @@ ALTER TABLE `promotion`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- Contraintes pour les tables déchargées

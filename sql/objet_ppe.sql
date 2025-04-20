@@ -151,61 +151,6 @@ delimiter ;
 
 
 
-DELIMITER $$
-CREATE TRIGGER tInsertParticulier
-BEFORE INSERT ON particulier
-FOR EACH ROW
-BEGIN
-    IF NEW.idUser IS NULL OR NEW.idUser NOT IN (SELECT idUser FROM user) THEN
-        SET NEW.idUser = IFNULL((SELECT MAX(idUser) FROM user), 0) + 1;
-    END IF;
-    INSERT INTO user (idUser, emailUser, mdpUser, adresseUser, roleUser)
-    VALUES (NEW.idUser, NEW.emailUser, NEW.mdpUser, NEW.adresseUser, 'client');
-END $$
-DELIMITER ;
-
-
-DELIMITER $$
-CREATE TRIGGER tInsertEntreprise
-BEFORE INSERT ON entreprise
-FOR EACH ROW
-BEGIN
-    IF NEW.idUser IS NULL OR NEW.idUser NOT IN (SELECT idUser FROM user) THEN
-        SET NEW.idUser = IFNULL((SELECT MAX(idUser) FROM user), 0) + 1;
-    END IF;
-    INSERT INTO user (idUser, emailUser, mdpUser, adresseUser, roleUser)
-    VALUES (NEW.idUser, NEW.emailUser, NEW.mdpUser, NULL, 'entreprise');
-END $$
-DELIMITER ;
-
-
-DELIMITER $$
-CREATE TRIGGER tUpdateParticulier
-BEFORE UPDATE ON particulier
-FOR EACH ROW
-BEGIN
-    UPDATE user
-    SET emailUser = NEW.emailUser,
-        mdpUser = NEW.mdpUser,
-        adresseUser = NEW.adresseUser
-    WHERE idUser = NEW.idUser;
-END $$
-DELIMITER ;
-
-
-DELIMITER $$
-CREATE TRIGGER tUpdateEntreprise
-BEFORE UPDATE ON entreprise
-FOR EACH ROW
-BEGIN
-    UPDATE user
-    SET emailUser = NEW.emailUser, mdpUser = NEW.mdpUser
-    WHERE idUser = OLD.idUser;
-END $$
-DELIMITER ;
-
-
-
 PROCEDURES STOCKEES :
 DELIMITER $$
 CREATE PROCEDURE pOffrirLivre(

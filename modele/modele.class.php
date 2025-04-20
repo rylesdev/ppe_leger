@@ -647,7 +647,7 @@
                 $this->unPdo->beginTransaction();
 
                 $requete =  "insert into user
-                            values (null, ?, SHA1(?), ?, 'client')";
+                            values (null, ?, SHA1(?), ?, 'particulier')";
                 $exec = $this->unPdo->prepare($requete);
                 $exec->bindValue(1, $emailUser, PDO::PARAM_STR);
                 $exec->bindValue(2, $mdpUser, PDO::PARAM_STR);
@@ -698,7 +698,7 @@
                 $this->unPdo->beginTransaction();
 
                 $requete =  "insert into user 
-                            values (null, ?, SHA1(?), ?, 'client')";
+                            values (null, ?, SHA1(?), ?, 'entreprise')";
                 $exec = $this->unPdo->prepare($requete);
                 $exec->bindValue(1, $emailUser, PDO::PARAM_STR);
                 $exec->bindValue(2, $mdpUser, PDO::PARAM_STR);
