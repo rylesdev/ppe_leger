@@ -1,8 +1,7 @@
 New :
-    - Mettre à jour les trimmers dans le objet_ppe.sql
-    - Il faut que l'index.php nous fasse apparaitre par défaut sur la page d'accueil
-    - Il faut remplacer le logo du bouton "Quitter" par un logo "Authentification"
-        - Quand on appuie sur ce bouton ça nous emmène vers c_inscription et c_connexion
+    - Voir si je peux remplacer, dans vue_livre, "if (isset($isAdmin) && $isAdmin == 1) {"
+        par if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']!="admin") {""
+
     - Trier tous les fichiers .css et supprimer ceux qui sont inutiles
     - Régler le problème des admin en double (dans le roleUser et dans la table admin)
     -  Faire une page lorsqu'on clique sur un livre
@@ -41,7 +40,7 @@ MCD :
 
 
 Autre :
-    - Rendre les code plus lisible et plus beau.
+    - Rendre les code plus lisible et plus cohérent.
 
 
 Expression des besoins à faire et garder dans un dossier à part :
@@ -113,6 +112,10 @@ A FAIRE :
 
 
 Fait :
+- Il faut que l'index.php nous fasse apparaitre par défaut sur la page d'accueil
+-  Il faut remplacer le logo du bouton "Quitter" par un logo "Authentification"
+        - Quand on appuie sur ce bouton ça nous emmène vers c_inscription et c_connexion
+
 - Supprimer les triggers héritage puis essayer les nouvelles requetes héritage
         // - Insert
         // - Update

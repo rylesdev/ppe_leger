@@ -67,7 +67,9 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser'] !="admin") {
     } else {
         $lesLivres = $unControleur->selectAllLivres();
     }
+
+} else if (!isset($_SESSION['emailUser'])) {
+    echo "<h3 style='color: red;'>Vous devez être connecté pour accéder à cette page.</h3>";
 } else {
-    echo "Page indisponible pour le rôle admin.";
+    echo "<h3 style='color: red;'>Page indisponible pour le rôle admin.</h3";
 }
-?>
