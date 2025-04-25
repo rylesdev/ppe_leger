@@ -91,6 +91,7 @@ GROUP BY u.emailUser;
 
 
 TRIGGERS :
+// Trigger suivant à supprimer après vérification que la procédure pQuantiteLigneCommande fonctionne correctement
 delimiter $$
 create trigger tExemplaireLivreLigneCommande
 before insert on ligneCommande
@@ -131,6 +132,45 @@ end $$
 delimiter ;
 
 
+// Faire un trigger qui va empêcher le user d''insérer une ligneCommande (insertLigneCommande) si la somme de toutes les quantiteLigneCommande (old et new) pour chaque idLivre est supérieur ou égal au nombre exemplaire d''un livre
+DELIMITER $$
+CREATE TRIGGER tStockLivre
+BEFORE update ON ligneCommande
+FOR EACH ROW
+BEGIN
+    DECLARE t_totalQuantite INT;
+    DECLARE t_exemplaireLivre INT;
+    DECLARE t_idUser INT;
+
+    SELECT idUser
+    INTO t_idUser
+    FROM commande
+    WHERE idCommande = NEW.idCommande;
+
+    SELECT SUM(lc.quantiteLigneCommande)
+    INTO t_totalQuantite
+    FROM ligneCommande lc
+    INNER JOIN commande c ON lc.idCommande = c.idCommande
+    WHERE lc.idLivre = NEW.idLivre
+    AND c.idUser = t_idUser
+    and c.statutCommande = 'en attente';
+
+    SET t_totalQuantite = IFNULL(t_totalQuantite, 0) - OLD.quantiteLigneCommande + NEW.quantiteLigneCommande;
+
+    SELECT exemplaireLivre
+    INTO t_exemplaireLivre
+    FROM livre
+    WHERE idLivre = NEW.idLivre;
+
+    IF t_totalQuantite > t_exemplaireLivre THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La quantité totale dépasse le nombre d''exemplaires disponibles pour ce livre.';
+    END IF;
+END$$
+DELIMITER ;
+
+
+
 delimiter $$
 create trigger tUpdateStockCommandeExpediee
 after update on commande
@@ -152,6 +192,37 @@ delimiter ;
 
 
 PROCEDURES STOCKEES :
+DELIMITER //
+CREATE PROCEDURE pQuantiteLigneCommande(
+    IN in_idCommande INT,
+    IN in_idLivre INT,
+    IN in_quantiteLigneCommande INT
+)
+BEGIN
+    DECLARE p_idLigneCommande INT;
+    DECLARE p_quantiteLigneCommande INT;
+
+    SELECT lc.idLigneCommande, lc.quantiteLigneCommande
+    INTO p_idLigneCommande, p_quantiteLigneCommande
+    FROM ligneCommande lc
+    INNER JOIN commande c ON lc.idCommande = c.idCommande
+    WHERE lc.idLivre = in_idLivre
+      AND c.idUser = (SELECT idUser FROM commande WHERE idCommande = in_idCommande LIMIT 1)
+      AND c.statutCommande = 'en attente'
+    LIMIT 1;
+
+    IF p_idLigneCommande IS NOT NULL THEN
+        UPDATE ligneCommande
+        SET quantiteLigneCommande = quantiteLigneCommande + in_quantiteLigneCommande
+        WHERE idLigneCommande = p_idLigneCommande;
+    ELSE
+        INSERT INTO ligneCommande
+        VALUES (null, in_idCommande, in_idLivre, in_quantiteLigneCommande);
+    END IF;
+END //
+DELIMITER ;
+
+
 DELIMITER $$
 CREATE PROCEDURE pOffrirLivre(
     IN p_idUser INT,

@@ -84,18 +84,17 @@ require_once("includes/header.php");
                     <p style='color: red;'>pour acheter un livre.</p>";
                 } else {
                     // Formulaire utilisateur
-                    echo "<form method='post' style='display: inline-block; margin-right: 10px; margin-bottom: 5px'>
-                        <input type='number' name='insertQuantiteLivre' min='1' max='" . $unLivre['exemplaireLivre'] . "'
-                               style='width: 50px; display: inline-block' required>
-                        <button type='submit' name='QuantiteLivre' style='background-color: #28a745; color: white; border: none; padding: 2px 5px; cursor: pointer'>
-                            OK
-                        </button>
-                    </form>
-                    <a href='index.php?page=2&action=acheter&idLivre=" . $unLivre['idLivre'] . "&idUser=" . $idUser . "'
-                       style='display: inline-block; margin-top: 5px' title='Ajouter au panier'>
-                        <img src='images/acheter.png' height='30' width='30' style='vertical-align: middle'>
-                        Panier
-                    </a>";
+                    // Remplacer la partie "Formulaire utilisateur" par ceci :
+                    echo    "<form method='post' style='display: inline-block;'>
+                                <input type='hidden' name='idLivre' value='".$unLivre['idLivre']."'>
+                                <input type='hidden' name='idUser' value='".$idUser."'>
+                                <input type='number' name='quantiteLivre' min='1' max='".$unLivre['exemplaireLivre']."'
+                                       value='1' style='width: 50px;' required>
+                                <button type='submit' name='action' value='AjouterPanier'
+                                        style='background-color: #2E6E49; color: white; border: none; padding: 5px 10px; cursor: pointer'>
+                                    Ajouter au panier
+                                </button>
+                            </form>";
                 }
             }
             echo "</td>";

@@ -476,6 +476,27 @@
             return $exec->fetchAll();
         }
 
+        public function selectCommandeEnAttente($idUser) {
+            $requete =  "select idCommande from commande 
+                        where idUser = ? and statutCommande = 'en attente'
+                        order by dateCommande desc limit 1;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function selectCommandeExpediee($idUser) {
+            $requete =  "select idCommande from commande 
+                        where idUser = ? and statutCommande = 'expédiée'
+                        order by dateCommande desc limit 1;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+
 
         /**************** DELETE ****************/
 
@@ -725,41 +746,45 @@
             }
         }
 
-		public function insertCommande ($idUser) {
+        public function insertCommande($idUser) {
             try {
-                $requete =  "insert into commande 
-			                values (null, null, 'en attente', null, ?);";
-			$exec = $this->unPdo->prepare ($requete);
-			$exec->BindValue (1, $idUser, PDO::PARAM_INT);
-			$exec->execute();
-			return $this->unPdo->lastInsertId();
-            } catch(PDOException $exp) {
-                echo $exp->getMessage();
-            }
-            return $exec->fetchAll();
-		}
+                $this->unPdo->beginTransaction();
 
-        public function insertLigneCommande($idCommande, $idLivre, $quantiteLivre) {
+                $requete =  "insert into commande 
+                            values (null, curdate(), 'en attente', date_add(curdate(), interval 7 day), ?);";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+                $exec->execute();
+
+                $idCommande = $this->unPdo->lastInsertId();
+                $this->unPdo->commit();
+
+                return $idCommande;
+
+            } catch (PDOException $e) {
+                $this->unPdo->rollBack();
+                error_log("Erreur création commande : " . $e->getMessage());
+                return false;
+            }
+        }
+
+        public function insertLigneCommande($idCommande, $idLivre, $quantiteLigneCommande) {
             try {
-                $requete = "insert into ligneCommande
-                            values (null, ?, ?, ?);";
-                $execInsert = $this->unPdo->prepare($requete);
-                $execInsert->bindValue(1, $idCommande, PDO::PARAM_INT);
-                $execInsert->bindValue(2, $idLivre, PDO::PARAM_INT);
-                $execInsert->bindValue(3, $quantiteLivre, PDO::PARAM_INT);
-                $execInsert->execute();
-                return $execInsert->fetchAll();
-            } catch (PDOException $exp) {
-                if ($exp->getCode() === '45000') {
-                    $messageErreur = $exp->getMessage();
-                    if (strpos($messageErreur, 'Stock insuffisant pour le livre') !== false) {
-                        echo "<h3 style='color: red;'>Erreur : Stock insuffisant pour le livre. <br> Veuillez réduire la quantité ou choisir un autre livre. </h3>";
-                    } elseif (strpos($messageErreur, 'Livre déjà dans le panier') !== false) {
-                        echo "<h3 style='color: green;'>Livre ajouté dans le panier. </h3>";
-                    } else {
-                        echo "<h3 style='color: red;'>Erreur : Un problème inattendu s'est produit.</h3>";
-                    }
+                $requete = "CALL pQuantiteLigneCommande(?, ?, ?)";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $idCommande, PDO::PARAM_INT);
+                $exec->BindValue(2, $idLivre, PDO::PARAM_INT);
+                $exec->BindValue(3, $quantiteLigneCommande, PDO::PARAM_INT);
+                $exec->execute();
+                return true;
+            } catch (PDOException $e) {
+                $errorMessage = $e->getMessage();
+                error_log("Erreur lors de l'insertion dans ligneCommande : " . $errorMessage);
+                if ($e->getCode() == '45000') {
+                    echo "<div class='alert alert-danger'>
+                    Erreur : La quantité totale dépasse le nombre d'exemplaires disponibles pour ce livre.</div>";
                 }
+                return false;
             }
         }
 
@@ -971,14 +996,26 @@
         }
 
         public function updateLigneCommande ($quantiteLigneCommande, $idLigneCommande) {
-            $requete =  "update ligneCommande
+            try {
+                $requete =  "update ligneCommande
                         set quantiteLigneCommande = ?
                         where idLigneCommande = ?;";
-            $exec = $this->unPdo->prepare ($requete);
-            $exec->BindValue (1, $quantiteLigneCommande, PDO::PARAM_INT);
-            $exec->BindValue (2, $idLigneCommande, PDO::PARAM_INT);
-            $exec->execute();
-            return $this->unPdo->lastInsertId();
+                $exec = $this->unPdo->prepare ($requete);
+                $exec->BindValue (1, $quantiteLigneCommande, PDO::PARAM_INT);
+                $exec->BindValue (2, $idLigneCommande, PDO::PARAM_INT);
+                $exec->execute();
+
+                return true;
+
+            } catch (PDOException $e) {
+                $errorMessage = $e->getMessage();
+                error_log("Erreur lors de l'insertion dans ligneCommande : " . $errorMessage);
+                if ($e->getCode() == '45000') {
+                echo "<div class='alert alert-danger'>
+                      Erreur : La quantité totale dépasse le nombre d'exemplaires disponibles pour ce livre.</div>";
+                }
+            return false;
+            }
         }
 
         public function ajouterPointAbonnement($pointAbonnement, $idUser) {
