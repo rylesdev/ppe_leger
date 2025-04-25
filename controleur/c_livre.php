@@ -1,60 +1,35 @@
 <?php
-$modeEdition = false;
-if (isset($_GET['action']) && $_GET['action'] == "edit" && isset($_GET['idLivre'])) {
-    $idLivre = $_GET['idLivre'];
-    $leLivre = $unControleur->selectWhereLivre($idLivre);
-    $modeEdition = true;
-} else {
-    $leLivre = null;
-}
-
 $idUser = $_SESSION['idUser'];
 
-if (!isset($_SESSION['commandeEnCours'])) {
-    $_SESSION['commandeEnCours'] = 0;
-    $commandeEnCours = $_SESSION['commandeEnCours'];
+if (isset($_POST['action']) && $_POST['action'] == 'AjouterPanier') {
+    $idLivre = (int)$_POST['idLivre'];
+    $quantiteLivre = (int)$_POST['quantiteLivre'];
+    $idUser = (int)$_POST['idUser'];
+
+    $idCommande = $unControleur->selectCommandeEnAttente($idUser)[0][0];
+
+    if (!$idCommande || ($unControleur->selectCommandeExpediee($idUser)[0][0] && !$unControleur->selectCommandeEnAttente($idUser)[0][0])) {
+        $idCommande = $unControleur->insertCommande($idUser);
+    }
+
+    $result = $unControleur->insertLigneCommande($idCommande, $idLivre, $quantiteLivre);
+
+    if ($result) {
+        echo "<div class='alert alert-success'>Article ajouté au panier (x$quantiteLivre)</div>";
+    }
 }
 
-if (isset($_GET['action']) && isset($_GET['idLivre'])) {
-    $action  = $_GET['action'];
-    $idLivre = $_GET['idLivre'];
-
-    if (isset($_POST['QuantiteLivre'])) {
-        $_SESSION['quantiteLivre'] = $_POST['insertQuantiteLivre'];
-        $quantiteLivre = $_SESSION['quantiteLivre'];
-    } else {
-        $quantiteLivre = isset($_SESSION['quantiteLivre']) ? $_SESSION['quantiteLivre'] : 0;
-    }
+if (isset($_REQUEST['action'])) {
+    $action = $_REQUEST['action'];
+    $idLivre = $_REQUEST['idLivre'] ?? null;
 
     switch ($action) {
         case "sup":
-                        $unControleur->deleteLivre($idLivre);
-                        break;
+            $unControleur->deleteLivre($idLivre);
+            break;
 
         case "edit":
-                        $leLivre = $unControleur->selectWhereLivre($idLivre);
-                        break;
-
-        case "acheter":
-            if (isset($idLivre) && isset($quantiteLivre) && $quantiteLivre > 0) {
-                $idCommande = $unControleur->selectCommandeEnCours($idUser);
-
-                if (!$idCommande) {
-                    $idCommande = $unControleur->insertCommande($idUser);
-                    if ($idCommande) {
-                        echo "<h3 style='color: green;'>Nouvelle commande créée.</h3>";
-                    } else {
-                        echo "<h3 style='color: red;'>Erreur : Impossible de créer une nouvelle commande.</h3>";
-                        break;
-                    }
-                }
-
-                $result = $unControleur->insertLigneCommande($idCommande, $idLivre, $quantiteLivre);
-
-                if ($result) {
-                    echo "<h3 style='color: green;'>Livre ajouté à la commande avec succès.</h3>";
-                }
-            }
+            $leLivre = $unControleur->selectWhereLivre($idLivre);
             break;
     }
 }
@@ -98,4 +73,3 @@ if (isset($_POST['FiltrerLivre'])) {
 }
 
 require_once("vue/livre/vue_livre.php");
-?>

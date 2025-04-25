@@ -152,6 +152,14 @@
             return $this->unModele->selectOffrirLivre($idUser);
         }
 
+        public function selectCommandeEnAttente($idUser) {
+            return $this->unModele->selectCommandeEnAttente($idUser);
+        }
+
+        public function selectCommandeExpediee($idUser) {
+            return $this->unModele->selectCommandeExpediee($idUser);
+        }
+
 
 		/**************** DELETE ****************/
 
@@ -203,8 +211,8 @@
 			return $this->unModele->insertCommande($idUser);
 		}
 
-		public function insertLigneCommande($idCommande, $idLivre, $quantiteLivre){
-			return $this->unModele->insertLigneCommande($idCommande, $idLivre, $quantiteLivre);
+		public function insertLigneCommande($idCommande, $idLivre, $quantiteLigneCommande){
+			return $this->unModele->insertLigneCommande($idCommande, $idLivre, $quantiteLigneCommande);
 		}
 
 		public function insertAbonnement1m($idUser){
@@ -259,7 +267,7 @@
 		}
 
 		public function updateLigneCommande ($quantiteLigneCommande, $idLigneCommande) {
-			$this->unModele->updateLigneCommande ($quantiteLigneCommande, $idLigneCommande);
+			return $this->unModele->updateLigneCommande ($quantiteLigneCommande, $idLigneCommande);
 		}
 
 		public function ajouterPointAbonnement($pointAbonnement, $idUser) {

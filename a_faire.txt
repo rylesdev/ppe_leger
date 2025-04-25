@@ -1,46 +1,26 @@
 New :
+    - Vérifier la logique de chaque page et s'assurer qu'il y ai pas d'incohérence avec les méthodes/$_SESSION notamment
+
     - Voir si je peux remplacer, dans vue_livre, "if (isset($isAdmin) && $isAdmin == 1) {"
         par if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']!="admin") {""
 
     - Trier tous les fichiers .css et supprimer ceux qui sont inutiles
+
     - Régler le problème des admin en double (dans le roleUser et dans la table admin)
-    -  Faire une page lorsqu'on clique sur un livre
-        Récupération de l'idLivre avec un GET (ou POST),
-        $idLivre = $_GET['idLivre'] puis afficher les informations du livre (whereIdLivre($idLivre))
 
-    - Mettre la requete "insertLigneCommande" dans la méthode "insertCommande"
-        en stockant les valeurs de ligneCommande dans un tableau matriciel
-        Exemple : $lignesCommande = array(
-                      array(1, 10, 15.50, "Produit A"), // Chaque sous-tableau représente une ligne de commande
-                      array(2, 5, 20.00, "Produit B")
-                  );
-
-                  // Ajouter une nouvelle ligne de commande
-                  $lignesCommande[] = array(3, 7, 12.75, "Produit C");
-
-                  // Accéder aux informations
-                  foreach ($lignesCommande as $ligne) {
-                      echo "ID: " . $ligne[0] . ", Quantité: " . $ligne[1] . ", Prix: " . $ligne[2] . ", Description: " . $ligne[3] . "\n";
-                  }
-
-
-Priorité :
     - Si les champs lors de l'inscription ne sont pas tous remplis, alors il faut bloquer le "insertUser"
-    - Changer le input lorsque le user ajoute un livre au panier pour que ça fonctionne dès le premier coup
 
+    - Je peux payer un livre de 100 points avec 70 points.
 
-Bug :
-    - ...
+    - La méthode "selectLikeLivres" qui sert à filtrer les livres ne marche pas.
+        Solution : Montrer au prof que le filtrage de la page Livre (le seul qui marche).
 
+    - (Optionnel) - Quand j'ajoute un livre avec une quantité de 12 (par exemple), la quantité sélectionnée est 3.
+        Réponse : Probablement un problème de synchronisation entre les "Confirmer la quantité".
 
-MCD :
     - Supprimer le “nomUser” de la table Avis et trouver un moyen pour régler la view "selectAvis".
 
 
-
-
-Autre :
-    - Rendre les code plus lisible et plus cohérent.
 
 
 Expression des besoins à faire et garder dans un dossier à part :
@@ -63,10 +43,6 @@ A FAIRE :
             - Mettre les vues Inscription et Connexion dans un carré
             - Changer la navbar pour mettre la page Panier, Commande, Abonnement, Informations, et Déconnexion sur le côté
             Exemple : https://shop.labourseauxlivres.fr/ https://www.lalibrairie.com/
-
-
-        Page du site :
-            - Mettre la liste des livres sur la page Accueil (page principale) et supprimer le logo de la liste des livres
 
 
         Page Panier :
@@ -98,22 +74,21 @@ A FAIRE :
                 Si ce n'est pas le cas alors le supprimer
 
 
-        Bug
-            - Je peux payer un livre de 100 points avec 70 points.
-
-            - La méthode "selectLikeLivres" qui sert à filtrer les livres ne marche pas.
-            Solution : Montrer au prof que le filtrage de la page Livre (le seul qui marche).
-
-            (Optionnel) - Quand j'ajoute un livre avec une quantité de 12 (par exemple), la quantité sélectionnée est 3.
-            Réponse : Probablement un problème de synchronisation entre les "Confirmer la quantité".
-
-
 
 
 
 Fait :
+- Changer le input lorsque le user ajoute un livre au panier pour que ça fonctionne dès le premier coup
+- Problème de logique avec les exemplaires. Les exemplaires de chaque livre sont mis à jour uniquement après l'achat (en attente -> expédiée)
+        Le problème qui pourrait se produire c'est si l'utilisateur achète plus de livre qu'il y a de stock.
+        Il faudrait mettre à jour le stock en temps réel, dès qu'il ajoute un livre au panier.
+- Modifier la procédure pQuantiteLigneCommande pour qu'il n'affiche pas un message d'erreur mais qu'il mette à jour la quantité de livre de la ligneCommande qui détient un idLivre similaire (lorsque le message d'erreur est affiché)
+- Modifier le fonctionnement de LigneCommande.
+        Il faut qu'il y ai une nouvelle commande seulement si l'utilisateur a payé.
+        Tant qu'il y a pas de nouvelle commande, alors toutes les ligneCommande se font avec le même idCommande.
+- (c_livre.php) régler le problème de l'insertCommande qui ne fonctionne pas et qui affiche un message d'erreur.
 - Il faut que l'index.php nous fasse apparaitre par défaut sur la page d'accueil
--  Il faut remplacer le logo du bouton "Quitter" par un logo "Authentification"
+- Il faut remplacer le logo du bouton "Quitter" par un logo "Authentification"
         - Quand on appuie sur ce bouton ça nous emmène vers c_inscription et c_connexion
 
 - Supprimer les triggers héritage puis essayer les nouvelles requetes héritage
