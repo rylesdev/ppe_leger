@@ -225,46 +225,46 @@ DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE pOffrirLivre(
-    IN p_idUser INT,
-    IN p_chiffre INT
+    IN in_idUser INT,
+    IN in_chiffre INT
 )
-BEGIN
-    DECLARE newIdCommande INT;
-    DECLARE randomLivreId INT;
-    IF NOT EXISTS (
-        SELECT 1
-        FROM abonnement
-        WHERE idUser = p_idUser
-    ) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Vous devez être abonné pour bénéficier de cette offre.';
+proc: BEGIN
+    DECLARE p_idCommande INT;
+    DECLARE p_idLivre INT;
+    DECLARE p_abonne_valide BOOLEAN DEFAULT FALSE;
+
+    SELECT COUNT(*) > 0 INTO p_abonne_valide
+    FROM abonnement
+    WHERE idUser = in_idUser AND dateFinAbonnement > CURDATE();
+
+    IF NOT p_abonne_valide THEN
+        LEAVE proc;
     END IF;
-    IF NOT EXISTS (
-        SELECT 1
-        FROM abonnement
-        WHERE idUser = p_idUser AND dateFinAbonnement > CURDATE()
-    ) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Votre abonnement a expiré. Vous ne pouvez pas bénéficier de cette offre.';
-    END IF;
-    IF p_chiffre = 5 THEN
-        INSERT INTO commande (idCommande, dateCommande, statutCommande, dateLivraisonCommande, idUser)
-        VALUES (null, NOW(), 'expédiée', DATE_ADD(NOW(), INTERVAL 7 DAY), p_idUser);
-        SET newIdCommande = LAST_INSERT_ID();
-        SELECT idLivre
-        INTO randomLivreId
-        FROM (
-            SELECT 9 AS idLivre UNION ALL
-            SELECT 10 UNION ALL
-            SELECT 11 UNION ALL
-            SELECT 12
-        ) AS livres
-        ORDER BY RAND()
+
+    IF in_chiffre = 5 THEN
+        SELECT idCommande INTO p_idCommande
+        FROM commande
+        WHERE idUser = in_idUser AND statutCommande = 'en attente'
+        ORDER BY dateCommande DESC
         LIMIT 1;
-        INSERT INTO ligneCommande (idLigneCommande, idCommande, idLivre, quantiteLigneCommande)
-        VALUES (null, newIdCommande, randomLivreId, 1);
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Un livre vous a été offert et va vous être envoyé directement chez vous !';
+
+        IF p_idCommande IS NOT NULL THEN
+            SELECT idLivre INTO p_idLivre
+            FROM (
+                SELECT 9 AS idLivre UNION ALL
+                SELECT 10 UNION ALL
+                SELECT 11 UNION ALL
+                SELECT 12
+            ) AS livres
+            ORDER BY RAND()
+            LIMIT 1;
+
+            INSERT INTO ligneCommande
+            VALUES (null, p_idCommande, p_idLivre, 1);
+
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Un livre vous a été offert dans votre panier actuel !';
+        END IF;
     END IF;
 END$$
 DELIMITER ;

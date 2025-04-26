@@ -134,10 +134,7 @@ $dateCommande = $dateCommande[0];
                     echo "<td> = </td>";
                     echo "<td>" . $totalLivre . "€</td>";
                     echo "<td>";
-                    if (isset($isAdmin) && $isAdmin == 1) {
                         echo "<a href='index.php?page=3&action=sup&idCommande=" . $uneCommande['idCommande'] . "&idLigneCommande=" . $uneCommande['idLigneCommande'] . "'>" . "<img src='images/supprimer.png' height='30' width='30'> </a>";
-                        echo "<a href='index.php?page=3&action=edit&idCommande=" . $uneCommande['idCommande'] . "&idLigneCommande=" . $uneCommande['idLigneCommande'] . "'>" . "<img src='images/editer.png' height='30' width='30'> </a>";
-                    }
                     ?>
                     <form method="post" style="display: inline-block;">
                         <input type="hidden" name="idLigneCommande" value="<?php echo $uneCommande['idLigneCommande']; ?>">
@@ -177,7 +174,7 @@ $dateCommande = $dateCommande[0];
                 <input type="text" id="montant" name="montant" value="<?php
                 if ($sommeAPayer > 0) {
                     echo $sommeAPayer . '€';
-                    $pointAUtiliser = $sommeAPayer * 10;
+                    $pointAUtiliser = (int) $sommeAPayer * 10;
                 } else {
                     echo '0€';
                 }
@@ -190,7 +187,7 @@ $dateCommande = $dateCommande[0];
                     echo $pointAUtiliser . ' points';
                     $_SESSION['pointAUtiliser'] = $pointAUtiliser;
                 } else {
-                    echo '0 Point';
+                    echo '0 point';
                 }
                 ?>" readonly>
             </div>

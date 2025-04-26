@@ -108,20 +108,20 @@
             return $exec->fetchAll();
         }
 
-		public function selectAllLivres (){
-			$requete =  "select l.*, m.nomMaisonEdition, c.nomCategorie
+        public function selectLivre() {
+            $requete =  "select l.*, m.nomMaisonEdition, c.nomCategorie
 				        from livre l
 				        inner join categorie c 
 				        on l.idCategorie=c.idCategorie
 				        inner join maisonEdition m 
 				        on l.idMaisonEdition=m.idMaisonEdition
 				        where prixLivre != 0;";
-			$exec = $this->unPdo->prepare ($requete);
-			$exec->execute ();
-			return $exec->fetchAll();
-		}
+            $exec = $this->unPdo->prepare ($requete);
+            $exec->execute ();
+            return $exec->fetchAll();
+        }
 
-		public function selectLikeLivres ($filtre){
+		public function selectLikeLivre ($filtre){
 			$requete =  "SELECT l.*, c.nomCategorie, m.nomMaisonEdition
                         FROM livre l   
                         INNER JOIN categorie c 
@@ -193,26 +193,6 @@
             $exec->BindValue (1, $idCommande, PDO::PARAM_STR);
             $exec->execute();
             return $exec->fetchAll();
-        }
-
-        public function selectCommandeEnCours($idUser) {
-            try {
-                $requete =  "select idCommande 
-                            from commande 
-                            where idUser = ? and statutCommande = 'en attente';";
-                $exec = $this->unPdo->prepare($requete);
-                $exec->bindValue(1, $idUser, PDO::PARAM_INT);
-                $exec->execute();
-                $result = $exec->fetch(PDO::FETCH_ASSOC);
-                if ($result) {
-                    return $result['idCommande'];
-                } else {
-                    return null;
-                }
-            } catch (PDOException $exp) {
-                echo $exp->getMessage();
-                return null;
-            }
         }
 
         public function selectDateLivraisonCommande($idUser) {
@@ -496,9 +476,116 @@
             return $exec->fetchAll();
         }
 
+        public function selectCommandeByUser($idUser) {
+            $requete = "SELECT * FROM commande 
+                WHERE idUser = ?
+                ORDER BY dateCommande DESC";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function selectCommandeById($idCommande) {
+            $requete = "SELECT lc.*, l.nomLivre, l.prixLivre 
+                FROM ligneCommande lc
+                JOIN livre l ON lc.idLivre = l.idLivre
+                WHERE lc.idCommande = ?";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idCommande, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function selectCommandeByIdTri($idCommande, $tri = null) {
+            try {
+                $requete = "SELECT l.*, lc.quantiteLigneCommande 
+                    FROM ligneCommande lc
+                    JOIN livre l ON lc.idLivre = l.idLivre
+                    WHERE lc.idCommande = ?";
+
+                // Ajout du tri
+                switch($tri) {
+                    case 'prixMin':
+                        $requete .= " ORDER BY l.prixLivre ASC";
+                        break;
+                    case 'prixMax':
+                        $requete .= " ORDER BY l.prixLivre DESC";
+                        break;
+                    case 'ordreCroissant':
+                        $requete .= " ORDER BY l.nomLivre ASC";
+                        break;
+                    case 'ordreDecroissant':
+                        $requete .= " ORDER BY l.nomLivre DESC";
+                        break;
+                }
+
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $idCommande, PDO::PARAM_INT);
+                $exec->execute();
+
+                return $exec->fetchAll(PDO::FETCH_ASSOC);
+
+            } catch (PDOException $e) {
+                error_log("Erreur dans selectCommandeByIdTri: " . $e->getMessage());
+                return [];
+            }
+        }
+
+        public function selectCommandeTri($idUser, $tri = null) {
+            try {
+                $requete = "SELECT l.*, lc.quantiteLigneCommande 
+                    FROM ligneCommande lc
+                    JOIN livre l ON lc.idLivre = l.idLivre
+                    JOIN commande c ON lc.idCommande = c.idCommande
+                    WHERE c.idUser = ?";
+
+                // Ajout du tri
+                switch($tri) {
+                    case 'prixMin':
+                        $requete .= " ORDER BY l.prixLivre ASC";
+                        break;
+                    case 'prixMax':
+                        $requete .= " ORDER BY l.prixLivre DESC";
+                        break;
+                    case 'ordreCroissant':
+                        $requete .= " ORDER BY l.nomLivre ASC";
+                        break;
+                    case 'ordreDecroissant':
+                        $requete .= " ORDER BY l.nomLivre DESC";
+                        break;
+                    default:
+                        $requete .= " ORDER BY c.dateCommande DESC"; // Tri par défaut
+                }
+
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $idUser, PDO::PARAM_INT);
+                $exec->execute();
+
+                return $exec->fetchAll(PDO::FETCH_ASSOC);
+
+            } catch (PDOException $e) {
+                error_log("Erreur dans selectCommandeTri: " . $e->getMessage());
+                return [];
+            }
+        }
+
+        public function countLigneCommande($idCommande) {
+            try {
+                $requete = "SELECT COUNT(*) as nb FROM ligneCommande WHERE idCommande = ?";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $idCommande, PDO::PARAM_INT);
+                $exec->execute();
+                return $exec->fetch()['nb'];
+            } catch (PDOException $e) {
+                error_log("Erreur dans countLigneCommande: " . $e->getMessage());
+                return 0;
+            }
+        }
 
 
-        /**************** DELETE ****************/
+
+            /**************** DELETE ****************/
 
 		public function deleteLivre($idLivre){
 			$requete =  "delete 
@@ -751,7 +838,7 @@
                 $this->unPdo->beginTransaction();
 
                 $requete =  "insert into commande 
-                            values (null, curdate(), 'en attente', date_add(curdate(), interval 7 day), ?);";
+                            values (null, null, 'en attente', null, ?);";
                 $exec = $this->unPdo->prepare($requete);
                 $exec->BindValue(1, $idUser, PDO::PARAM_INT);
                 $exec->execute();
@@ -1045,11 +1132,23 @@
 
         /**************** PROCEDURE ****************/
         public function procedureOffrirLivre($idUser, $chiffre) {
-            $requete = "CALL pOffrirLivre(?, ?)";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->BindValue(2, $chiffre, PDO::PARAM_INT);
-            $exec->execute();
+            try {
+                $requete = "CALL pOffrirLivre(?, ?)";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $idUser, PDO::PARAM_INT);
+                $exec->bindValue(2, $chiffre, PDO::PARAM_INT);
+                $exec->execute();
+
+                return true;
+            } catch (PDOException $e) {
+                $errorMessage = $e->getMessage();
+                error_log("Erreur lors de l'insertion dans ligneCommande : " . $errorMessage);
+                if ($e->getCode() == '45000') {
+                    echo "<div class='alert alert-success'>
+                    Un livre vous a été offert dans votre panier actuel !</div>";
+                }
+                return false;
+            }
         }
 
         public function procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition) {

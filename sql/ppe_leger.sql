@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : ven. 25 avr. 2025 à 18:17
+-- Généré le : sam. 26 avr. 2025 à 23:09
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -55,43 +55,43 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `pInsertOrUpdatePromotion` (IN `p_no
     END IF;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pOffrirLivre` (IN `p_idUser` INT, IN `p_chiffre` INT)   BEGIN
-    DECLARE newIdCommande INT;
-    DECLARE randomLivreId INT;
-    IF NOT EXISTS (
-        SELECT 1
-        FROM abonnement
-        WHERE idUser = p_idUser
-    ) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Vous devez être abonné pour bénéficier de cette offre.';
+CREATE DEFINER=`root`@`localhost` PROCEDURE `pOffrirLivre` (IN `in_idUser` INT, IN `in_chiffre` INT)   proc: BEGIN
+    DECLARE p_idCommande INT;
+    DECLARE p_idLivre INT;
+    DECLARE p_abonne_valide BOOLEAN DEFAULT FALSE;
+
+    SELECT COUNT(*) > 0 INTO p_abonne_valide
+    FROM abonnement
+    WHERE idUser = in_idUser AND dateFinAbonnement > CURDATE();
+
+    IF NOT p_abonne_valide THEN
+        LEAVE proc;
     END IF;
-    IF NOT EXISTS (
-        SELECT 1
-        FROM abonnement
-        WHERE idUser = p_idUser AND dateFinAbonnement > CURDATE()
-    ) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Votre abonnement a expiré. Vous ne pouvez pas bénéficier de cette offre.';
-    END IF;
-    IF p_chiffre = 5 THEN
-        INSERT INTO commande (idCommande, dateCommande, statutCommande, dateLivraisonCommande, idUser)
-        VALUES (null, NOW(), 'expédiée', DATE_ADD(NOW(), INTERVAL 7 DAY), p_idUser);
-        SET newIdCommande = LAST_INSERT_ID();
-        SELECT idLivre
-        INTO randomLivreId
-        FROM (
-            SELECT 9 AS idLivre UNION ALL
-            SELECT 10 UNION ALL
-            SELECT 11 UNION ALL
-            SELECT 12
-        ) AS livres
-        ORDER BY RAND()
+
+    IF in_chiffre = 5 THEN
+        SELECT idCommande INTO p_idCommande
+        FROM commande
+        WHERE idUser = in_idUser AND statutCommande = 'en attente'
+        ORDER BY dateCommande DESC
         LIMIT 1;
-        INSERT INTO ligneCommande (idLigneCommande, idCommande, idLivre, quantiteLigneCommande)
-        VALUES (null, newIdCommande, randomLivreId, 1);
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Un livre vous a été offert et va vous être envoyé directement chez vous !';
+
+        IF p_idCommande IS NOT NULL THEN
+            SELECT idLivre INTO p_idLivre
+            FROM (
+                SELECT 9 AS idLivre UNION ALL
+                SELECT 10 UNION ALL
+                SELECT 11 UNION ALL
+                SELECT 12
+            ) AS livres
+            ORDER BY RAND()
+            LIMIT 1;
+
+            INSERT INTO ligneCommande
+            VALUES (null, p_idCommande, p_idLivre, 1);
+
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Un livre vous a été offert dans votre panier actuel !';
+        END IF;
     END IF;
 END$$
 
@@ -142,7 +142,7 @@ INSERT INTO `abonnement` (`idAbonnement`, `idUser`, `dateDebutAbonnement`, `date
 (1, 2, '2025-01-01', '2025-12-31', 0),
 (3, 23, '2025-01-25', '2025-04-25', 0),
 (4, 15, '2025-01-26', '2025-02-28', 80),
-(26, 37, '2025-04-25', '2025-05-25', 0);
+(26, 37, '2025-04-25', '2025-05-25', 730);
 
 -- --------------------------------------------------------
 
@@ -397,7 +397,26 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (455, '2025-02-03', 'expédiée', '2025-02-10', 15),
 (462, '2025-04-24', 'expédiée', '2025-05-01', 37),
 (463, '2025-04-25', 'en attente', '2025-05-02', 2),
-(465, '2025-04-25', 'en attente', '2025-05-02', 37);
+(465, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(466, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(467, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(468, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(469, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(470, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(471, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(472, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(473, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(474, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(475, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(476, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(477, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(478, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(479, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(480, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(481, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(482, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(483, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(484, '2025-04-27', 'expédiée', '2025-05-04', 37);
 
 -- --------------------------------------------------------
 
@@ -551,10 +570,43 @@ INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quanti
 (790, 463, 2, 1),
 (791, 463, 2, 31),
 (792, 462, 13, 80),
-(793, 465, 3, 15),
-(794, 465, 2, 82),
 (795, 465, 45, 1),
-(796, 465, 50, 100);
+(797, 465, 3, 10),
+(798, 466, 2, 1),
+(799, 466, 3, 12),
+(800, 467, 11, 1),
+(801, 468, 9, 1),
+(802, 469, 2, 1),
+(803, 469, 12, 1),
+(804, 470, 2, 1),
+(805, 470, 11, 1),
+(806, 471, 2, 1),
+(807, 471, 11, 1),
+(808, 472, 2, 1),
+(809, 472, 12, 1),
+(810, 473, 2, 1),
+(811, 473, 11, 1),
+(812, 474, 2, 5),
+(813, 474, 9, 1),
+(814, 475, 3, 2),
+(815, 475, 12, 1),
+(816, 476, 3, 12),
+(817, 477, 2, 11),
+(818, 477, 10, 1),
+(819, 478, 2, 1),
+(820, 478, 11, 1),
+(821, 479, 2, 1),
+(822, 479, 12, 1),
+(823, 480, 2, 1),
+(824, 480, 9, 1),
+(825, 481, 2, 1),
+(826, 481, 10, 1),
+(827, 482, 2, 1),
+(828, 482, 10, 1),
+(829, 483, 2, 1),
+(830, 483, 12, 1),
+(831, 484, 2, 1),
+(832, 484, 10, 1);
 
 --
 -- Déclencheurs `ligneCommande`
@@ -1130,7 +1182,7 @@ ALTER TABLE `categorie`
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=466;
+  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=485;
 
 --
 -- AUTO_INCREMENT pour la table `entreprise`
@@ -1142,7 +1194,7 @@ ALTER TABLE `entreprise`
 -- AUTO_INCREMENT pour la table `ligneCommande`
 --
 ALTER TABLE `ligneCommande`
-  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=797;
+  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=833;
 
 --
 -- AUTO_INCREMENT pour la table `livre`
