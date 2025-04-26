@@ -11,7 +11,22 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser'] == "admin") {
 
 $idUser = $_SESSION['idUser'];
 
-// Gestion des actions
+function fUpdatePointAbonnement($unControleur, $idUser, $idCommande) {
+    if ($unControleur->selectDateAbonnement($idUser) >= 0) {
+        $resultat = $unControleur->selectNbLigneCommande($idCommande);
+        $pointAbonnement = $resultat['nombreLigneCommande'] * 10;
+        $unControleur->ajouterPointAbonnement($pointAbonnement, $idUser);
+    }
+}
+
+function fOffrirLivre($unControleur, $idUser) {
+    $chiffre = rand(5, 5);
+    $result = $unControleur->procedureOffrirLivre($idUser, $chiffre);
+    if ($result) {
+        echo "<div class='alert alert-success'>Un livre vous a été offert dans votre panier actuel !</div>";
+    }
+}
+
 if (isset($_POST['ModifierPanier'])) {
     $idLigneCommande = $_POST['idLigneCommande'];
     $quantiteLigneCommande = $_POST['quantiteLigneCommande'];
@@ -36,43 +51,51 @@ if (isset($_GET['action'])) {
             break;
 
         case "payer":
-            $pointAbonnement = $_POST['pointAUtiliser'] ?? 0;
+            $idCommande = $unControleur->selectCommandeEnAttente($idUser)[0][0];
 
-            if ($pointAbonnement > 0 && $unControleur->selectPointAbonnement($idUser)['pointAbonnement'] >= $pointAbonnement) {
-                $unControleur->enleverPointAbonnement($pointAbonnement, $idUser);
+            if (isset($_POST['PayerPaypal'])) {
+                if ($idCommande) {
+                    fUpdatePointAbonnement($unControleur, $idUser, $idCommande);
+
+                    fOffrirLivre($unControleur, $idUser);
+
+                    $unControleur->updateCommande($idCommande);
+
+                    header("Location: https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR");
+                    exit();
+                } else {
+                    echo "<div class='alert alert-danger'>Aucune commande en cours trouvée</div>";
+                }
             }
 
-            $idCommande = $unControleur->selectCommandeEnCours($idUser);
-            if ($idCommande) {
-                $unControleur->updateCommande($idCommande);
+            if (isset($_POST['PayerPoint'])) {
+                $pointAUtiliser = $_SESSION['pointAUtiliser'];
+                $pointsDisponibles = $unControleur->selectPointAbonnement($idUser)['pointAbonnement'];
 
-                if ($unControleur->selectDateAbonnement($idUser) > 0) {
-                    $resultat = $unControleur->selectNbLigneCommande($idCommande);
-                    $pointAbonnement = $resultat['nombreLigneCommande'] * 10;
-                    $unControleur->ajouterPointAbonnement($pointAbonnement, $idUser);
+                if ($pointAUtiliser > 0 && $pointsDisponibles >= $pointAUtiliser) {
+                    if ($idCommande) {
+                        $livreOffert = fOffrirLivre($unControleur, $idUser);
+
+                        $unControleur->enleverPointAbonnement($pointAUtiliser, $idUser);
+
+                        $unControleur->updateCommande($idCommande);
+
+                        echo "<div class='alert alert-success'>Paiement effectué avec $pointAUtiliser points</div>";
+                    } else {
+                        echo "<div class='alert alert-danger'>Aucune commande en cours trouvée</div>";
+                    }
+                } else {
+                    echo "<div class='alert alert-danger'>Points insuffisants pour effectuer le paiement</div>";
                 }
-
-                try {
-                    $chiffre = rand(1, 5);
-                    $unControleur->procedureOffrirLivre($idUser, $chiffre);
-                } catch (PDOException $e) {
-                    echo "<div class='alert alert-danger'>".$e->getMessage()."</div>";
-                }
-
-                header("Location: https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR");
-                exit();
-            } else {
-                echo "<div class='alert alert-danger'>Aucune commande en cours trouvée</div>";
             }
             break;
     }
 }
 
-// Filtrage des livres
 if (isset($_POST['FiltrerPanier'])) {
-    $lesLivres = $unControleur->selectLikeLivres($_POST['filtre']);
+    $lesLivres = $unControleur->selectLikeLivre($_POST['filtre']);
 } else {
-    $lesLivres = $unControleur->selectAllLivres();
+    $lesLivres = $unControleur->selectLivre();
 }
 
 require_once("vue/panier/vue_panier.php");

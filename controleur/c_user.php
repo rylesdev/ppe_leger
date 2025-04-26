@@ -5,6 +5,9 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']!="admin") {
 
     $idUser = $_SESSION['idUser'];
 
+    // A SUPPRIMER URGENT
+    var_dump($idUser);
+
     require_once("vue/user/vue_user.php");
 
     require_once("vue/user/vue_update_user.php");

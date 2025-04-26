@@ -15,9 +15,9 @@ if (isset($isAdmin) && $isAdmin == 1) {
     }
 
 if (isset($_POST['FiltrerStockage'])){
-    $lesLivres = $unControleur->selectLikeLivres($_POST['filtre']);
+    $lesLivres = $unControleur->selectLikeLivre($_POST['filtre']);
 } else {
-    $lesLivres = $unControleur->selectAllLivres ($idUser);
+    $lesLivres = $unControleur->selectLivre();
 }
 
 require_once("vue/stockage/vue_select_livre_stockage.php");

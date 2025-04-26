@@ -1,7 +1,7 @@
 <?php
-	require_once ("modele/modele.class.php"); 
+	require_once ("modele/modele.class.php");
 	class Controleur {
-		private $unModele ; 
+		private $unModele ;
 
 		public function __construct (){
 			$this->unModele = new Modele ();
@@ -28,12 +28,12 @@
 			return $this->unModele->selectAdminPrincipal($idUser);
 		}
 
-		public function selectAllLivres (){
-			return $this->unModele->selectAllLivres();
+		public function selectLivre(){
+			return $this->unModele->selectLivre();
 		}
 
-		public function selectLikeLivres ($filtre){
-			return $this->unModele->selectLikeLivres($filtre);
+		public function selectLikeLivre ($filtre){
+			return $this->unModele->selectLikeLivre($filtre);
 		}
 
 		public function selectWhereLivre($idLivre){
@@ -44,13 +44,9 @@
 			return $this->unModele->selectAdresseUser($idUser);
 		}
 
-        public function selectLigneCommande ($idUser){
+        public function selectLigneCommande ($idCommande){
             return $this->unModele->selectLigneCommande($idCommande);
         }
-
-		public function selectCommandeEnCours($idUser) {
-			return $this->unModele->selectCommandeEnCours($idUser);
-		}
 
 		public function selectDateLivraisonCommande($idUser) {
 			return $this->unModele->selectDateLivraisonCommande($idUser);
@@ -158,6 +154,22 @@
 
         public function selectCommandeExpediee($idUser) {
             return $this->unModele->selectCommandeExpediee($idUser);
+        }
+
+        public function selectCommandeByUser($idUser) {
+            return $this->unModele->selectCommandeByUser($idUser);
+        }
+
+        public function selectCommandeByIdTri($idCommande, $tri = null) {
+            return $this->unModele->selectCommandeByIdTri($idCommande, $tri);
+        }
+
+        public function selectCommandeTri($idUser, $tri = null) {
+            return $this->unModele->selectCommandeTri($idUser, $tri);
+        }
+
+        public function countLigneCommande($idCommande) {
+            return $this->unModele->countLigneCommande($idCommande);
         }
 
 
@@ -281,7 +293,7 @@
 
 		/**************** PROCEDURE ****************/
 		public function procedureOffrirLivre($idUser, $chiffre) {
-			$this->unModele->procedureOffrirLivre($idUser, $chiffre);
+			return $this->unModele->procedureOffrirLivre($idUser, $chiffre);
 		}
 
         public function procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition) {

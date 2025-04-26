@@ -67,9 +67,9 @@ if (isset($_POST['Modifier'])) {
 }
 
 if (isset($_POST['FiltrerLivre'])) {
-    $lesLivres = $unControleur->selectLikeLivres($_POST['filtre']);
+    $lesLivres = $unControleur->selectLikeLivre($_POST['filtre']);
 } else {
-    $lesLivres = $unControleur->selectAllLivres();
+    $lesLivres = $unControleur->selectLivre();
 }
 
 require_once("vue/livre/vue_livre.php");
