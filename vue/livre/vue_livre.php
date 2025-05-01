@@ -3,107 +3,107 @@ $titrePage = "Acheter un livre";
 require_once("includes/header.php");
 ?>
 
-<link rel="stylesheet" href="includes/css/vue_livre.css">
+    <link rel="stylesheet" href="includes/css/vue_livre.css">
 
-<h3>Liste des livres (<?= count($lesLivres) ?>)</h3>
+    <h3>Liste des livres (<?= count($lesLivres) ?>)</h3>
 
-<form method="post">
-    Filtrer par : <input type="text" name="filtre">
-    <input type="submit" name="FiltrerLivre" value="Filtrer" class="table-success">
-</form>
-<br>
+    <form method="post">
+        Filtrer par : <input type="text" name="filtre">
+        <input type="submit" name="FiltrerLivre" value="Filtrer" class="table-success">
+    </form>
+    <br>
 
-<table class="table" style="margin-left: 50px; margin-right: 50px; table-layout: fixed; width: 100%">
-    <thead class="table-success">
-    <tr>
-        <th scope="col" style="width: 100px">Image</th>
-        <th scope="col" style="width: 200px">Nom</th>
-        <th scope="col" style="width: 150px">Catégorie</th>
-        <th scope="col" style="width: 150px">Auteur</th>
-        <th scope="col" style="width: 150px">Maison d'édition</th>
-        <th scope="col" style="width: 100px">Exemplaires</th>
-        <th scope="col" style="width: 120px">Prix</th>
-        <th scope="col" style="width: 200px">Opérations</th>
-    </tr>
-    </thead>
-    <tbody>
+    <table class="table" style="margin-left: 50px; margin-right: 50px; table-layout: fixed; width: 100%">
+        <thead class="table-success">
+        <tr>
+            <th scope="col" style="width: 100px">Image</th>
+            <th scope="col" style="width: 200px">Nom</th>
+            <th scope="col" style="width: 150px">Catégorie</th>
+            <th scope="col" style="width: 150px">Auteur</th>
+            <th scope="col" style="width: 150px">Maison d'édition</th>
+            <th scope="col" style="width: 100px">Exemplaires</th>
+            <th scope="col" style="width: 120px">Prix</th>
+            <th scope="col" style="width: 200px">Opérations</th>
+        </tr>
+        </thead>
+        <tbody>
 
-    <?php
-    // Récupération des promotions indexées par idLivre pour optimisation
-    $livresPromotion = $unControleur->selectLivrePromotion();
-    $promosParId = [];
-    foreach ($livresPromotion as $promo) {
-        $promosParId[$promo['idLivre']] = $promo;
-    }
+        <?php
+        // Récupération des promotions indexées par idLivre pour optimisation
+        $livresPromotion = $unControleur->selectLivrePromotion();
+        $promosParId = [];
+        foreach ($livresPromotion as $promo) {
+            $promosParId[$promo['idLivre']] = $promo;
+        }
 
-    $idUser = $_SESSION['idUser'];
+        $idUser = $_SESSION['idUser'];
 
-    if (isset($lesLivres)) {
-        foreach ($lesLivres as $unLivre) {
-            $enPromotion = isset($promosParId[$unLivre['idLivre']]);
-            $prixPromo = $enPromotion ?
-                $unLivre['prixLivre'] * (1 - $promosParId[$unLivre['idLivre']]['reductionPromotion'] / 100) :
-                null;
+        if (isset($lesLivres)) {
+            foreach ($lesLivres as $unLivre) {
+                $enPromotion = isset($promosParId[$unLivre['idLivre']]);
+                $prixPromo = $enPromotion ?
+                    $unLivre['prixLivre'] * (1 - $promosParId[$unLivre['idLivre']]['reductionPromotion'] / 100) :
+                    null;
 
-            echo "<tr>";
-            // Image du livre
-            echo "<td style='width: 100px'><img src='images/livres/" . htmlspecialchars($unLivre['imageLivre']) . "' style='height: 150px; width: 100px; object-fit: contain' alt='Couverture du livre'></td>";
+                echo "<tr>";
+                // Image du livre
+                echo "<td style='width: 100px'><img src='images/livres/" . htmlspecialchars($unLivre['imageLivre']) . "' style='height: 150px; width: 100px; object-fit: contain' alt='Couverture du livre'></td>";
 
-            // Informations du livre
-            echo "<td style='width: 200px'>" . htmlspecialchars($unLivre['nomLivre']) . "</td>";
-            echo "<td style='width: 150px'>" . htmlspecialchars($unLivre['nomCategorie']) . "</td>";
-            echo "<td style='width: 150px'>" . htmlspecialchars($unLivre['auteurLivre']) . "</td>";
-            echo "<td style='width: 150px'>" . htmlspecialchars($unLivre['nomMaisonEdition']) . "</td>";
-            echo "<td style='width: 100px; text-align: center'>" . htmlspecialchars($unLivre['exemplaireLivre']) . "</td>";
+                // Informations du livre
+                echo "<td style='width: 200px'>" . htmlspecialchars($unLivre['nomLivre']) . "</td>";
+                echo "<td style='width: 150px'>" . htmlspecialchars($unLivre['nomCategorie']) . "</td>";
+                echo "<td style='width: 150px'>" . htmlspecialchars($unLivre['auteurLivre']) . "</td>";
+                echo "<td style='width: 150px'>" . htmlspecialchars($unLivre['nomMaisonEdition']) . "</td>";
+                echo "<td style='width: 100px; text-align: center'>" . htmlspecialchars($unLivre['exemplaireLivre']) . "</td>";
 
-            // Prix avec gestion de la promotion
-            if ($enPromotion) {
-                echo "<td style='width: 120px'>
-                <del>" . number_format($unLivre['prixLivre'], 2) . "€</del><br>
-                <span style='color: red; font-weight: bold'>" . number_format($prixPromo, 2) . "€</span><br>
-                <small>-" . $promosParId[$unLivre['idLivre']]['reductionPromotion'] . "%</small>
-            </td>";
-            } else {
-                echo "<td style='width: 120px'>" . number_format($unLivre['prixLivre'], 2) . "€</td>";
-            }
+                // Prix avec gestion de la promotion (MODIFICATION ICI)
+                if ($enPromotion) {
+                    $reduction = $promosParId[$unLivre['idLivre']]['reductionPromotion'];
+                    echo "<td style='width: 120px'>
+                    <del>" . number_format($unLivre['prixLivre'], 2) . "€</del><br>
+                    <span style='color: red; font-weight: bold'>" . number_format($prixPromo, 2) . "€</span><br>
+                    <small>-" . $reduction . "%</small>
+                </td>";
+                } else {
+                    echo "<td style='width: 120px'>" . number_format($unLivre['prixLivre'], 2) . "€</td>";
+                }
 
-            // Opérations (admin ou utilisateur)
-            echo "<td style='width: 200px; white-space: nowrap'>";
-            if (isset($isAdmin) && $isAdmin == 1) {
-                // Boutons admin
-                echo "<a href='index.php?page=2&action=sup&idLivre=" . $unLivre['idLivre'] . "' style='margin-right: 5px' title='Supprimer'>
+                // Opérations (admin ou utilisateur)
+                echo "<td style='width: 200px; white-space: nowrap'>";
+                if (isset($isAdmin) && $isAdmin == 1) {
+                    // Boutons admin
+                    echo "<a href='index.php?page=2&action=sup&idLivre=" . $unLivre['idLivre'] . "' style='margin-right: 5px' title='Supprimer'>
                     <img src='images/supprimer.png' height='30' width='30'>
                 </a>
                 <a href='index.php?page=2&action=edit&idLivre=" . $unLivre['idLivre'] . "' title='Éditer'>
                     <img src='images/editer.png' height='30' width='30'>
                 </a>";
-            } else {
-                // Vérifier si l'utilisateur est connecté
-                if (!isset($_SESSION['emailUser'])) {
-                    echo "<p style='color: red;'>Vous devez être connecté </p> 
-                    <p style='color: red;'>pour acheter un livre.</p>";
                 } else {
-                    // Formulaire utilisateur
-                    // Remplacer la partie "Formulaire utilisateur" par ceci :
-                    echo    "<form method='post' style='display: inline-block;'>
-                                <input type='hidden' name='idLivre' value='".$unLivre['idLivre']."'>
-                                <input type='hidden' name='idUser' value='".$idUser."'>
-                                <input type='number' name='quantiteLivre' min='1' max='".$unLivre['exemplaireLivre']."'
-                                       value='1' style='width: 50px;' required>
-                                <button type='submit' name='action' value='AjouterPanier'
-                                        style='background-color: #2E6E49; color: white; border: none; padding: 5px 10px; cursor: pointer'>
-                                    Ajouter au panier
-                                </button>
-                            </form>";
+                    // Vérifier si l'utilisateur est connecté
+                    if (!isset($_SESSION['emailUser'])) {
+                        echo "<p style='color: red;'>Vous devez être connecté </p> 
+                    <p style='color: red;'>pour acheter un livre.</p>";
+                    } else {
+                        // Formulaire utilisateur
+                        echo "<form method='post' style='display: inline-block;'>
+                            <input type='hidden' name='idLivre' value='".$unLivre['idLivre']."'>
+                            <input type='hidden' name='idUser' value='".$idUser."'>
+                            <input type='number' name='quantiteLivre' min='1' max='".$unLivre['exemplaireLivre']."'
+                                   value='1' style='width: 50px;' required>
+                            <button type='submit' name='action' value='AjouterPanier'
+                                    style='background-color: #2E6E49; color: white; border: none; padding: 5px 10px; cursor: pointer'>
+                                Ajouter au panier
+                            </button>
+                        </form>";
+                    }
                 }
+                echo "</td>";
+                echo "</tr>";
             }
-            echo "</td>";
-            echo "</tr>";
         }
-    }
-    ?>
-    </tbody>
-</table>
+        ?>
+        </tbody>
+    </table>
 
 <?php
 require_once("includes/footer.php");

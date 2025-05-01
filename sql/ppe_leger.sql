@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : jeu. 01 mai 2025 à 00:50
+-- Généré le : jeu. 01 mai 2025 à 18:53
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -25,17 +25,54 @@ DELIMITER $$
 --
 -- Procédures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pInsertLivre` (IN `p_nomLivre` VARCHAR(255), IN `p_auteurLivre` VARCHAR(255), IN `p_imageLivre` VARCHAR(255), IN `p_exemplaireLivre` INT, IN `p_prixLivre` DECIMAL(10,2), IN `p_nomCategorie` VARCHAR(255), IN `p_nomMaisonEdition` VARCHAR(255))   BEGIN
-    DECLARE v_idCategorie INT;
-    DECLARE v_idMaisonEdition INT;
-    SELECT idCategorie INTO v_idCategorie
+CREATE DEFINER=`root`@`localhost` PROCEDURE `pInsertLivre` (IN `in_nomLivre` VARCHAR(255), IN `in_auteurLivre` VARCHAR(255), IN `in_imageLivre` VARCHAR(255), IN `in_exemplaireLivre` INT, IN `in_prixLivre` DECIMAL(10,2), IN `in_nomCategorie` VARCHAR(255), IN `in_nomMaisonEdition` VARCHAR(255), IN `in_nomPromotion` VARCHAR(255))   BEGIN
+    DECLARE p_idCategorie INT;
+    DECLARE p_idMaisonEdition INT;
+    DECLARE p_idPromotion INT;
+
+    SELECT idCategorie INTO p_idCategorie
     FROM categorie
-    WHERE nomCategorie = p_nomCategorie;
-    SELECT idMaisonEdition INTO v_idMaisonEdition
+    WHERE nomCategorie = in_nomCategorie;
+    
+    SELECT idMaisonEdition INTO p_idMaisonEdition
     FROM maisonEdition
-    WHERE nomMaisonEdition = p_nomMaisonEdition;
-    INSERT INTO livre (nomLivre, auteurLivre, imageLivre, exemplaireLivre, prixLivre, idCategorie, idMaisonEdition)
-    VALUES (p_nomLivre, p_auteurLivre, p_imageLivre, p_exemplaireLivre, p_prixLivre, v_idCategorie, v_idMaisonEdition);
+    WHERE nomMaisonEdition = in_nomMaisonEdition;
+    
+    SELECT idPromotion INTO p_idPromotion
+    FROM promotion
+    WHERE nomPromotion = in_nomPromotion;
+
+    INSERT INTO livre (idLivre, nomLivre, auteurLivre, imageLivre, exemplaireLivre, prixLivre, idCategorie, idMaisonEdition, idPromotion)
+    VALUES (null, in_nomLivre, in_auteurLivre, in_imageLivre, in_exemplaireLivre, in_prixLivre, p_idCategorie, p_idMaisonEdition, p_idPromotion);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `pInsertOrUpdateLigneCommande` (IN `in_idCommande` INT, IN `in_idLivre` INT, IN `in_quantiteLigneCommande` INT)   BEGIN
+    DECLARE p_idLigneCommande INT;
+    DECLARE p_quantiteLigneCommande INT;
+
+    SELECT lc.idLigneCommande, lc.quantiteLigneCommande
+    INTO p_idLigneCommande, p_quantiteLigneCommande
+    FROM ligneCommande lc
+    INNER JOIN commande c ON lc.idCommande = c.idCommande
+    WHERE lc.idLivre = in_idLivre
+      AND c.idUser = (SELECT idUser FROM commande WHERE idCommande = in_idCommande LIMIT 1)
+      AND c.statutCommande = 'en attente'
+    LIMIT 1;
+
+    IF p_idLigneCommande IS NOT NULL THEN
+        UPDATE ligneCommande
+        SET quantiteLigneCommande = quantiteLigneCommande + in_quantiteLigneCommande
+        WHERE idLigneCommande = p_idLigneCommande;
+
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'TEXT 1';
+    ELSE
+        INSERT INTO ligneCommande
+        VALUES (null, in_idCommande, in_idLivre, in_quantiteLigneCommande);
+
+         SIGNAL SQLSTATE '45000'
+         SET MESSAGE_TEXT = 'TEXT 2';
+    END IF;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `pInsertOrUpdatePromotion` (IN `in_nomLivre` VARCHAR(255), IN `in_reductionPromotion` INT, IN `in_dateFinPromotion` DATE)   BEGIN
@@ -50,7 +87,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `pInsertOrUpdatePromotion` (IN `in_n
 
     IF p_idLivre IS NULL THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Erreur : Le livre spécifié n''existe pas';
+        SET MESSAGE_TEXT = 'TEXT 1';
     END IF;
 
     SELECT idPromotion INTO p_newIdPromotion
@@ -68,8 +105,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `pInsertOrUpdatePromotion` (IN `in_n
         SET idPromotion = p_newIdPromotion
         WHERE idLivre = p_idLivre;
 
-        SET p_message = CONCAT('Promotion existante de ', in_reductionPromotion, '% mise à jour et appliquée au livre ', in_nomLivre);
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = p_message;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'TEXT 2';
     ELSE
         INSERT INTO promotion (idPromotion, nomPromotion, dateDebutPromotion, dateFinPromotion, reductionPromotion)
         VALUES (NULL, CONCAT(in_reductionPromotion, '%'), CURDATE(), in_dateFinPromotion, in_reductionPromotion);
@@ -80,46 +117,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `pInsertOrUpdatePromotion` (IN `in_n
         SET idPromotion = p_newIdPromotion
         WHERE idLivre = p_idLivre;
 
-        SET p_message = CONCAT('Nouvelle promotion de ', in_reductionPromotion, '% créée et appliquée au livre ', in_nomLivre);
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = p_message;
-    END IF;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pManageBookPromotion` (IN `in_nomLivre` VARCHAR(255), IN `in_dateFinPromotion` DATE, IN `in_reductionPromotion` DECIMAL(5,2), IN `in_nomPromotion` VARCHAR(255))   BEGIN
-    DECLARE p_idLivre INT;
-    DECLARE p_idPromotion INT;
-    DECLARE p_currentDateFin DATE;
-    DECLARE p_message VARCHAR(255);
-
-    -- Définir les valeurs par défaut pour les paramètres optionnels
-    SET in_reductionPromotion = IFNULL(in_reductionPromotion, NULL);
-    SET in_nomPromotion = IFNULL(in_nomPromotion, NULL);
-
-    SELECT idLivre INTO p_idLivre FROM livre WHERE nomLivre = in_nomLivre LIMIT 1;
-
-    IF p_idLivre IS NULL THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Erreur : Le livre spécifié n''existe pas';
-    END IF;
-
-    SELECT idPromotion INTO p_idPromotion FROM livre WHERE idLivre = p_idLivre;
-
-    IF p_idPromotion IS NOT NULL THEN
-        UPDATE promotion
-        SET dateFinPromotion = in_dateFinPromotion
-        WHERE idPromotion = p_idPromotion;
-
-        SET p_message = CONCAT('Une promotion de ', in_reductionPromotion, '% a bien été mise à jour pour le livre ', in_nomLivre);
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = p_message;
-    ELSE
-        INSERT INTO promotion VALUES (null, in_nomPromotion, CURDATE(), in_dateFinPromotion, in_reductionPromotion);
-
-        UPDATE livre
-        SET idPromotion = LAST_INSERT_ID()
-        WHERE idLivre = p_idLivre;
-
-        SET p_message = CONCAT('Une promotion de ', in_reductionPromotion, '% a bien été ajoutée pour le livre ', in_nomLivre);
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = p_message;
+        SET MESSAGE_TEXT = 'TEXT 3';
     END IF;
 END$$
 
@@ -163,29 +162,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `pOffrirLivre` (IN `in_idUser` INT, 
     END IF;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pQuantiteLigneCommande` (IN `in_idCommande` INT, IN `in_idLivre` INT, IN `in_quantiteLigneCommande` INT)   BEGIN
-    DECLARE p_idLigneCommande INT;
-    DECLARE p_quantiteLigneCommande INT;
-
-    SELECT lc.idLigneCommande, lc.quantiteLigneCommande
-    INTO p_idLigneCommande, p_quantiteLigneCommande
-    FROM ligneCommande lc
-    INNER JOIN commande c ON lc.idCommande = c.idCommande
-    WHERE lc.idLivre = in_idLivre
-      AND c.idUser = (SELECT idUser FROM commande WHERE idCommande = in_idCommande LIMIT 1)
-      AND c.statutCommande = 'en attente'
-    LIMIT 1;
-
-    IF p_idLigneCommande IS NOT NULL THEN
-        UPDATE ligneCommande
-        SET quantiteLigneCommande = quantiteLigneCommande + in_quantiteLigneCommande
-        WHERE idLigneCommande = p_idLigneCommande;
-    ELSE
-        INSERT INTO ligneCommande (idCommande, idLivre, quantiteLigneCommande)
-        VALUES (in_idCommande, in_idLivre, in_quantiteLigneCommande);
-    END IF;
-END$$
-
 DELIMITER ;
 
 -- --------------------------------------------------------
@@ -210,7 +186,7 @@ INSERT INTO `abonnement` (`idAbonnement`, `idUser`, `dateDebutAbonnement`, `date
 (1, 2, '2025-01-01', '2025-12-31', 0),
 (3, 23, '2025-01-25', '2025-04-25', 0),
 (4, 15, '2025-01-26', '2025-02-28', 80),
-(26, 37, '2025-04-25', '2025-05-25', 730);
+(26, 37, '2025-04-25', '2025-06-01', 190);
 
 -- --------------------------------------------------------
 
@@ -322,7 +298,8 @@ INSERT INTO `avis` (`idAvis`, `idLivre`, `nomLivre`, `idUser`, `commentaireAvis`
 (31, 3, 'L`Etranger', 15, 'test \'', 5, '2025-02-03'),
 (32, 45, 'L`Art de la guerre', 37, 'super', 4, '2025-05-01'),
 (33, 10, 'Les Misérables', 37, 'excellent', 1, '2025-05-01'),
-(34, 10, 'Les Misérables', 37, 'nul', 5, '2025-05-01');
+(34, 10, 'Les Misérables', 37, 'nul', 5, '2025-05-01'),
+(35, 3, 'L`Etranger', 37, 'test avis 16h07', 4, '2025-05-01');
 
 -- --------------------------------------------------------
 
@@ -488,7 +465,52 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (482, '2025-04-26', 'expédiée', '2025-05-03', 37),
 (483, '2025-04-26', 'expédiée', '2025-05-03', 37),
 (484, '2025-04-27', 'expédiée', '2025-05-04', 37),
-(485, NULL, 'en attente', NULL, 37);
+(485, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(486, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(487, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(488, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(489, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(490, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(491, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(492, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(493, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(494, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(495, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(496, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(497, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(498, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(499, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(500, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(501, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(502, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(503, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(504, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(505, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(506, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(507, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(508, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(509, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(510, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(511, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(512, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(513, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(514, '2025-05-01', 'expédiée', '2025-05-08', 37),
+(515, NULL, 'en attente', NULL, 37);
+
+--
+-- Déclencheurs `commande`
+--
+DELIMITER $$
+CREATE TRIGGER `tUpdateStockCommande` AFTER UPDATE ON `commande` FOR EACH ROW BEGIN
+    IF OLD.statutCommande = 'en attente' AND NEW.statutCommande = 'expédiée' THEN
+        UPDATE livre l
+        JOIN ligneCommande lc ON l.idLivre = lc.idLivre
+        SET l.exemplaireLivre = l.exemplaireLivre - lc.quantiteLigneCommande
+        WHERE lc.idCommande = NEW.idCommande;
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -679,7 +701,62 @@ INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quanti
 (830, 483, 12, 1),
 (831, 484, 2, 1),
 (832, 484, 10, 1),
-(833, 485, 2, 1);
+(834, 485, 2, 84),
+(835, 485, 3, 2),
+(836, 485, 13, 2),
+(837, 485, 14, 1),
+(838, 485, 9, 1),
+(839, 486, 2, 1),
+(840, 486, 9, 1),
+(841, 487, 2, 1),
+(842, 487, 9, 1),
+(843, 488, 2, 4),
+(844, 488, 9, 1),
+(845, 489, 2, 4),
+(846, 489, 3, 14),
+(847, 489, 10, 1),
+(849, 490, 2, 90),
+(850, 490, 12, 1),
+(851, 491, 2, 1),
+(852, 491, 9, 1),
+(853, 492, 2, 1),
+(854, 492, 12, 1),
+(855, 493, 2, 1),
+(856, 493, 1, 5),
+(857, 493, 10, 1),
+(858, 494, 2, 1),
+(859, 494, 9, 1),
+(860, 495, 2, 1),
+(861, 495, 11, 1),
+(862, 496, 2, 1),
+(863, 496, 9, 1),
+(864, 497, 2, 1),
+(865, 497, 11, 1),
+(866, 498, 2, 1),
+(867, 498, 9, 1),
+(868, 499, 2, 1),
+(869, 499, 10, 1),
+(870, 500, 2, 1),
+(871, 500, 12, 1),
+(872, 501, 2, 1),
+(873, 501, 12, 1),
+(874, 502, 2, 1),
+(875, 503, 2, 1),
+(876, 504, 2, 1),
+(877, 505, 2, 1),
+(878, 505, 3, 3),
+(879, 505, 13, 4),
+(880, 506, 2, 1),
+(881, 507, 2, 1),
+(882, 508, 2, 1),
+(883, 509, 2, 1),
+(884, 510, 2, 1),
+(885, 511, 2, 1),
+(886, 512, 3, 1),
+(887, 513, 2, 1),
+(888, 514, 3, 1),
+(889, 515, 2, 1),
+(890, 515, 3, 1);
 
 --
 -- Déclencheurs `ligneCommande`
@@ -741,20 +818,20 @@ CREATE TABLE `livre` (
 --
 
 INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exemplaireLivre`, `prixLivre`, `idCategorie`, `idMaisonEdition`, `idPromotion`) VALUES
-(1, 'Alcools', 'Apollinaire', 'alcools.png', 99, 12.50, 3, 1, 3),
-(2, 'Crime et Chatiment', 'Dostoïevski', 'crime_et_chatiment.png', 84, 15.00, 1, 2, 13),
-(3, 'L`Etranger', 'Camus', 'l_etranger.png', 55, 10.00, 1, 3, NULL),
-(4, 'L`Odyssée', 'Homère', 'l_odyssee.png', 89, 13.50, 2, 4, NULL),
+(1, 'Alcools', 'Apollinaire', 'alcools.png', 94, 12.50, 3, 1, 18),
+(2, 'Crime et Chatiment', 'Dostoïevski', 'crime_et_chatiment.png', 78, 15.00, 1, 2, 13),
+(3, 'L`Etranger', 'Camus', 'l_etranger.png', 80, 10.00, 1, 3, NULL),
+(4, 'L`Odyssée', 'Homère', 'l_odyssee.png', 89, 13.50, 2, 4, 19),
 (5, 'Les Fleurs du Mal', 'Baudelaire', 'les_fleurs_du_mal.png', 100, 14.00, 3, 5, 14),
 (6, 'PHP et MySQL pour les nuls', 'Valade', 'php_et_mysql_pour_les_nuls.png', 79, 22.00, 4, 6, NULL),
 (7, 'Programmer en Java', 'Delannoy', 'programmer_en_java.png', 100, 25.00, 4, 7, NULL),
 (8, 'SPQR', 'Beard', 'spqr.png', 99, 18.00, 2, 8, NULL),
-(9, 'À la recherche du temps perdu', 'Proust', 'a_la_recherche_du_temps_perdu.png', 96, 0.00, 1, 1, NULL),
-(10, 'Les Misérables', 'Hugo', 'les_miserables_I.png', 99, 0.00, 1, 2, NULL),
-(11, '1984', 'Orwell', '1984.png', 95, 0.00, 1, 3, NULL),
-(12, 'L`Art d\'aimer', 'Ovide', 'l_art_d_aimer', 92, 0.00, 1, 4, NULL),
-(13, 'La Peste', 'Camus', 'la_peste.png', 50, 15.99, 1, 1, NULL),
-(14, 'Les Mémoires d\'Hadrien', 'Yourcenar', 'les_memoires_d_hadrien.png', 94, 12.99, 1, 1, NULL),
+(9, 'À la recherche du temps perdu', 'Proust', 'a_la_recherche_du_temps_perdu.png', 93, 0.00, 1, 1, NULL),
+(10, 'Les Misérables', 'Hugo', 'les_miserables_I.png', 96, 0.00, 1, 2, NULL),
+(11, '1984', 'Orwell', '1984.png', 93, 0.00, 1, 3, NULL),
+(12, 'L`Art d\'aimer', 'Ovide', 'l_art_d_aimer', 88, 0.00, 1, 4, NULL),
+(13, 'La Peste', 'Camus', 'la_peste.png', 95, 15.99, 1, 1, NULL),
+(14, 'Les Mémoires d\'Hadrien', 'Yourcenar', 'les_memoires_d_hadrien.png', 99, 12.99, 1, 1, NULL),
 (15, 'La Condition humaine', 'Malraux', 'la_condition_humaine.png', 100, 14.99, 1, 1, NULL),
 (16, 'Le Comte de Monte-Cristo', 'Dumas', 'le_comte_de_monte_cristo.png', 100, 9.99, 1, 2, NULL),
 (17, 'Orgueil et Préjugés', 'Austen', 'orgueil_et_prejuges.png', 100, 8.99, 1, 2, NULL),
@@ -847,17 +924,22 @@ CREATE TABLE `promotion` (
 
 INSERT INTO `promotion` (`idPromotion`, `nomPromotion`, `dateDebutPromotion`, `dateFinPromotion`, `reductionPromotion`) VALUES
 (1, '10%', '2025-01-05', '2025-01-20', 10),
-(2, '20%', '2025-02-01', '2025-02-15', 20),
-(3, '30%', '2025-03-01', '2007-07-07', 30),
-(4, '40%', '2025-03-26', '2026-12-12', 40),
-(5, '50%', '2025-03-26', '2026-12-12', 50),
+(2, '20%', '2025-02-01', '1212-12-12', 20),
+(3, '30%', '2025-03-01', '2012-12-12', 30),
+(4, '40%', '2025-03-26', '2012-12-12', 40),
+(5, '50%', '2025-03-26', '2002-12-12', 50),
 (6, '60%', '2025-02-02', '2025-02-10', 60),
 (7, '70%', '2025-03-26', '2026-12-12', 70),
 (8, '80%', '2025-03-26', '2026-12-12', 80),
 (9, '90%', '2025-01-05', '2025-01-20', 90),
 (10, 'Aucune promotion', '2025-01-05', '2025-01-20', 0),
 (13, '35%', '2025-05-01', '2008-08-08', 35),
-(14, '55%', '2025-05-01', '2001-01-01', 55);
+(14, '55%', '2025-05-01', '2001-01-01', 55),
+(15, '36%', '2025-05-01', '2012-02-20', 36),
+(16, '52%', '2025-05-01', '2005-12-12', 52),
+(17, '7%', '2025-05-01', '2012-12-12', 7),
+(18, '67%', '2025-05-01', '2012-12-12', 67),
+(19, '42%', '2025-05-01', '2025-12-12', 42);
 
 -- --------------------------------------------------------
 
@@ -897,7 +979,7 @@ INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`)
 (34, '987987@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '47 Allée des Chênes', 'particulier'),
 (35, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '15 Route du Soleil', 'particulier'),
 (36, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '63 Place du Marché', 'particulier'),
-(37, 'part@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'part', 'particulier'),
+(37, 'part@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '17 rue des moulins', 'particulier'),
 (38, 'uy@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'uy', 'particulier'),
 (42, 'partauth@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'partauth', 'particulier'),
 (43, 'entauth@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'entauth', 'entreprise');
@@ -919,10 +1001,10 @@ CREATE TABLE `vcommandesenattente` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vlivresenstock` (
-`idLivre` int
+`exemplaireLivre` int
+,`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
-,`exemplaireLivre` int
 );
 
 -- --------------------------------------------------------
@@ -945,8 +1027,8 @@ CREATE TABLE `vmeilleuresventes` (
 --
 CREATE TABLE `vmeilleursavis` (
 `idLivre` int
-,`nomLivre` varchar(50)
 ,`moyenneNote` decimal(7,4)
+,`nomLivre` varchar(50)
 );
 
 -- --------------------------------------------------------
@@ -1004,9 +1086,9 @@ CREATE TABLE `vtotallivre` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vtotallivreenattente` (
-`idLivre` int
-,`idCommande` int
+`idCommande` int
 ,`idLigneCommande` int
+,`idLivre` int
 ,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
@@ -1022,8 +1104,8 @@ CREATE TABLE `vtotallivreenattente` (
 --
 CREATE TABLE `vtotallivreexpediee` (
 `idCommande` int
-,`idUser` int
 ,`idLivre` int
+,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
 ,`quantiteLigneCommande` int
@@ -1242,7 +1324,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT pour la table `avis`
 --
 ALTER TABLE `avis`
-  MODIFY `idAvis` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `idAvis` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT pour la table `categorie`
@@ -1254,7 +1336,7 @@ ALTER TABLE `categorie`
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=486;
+  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=516;
 
 --
 -- AUTO_INCREMENT pour la table `entreprise`
@@ -1266,13 +1348,13 @@ ALTER TABLE `entreprise`
 -- AUTO_INCREMENT pour la table `ligneCommande`
 --
 ALTER TABLE `ligneCommande`
-  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=834;
+  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=891;
 
 --
 -- AUTO_INCREMENT pour la table `livre`
 --
 ALTER TABLE `livre`
-  MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT pour la table `maisonEdition`
@@ -1290,7 +1372,7 @@ ALTER TABLE `particulier`
 -- AUTO_INCREMENT pour la table `promotion`
 --
 ALTER TABLE `promotion`
-  MODIFY `idPromotion` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `idPromotion` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT pour la table `user`

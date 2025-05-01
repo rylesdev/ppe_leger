@@ -91,48 +91,7 @@ GROUP BY u.emailUser;
 
 
 TRIGGERS :
-// Trigger suivant à supprimer après vérification que la procédure pQuantiteLigneCommande fonctionne correctement
-delimiter $$
-create trigger tExemplaireLivreLigneCommande
-before insert on ligneCommande
-for each row
-begin
-    declare existingQuantity int;
-    select lc.quantiteLigneCommande
-    into existingQuantity
-    from ligneCommande lc
-    inner join commande c on lc.idCommande = c.idCommande
-    where lc.idLivre = NEW.idLivre
-      and c.idUser = (select idUser from commande where idCommande = NEW.idCommande LIMIT 1)
-      and c.statutCommande = 'en attente'
-    LIMIT 1;
-    if existingQuantity is not null then
-        SIGNAL SQLSTATE "45000"
-        SET MESSAGE_TEXT = "Erreur : Livre déjà dans le panier de cet utilisateur. Veuillez modifier le nombre d'exemplaires.";
-    end if;
-end $$
-delimiter ;
-
-
-delimiter $$
-create trigger tStockNull
-before insert on ligneCommande
-for each row
-begin
-declare exemplaireLivreDisponible int;
-select exemplaireLivre
-into exemplaireLivreDisponible
-from livre
-where idLivre = NEW.idLivre;
-if exemplaireLivreDisponible < NEW.quantiteLigneCommande then
-    SIGNAL SQLSTATE '45000'
-    set MESSAGE_TEXT = 'Erreur : Stock insuffisant pour le livre.';
-end IF;
-end $$
-delimiter ;
-
-
-// Faire un trigger qui va empêcher le user d''insérer une ligneCommande (insertLigneCommande) si la somme de toutes les quantiteLigneCommande (old et new) pour chaque idLivre est supérieur ou égal au nombre exemplaire d''un livre
+// Trigger qui sert à vérifier si la quantité de livre d''une ligneCommande est supérieur à la quantité d''exemplaire de ce livre.
 DELIMITER $$
 CREATE TRIGGER tStockLivre
 BEFORE update ON ligneCommande
@@ -170,30 +129,29 @@ END$$
 DELIMITER ;
 
 
-
-delimiter $$
-create trigger tUpdateStockCommandeExpediee
-after update on commande
-for each row
-begin
-    if OLD.statutCommande = 'en attente' and NEW.statutCommande = 'expédiée' then
-        update livre
-        set exemplaireLivre = exemplaireLivre - (
-            select sum(quantiteLigneCommande)
-            from ligneCommande
-            where idCommande = NEW.idCommande
-            and ligneCommande.idLivre = livre.idLivre
-        )
-        where idLivre in (select idLivre from ligneCommande where idCommande = NEW.idCommande);
-    end if;
-end $$
-delimiter ;
+// Trigger qui sert à mettre à jour la quantité d''exemplaire d'' livre après une commande.
+DELIMITER //
+CREATE TRIGGER tUpdateStockCommande
+AFTER UPDATE ON commande
+FOR EACH ROW
+BEGIN
+    IF OLD.statutCommande = 'en attente' AND NEW.statutCommande = 'expédiée' THEN
+        UPDATE livre l
+        JOIN ligneCommande lc ON l.idLivre = lc.idLivre
+        SET l.exemplaireLivre = l.exemplaireLivre - lc.quantiteLigneCommande
+        WHERE lc.idCommande = NEW.idCommande;
+    END IF;
+END//
+DELIMITER ;
 
 
 
 PROCEDURES STOCKEES :
+// Procédure qui sert à mettre à jour la quantité d''un livre d''une ligneCommande si ce livre existe déjà dans la commande.
+// S''il n''existe pas, alors il y a une nouvelle insertion de ligneCommande avec ce nouveau livre.
+// Si pour cette procédure le résultat = 0, ça signifie que le trigger "tStockLivre" stop la procédure
 DELIMITER //
-CREATE PROCEDURE pQuantiteLigneCommande(
+CREATE PROCEDURE pInsertOrUpdateLigneCommande(
     IN in_idCommande INT,
     IN in_idLivre INT,
     IN in_quantiteLigneCommande INT
@@ -215,14 +173,21 @@ BEGIN
         UPDATE ligneCommande
         SET quantiteLigneCommande = quantiteLigneCommande + in_quantiteLigneCommande
         WHERE idLigneCommande = p_idLigneCommande;
+
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'TEXT 1';
     ELSE
         INSERT INTO ligneCommande
         VALUES (null, in_idCommande, in_idLivre, in_quantiteLigneCommande);
+
+         SIGNAL SQLSTATE '45000'
+         SET MESSAGE_TEXT = 'TEXT 2';
     END IF;
 END //
 DELIMITER ;
 
 
+// Procédure qui sert à offrir un livre après une commande
 DELIMITER $$
 CREATE PROCEDURE pOffrirLivre(
     IN in_idUser INT,
@@ -270,31 +235,42 @@ END$$
 DELIMITER ;
 
 
+// Procédure qui va transformer les noms des champs de la table livre en id afin de faire une insertion.
 DELIMITER $$
 CREATE PROCEDURE pInsertLivre(
-    IN p_nomLivre VARCHAR(255),
-    IN p_auteurLivre VARCHAR(255),
-    IN p_imageLivre VARCHAR(255),
-    IN p_exemplaireLivre INT,
-    IN p_prixLivre DECIMAL(10, 2),
-    IN p_nomCategorie VARCHAR(255),
-    IN p_nomMaisonEdition VARCHAR(255)
+    IN in_nomLivre VARCHAR(255),
+    IN in_auteurLivre VARCHAR(255),
+    IN in_imageLivre VARCHAR(255),
+    IN in_exemplaireLivre INT,
+    IN in_prixLivre float(10, 2),
+    IN in_nomCategorie VARCHAR(255),
+    IN in_nomMaisonEdition VARCHAR(255),
+    IN in_nomPromotion VARCHAR(255)
 )
 BEGIN
-    DECLARE v_idCategorie INT;
-    DECLARE v_idMaisonEdition INT;
-    SELECT idCategorie INTO v_idCategorie
+    DECLARE p_idCategorie INT;
+    DECLARE p_idMaisonEdition INT;
+    DECLARE p_idPromotion INT;
+
+    SELECT idCategorie INTO p_idCategorie
     FROM categorie
-    WHERE nomCategorie = p_nomCategorie;
-    SELECT idMaisonEdition INTO v_idMaisonEdition
+    WHERE nomCategorie = in_nomCategorie;
+
+    SELECT idMaisonEdition INTO p_idMaisonEdition
     FROM maisonEdition
-    WHERE nomMaisonEdition = p_nomMaisonEdition;
-    INSERT INTO livre (nomLivre, auteurLivre, imageLivre, exemplaireLivre, prixLivre, idCategorie, idMaisonEdition)
-    VALUES (p_nomLivre, p_auteurLivre, p_imageLivre, p_exemplaireLivre, p_prixLivre, v_idCategorie, v_idMaisonEdition);
+    WHERE nomMaisonEdition = in_nomMaisonEdition;
+
+    SELECT idPromotion INTO p_idPromotion
+    FROM promotion
+    WHERE nomPromotion = in_nomPromotion;
+
+    INSERT INTO livre (idLivre, nomLivre, auteurLivre, imageLivre, exemplaireLivre, prixLivre, idCategorie, idMaisonEdition, idPromotion)
+    VALUES (null, in_nomLivre, in_auteurLivre, in_imageLivre, in_exemplaireLivre, in_prixLivre, p_idCategorie, p_idMaisonEdition, p_idPromotion);
 END $$
 DELIMITER ;
 
 
+// Procédure qui sert à insert ou à update une promotion
 DELIMITER $$
 CREATE PROCEDURE pInsertOrUpdatePromotion(
     IN in_nomLivre VARCHAR(255),
@@ -313,7 +289,7 @@ BEGIN
 
     IF p_idLivre IS NULL THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Erreur : Le livre spécifié n''existe pas';
+        SET MESSAGE_TEXT = 'TEXT 1';
     END IF;
 
     SELECT idPromotion INTO p_newIdPromotion
@@ -331,8 +307,8 @@ BEGIN
         SET idPromotion = p_newIdPromotion
         WHERE idLivre = p_idLivre;
 
-        SET p_message = CONCAT('Promotion existante de ', in_reductionPromotion, '% mise à jour et appliquée au livre ', in_nomLivre);
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = p_message;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'TEXT 2';
     ELSE
         INSERT INTO promotion (idPromotion, nomPromotion, dateDebutPromotion, dateFinPromotion, reductionPromotion)
         VALUES (NULL, CONCAT(in_reductionPromotion, '%'), CURDATE(), in_dateFinPromotion, in_reductionPromotion);
@@ -343,8 +319,8 @@ BEGIN
         SET idPromotion = p_newIdPromotion
         WHERE idLivre = p_idLivre;
 
-        SET p_message = CONCAT('Nouvelle promotion de ', in_reductionPromotion, '% créée et appliquée au livre ', in_nomLivre);
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = p_message;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'TEXT 3';
     END IF;
 END $$
 DELIMITER ;
