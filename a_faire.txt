@@ -1,7 +1,16 @@
 New :
-    - Regarder si la prostock offrirLivre fonctionne bien
+    - Vérifier que la mise à jour des exemplaires de livres se fait bien suite à un statutCommande="expédiée"
 
-    - Tester l'insertion d'avis
+    - Regarder pourquoi la vue_panier.php détient un "prixPromotion" et voir si c'est en lien avec la "vue_promotion.php".
+        Si c'est pas le cas alors modifier la vue_promotion.php pour mettre "reductionPromotion" et voir si il y a des bugs dans le panier par la suite.
+
+    - Enlever "Obtenez votre livre offert maintenant" dans la page d'accueil pour les admin
+
+    - Mettre des gestions d'exceptions dans le insertLivre (page livre) pour l'admin
+
+    - Pour les stats mettre des graphes et des courbes
+
+    - Regarder si la prostock offrirLivre fonctionne bien
 
     - Vérifier la logique de chaque page et s'assurer qu'il y ai pas d'incohérence avec les méthodes/$_SESSION notamment
 

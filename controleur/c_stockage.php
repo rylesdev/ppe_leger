@@ -5,6 +5,7 @@ if (isset($isAdmin) && $isAdmin == 1) {
     $leLivre = null;
 
     require_once("vue/stockage/vue_stockage.php");
+
     if(isset($_POST['ValiderStockage'])){
         $exemplaireLivre = $_POST['exemplaireLivre'];
         $nomLivre = $_POST['nomLivre'];

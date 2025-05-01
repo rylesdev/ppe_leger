@@ -7,10 +7,10 @@ if (isset($isAdmin) && $isAdmin == 1) {
 
     if (isset($_POST['ValiderPromotion'])) {
         $nomLivre = $_POST['nomLivre'];
-        $prixPromotion = $_POST['prixPromotion'];
+        $reductionPromotion = $_POST['prixPromotion'];
         $dateFinPromotion = $_POST['dateFinPromotion'];
 
-        $unControleur->procedureInsertOrUpdatePromotion($nomLivre, $prixPromotion, $dateFinPromotion);
+        $unControleur->procedureInsertOrUpdatePromotion($nomLivre, $reductionPromotion, $dateFinPromotion);
     }
 }
 ?>

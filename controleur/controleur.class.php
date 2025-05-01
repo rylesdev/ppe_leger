@@ -271,7 +271,7 @@
 		}
 
 		public function updateStockageLivre($exemplaireLivre, $nomLivre) {
-			$this->unModele->updateStockageLivre($exemplaireLivre, $nomLivre);
+			return $this->unModele->updateStockageLivre($exemplaireLivre, $nomLivre);
 		}
 
 		public function updateCommande($idCommande) {
@@ -300,8 +300,8 @@
             $this->unModele->procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition);
         }
 
-        public function procedureInsertOrUpdatePromotion($nomLivre, $prixPromotion, $dateFinPromotion) {
-            $this->unModele->procedureInsertOrUpdatePromotion($nomLivre, $prixPromotion, $dateFinPromotion);
+        public function procedureInsertOrUpdatePromotion($nomLivre, $reductionPromotion, $dateFinPromotion) {
+            $this->unModele->procedureInsertOrUpdatePromotion($nomLivre, $reductionPromotion, $dateFinPromotion);
         }
 	}
 ?>
