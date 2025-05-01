@@ -18,7 +18,7 @@ require_once("includes/header.php");
             </div>
 
             <div class="form-group">
-                <label for="prixPromotion">Prix Promotionnel (€) :</label>
+                <label for="prixPromotion">Réduction promotionnelle (%) :</label>
                 <input type="number" name="prixPromotion" step="0.01" required>
             </div>
 

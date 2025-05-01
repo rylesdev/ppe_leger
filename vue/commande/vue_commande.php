@@ -14,6 +14,17 @@ $livresPromotion = $unControleur->selectLivrePromotion();
 $idCommandeSelectionnee = $_POST['idCommandeSelectionnee'] ?? null;
 $tri = $_POST['tri'] ?? null;
 
+// Traitement de l'avis
+if(isset($_POST['ValiderAvis'])) {
+    $idLivre = $_POST['idLivre'];
+    $nomLivre = $_POST['nomLivre'];
+    $commentaire = $_POST['commentaireAvis'];
+    $note = $_POST['noteAvis'];
+
+    // Traitement de l'avis (à adapter selon votre structure)
+    $unControleur->insertAvis($idUser, $idLivre, $note, $commentaire);
+}
+
 // Récupérer les commandes selon sélection et tri
 if ($idCommandeSelectionnee) {
     $lesCommandes = $unControleur->selectCommandeByIdTri($idCommandeSelectionnee, $tri);
@@ -104,15 +115,16 @@ $dateCommande = $unControleur->selectDateLivraisonCommande($idUser)[0];
                         <td>
                             <form method="post" class="avis-form">
                                 <input type="hidden" name="idLivre" value="<?= $uneCommande['idLivre'] ?>">
+                                <input type="hidden" name="nomLivre" value="<?= htmlspecialchars($uneCommande['nomLivre']) ?>">
                                 <div class="star-rating">
                                     <?php for ($i = 5; $i >= 1; $i--): ?>
                                         <input type="radio" id="star<?= $i ?>_<?= $uneCommande['idLivre'] ?>"
-                                               name="note" value="<?= $i ?>">
+                                               name="noteAvis" value="<?= $i ?>">
                                         <label for="star<?= $i ?>_<?= $uneCommande['idLivre'] ?>">★</label>
                                     <?php endfor; ?>
                                 </div>
-                                <textarea name="commentaire" placeholder="Votre avis..."></textarea>
-                                <button type="submit" name="submitAvis" class="btn-submit">Envoyer l'avis</button>
+                                <textarea name="commentaireAvis" placeholder="Votre avis..."></textarea>
+                                <button type="submit" name="ValiderAvis" class="btn-submit">Envoyer l'avis</button>
                             </form>
                         </td>
                     </tr>

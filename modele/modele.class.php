@@ -1068,6 +1068,7 @@
 			$exec->BindValue(1,$exemplaireLivre, PDO::PARAM_INT);
 			$exec->BindValue(2, $nomLivre, PDO::PARAM_STR);
 			$exec->execute();
+            return $exec->execute();
 		}
 
         public function updateCommande ($idCommande) {
@@ -1165,11 +1166,11 @@
             return $exec->fetchAll();
         }
 
-        public function procedureInsertOrUpdatePromotion($nomLivre, $prixPromotion, $dateFinPromotion) {
+        public function procedureInsertOrUpdatePromotion($nomLivre, $reductionPromotion, $dateFinPromotion) {
             $requete = "CALL pInsertOrUpdatePromotion(?, ?, ?)";
             $exec = $this->unPdo->prepare ($requete);
             $exec->BindValue (1, $nomLivre, PDO::PARAM_STR);
-            $exec->BindValue (2, $prixPromotion, PDO::PARAM_STR);
+            $exec->BindValue (2, $reductionPromotion, PDO::PARAM_STR);
             $exec->BindValue (3, $dateFinPromotion, PDO::PARAM_STR);
             $exec->execute ();
             return $exec->fetchAll();

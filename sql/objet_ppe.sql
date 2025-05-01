@@ -297,24 +297,54 @@ DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE pInsertOrUpdatePromotion(
-    IN p_nomLivre VARCHAR(255),
-    IN p_prixPromotion DECIMAL(10,2),
-    IN p_dateFinPromotion date
+    IN in_nomLivre VARCHAR(255),
+    IN in_reductionPromotion INT,
+    IN in_dateFinPromotion DATE
 )
 BEGIN
-    DECLARE v_idLivre INT;
-    SELECT idLivre INTO v_idLivre FROM livre WHERE nomLivre = p_nomLivre LIMIT 1;
-    IF v_idLivre IS NULL THEN
+    DECLARE p_idLivre INT;
+    DECLARE p_newIdPromotion INT;
+    DECLARE p_message VARCHAR(255);
+
+    SELECT idLivre INTO p_idLivre
+    FROM livre
+    WHERE nomLivre = in_nomLivre
+    LIMIT 1;
+
+    IF p_idLivre IS NULL THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Le livre spécifié n\'existe pas.';
+        SET MESSAGE_TEXT = 'Erreur : Le livre spécifié n''existe pas';
     END IF;
-    IF EXISTS (SELECT 1 FROM promotion WHERE idLivre = v_idLivre) THEN
+
+    SELECT idPromotion INTO p_newIdPromotion
+    FROM promotion
+    WHERE reductionPromotion = in_reductionPromotion
+    ORDER BY idPromotion DESC
+    LIMIT 1;
+
+    IF p_newIdPromotion IS NOT NULL THEN
         UPDATE promotion
-        SET prixPromotion = p_prixPromotion
-        WHERE idLivre = v_idLivre;
+        SET dateFinPromotion = in_dateFinPromotion
+        WHERE idPromotion = p_newIdPromotion;
+
+        UPDATE livre
+        SET idPromotion = p_newIdPromotion
+        WHERE idLivre = p_idLivre;
+
+        SET p_message = CONCAT('Promotion existante de ', in_reductionPromotion, '% mise à jour et appliquée au livre ', in_nomLivre);
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = p_message;
     ELSE
-        INSERT INTO promotion (idPromotion, idLivre, dateDebutPromotion, dateFinPromotion, prixPromotion)
-        VALUES (null, v_idLivre, curdate(), p_dateFinPromotion, p_prixPromotion);
+        INSERT INTO promotion (idPromotion, nomPromotion, dateDebutPromotion, dateFinPromotion, reductionPromotion)
+        VALUES (NULL, CONCAT(in_reductionPromotion, '%'), CURDATE(), in_dateFinPromotion, in_reductionPromotion);
+
+        SELECT LAST_INSERT_ID() INTO p_newIdPromotion;
+
+        UPDATE livre
+        SET idPromotion = p_newIdPromotion
+        WHERE idLivre = p_idLivre;
+
+        SET p_message = CONCAT('Nouvelle promotion de ', in_reductionPromotion, '% créée et appliquée au livre ', in_nomLivre);
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = p_message;
     END IF;
 END $$
 DELIMITER ;
