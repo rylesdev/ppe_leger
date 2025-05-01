@@ -32,6 +32,10 @@
 			return $this->unModele->selectLivre();
 		}
 
+        public function selectLivreById($idLivre) {
+            return $this->unModele->selectLivreById($idLivre);
+        }
+
 		public function selectLikeLivre ($filtre){
 			return $this->unModele->selectLikeLivre($filtre);
 		}
@@ -39,6 +43,10 @@
 		public function selectWhereLivre($idLivre){
 			return $this->unModele->selectWhereLivre($idLivre);
 		}
+
+        public function selectFiltreLivreEnAttente($idUser, $filtre) {
+            return $this->unModele->selectFiltreLivreEnAttente($idUser, $filtre);
+        }
 
 		public function selectAdresseUser ($idUser){
 			return $this->unModele->selectAdresseUser($idUser);
@@ -223,8 +231,8 @@
 			return $this->unModele->insertCommande($idUser);
 		}
 
-		public function insertLigneCommande($idCommande, $idLivre, $quantiteLigneCommande){
-			return $this->unModele->insertLigneCommande($idCommande, $idLivre, $quantiteLigneCommande);
+		public function procedureInsertOrUpdateLigneCommande($idCommande, $idLivre, $quantiteLigneCommande){
+			return $this->unModele->procedureInsertOrUpdateLigneCommande($idCommande, $idLivre, $quantiteLigneCommande);
 		}
 
 		public function insertAbonnement1m($idUser){
@@ -282,8 +290,8 @@
 			return $this->unModele->updateLigneCommande ($quantiteLigneCommande, $idLigneCommande);
 		}
 
-		public function ajouterPointAbonnement($pointAbonnement, $idUser) {
-			$this->unModele->ajouterPointAbonnement($pointAbonnement, $idUser);
+		public function ajouterPointAbonnement($pointAbonnement, $idUser){
+			return $this->unModele->ajouterPointAbonnement($pointAbonnement, $idUser);
 		}
 
 		public function enleverPointAbonnement($pointAbonnement, $idUser) {
@@ -296,12 +304,12 @@
 			return $this->unModele->procedureOffrirLivre($idUser, $chiffre);
 		}
 
-        public function procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition) {
-            $this->unModele->procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition);
+        public function procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition, $nomPromotion) {
+            return $this->unModele->procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition, $nomPromotion);
         }
 
         public function procedureInsertOrUpdatePromotion($nomLivre, $reductionPromotion, $dateFinPromotion) {
-            $this->unModele->procedureInsertOrUpdatePromotion($nomLivre, $reductionPromotion, $dateFinPromotion);
+            return $this->unModele->procedureInsertOrUpdatePromotion($nomLivre, $reductionPromotion, $dateFinPromotion);
         }
 	}
 ?>

@@ -43,10 +43,10 @@ $livresPromotion = $unControleur->selectLivrePromotion();
                 foreach ($livresPromotion as $livre) {
                     if (!empty($livre['idPromotion'])) {
                         $hasPromotions = true;
-                        $pourcentagePromo = $livre['idPromotion'] * 10;
+                        $pourcentagePromo = $livre['reductionPromotion']; // Utilisation de reductionPromotion au lieu de idPromotion
                         $nouveauPrix = $livre['prixLivre'] * (1 - $pourcentagePromo / 100);
+
                         echo "<div class='book-card'>";
-                        echo "<img src='".htmlspecialchars($livre['imageLivre'])."' alt='".htmlspecialchars($livre['nomLivre'])."'>";
                         echo "<h3><a href='index.php?page=2&id=".$livre['idLivre']."'>" . htmlspecialchars($livre['nomLivre']) . "</a></h3>";
                         echo "<p>Auteur: " . htmlspecialchars($livre['auteurLivre']) . "</p>";
                         echo "<p class='old-price'>Ancien prix: " . number_format($livre['prixLivre'], 2) . "€</p>";

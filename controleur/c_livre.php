@@ -12,10 +12,16 @@ if (isset($_POST['action']) && $_POST['action'] == 'AjouterPanier') {
         $idCommande = $unControleur->insertCommande($idUser);
     }
 
-    $result = $unControleur->insertLigneCommande($idCommande, $idLivre, $quantiteLivre);
+    $result = $unControleur->procedureInsertOrUpdateLigneCommande($idCommande, $idLivre, $quantiteLivre);
+    $nomLivre = $unControleur->selectLivreById($idLivre)[0][1];
 
-    if ($result) {
-        echo "<div class='alert alert-success'>Article ajouté au panier (x$quantiteLivre)</div>";
+    if ($result == 1) {
+        echo "<div class='alert alert-success'>Article '" . $nomLivre . "' (x$quantiteLivre) ajouté à la commande " . $idCommande . "</div>";
+    } else if ($result == 2) {
+        echo "<div class='alert alert-success'>Nouvelle commande crée pour l'article '" . $nomLivre . "' (x$quantiteLivre)</div>";
+    } else if ($result == 0) {
+        echo "<div class='alert alert-danger'> Erreur : La quantité totale commandée pour '" . $nomLivre . "' est supérieure au stock disponible.<br>
+             Veuillez sélectionner, dans la page Panier, une quantité d'articles inférieure ou égale au nombre d'exemplaires en stock pour cet article.</div>";
     }
 }
 
@@ -34,24 +40,29 @@ if (isset($_REQUEST['action'])) {
     }
 }
 
+if (isset($_POST['ValiderInsert'])) {
+    $nomLivre = $_POST['nomLivre'];
+    $auteurLivre = $_POST['auteurLivre'];
+    $imageLivre = $_POST['imageLivre'];
+    $exemplaireLivre = $_POST['exemplaireLivre'];
+    $prixLivre = $_POST['prixLivre'];
+    $nomCategorie = $_POST['nomCategorie'];
+    $nomMaisonEdition = $_POST['nomMaisonEdition'];
+    $nomPromotion = $_POST['nomPromotion'];
+
+    $resultInsertLivre = $unControleur->procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition, $nomPromotion);
+    var_dump($resultInsertLivre);
+    if ($resultInsertLivre) {
+        echo "<div class='alert alert-success'>Insertion réussie du livre.</div>";
+    } else if ($resultInsertLivre == false){
+        echo "<div class='alert alert-danger'>Erreur : Impossible d'insérer le livre</div>";
+    }
+}
+
 if (isset($isAdmin) && $isAdmin == 1) {
     require_once("vue/livre/vue_insert_livre.php");
 } else {
     echo "";
-}
-
-if (isset($_POST['ValiderInsert'])) {
-    $nomLivre = $_POST['nomLivre'];
-    $nomCategorie = $_POST['nomCategorie'];
-    $auteurLivre = $_POST['auteurLivre'];
-    $imageLivre = $_POST['imageLivre'];
-    $nomMaisonEdition = $_POST['nomMaisonEdition'];
-    $exemplaireLivre = $_POST['exemplaireLivre'];
-    $prixLivre = $_POST['prixLivre'];
-
-    if ($unControleur->procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition)){
-        echo "<br> Insertion réussie du livre <br>";
-    }
 }
 
 if (isset($_POST['Modifier'])) {
