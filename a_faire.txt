@@ -1,46 +1,30 @@
-New :
-    - Voir si la page d'accueil est nécessaire pour l'admin ou si je peux la supprimer pour l'admin.
-
-    - Mettre des gestions d'exceptions :
-        - insertLivre (page livre) pour l'admin
-        - insertUser (page inscription) pour l'utilisateur
-
-    - Vérifier la logique de chaque page et s'assurer qu'il y ai pas d'incohérence avec les méthodes/$_SESSION notamment
-
-    - Voir si je peux remplacer, dans vue_livre, "if (isset($isAdmin) && $isAdmin == 1) {"
-        par if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']!="admin") {""
-
-    - Régler le problème des admin en double (dans le roleUser et dans la table admin)
-
-    - Supprimer le “nomUser” de la table Avis et trouver un moyen pour régler la view "selectAvis".
-
-    - Trier tous les fichiers .css et supprimer ceux qui sont inutiles
-
-    - Magnifier le code avec tailwind.css et alpine.js en demandant à claude.
-
-
-
-
-Expression des besoins à faire et garder dans un dossier à part :
-    - Mot de passe oublié dans la Page Connexion.
-    - Renouvellement du mot de passe tous les 90 jours.
-    - Archiver toutes les commandes qui ont été expédiées avec le nom du client.
-    - Créer une view sur le nombre de livres vendus par catégorie.
-    - Ajouter le champ "nbCommandeUser" sur la table user qui permet, après chaque achat d'un livre, d'incrémenter automatiquement le champ "nbCommandeUser".
-    - Envoyer un mail quand l’utilisateur a fait une commande pour le prévenir que sa commande est expédiée
-    - Envoyer un mail quand l’utilisateur a fait une commande pour le prévenir que sa commande est arrivée
-
-
-
 A FAIRE :
+    - Vérifier que l'insertion dans les tables archiveCommande et archiveLigneCommande fonctionne bien après la suppression d'un user.
+
+    - Supprimer le "statutCommande='annulée'" s'il n'a aucune utilité dans le code.
+
+    - Faire un système qui va bloquer l'inscription si le email existe déjà dans la table user.
+
+    - Vérifier la logique de chaque page et s'assurer qu'il y ai pas d'incohérence avec les méthodes/$_SESSION notamment.
+
+    - Modifier les vues pour qu'elles soient plus intéressantes.
+
+    - Trier tous les fichiers .css et supprimer ceux qui sont inutiles.
+
+    - Rendre le site plus esthétique avec tailwind.css et alpine.js en demandant à claude.
+
+    - Éventuellement donner des permissions différentes entre les différents admins (principal, junior, etc...).
+
+
+
+
     FRONT-END
         Page Connexion :
-            - Rendre la page plus esthétique
-            - Réduire la taille des boutons
-            - Mettre une image ou une couleur de fond qui sera la même que sur les autres pages du site
-            - Mettre les vues Inscription et Connexion dans un carré
-            - Changer la navbar pour mettre la page Panier, Commande, Abonnement, Informations, et Déconnexion sur le côté
-            Exemple : https://shop.labourseauxlivres.fr/ https://www.lalibrairie.com/
+            - Rendre la page plus esthétique.
+            - Réduire la taille des boutons.
+            - Mettre une image ou une couleur de fond qui sera la même que sur les autres pages du site.
+            - Mettre les vues Inscription et Connexion dans un carré.
+            - Modifier les logos pour faire quelque chose de plus minimaliste.
 
 
         Page Panier :
@@ -54,28 +38,15 @@ A FAIRE :
 
 
 
-    BACK-END
-        PHPMyAdmin
-            - Faire un système qui va bloquer l'inscription si le email existe déjà dans la table user.
-            - Faire un système qui va bloquer le "insertUser" si les champs lors de l'inscription ne sont pas tous remplis.
-            - Prévenir à l’utilisateur, lors de l’inscription, que le mot de passe doit être renouvelé tous les 90 jours
-            - Tous les 3 mois le mot de passe doit être expiré et l’utilisateur devra le changer sinon il pourra pas se connecter
-            - Créer un bouton "mot de passe oublié" pour que le user puisse changer son mot de passe
-            - Envoyer un mail quand l’utilisateur a fait une commande pour le prévenir que sa commande est expédiée
-            - Envoyer un mail quand l’utilisateur a fait une commande pour le prévenir que sa commande est arrivée
-
-            - Modifier la base de donnée pour que les spécialisations de la table User soient correctement déclarées. C’est-à-dire que les champs de la table Particulier, par exemple, ne soient pas présents tel qu’ils le sont dans la table User.
-            - Suite à cela, modifier les triggers des héritages et le modele des héritages (Procédure, insert, select, etc…).
-            - Modifier la base de donnée pour qu’elle ai une logique de MCD correcte (notamment au niveau des clés étrangères qui sont au mauvais endroits (Abonnement et User par exemple)).
-
-            - Voir si le "statutCommande='annulée'" a une utilité dans le code.
-                Si ce n'est pas le cas alors le supprimer
-
-
-
 
 
 Fait :
+- Remplacer tous les "if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']!='admin')"" {"
+        par  "if (isset($isAdmin) && $isAdmin == 1) {"
+- Mettre des gestions d'exceptions :
+        - insertLivre (page livre) pour l'admin
+        - insertUser (page inscription) pour l'utilisateur
+- Régler la page authentification pour envoyer le user vers la page 1 après la connexion, et mettre un message de confirmation après une inscription.
 - La méthode "selectLikeLivres" qui sert à filtrer les livres ne marche pas.
 - Pour les stats mettre des graphes et des courbes
 - Je ne reçois pas mes points lorsque je fais un achat avec Paypal
@@ -160,4 +131,3 @@ Fait :
             - Trigger qui envoie une notification dans la table "notification" après chaque commande passée
 
             - Procédure qui hash automatiquement les mdp
-

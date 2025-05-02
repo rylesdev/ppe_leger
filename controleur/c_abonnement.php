@@ -1,5 +1,7 @@
 <?php
-if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']!="admin") {
+if (!isset($_SESSION['emailUser'])) {
+    echo "<h3 style='color: red;'>Vous devez être connecté pour accéder à cette page.</h3>";
+} elseif (empty($isAdmin) || $isAdmin == 0) {
     require_once("controleur/controleur.class.php");
     $unControleur = new Controleur();
 
@@ -44,9 +46,6 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']!="admin") {
         } elseif ($dateAbonnement !== null ) {
             echo "<h3> Votre abonnement prend fin dans " . $dateAbonnement['jourRestant'] . " jours. </h3>";
         }
-
-} else if (!isset($_SESSION['emailUser'])) {
-    echo "<h3 style='color: red;'>Vous devez être connecté pour accéder à cette page.</h3>";
 } else {
-    echo "<h3 style='color: red;'>Page indisponible pour le rôle admin.</h3";
+    echo "<h3 style='color: red;'>Page indisponible pour le rôle admin.</h3>";
 }

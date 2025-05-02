@@ -51,7 +51,6 @@ if (isset($_POST['ValiderInsert'])) {
     $nomPromotion = $_POST['nomPromotion'];
 
     $resultInsertLivre = $unControleur->procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition, $nomPromotion);
-    var_dump($resultInsertLivre);
     if ($resultInsertLivre) {
         echo "<div class='alert alert-success'>Insertion réussie du livre.</div>";
     } else if ($resultInsertLivre == false){

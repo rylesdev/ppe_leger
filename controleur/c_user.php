@@ -1,11 +1,13 @@
 <?php
-if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']!="admin") {
+if (!isset($_SESSION['emailUser'])) {
+    echo "<h3 style='color: red;'>Vous devez être connecté pour accéder à cette page.</h3>";
+} elseif (empty($isAdmin) || $isAdmin == 0) {
     require_once("controleur/controleur.class.php");
     $unControleur = new Controleur();
 
     $idUser = $_SESSION['idUser'];
 
-    // A SUPPRIMER URGENT
+    // A SUPPRIMER
     var_dump($idUser);
 
     require_once("vue/user/vue_user.php");
@@ -54,9 +56,6 @@ if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']!="admin") {
             exit();
         }
     }
-
-} else if (!isset($_SESSION['emailUser'])) {
-    echo "<h3 style='color: red;'>Vous devez être connecté pour accéder à cette page.</h3>";
 } else {
-    echo "<h3 style='color: red;'>Page indisponible pour le rôle admin.</h3";
+    echo "<h3 style='color: red;'>Page indisponible pour le rôle admin.</h3>";
 }

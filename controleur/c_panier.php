@@ -4,7 +4,7 @@ if (!isset($_SESSION['emailUser'])) {
     exit();
 }
 
-if (isset($_SESSION['roleUser']) && $_SESSION['roleUser'] == "admin") {
+if (isset($isAdmin) && $isAdmin == 1) {
     echo "<h3 style='color: red;'>Page indisponible pour le rôle admin.</h3>";
     exit();
 }

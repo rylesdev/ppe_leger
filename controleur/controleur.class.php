@@ -180,6 +180,10 @@
             return $this->unModele->countLigneCommande($idCommande);
         }
 
+        public function executerRequete($requete) {
+            return $this->unModele->executerRequete($requete);
+        }
+
 
 		/**************** DELETE ****************/
 
