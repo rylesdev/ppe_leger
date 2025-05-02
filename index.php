@@ -5,8 +5,8 @@ require_once("controleur/controleur.class.php");
 
 $unControleur = new Controleur();
 
-$result = $unControleur->selectAdminPrincipal($_SESSION['idUser']);
-$isAdmin = $result[0][0];
+$resultAdminPrincipal = $unControleur->selectAdminPrincipal($_SESSION['idUser']);
+$isAdmin = $resultAdminPrincipal[0][0];
 
 ?>
 <!DOCTYPE html>
@@ -31,49 +31,6 @@ $isAdmin = $result[0][0];
     </div>
 
     <?php
-    if (isset($_POST['Connexion'])) {
-        $emailUser = $_POST['emailUser'];
-        $mdpUser = $_POST['mdpUser'];
-
-        $unUser = $unControleur->verifConnexion($emailUser, $mdpUser);
-        if ($unUser) {
-            $_SESSION['idUser'] = $unUser['idUser'];
-            $_SESSION['emailUser'] = $_POST['emailUser'];
-            $_SESSION['mdpUser'] = $_POST['mdpUser'];
-            $_SESSION['roleUser'] = $unUser['roleUser'];
-
-        } else {
-            echo "<br> Vérifier les identifiants. ";
-        }
-    }
-
-    if (isset($_POST['InscriptionParticulier'])) {
-        $emailUser = $_POST['emailUser'];
-        $mdpUser = $_POST['mdpUser'];
-        $adresseUser = $_POST['adresseUser'];
-
-        $nomUser = $_POST['nomUser'];
-        $prenomUser = $_POST['prenomUser'];
-        $dateNaissanceUser = $_POST['dateNaissanceUser'];
-        $sexeUser = $_POST['sexeUser'];
-
-        var_dump($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser);
-
-        $unControleur->insertParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser);
-    }
-
-    if (isset($_POST['InscriptionEntreprise'])) {
-        $emailUser = $_POST['emailUser'];
-        $mdpUser = $_POST['mdpUser'];
-        $adresseUser = $_POST['adresseUser'];
-
-        $siretUser = $_POST['siretUser'];
-        $raisonSocialeUser = $_POST['raisonSocialeUser'];
-        $capitalSocialUser = $_POST['capitalSocialUser'];
-
-        $unControleur->insertEntreprise($emailUser, $mdpUser, $adresseUser, $siretUser, $raisonSocialeUser, $capitalSocialUser);
-    }
-
     echo '<div id="navbar" style="background-Color: #f0f0f0">
 		<a href="index.php?page=1"> <img src="images/logo.png" height="80" width="80" style="margin-right: 30px"> </a>
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : jeu. 01 mai 2025 à 18:53
+-- Généré le : ven. 02 mai 2025 à 22:22
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -261,7 +261,6 @@ INSERT INTO `archiveLigneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, 
 CREATE TABLE `avis` (
   `idAvis` int NOT NULL,
   `idLivre` int NOT NULL,
-  `nomLivre` varchar(50) NOT NULL,
   `idUser` int NOT NULL,
   `commentaireAvis` text NOT NULL,
   `noteAvis` tinyint NOT NULL,
@@ -272,34 +271,34 @@ CREATE TABLE `avis` (
 -- Déchargement des données de la table `avis`
 --
 
-INSERT INTO `avis` (`idAvis`, `idLivre`, `nomLivre`, `idUser`, `commentaireAvis`, `noteAvis`, `dateAvis`) VALUES
-(1, 1, '', 2, 'Excellent livre, très captivant !', 5, '2025-01-25'),
-(2, 4, '', 23, 'Un peu long à démarrer, mais intéressant.', 3, '2025-01-25'),
-(3, 1, '', 1, 'bien', 1, '2025-01-29'),
-(7, 2, '', 15, 'df', 2, '2025-01-29'),
-(8, 4, '', 15, 'azd', 4, '2025-01-29'),
-(14, 6, '', 15, 'dfg', 1, '2025-01-29'),
-(15, 2, '', 15, 'dfg', 1, '2025-01-29'),
-(16, 2, '', 15, 'qsd', 3, '2025-01-29'),
-(17, 6, '', 15, 'tibo', 4, '2025-01-29'),
-(18, 8, '', 15, 'très bon livre', 5, '2025-01-29'),
-(19, 3, 'L', 15, 'bof', 3, '2025-01-29'),
-(20, 3, 'L', 15, 'bof', 3, '2025-01-29'),
-(21, 3, 'L', 15, 'bof', 3, '2025-01-29'),
-(22, 3, 'L', 15, 'bof', 3, '2025-01-29'),
-(23, 3, 'L', 15, 'bof', 3, '2025-01-29'),
-(24, 2, 'Crime et Chatiment', 15, 'surcôté', 3, '2025-01-29'),
-(25, 2, 'Crime et Chatiment', 15, 'surcôté', 3, '2025-01-29'),
-(26, 8, 'SPQR', 15, 'masterclass', 5, '2025-02-02'),
-(27, 8, 'SPQR', 15, 'masterclass', 5, '2025-02-02'),
-(28, 2, 'Crime et Chatiment', 15, '3 étoiles', 3, '2025-02-02'),
-(29, 3, 'L', 15, 'test l\'', 4, '2025-02-02'),
-(30, 2, 'Crime et Chatiment', 15, 'cube information', 4, '2025-02-02'),
-(31, 3, 'L`Etranger', 15, 'test \'', 5, '2025-02-03'),
-(32, 45, 'L`Art de la guerre', 37, 'super', 4, '2025-05-01'),
-(33, 10, 'Les Misérables', 37, 'excellent', 1, '2025-05-01'),
-(34, 10, 'Les Misérables', 37, 'nul', 5, '2025-05-01'),
-(35, 3, 'L`Etranger', 37, 'test avis 16h07', 4, '2025-05-01');
+INSERT INTO `avis` (`idAvis`, `idLivre`, `idUser`, `commentaireAvis`, `noteAvis`, `dateAvis`) VALUES
+(1, 1, 2, 'Excellent livre, très captivant !', 5, '2025-01-25'),
+(2, 4, 23, 'Un peu long à démarrer, mais intéressant.', 3, '2025-01-25'),
+(3, 1, 1, 'bien', 1, '2025-01-29'),
+(7, 2, 15, 'df', 2, '2025-01-29'),
+(8, 4, 15, 'azd', 4, '2025-01-29'),
+(14, 6, 15, 'dfg', 1, '2025-01-29'),
+(15, 2, 15, 'dfg', 1, '2025-01-29'),
+(16, 2, 15, 'qsd', 3, '2025-01-29'),
+(17, 6, 15, 'tibo', 4, '2025-01-29'),
+(18, 8, 15, 'très bon livre', 5, '2025-01-29'),
+(19, 3, 15, 'bof', 3, '2025-01-29'),
+(20, 3, 15, 'bof', 3, '2025-01-29'),
+(21, 3, 15, 'bof', 3, '2025-01-29'),
+(22, 3, 15, 'bof', 3, '2025-01-29'),
+(23, 3, 15, 'bof', 3, '2025-01-29'),
+(24, 2, 15, 'surcôté', 3, '2025-01-29'),
+(25, 2, 15, 'surcôté', 3, '2025-01-29'),
+(26, 8, 15, 'masterclass', 5, '2025-02-02'),
+(27, 8, 15, 'masterclass', 5, '2025-02-02'),
+(28, 2, 15, '3 étoiles', 3, '2025-02-02'),
+(29, 3, 15, 'test l\'', 4, '2025-02-02'),
+(30, 2, 15, 'cube information', 4, '2025-02-02'),
+(31, 3, 15, 'test \'', 5, '2025-02-03'),
+(32, 45, 37, 'super', 4, '2025-05-01'),
+(33, 10, 37, 'excellent', 1, '2025-05-01'),
+(34, 10, 37, 'nul', 5, '2025-05-01'),
+(35, 3, 37, 'test avis 16h07', 4, '2025-05-01');
 
 -- --------------------------------------------------------
 
@@ -520,7 +519,7 @@ DELIMITER ;
 
 CREATE TABLE `entreprise` (
   `idUser` int NOT NULL,
-  `siretUser` varchar(14) DEFAULT NULL,
+  `siretUser` bigint DEFAULT NULL,
   `raisonSocialeUser` varchar(255) DEFAULT NULL,
   `capitalSocialUser` float(15,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -530,14 +529,15 @@ CREATE TABLE `entreprise` (
 --
 
 INSERT INTO `entreprise` (`idUser`, `siretUser`, `raisonSocialeUser`, `capitalSocialUser`) VALUES
-(26, '123456789', 'Entreprise SARL', 10000.00),
-(27, '123456789', 'Entreprise SARL', 10000.00),
-(30, '123123123', 'yasser', 123123120.00),
-(31, '1298371892', '123', NULL),
-(32, '123', '123', 123124.00),
-(33, '123123', '123123', 123123.00),
-(34, '987987', '987987', 987987.00),
-(43, 'entauth', 'entauth', 12312.93);
+(26, 123456789, 'Entreprise SARL', 10000.00),
+(27, 123456789, 'Entreprise SARL', 10000.00),
+(30, 123123123, 'yasser', 123123120.00),
+(31, 1298371892, '123', NULL),
+(32, 123, '123', 123124.00),
+(33, 123123, '123123', 123123.00),
+(34, 987987, '987987', 987987.00),
+(59, 12312312312312, 'partent', 1000000.12),
+(61, 12312312312312, 'azd', 1231.10);
 
 -- --------------------------------------------------------
 
@@ -850,7 +850,8 @@ INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exempl
 (47, 'Le Lean Startup', 'Ries', 'le_lean_startup.png', 100, 16.99, 4, 7, NULL),
 (48, 'Les Templiers', 'Demurger', 'les_templiers.png', 100, 18.99, 2, 8, NULL),
 (49, 'La Seconde Guerre mondiale', 'Beevor', 'la_seconde_guerre_mondiale.png', 100, 19.99, 2, 8, NULL),
-(50, 'Napoléon : Une ambition française', 'Tulard', 'napoleon_une_ambition_francaise.png', 100, 20.99, 2, 8, NULL);
+(50, 'Napoléon : Une ambition française', 'Tulard', 'napoleon_une_ambition_francaise.png', 100, 20.99, 2, 8, NULL),
+(66, '18h06', '18h06', '18h06.png', 120, 8.90, 3, 4, 7);
 
 -- --------------------------------------------------------
 
@@ -902,7 +903,11 @@ INSERT INTO `particulier` (`idUser`, `nomUser`, `prenomUser`, `dateNaissanceUser
 (36, 'yasser', 'yasser', '2010-12-21', 'M'),
 (37, 'part', 'part', '2009-12-12', 'M'),
 (38, 'uy', 'uy', '2003-03-12', 'M'),
-(42, 'partauth', 'partauth', '2005-02-20', 'M');
+(42, 'partauth', 'partauth', '2005-02-20', 'M'),
+(46, '16h48', '16h48', '2025-05-20', 'F'),
+(54, 'intpart', 'intpart', '2012-12-12', 'M'),
+(60, '17h35', '17h35', '2005-12-16', 'F'),
+(62, 'bil', 'orebil', '2018-09-12', 'M');
 
 -- --------------------------------------------------------
 
@@ -982,7 +987,14 @@ INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`)
 (37, 'part@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '17 rue des moulins', 'particulier'),
 (38, 'uy@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'uy', 'particulier'),
 (42, 'partauth@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'partauth', 'particulier'),
-(43, 'entauth@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'entauth', 'entreprise');
+(43, 'entauth@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'entauth', 'entreprise'),
+(45, '16h47@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '16h47', 'entreprise'),
+(46, '16h48@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '16h48', 'particulier'),
+(54, 'intpart@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'intpart', 'particulier'),
+(59, 'partent@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'partent', 'entreprise'),
+(60, '17h35@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '17h35', 'particulier'),
+(61, 'azd@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'azd', 'entreprise'),
+(62, 'azd@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'azd', 'particulier');
 
 -- --------------------------------------------------------
 
@@ -1001,10 +1013,10 @@ CREATE TABLE `vcommandesenattente` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vlivresenstock` (
-`exemplaireLivre` int
-,`idLivre` int
+`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
+,`exemplaireLivre` int
 );
 
 -- --------------------------------------------------------
@@ -1027,8 +1039,8 @@ CREATE TABLE `vmeilleuresventes` (
 --
 CREATE TABLE `vmeilleursavis` (
 `idLivre` int
-,`moyenneNote` decimal(7,4)
 ,`nomLivre` varchar(50)
+,`moyenneNote` decimal(7,4)
 );
 
 -- --------------------------------------------------------
@@ -1086,9 +1098,9 @@ CREATE TABLE `vtotallivre` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vtotallivreenattente` (
-`idCommande` int
+`idLivre` int
+,`idCommande` int
 ,`idLigneCommande` int
-,`idLivre` int
 ,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
@@ -1104,8 +1116,8 @@ CREATE TABLE `vtotallivreenattente` (
 --
 CREATE TABLE `vtotallivreexpediee` (
 `idCommande` int
-,`idLivre` int
 ,`idUser` int
+,`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
 ,`quantiteLigneCommande` int
@@ -1342,7 +1354,7 @@ ALTER TABLE `commande`
 -- AUTO_INCREMENT pour la table `entreprise`
 --
 ALTER TABLE `entreprise`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT pour la table `ligneCommande`
@@ -1354,7 +1366,7 @@ ALTER TABLE `ligneCommande`
 -- AUTO_INCREMENT pour la table `livre`
 --
 ALTER TABLE `livre`
-  MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT pour la table `maisonEdition`
@@ -1366,7 +1378,7 @@ ALTER TABLE `maisonEdition`
 -- AUTO_INCREMENT pour la table `particulier`
 --
 ALTER TABLE `particulier`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT pour la table `promotion`
@@ -1378,7 +1390,7 @@ ALTER TABLE `promotion`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- Contraintes pour les tables déchargées

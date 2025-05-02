@@ -102,8 +102,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectAdminPrincipal($idUser)
-        {
+        public function selectAdminPrincipal($idUser) {
             $requete = "select count(*) as isAdmin 
                         from admin 
                         where idUser = ? and niveauAdmin = 'principal';";
@@ -650,6 +649,12 @@
                 error_log("Erreur dans countLigneCommande: " . $e->getMessage());
                 return 0;
             }
+        }
+
+        public function executerRequete($requete)
+        {
+            $exec = $this->unPdo->query($requete);
+            return $exec->fetchAll(PDO::FETCH_COLUMN);
         }
 
 
