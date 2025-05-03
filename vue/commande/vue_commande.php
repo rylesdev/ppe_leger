@@ -14,15 +14,6 @@ $livresPromotion = $unControleur->selectLivrePromotion();
 $idCommandeSelectionnee = $_POST['idCommandeSelectionnee'] ?? null;
 $tri = $_POST['tri'] ?? null;
 
-// Traitement de l'avis
-if(isset($_POST['ValiderAvis'])) {
-    $idLivre = $_POST['idLivre'];
-    $nomLivre = $_POST['nomLivre'];
-    $commentaire = $_POST['commentaireAvis'];
-    $note = $_POST['noteAvis'];
-    $unControleur->insertAvis($idUser, $idLivre, $note, $commentaire);
-}
-
 // Récupérer les commandes selon sélection et tri
 if ($idCommandeSelectionnee) {
     $lesCommandes = $unControleur->selectCommandeByIdTri($idCommandeSelectionnee, $tri);

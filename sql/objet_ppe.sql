@@ -145,6 +145,32 @@ END//
 DELIMITER ;
 
 
+// Trigger qui sert à insérer les champs commande et ligneCommande dans les tables archiveCommande et archiveLigneCommande après la suppression d''un user
+DELIMITER //
+CREATE TRIGGER tInsertArchive
+before DELETE ON user
+FOR EACH ROW
+BEGIN
+    INSERT INTO archiveCommande
+    SELECT c.idCommande, c.dateCommande, c.statutCommande, c.dateLivraisonCommande, c.idUser, NOW()
+    FROM commande c
+    WHERE c.idUser = OLD.idUser;
+
+    INSERT INTO archiveLigneCommande
+    SELECT lc.idLigneCommande, lc.idCommande, lc.idLivre, lc.quantiteLigneCommande, NOW()
+    FROM ligneCommande lc
+    JOIN commande c ON lc.idCommande = c.idCommande
+    WHERE c.idUser = OLD.idUser;
+
+    DELETE FROM ligneCommande
+    WHERE idCommande IN (SELECT idCommande FROM commande WHERE idUser = OLD.idUser);
+
+    DELETE FROM commande
+    WHERE idUser = OLD.idUser;
+END//
+DELIMITER ;
+
+
 
 PROCEDURES STOCKEES :
 // Procédure qui sert à mettre à jour la quantité d''un livre d''une ligneCommande si ce livre existe déjà dans la commande.
@@ -323,4 +349,21 @@ BEGIN
         SET MESSAGE_TEXT = 'TEXT 3';
     END IF;
 END $$
+DELIMITER ;
+
+
+
+EVENT :
+// Event qui sert à mettre à jour le statutCommande en fonction de la dateLivraisonCommande et de la date actuelle.
+DELIMITER //
+CREATE EVENT IF NOT EXISTS eUpdateStatutCommande
+ON SCHEDULE EVERY 1 DAY
+STARTS CURRENT_DATE + INTERVAL 1 DAY
+DO
+BEGIN
+    UPDATE commande
+    SET statutCommande = 'arrivée'
+    WHERE statutCommande = 'expédiée'
+    AND dateLivraisonCommande < CURDATE();
+END//
 DELIMITER ;

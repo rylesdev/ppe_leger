@@ -28,33 +28,10 @@
             return $exec->fetch();
         }
 
-        /*public function selectEmailUser($emailUser) {
-            public function emailExists($emailUser) {
-                $requete = "SELECT COUNT(*) as count FROM user WHERE emailUser = ?";
-                $exec = $this->unPdo->prepare($requete);
-                $exec->bindValue(1, $emailUser, PDO::PARAM_STR);
-                $exec->execute();
-                return $exec->fetchAll();
 
-                $requeteParticulier = "SELECT COUNT(*) as count FROM particulier WHERE emailUser = ?";
-                $execParticulier = $this->unPdo->prepare($requeteParticulier);
-                $execParticulier->bindValue(1, $emailUser, PDO::PARAM_STR);
-                $execParticulier->execute();
-                return $execParticulier->fetchAll();
 
-                $requeteEntreprise = "SELECT COUNT(*) as count FROM entreprise WHERE emailUser = ?";
-                $execEntreprise = $this->unPdo->prepare($sqlEntreprise);
-                $execEntreprise->bindValue(1, $emailUser, PDO::PARAM_STR);
-                $execEntreprise->execute();
-                return $execEntreprise->fetchAll();
-
-                // Si l'email existe dans au moins une des tables, retourner true
-                return ($exec['count'] > 0 || $execParticulier['count'] > 0 || $execEntreprise['count'] > 0);
-            }
-        }*/
-
-        public function selectParticulier($idUser)
-        {
+        /**************** SELECT ****************/
+        public function selectParticulier($idUser) {
             $requete = "select u.emailUser, u.mdpUser, u.adresseUser, p.nomUser, p.prenomUser, p.dateNaissanceUser, p.sexeUser
                         from particulier p
                         inner join user u 
@@ -66,36 +43,12 @@
             return $exec->fetchAll();
         }
 
-        public function selectEntreprise($idUser)
-        {
+        public function selectEntreprise($idUser) {
             $requete = "select u.emailUser, u.mdpUser, u.adresseUser, e.siretUser, e.raisonSocialeUser, e.capitalSocialUser
                         from entreprise e
                         inner join user u  
                         on e.idUser = u.idUser
                         where u.idUser = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        /*public function selectEntreprise($idUser) {
-            $requete =  "select * 
-                        from entreprise
-                        where idUser = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
-        }*/
-
-
-        /**************** SELECT ****************/
-        public function selectUser($idUser)
-        {
-            $requete = "select * 
-                        from user
-                        where idUser = ?;";
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
@@ -134,8 +87,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectLikeLivre($filtre)
-        {
+        public function selectLikeLivre($filtre) {
             $requete = "SELECT l.*, c.nomCategorie, m.nomMaisonEdition
                         FROM livre l   
                         INNER JOIN categorie c 
@@ -163,21 +115,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectAllCategories($nomCategorie)
-        {
-            $requete = "select c.nomCategorie 
-                        from categorie c
-                        inner join livre l
-                        on c.idCategorie=l.idCategorie
-                        where idCategorie = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $nomCategorie, PDO::PARAM_STR);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function selectWhereLivre($idLivre)
-        {
+        public function selectWhereLivre($idLivre) {
             $requete = "select * 
 			            from livre l
 			            inner join categorie c
@@ -207,11 +145,10 @@
             $select->BindValue(1, $idUser, PDO::PARAM_INT);
             $select->BindValue(2, $filtre, PDO::PARAM_STR);
             $select->execute();
-            return $select->fetchAll(PDO::FETCH_ASSOC);
+            return $select->fetchAll();
         }
 
-        public function selectAdresseUser($idUser)
-        {
+        public function selectAdresseUser($idUser) {
             $requete = "select adresseUser 
                         from user 
                         where idUser = ?;";
@@ -221,19 +158,7 @@
             return $exec->fetch();
         }
 
-        public function selectLigneCommande($idCommande)
-        {
-            $requete = "select * 
-                        from ligneCommande 
-                        where idCommande = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idCommande, PDO::PARAM_STR);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function selectDateLivraisonCommande($idUser)
-        {
+        public function selectDateLivraisonCommande($idUser) {
             $requete =  "SELECT DATE_ADD(CURDATE(), INTERVAL 7 DAY) as dateLivraisonCommande 
                         FROM commande
                         WHERE idUser = ?
@@ -244,193 +169,7 @@
             return $exec->fetch();
         }
 
-        public function viewSelectTotalCommandeEnAttente($idUser)
-        {
-            $requete = "select *
-                        from vTotalCommandeEnAttente
-                        where idUser = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetch();
-        }
-
-        public function viewSelectTotalCommandeExpediee($idUser)
-        {
-            $requete = "select * 
-                        from vTotalCommandeExpediee   
-                        where idUser = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetch();
-        }
-
-        public function viewSelectTotalLivreEnAttente($idUser)
-        {
-            $requete = "select * 
-                        from vTotalLivreEnAttente
-                        where idUser = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->bindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function viewSelectTotalLivreExpediee($idUser)
-        {
-            $requete = "select * 
-                        from vTotalLivreExpediee
-                        where idUser = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->bindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function viewSelectNbMinLivreEnAttente($idUser)
-        {
-            $requete = "select *
-                        from vTotalLivreEnAttente
-                        where idUser = ? 
-                        order by totalLivre asc;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function viewSelectNbMaxLivreEnAttente($idUser)
-        {
-            $requete = "select *
-                        from vTotalLivreEnAttente
-                        where idUser = ?
-                        order by totalLivre desc";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function viewSelectNomMinLivreEnAttente($idUser)
-        {
-            $requete = "select *
-                        from vTotalLivreEnAttente
-                        where idUser = ?
-                        order by nomLivre asc;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function viewSelectNomMaxLivreEnAttente($idUser)
-        {
-            $requete = "select *
-                        from vTotalLivreEnAttente
-                        where idUser = ?
-                        order by nomLivre desc;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function viewSelectNbMinLivreExpediee($idUser)
-        {
-            $requete = "select *
-                        from vTotalLivreExpediee
-                        where idUser = ? 
-                        order by totalLivre asc;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function viewSelectNbMaxLivreExpediee($idUser)
-        {
-            $requete = "select *
-                        from vTotalLivreExpediee
-                        where idUser = ?
-                        order by totalLivre desc";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function viewSelectNomMinLivreExpediee($idUser)
-        {
-            $requete = "select *
-                        from vTotalLivreExpediee
-                        where idUser = ?
-                        order by nomLivre asc;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function viewSelectNomMaxLivreExpediee($idUser)
-        {
-            $requete = "select *
-                        from vTotalLivreExpediee
-                        where idUser = ?
-                        order by nomLivre desc;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function viewSelectCommandesEnAttente()
-        {
-            $requete = "select * 
-                        from vCommandesEnAttente";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function viewSelectMeilleuresVentes()
-        {
-            $requete = "select * 
-                        from vMeilleuresVentes";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function viewSelectLivresEnStock()
-        {
-            $requete = "select * 
-                        from vLivresEnStock";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function viewMeilleursAvis()
-        {
-            $requete = "select *
-                        from vMeilleursAvis;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function viewNbLivreAcheteUser()
-        {
-            $requete = "select *
-                        from vNbLivreAcheteUser;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function selectDateAbonnement($idUser)
-        {
+        public function selectDateAbonnement($idUser) {
             $requete = "select floor(DATEDIFF(dateFinAbonnement, CURDATE())) AS jourRestant
                         from abonnement
                         where idUser = ?;";
@@ -440,8 +179,7 @@
             return $exec->fetch();
         }
 
-        public function selectPointAbonnement($idUser)
-        {
+        public function selectPointAbonnement($idUser) {
             $requete = "select pointAbonnement
                         from abonnement
                         where idUser = ?;";
@@ -449,19 +187,6 @@
             $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
             return $exec->fetch();
-        }
-
-        public function selectDateLigneCommande($idUser)
-        {
-            $requete = "select li.idLigneCommande, floor(DATEDIFF(c.dateLivraisonCommande, CURDATE())) AS jourRestant
-                        from ligneCommande li
-                        inner join commande c 
-                        on li.idCommande=c.idCommande
-                        where c.idUser = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
         }
 
         public function selectNbLigneCommande($idCommande) {
@@ -487,21 +212,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectUnLivrePromotion($idLivre)
-        {
-            $requete = "select prixPromotion 
-                        from promotion 
-                        where idLivre = ? 
-                        and dateDebut <= curdate() 
-                        and dateFin >= curdate()";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idLivre, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function selectOffrirLivre($idUser)
-        {
+        public function selectOffrirLivre($idUser) {
             $requete = "select l.nomLivre
                         from ligneCommande li
                         inner join commande c 
@@ -517,8 +228,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectCommandeEnAttente($idUser)
-        {
+        public function selectCommandeEnAttente($idUser) {
             $requete = "select idCommande from commande 
                         where idUser = ? and statutCommande = 'en attente'
                         order by dateCommande desc limit 1;";
@@ -528,8 +238,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectCommandeExpediee($idUser)
-        {
+        public function selectCommandeExpediee($idUser) {
             $requete = "select idCommande from commande 
                         where idUser = ? and statutCommande = 'expédiée'
                         order by dateCommande desc limit 1;";
@@ -539,8 +248,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectCommandeByUser($idUser)
-        {
+        public function selectCommandeByUser($idUser) {
             $requete = "SELECT * FROM commande 
                 WHERE idUser = ?
                 ORDER BY dateCommande DESC";
@@ -550,20 +258,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectCommandeById($idCommande)
-        {
-            $requete = "SELECT lc.*, l.nomLivre, l.prixLivre 
-                FROM ligneCommande lc
-                JOIN livre l ON lc.idLivre = l.idLivre
-                WHERE lc.idCommande = ?";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idCommande, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        public function selectCommandeByIdTri($idCommande, $tri = null)
-        {
+        public function selectCommandeByIdTri($idCommande, $tri = null) {
             try {
                 $requete = "SELECT l.*, lc.quantiteLigneCommande 
                     FROM ligneCommande lc
@@ -598,8 +293,7 @@
             }
         }
 
-        public function selectCommandeTri($idUser, $tri = null)
-        {
+        public function selectCommandeTri($idUser, $tri = null) {
             try {
                 $requete = "SELECT l.*, lc.quantiteLigneCommande 
                     FROM ligneCommande lc
@@ -637,129 +331,57 @@
             }
         }
 
-        public function countLigneCommande($idCommande)
-        {
-            try {
-                $requete = "SELECT COUNT(*) as nb FROM ligneCommande WHERE idCommande = ?";
-                $exec = $this->unPdo->prepare($requete);
-                $exec->bindValue(1, $idCommande, PDO::PARAM_INT);
-                $exec->execute();
-                return $exec->fetch()['nb'];
-            } catch (PDOException $e) {
-                error_log("Erreur dans countLigneCommande: " . $e->getMessage());
-                return 0;
-            }
+        public function countLigneCommande($idCommande) {
+            $requete = "SELECT COUNT(*) as nb FROM ligneCommande WHERE idCommande = ?";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->bindValue(1, $idCommande, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+        
+        public function selectEmail($emailUser) {
+            $requete = "select * from user where emailuser = ?;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $emailUser, PDO::PARAM_STR);
+            $exec->execute();
+            return $exec->fetchAll();
         }
 
-        public function executerRequete($requete)
-        {
+        public function executerRequete($requete) {
             $exec = $this->unPdo->query($requete);
             return $exec->fetchAll(PDO::FETCH_COLUMN);
         }
 
 
+
         /**************** DELETE ****************/
-
-        public function deleteLivre($idLivre)
-        {
-            $requete = "delete 
-			            from livre 
-			            where idLivre = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idLivre, PDO::PARAM_STR);
-            $exec->execute();
-        }
-
-        public function deleteLigneCommande($idLigneCommande)
-        {
-            $requete = "delete from 
-                        ligneCommande 
-                        where idLigneCommande = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idLigneCommande, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
-        }
-
-        /*public function deleteCommande($idCommande) {
-            $requete =  "delete 
-                        from commande 
-                        where idCommande = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue (1, $idCommande, PDO::PARAM_INT);
-            $exec->execute();
-        }*/
-
-        public function archiverCommandeUtilisateur($idUser)
-        {
+        public function deleteLivre($idLivre) {
             try {
-                $this->unPdo->beginTransaction();
-
-                // 1. Archiver les commandes
-                $exec = $this->unPdo->prepare("
-            INSERT INTO archiveCommande 
-            (idCommande, dateCommande, statutCommande, dateLivraisonCommande, idUser, date_archivage)
-            SELECT 
-                idCommande, dateCommande, statutCommande, dateLivraisonCommande, idUser, NOW()
-            FROM commande 
-            WHERE idUser = :idUser
-        ");
-                $exec->bindValue(':idUser', $idUser, PDO::PARAM_INT);
-                $exec = $exec->execute();
-                if (!$exec) {
-                    throw new PDOException("Échec de l'archivage des commandes");
-                }
-
-                // 2. Archiver les lignes de commande associées
-                $exec = $this->unPdo->prepare("
-            INSERT INTO archiveLigneCommande
-            (idLigneCommande, idCommande, idLivre, quantiteLigneCommande, date_archivage)
-            SELECT 
-                lc.idLigneCommande, lc.idCommande, lc.idLivre, lc.quantiteLigneCommande, NOW()
-            FROM ligneCommande lc
-            JOIN commande c ON lc.idCommande = c.idCommande
-            WHERE c.idUser = :idUser
-        ");
-                $exec->bindValue(':idUser', $idUser, PDO::PARAM_INT);
-                $exec = $exec->execute();
-                if (!$exec) {
-                    throw new PDOException("Échec de l'archivage des lignes de commande");
-                }
-
-                // 3. Suppression dans l'ordre inverse des dépendances
-                $exec = $this->unPdo->prepare("
-            DELETE FROM ligneCommande 
-            WHERE idCommande IN (
-                SELECT idCommande FROM commande WHERE idUser = :idUser
-            )
-        ");
-                $exec->bindValue(':idUser', $idUser, PDO::PARAM_INT);
-                $exec = $exec->execute();
-                if (!$exec) {
-                    throw new PDOException("Échec de la suppression des lignes de commande");
-                }
-
-                $exec = $this->unPdo->prepare("
-            DELETE FROM commande WHERE idUser = :idUser
-        ");
-                $exec->bindValue(':idUser', $idUser, PDO::PARAM_INT);
-                $exec = $exec->execute();
-                if (!$exec) {
-                    throw new PDOException("Échec de la suppression des commandes");
-                }
-
-                $this->unPdo->commit();
+                $requete =  "delete from livre 
+			                where idLivre = ?;";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $idLivre, PDO::PARAM_STR);
+                $exec->execute();
                 return true;
-
-            } catch (PDOException $e) {
-                $this->unPdo->rollBack();
-                error_log("Erreur archivage commandes: " . $e->getMessage());
+            } catch (PDOException $exp) {
                 return false;
             }
         }
 
-        public function deleteParticulier($idUser)
-        {
+        public function deleteLigneCommande($idLigneCommande) {
+            try {
+                $requete =  "delete from ligneCommande 
+                            where idLigneCommande = ?;";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $idLigneCommande, PDO::PARAM_INT);
+                $exec->execute();
+                return true;
+            } catch (PDOException $exp) {
+                return false;
+            }
+        }
+
+        public function deleteParticulier($idUser) {
             try {
                 $this->unPdo->beginTransaction();
 
@@ -777,13 +399,11 @@
                 return true;
             } catch (PDOException $exp) {
                 $this->unPdo->rollBack();
-                error_log("Erreur suppression particulier: " . $exp->getMessage());
                 return false;
             }
         }
 
-        public function deleteEntreprise($idUser)
-        {
+        public function deleteEntreprise($idUser) {
             try {
                 $this->unPdo->beginTransaction();
 
@@ -801,35 +421,14 @@
                 return true;
             } catch (PDOException $exp) {
                 $this->unPdo->rollBack();
-                error_log("Erreur suppression entreprise: " . $exp->getMessage());
                 return false;
             }
         }
 
 
+
         /**************** INSERT ****************/
-        /*public function triggerInsertParticulier($emailUser, $mdpUser, $nomUser, $prenomUser, $adresseUser, $dateNaissanceUser, $sexeUser) {
-            try {
-                $requete =  "insert into particulier (idUser, emailUser, mdpUser, nomUser, prenomUser, adresseUser, dateNaissanceUser, sexeUser)
-                            values (null, ?, sha1(?), ?, ?, ?, ?, ?);";
-                $exec = $this->unPdo->prepare($requete);
-                $exec->bindValue(1, $emailUser, PDO::PARAM_STR);
-                $exec->bindValue(2, $mdpUser, PDO::PARAM_STR);
-                $exec->bindValue(3, $nomUser, PDO::PARAM_STR);
-                $exec->bindValue(4, $prenomUser, PDO::PARAM_STR);
-                $exec->bindValue(5, $adresseUser, PDO::PARAM_STR);
-                $exec->bindValue(6, $dateNaissanceUser, PDO::PARAM_STR);
-                $exec->bindValue(7, $sexeUser, PDO::PARAM_STR);
-                $exec->execute();
-
-                return $this->unPdo->lastInsertId();
-            } catch (PDOException $exp) {
-                echo $exp->getMessage();
-            }
-        }*/
-
-        public function insertParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser)
-        {
+        public function insertParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser) {
             try {
                 $this->unPdo->beginTransaction();
 
@@ -854,34 +453,14 @@
 
                 $this->unPdo->commit();
 
-                return $idUser;
+                return true;
             } catch (PDOException $exp) {
                 $this->unPdo->rollBack();
-                error_log("Erreur insertion particulier: " . $exp->getMessage());
                 return false;
             }
         }
 
-        /*public function triggerInsertEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser) {
-            try {
-                $requete =  "insert into entreprise (idUser, emailUser, mdpUser, siretUser, raisonSocialeUser, capitalSocialUser)
-                            values (null, ?, sha1(?), ?, ?, ?);";
-                $exec = $this->unPdo->prepare($requete);
-                $exec->bindValue(1, $emailUser, PDO::PARAM_STR);
-                $exec->bindValue(2, $mdpUser, PDO::PARAM_STR);
-                $exec->bindValue(3, $siretUser, PDO::PARAM_STR);
-                $exec->bindValue(4, $raisonSocialeUser, PDO::PARAM_STR);
-                $exec->bindValue(5, $capitalSocialUser, PDO::PARAM_STR);
-                $exec->execute();
-
-                return $this->unPdo->lastInsertId();
-            } catch (PDOException $exp) {
-                echo $exp->getMessage();
-            }
-        }*/
-
-        public function insertEntreprise($emailUser, $mdpUser, $adresseUser, $siretUser, $raisonSocialeUser, $capitalSocialUser)
-        {
+        public function insertEntreprise($emailUser, $mdpUser, $adresseUser, $siretUser, $raisonSocialeUser, $capitalSocialUser) {
             try {
                 $this->unPdo->beginTransaction();
 
@@ -905,16 +484,14 @@
 
                 $this->unPdo->commit();
 
-                return $idUser;
+                return true;
             } catch (PDOException $exp) {
                 $this->unPdo->rollBack();
-                error_log("Erreur insertion entreprise: " . $exp->getMessage());
                 return false;
             }
         }
 
-        public function insertCommande($idUser)
-        {
+        public function insertCommande($idUser) {
             try {
                 $this->unPdo->beginTransaction();
 
@@ -925,94 +502,117 @@
                 $exec->execute();
 
                 $idCommande = $this->unPdo->lastInsertId();
+
                 $this->unPdo->commit();
 
                 return $idCommande;
-
             } catch (PDOException $e) {
                 $this->unPdo->rollBack();
-                error_log("Erreur création commande : " . $e->getMessage());
                 return false;
             }
         }
 
-        public function insertAbonnement1m($idUser)
-        {
-            $requete = "insert into abonnement
-						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 MONTH), 0);";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
+        public function insertAbonnement1m($idUser) {
+            try {
+                $requete =  "insert into abonnement
+						    values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 MONTH), 0);";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+                $exec->execute();
+                return true;
+            } catch (PDOException $exp) {
+                return false;
+            }
         }
 
-        public function updateAbonnement1m($idUser)
-        {
-            $requete = "update abonnement 
+        public function updateAbonnement1m($idUser) {
+            try {
+                $requete = "update abonnement 
                         set dateFinAbonnement = DATE_ADD(CURDATE(), INTERVAL 1 MONTH)
                         where idUser = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+                $exec->execute();
+                return true;
+            } catch (PDOException $exp) {
+                return false;
+            }
         }
 
-        public function insertAbonnement3m($idUser)
-        {
-            $requete = "insert into abonnement
+        public function insertAbonnement3m($idUser) {
+            try {
+                $requete = "insert into abonnement
 						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 3 MONTH)n 0);";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+                $exec->execute();
+                return true;
+            } catch (PDOException $exp) {
+                return false;
+            }
         }
 
-        public function updateAbonnement3m($idUser)
-        {
-            $requete = "update abonnement 
+        public function updateAbonnement3m($idUser) {
+            try {
+                $requete = "update abonnement 
                         set dateFinAbonnement = DATE_ADD(CURDATE(), INTERVAL 3 MONTH)
                         where idUser = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+                $exec->execute();
+                return true;
+            } catch (PDOException $exp) {
+                return false;
+            }
         }
 
-        public function insertAbonnement1a($idUser)
-        {
-            $requete = "insert into abonnement
+        public function insertAbonnement1a($idUser) {
+            try {
+                $requete = "insert into abonnement
 						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 YEAR), 0);";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+                $exec->execute();
+                return true;
+            } catch (PDOException $exp) {
+                return false;
+            }
         }
 
-        public function updateAbonnement1a($idUser)
-        {
-            $requete = "update abonnement 
+        public function updateAbonnement1a($idUser) {
+            try {
+                $requete = "update abonnement 
                         set dateFinAbonnement = DATE_ADD(CURDATE(), INTERVAL 1 YEAR)
                         where idUser = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-            return $exec->fetchAll();
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+                $exec->execute();
+                return true;
+            } catch (PDOException $exp) {
+                return false;
+            }
         }
 
-        public function insertAvis($idLivre, $nomLivre, $idUser, $commentaireAvis, $noteAvis)
-        {
-            $requete = "insert into avis
-                        values (null, ?, ?, ?, ?, ?, curdate());";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->bindValue(1, $idLivre, PDO::PARAM_INT);
-            $exec->bindValue(2, $nomLivre, PDO::PARAM_STR);
-            $exec->bindValue(3, $idUser, PDO::PARAM_INT);
-            $exec->bindValue(4, $commentaireAvis, PDO::PARAM_STR);
-            $exec->bindValue(5, $noteAvis, PDO::PARAM_INT);
-            $exec->execute();
+        public function insertAvis($idLivre, $idUser, $commentaireAvis, $noteAvis) {
+            try {
+                $requete =  "insert into avis
+                            values (null, ?, ?, ?, ?, curdate());";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $idLivre, PDO::PARAM_INT);
+                $exec->bindValue(2, $idUser, PDO::PARAM_INT);
+                $exec->bindValue(3, $commentaireAvis, PDO::PARAM_STR);
+                $exec->bindValue(4, $noteAvis, PDO::PARAM_INT);
+                $exec->execute();
+                return true;
+            } catch (PDOEXception $exp) {
+                return false;
+            }
         }
+
 
 
         /**************** UPDATE ****************/
-        public function updateParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser, $idUser)
-        {
+        public function updateParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser, $idUser) {
             try {
                 $this->unPdo->beginTransaction();
 
@@ -1053,8 +653,7 @@
             }
         }
 
-        public function updateEntreprise($emailUser, $mdpUser, $adresseUser, $siretUser, $raisonSocialeUser, $capitalSocialUser, $idUser)
-        {
+        public function updateEntreprise($emailUser, $mdpUser, $adresseUser, $siretUser, $raisonSocialeUser, $capitalSocialUser, $idUser) {
             try {
                 $this->unPdo->beginTransaction();
 
@@ -1093,53 +692,42 @@
             }
         }
 
-        /*public function updateEntreprise($emailUser, $mdpUser, $siretUser, $raisonSocialeUser, $capitalSocialUser, $idUser) {
-            $requete =  "update entreprise 
-                        set emailUser = ?, 
-                        mdpUser = sha1(?), 
-                        siretUser = ?, 
-                        raisonSocialeUser = ?,
-                        capitalSocialUser = ?
-                        where idUser = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $emailUser, PDO::PARAM_STR);
-            $exec->BindValue(2, $mdpUser, PDO::PARAM_STR);
-            $exec->BindValue(3, $siretUser, PDO::PARAM_STR);
-            $exec->BindValue(4, $raisonSocialeUser, PDO::PARAM_STR);
-            $exec->BindValue(5, $capitalSocialUser, PDO::PARAM_STR);
-            $exec->BindValue(6, $idUser, PDO::PARAM_INT);
-            $exec->execute();
-        }*/
-
-        public function updateLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $idLivre, $prixLivre)
-        {
-            $requete = "update livre 
-			            set nomLivre = ?, 
-			            categorieLivre = ?, 
-			            auteurLivre = ?, 
-			            imageLivre = ?, 
-			            prixLivre = ? 
-			            where idLivre = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $nomLivre, PDO::PARAM_STR);
-            $exec->BindValue(2, $categorieLivre, PDO::PARAM_STR);
-            $exec->BindValue(3, $auteurLivre, PDO::PARAM_STR);
-            $exec->BindValue(4, $imageLivre, PDO::PARAM_STR);
-            $exec->BindValue(5, $prixLivre, PDO::PARAM_STR);
-            $exec->BindValue(6, $idLivre, PDO::PARAM_INT);
-            $exec->execute();
+        public function updateLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $idLivre, $prixLivre) {
+            try {
+                $requete =  "update livre 
+			                set nomLivre = ?, 
+			                categorieLivre = ?, 
+			                auteurLivre = ?, 
+			                imageLivre = ?, 
+			                prixLivre = ? 
+			                where idLivre = ?;";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $nomLivre, PDO::PARAM_STR);
+                $exec->BindValue(2, $categorieLivre, PDO::PARAM_STR);
+                $exec->BindValue(3, $auteurLivre, PDO::PARAM_STR);
+                $exec->BindValue(4, $imageLivre, PDO::PARAM_STR);
+                $exec->BindValue(5, $prixLivre, PDO::PARAM_STR);
+                $exec->BindValue(6, $idLivre, PDO::PARAM_INT);
+                $exec->execute();
+                return true;
+            } catch (PDOException $exp) {
+                return false;
+            }
         }
 
-        public function updateStockageLivre($exemplaireLivre, $nomLivre)
-        {
-            $requete = "update livre 
+        public function updateStockageLivre($exemplaireLivre, $nomLivre) {
+            try {
+                $requete = "update livre 
 			            set exemplaireLivre = ? 
 			            where nomLivre = ?;";
-            $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $exemplaireLivre, PDO::PARAM_INT);
-            $exec->BindValue(2, $nomLivre, PDO::PARAM_STR);
-            $exec->execute();
-            return $exec->execute();
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $exemplaireLivre, PDO::PARAM_INT);
+                $exec->BindValue(2, $nomLivre, PDO::PARAM_STR);
+                $exec->execute();
+                return true;
+            } catch (PDOException $exp) {
+                return false;
+            }
         }
 
         public function updateCommande($idCommande) {
@@ -1158,8 +746,7 @@
             }
         }
 
-        public function updateLigneCommande($quantiteLigneCommande, $idLigneCommande)
-        {
+        public function updateLigneCommande($quantiteLigneCommande, $idLigneCommande) {
             try {
                 $requete = "update ligneCommande
                         set quantiteLigneCommande = ?
@@ -1197,18 +784,114 @@
             }
         }
 
-        public function enleverPointAbonnement($pointAbonnement, $idUser)
-        {
-            $requete = "update abonnement 
+        public function enleverPointAbonnement($pointAbonnement, $idUser) {
+                $requete = "update abonnement 
                         set pointAbonnement = pointAbonnement - ?
                         where idUser = ?;";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $pointAbonnement, PDO::PARAM_INT);
+                $exec->BindValue(2, $idUser, PDO::PARAM_INT);
+                $exec->execute();
+        }
+
+
+
+        /**************** VIEW ****************/
+        public function viewSelectTotalLivreEnAttente($idUser) {
+            $requete = "select * 
+                        from vTotalLivreEnAttente
+                        where idUser = ?;";
             $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $pointAbonnement, PDO::PARAM_INT);
-            $exec->BindValue(2, $idUser, PDO::PARAM_INT);
+            $exec->bindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
             return $exec->fetchAll();
         }
 
+        public function viewSelectNbMinLivreEnAttente($idUser) {
+            $requete = "select *
+                        from vTotalLivreEnAttente
+                        where idUser = ? 
+                        order by totalLivre asc;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function viewSelectNbMaxLivreEnAttente($idUser) {
+            $requete = "select *
+                        from vTotalLivreEnAttente
+                        where idUser = ?
+                        order by totalLivre desc";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function viewSelectNomMinLivreEnAttente($idUser) {
+            $requete = "select *
+                        from vTotalLivreEnAttente
+                        where idUser = ?
+                        order by nomLivre asc;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function viewSelectNomMaxLivreEnAttente($idUser) {
+            $requete = "select *
+                        from vTotalLivreEnAttente
+                        where idUser = ?
+                        order by nomLivre desc;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function viewSelectCommandesEnAttente() {
+            $requete = "select * 
+                        from vCommandesEnAttente";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function viewSelectMeilleuresVentes() {
+            $requete = "select * 
+                        from vMeilleuresVentes";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function viewSelectLivresEnStock() {
+            $requete = "select * 
+                        from vLivresEnStock";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function viewMeilleursAvis() {
+            $requete = "select *
+                        from vMeilleursAvis;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function viewNbLivreAcheteUser() {
+            $requete = "select *
+                        from vNbLivreAcheteUser;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        
 
         /**************** PROCEDURE ****************/
         public function procedureInsertOrUpdateLigneCommande($idCommande, $idLivre, $quantiteLigneCommande) {
@@ -1246,23 +929,15 @@
             return $result;
         }
 
-        public function procedureOffrirLivre($idUser, $chiffre)
-        {
+        public function procedureOffrirLivre($idUser, $chiffre) {
             try {
                 $requete = "CALL pOffrirLivre(?, ?)";
                 $exec = $this->unPdo->prepare($requete);
                 $exec->bindValue(1, $idUser, PDO::PARAM_INT);
                 $exec->bindValue(2, $chiffre, PDO::PARAM_INT);
                 $exec->execute();
-
                 return true;
             } catch (PDOException $e) {
-                $errorMessage = $e->getMessage();
-                error_log("Erreur lors de l'insertion dans ligneCommande : " . $errorMessage);
-                if ($e->getCode() == '45000') {
-                    echo "<div class='alert alert-success'>
-                    Un livre vous a été offert dans votre panier actuel !</div>";
-                }
                 return false;
             }
         }
@@ -1311,4 +986,3 @@
             return $result;
         }
     }
-?>

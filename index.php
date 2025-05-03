@@ -7,51 +7,47 @@ $unControleur = new Controleur();
 
 $resultAdminPrincipal = $unControleur->selectAdminPrincipal($_SESSION['idUser']);
 $isAdmin = $resultAdminPrincipal[0][0];
-
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>PPE Book'In</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="includes/css/index.css">
+    <link rel="stylesheet" href="includes/css/style.css">
 </head>
 <body>
 <center>
-    <h1> Book'In </h1>
+    <h1>Book'In</h1>
     <div class="relief-box">
         <img src="images/logo.png" height="100" width="100">
         <?php
         if (isset($isAdmin) && $isAdmin == 1) {
             echo "<br>";
-            echo "/**************** Mode Admin ****************/";
+            echo "<!-- Mode Admin -->";
         }
         ?>
     </div>
 
+    <div id="navbar" class="navbar">
+        <a href="index.php?page=1"><img src="images/logo.png" height="80" width="80" alt="Accueil"></a>
+        <a href="index.php?page=2"><img src="images/rechercher.png" height="80" width="80" alt="Livres"></a>
+        <?php if (empty($isAdmin) || $isAdmin == 0): ?>
+            <a href="index.php?page=3"><img src="images/panier.png" height="80" width="80" alt="Panier"></a>
+            <a href="index.php?page=4"><img src="images/commande.png" height="80" width="80" alt="Commande"></a>
+            <a href="index.php?page=5"><img src="images/abonnement.png" height="80" width="80" alt="Abonnement"></a>
+            <a href="index.php?page=6"><img src="images/utilisateur.png" height="80" width="80" alt="Utilisateur"></a>
+        <?php endif; ?>
+        <?php if (isset($isAdmin) && $isAdmin == 1): ?>
+            <a href="index.php?page=7"><img src="images/promotion.png" height="80" width="80" alt="Promotion"></a>
+            <a href="index.php?page=8"><img src="images/stockage.png" height="80" width="80" alt="Stockage"></a>
+            <a href="index.php?page=9"><img src="images/statistique.png" height="80" width="80" alt="Statistique"></a>
+        <?php endif; ?>
+        <a href="index.php?page=10"><img src="images/authentification.png" height="80" width="80" alt="Authentification"></a>
+    </div>
+
     <?php
-    echo '<div id="navbar" style="background-Color: #f0f0f0">
-		<a href="index.php?page=1"> <img src="images/logo.png" height="80" width="80" style="margin-right: 30px"> </a>
-
-		<a href="index.php?page=2"> <img src="images/rechercher.png" height="80" width="80" style="margin-right: 30px"> </a>';
-
-    if (empty($isAdmin) || $isAdmin == 0) {
-        echo '<a href="index.php?page=3"> <img src="images/panier.png" height="80" width="80" style="margin-right: 30px"> </a>';
-        echo '<a href="index.php?page=4"> <img src="images/commande.png" height="80" width="80" style="margin-right: 30px"> </a>';
-        echo '<a href="index.php?page=5"> <img src="images/abonnement.png" height="80" width="80" style="margin-right: 30px"> </a>';
-        echo '<a href="index.php?page=6"> <img src="images/utilisateur.png" height="80" width="80" style="margin-right: 30px"> </a>';
-    }
-
-    if (isset($isAdmin) && $isAdmin == 1) {
-        echo '<a href="index.php?page=7"> <img src="images/promotion.png" height="80" width="80" style="margin-right: 30px"> </a>';
-        echo '<a href="index.php?page=8"> <img src="images/stockage.png" height="80" width="80" style="margin-right: 30px"> </a>';
-        echo '<a href="index.php?page=9"> <img src="images/statistique.png" height="80" width="80" style="margin-right: 30px"> </a>';
-    }
-
-    echo '<a href="index.php?page=10"> <img src="images/authentification.png" height="80" width="80" style="margin-right: 30px"> </a>
-    </div>';
-
     if (isset($_GET['page'])) {
         $page = $_GET['page'];
     } else {
@@ -91,8 +87,7 @@ $isAdmin = $resultAdminPrincipal[0][0];
             break;
     }
     ?>
-    <br>
-    <br>
+    <br><br>
 </center>
 </body>
 </html>

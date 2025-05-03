@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : ven. 02 mai 2025 à 22:22
+-- Généré le : sam. 03 mai 2025 à 22:47
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -186,7 +186,7 @@ INSERT INTO `abonnement` (`idAbonnement`, `idUser`, `dateDebutAbonnement`, `date
 (1, 2, '2025-01-01', '2025-12-31', 0),
 (3, 23, '2025-01-25', '2025-04-25', 0),
 (4, 15, '2025-01-26', '2025-02-28', 80),
-(26, 37, '2025-04-25', '2025-06-01', 190);
+(26, 37, '2025-04-25', '2025-06-01', 140);
 
 -- --------------------------------------------------------
 
@@ -227,7 +227,10 @@ CREATE TABLE `archiveCommande` (
 --
 
 INSERT INTO `archiveCommande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLivraisonCommande`, `idUser`, `date_archivage`) VALUES
-(457, '2002-09-09 00:00:00', 'en attente', '2002-12-12 00:00:00', 40, '2025-04-19 20:10:36');
+(457, '2002-09-09 00:00:00', 'en attente', '2002-12-12 00:00:00', 40, '2025-04-19 20:10:36'),
+(516, '2025-05-03 00:00:00', 'expédiée', '2025-05-10 00:00:00', 63, '2025-05-03 16:27:39'),
+(517, '2025-05-03 00:00:00', 'expédiée', '2025-05-10 00:00:00', 68, '2025-05-03 17:29:44'),
+(518, '2025-05-03 00:00:00', 'expédiée', '2025-05-10 00:00:00', 68, '2025-05-03 17:29:44');
 
 -- --------------------------------------------------------
 
@@ -250,7 +253,12 @@ CREATE TABLE `archiveLigneCommande` (
 INSERT INTO `archiveLigneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quantiteLigneCommande`, `date_archivage`) VALUES
 (724, 457, 3, 10, '2025-04-19 20:10:36'),
 (725, 457, 5, 20, '2025-04-19 20:10:36'),
-(726, 457, 4, 30, '2025-04-19 20:10:36');
+(726, 457, 4, 30, '2025-04-19 20:10:36'),
+(891, 516, 17, 20, '2025-05-03 16:27:39'),
+(892, 516, 45, 3, '2025-05-03 16:27:39'),
+(893, 516, 49, 40, '2025-05-03 16:27:39'),
+(894, 517, 2, 27, '2025-05-03 17:29:44'),
+(895, 518, 13, 30, '2025-05-03 17:29:44');
 
 -- --------------------------------------------------------
 
@@ -298,7 +306,9 @@ INSERT INTO `avis` (`idAvis`, `idLivre`, `idUser`, `commentaireAvis`, `noteAvis`
 (32, 45, 37, 'super', 4, '2025-05-01'),
 (33, 10, 37, 'excellent', 1, '2025-05-01'),
 (34, 10, 37, 'nul', 5, '2025-05-01'),
-(35, 3, 37, 'test avis 16h07', 4, '2025-05-01');
+(35, 3, 37, 'test avis 16h07', 4, '2025-05-01'),
+(36, 1, 37, 'test5', 4, '2025-05-03'),
+(38, 2, 37, 'test7', 2, '2025-05-03');
 
 -- --------------------------------------------------------
 
@@ -330,7 +340,7 @@ INSERT INTO `categorie` (`idCategorie`, `nomCategorie`) VALUES
 CREATE TABLE `commande` (
   `idCommande` int NOT NULL,
   `dateCommande` date DEFAULT NULL,
-  `statutCommande` enum('en attente','annulée','expédiée','arrivée') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `statutCommande` enum('en attente','expédiée','arrivée') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `dateLivraisonCommande` date DEFAULT NULL,
   `idUser` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -340,129 +350,129 @@ CREATE TABLE `commande` (
 --
 
 INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLivraisonCommande`, `idUser`) VALUES
-(351, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(352, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(353, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(354, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(355, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(356, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(357, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(358, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(359, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(360, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(361, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(362, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(363, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(364, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(365, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(366, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(367, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(368, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(369, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(370, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(371, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(372, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(373, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(374, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(375, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(376, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(377, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(378, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(379, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(380, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(381, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(382, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(383, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(384, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(385, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(386, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(387, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(388, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(389, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(390, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(391, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(392, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(393, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(395, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(396, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(397, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(398, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(399, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(400, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(401, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(402, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(403, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(404, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(405, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(406, '2025-01-30', 'expédiée', '2025-02-06', 2),
-(407, '2025-01-30', 'expédiée', '2025-02-06', 2),
-(408, '2025-01-30', 'expédiée', '2025-02-06', 2),
-(409, '2025-01-30', 'expédiée', '2025-02-06', 15),
-(410, '2025-01-30', 'expédiée', '2025-02-06', 15),
-(411, '2025-01-30', 'expédiée', '2025-02-06', 15),
-(412, '2025-01-30', 'expédiée', '2025-02-06', 15),
-(413, '2025-01-30', 'expédiée', '2025-02-06', 15),
-(414, '2025-01-30', 'expédiée', '2025-02-06', 15),
-(415, '2025-01-30', 'expédiée', '2025-02-06', 15),
-(417, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(418, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(419, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(420, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(421, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(422, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(423, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(424, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(425, '2025-02-02', 'expédiée', '2025-02-09', 24),
-(426, '2025-02-02', 'expédiée', '2025-02-09', 24),
-(427, '2025-02-02', 'expédiée', '2025-02-09', 2),
-(428, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(429, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(430, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(431, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(432, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(433, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(434, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(435, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(436, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(437, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(438, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(439, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(440, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(441, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(442, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(443, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(444, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(445, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(446, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(447, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(448, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(449, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(450, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(452, '2025-02-03', 'expédiée', '2025-02-10', 15),
-(453, '2025-02-03', 'expédiée', '2025-02-10', 15),
-(454, '2025-02-03', 'expédiée', '2025-02-10', 15),
-(455, '2025-02-03', 'expédiée', '2025-02-10', 15),
-(462, '2025-04-24', 'expédiée', '2025-05-01', 37),
+(351, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(352, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(353, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(354, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(355, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(356, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(357, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(358, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(359, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(360, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(361, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(362, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(363, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(364, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(365, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(366, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(367, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(368, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(369, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(370, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(371, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(372, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(373, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(374, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(375, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(376, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(377, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(378, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(379, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(380, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(381, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(382, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(383, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(384, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(385, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(386, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(387, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(388, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(389, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(390, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(391, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(392, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(393, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(395, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(396, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(397, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(398, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(399, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(400, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(401, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(402, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(403, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(404, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(405, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(406, '2025-01-30', 'arrivée', '2025-02-06', 2),
+(407, '2025-01-30', 'arrivée', '2025-02-06', 2),
+(408, '2025-01-30', 'arrivée', '2025-02-06', 2),
+(409, '2025-01-30', 'arrivée', '2025-02-06', 15),
+(410, '2025-01-30', 'arrivée', '2025-02-06', 15),
+(411, '2025-01-30', 'arrivée', '2025-02-06', 15),
+(412, '2025-01-30', 'arrivée', '2025-02-06', 15),
+(413, '2025-01-30', 'arrivée', '2025-02-06', 15),
+(414, '2025-01-30', 'arrivée', '2025-02-06', 15),
+(415, '2025-01-30', 'arrivée', '2025-02-06', 15),
+(417, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(418, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(419, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(420, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(421, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(422, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(423, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(424, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(425, '2025-02-02', 'arrivée', '2025-02-09', 24),
+(426, '2025-02-02', 'arrivée', '2025-02-09', 24),
+(427, '2025-02-02', 'arrivée', '2025-02-09', 2),
+(428, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(429, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(430, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(431, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(432, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(433, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(434, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(435, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(436, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(437, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(438, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(439, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(440, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(441, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(442, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(443, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(444, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(445, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(446, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(447, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(448, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(449, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(450, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(452, '2025-02-03', 'arrivée', '2025-02-10', 15),
+(453, '2025-02-03', 'arrivée', '2025-02-10', 15),
+(454, '2025-02-03', 'arrivée', '2025-02-10', 15),
+(455, '2025-02-03', 'arrivée', '2025-02-10', 15),
+(462, '2025-04-24', 'arrivée', '2025-05-01', 37),
 (463, '2025-04-25', 'en attente', '2025-05-02', 2),
-(465, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(466, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(467, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(468, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(469, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(470, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(471, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(472, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(473, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(474, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(475, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(476, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(477, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(478, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(479, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(480, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(481, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(482, '2025-04-26', 'expédiée', '2025-05-03', 37),
-(483, '2025-04-26', 'expédiée', '2025-05-03', 37),
+(465, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(466, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(467, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(468, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(469, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(470, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(471, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(472, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(473, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(474, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(475, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(476, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(477, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(478, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(479, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(480, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(481, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(482, '2025-04-26', 'arrivée', '2025-05-03', 37),
+(483, '2025-04-26', 'arrivée', '2025-05-03', 37),
 (484, '2025-04-27', 'expédiée', '2025-05-04', 37),
 (485, '2025-05-01', 'expédiée', '2025-05-08', 37),
 (486, '2025-05-01', 'expédiée', '2025-05-08', 37),
@@ -494,7 +504,10 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (512, '2025-05-01', 'expédiée', '2025-05-08', 37),
 (513, '2025-05-01', 'expédiée', '2025-05-08', 37),
 (514, '2025-05-01', 'expédiée', '2025-05-08', 37),
-(515, NULL, 'en attente', NULL, 37);
+(515, '2025-05-03', 'expédiée', '2025-05-10', 37),
+(519, '2025-05-03', 'expédiée', '2025-05-10', 37),
+(520, '2025-05-03', 'expédiée', '2025-05-10', 37),
+(521, NULL, 'en attente', NULL, 37);
 
 --
 -- Déclencheurs `commande`
@@ -537,7 +550,8 @@ INSERT INTO `entreprise` (`idUser`, `siretUser`, `raisonSocialeUser`, `capitalSo
 (33, 123123, '123123', 123123.00),
 (34, 987987, '987987', 987987.00),
 (59, 12312312312312, 'partent', 1000000.12),
-(61, 12312312312312, 'azd', 1231.10);
+(61, 12312312312312, 'azd', 1231.10),
+(65, 13123123123, 'okppl', 123123120.00);
 
 -- --------------------------------------------------------
 
@@ -756,7 +770,12 @@ INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quanti
 (887, 513, 2, 1),
 (888, 514, 3, 1),
 (889, 515, 2, 1),
-(890, 515, 3, 1);
+(890, 515, 3, 1),
+(896, 519, 2, 1),
+(897, 519, 12, 1),
+(898, 520, 2, 1),
+(899, 520, 9, 1),
+(900, 521, 2, 1);
 
 --
 -- Déclencheurs `ligneCommande`
@@ -819,22 +838,22 @@ CREATE TABLE `livre` (
 
 INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exemplaireLivre`, `prixLivre`, `idCategorie`, `idMaisonEdition`, `idPromotion`) VALUES
 (1, 'Alcools', 'Apollinaire', 'alcools.png', 94, 12.50, 3, 1, 18),
-(2, 'Crime et Chatiment', 'Dostoïevski', 'crime_et_chatiment.png', 78, 15.00, 1, 2, 13),
-(3, 'L`Etranger', 'Camus', 'l_etranger.png', 80, 10.00, 1, 3, NULL),
+(2, 'Crime et Chatiment', 'Dostoïevski', 'crime_et_chatiment.png', 48, 15.00, 1, 2, 13),
+(3, 'L`Etranger', 'Camus', 'l_etranger.png', 79, 10.00, 1, 3, NULL),
 (4, 'L`Odyssée', 'Homère', 'l_odyssee.png', 89, 13.50, 2, 4, 19),
 (5, 'Les Fleurs du Mal', 'Baudelaire', 'les_fleurs_du_mal.png', 100, 14.00, 3, 5, 14),
 (6, 'PHP et MySQL pour les nuls', 'Valade', 'php_et_mysql_pour_les_nuls.png', 79, 22.00, 4, 6, NULL),
 (7, 'Programmer en Java', 'Delannoy', 'programmer_en_java.png', 100, 25.00, 4, 7, NULL),
 (8, 'SPQR', 'Beard', 'spqr.png', 99, 18.00, 2, 8, NULL),
-(9, 'À la recherche du temps perdu', 'Proust', 'a_la_recherche_du_temps_perdu.png', 93, 0.00, 1, 1, NULL),
+(9, 'À la recherche du temps perdu', 'Proust', 'a_la_recherche_du_temps_perdu.png', 92, 0.00, 1, 1, NULL),
 (10, 'Les Misérables', 'Hugo', 'les_miserables_I.png', 96, 0.00, 1, 2, NULL),
 (11, '1984', 'Orwell', '1984.png', 93, 0.00, 1, 3, NULL),
-(12, 'L`Art d\'aimer', 'Ovide', 'l_art_d_aimer', 88, 0.00, 1, 4, NULL),
-(13, 'La Peste', 'Camus', 'la_peste.png', 95, 15.99, 1, 1, NULL),
+(12, 'L`Art d\'aimer', 'Ovide', 'l_art_d_aimer', 87, 0.00, 1, 4, NULL),
+(13, 'La Peste', 'Camus', 'la_peste.png', 65, 15.99, 1, 1, NULL),
 (14, 'Les Mémoires d\'Hadrien', 'Yourcenar', 'les_memoires_d_hadrien.png', 99, 12.99, 1, 1, NULL),
 (15, 'La Condition humaine', 'Malraux', 'la_condition_humaine.png', 100, 14.99, 1, 1, NULL),
 (16, 'Le Comte de Monte-Cristo', 'Dumas', 'le_comte_de_monte_cristo.png', 100, 9.99, 1, 2, NULL),
-(17, 'Orgueil et Préjugés', 'Austen', 'orgueil_et_prejuges.png', 100, 8.99, 1, 2, NULL),
+(17, 'Orgueil et Préjugés', 'Austen', 'orgueil_et_prejuges.png', 80, 8.99, 1, 2, NULL),
 (18, 'Shining', 'King', 'shining.png', 100, 10.99, 1, 2, NULL),
 (19, 'Bel-Ami', 'Maupassant', 'bel_ami.png', 99, 11.99, 1, 3, NULL),
 (20, 'Fahrenheit 451', 'Bradbury', 'fahrenheit_451.png', 100, 9.99, 1, 3, NULL),
@@ -845,11 +864,11 @@ INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exempl
 (25, 'Le Petit Livre des citations latines', 'Delamaire', 'le_petit_livre_des_citations_latines.png', 100, 7.99, 3, 6, NULL),
 (43, 'Le Petit Livre des grandes coïncidences', 'Chiflet', 'le_petit_livre_des_grandes_coincidences.png', 100, 7.99, 3, 6, NULL),
 (44, 'Le Petit Livre des gros mensonges', 'Chiflet', 'le_petit_livre_des_gros_mensonges.png', 100, 7.99, 3, 6, NULL),
-(45, 'L`Art de la guerre', 'Sun', 'l_art_de_la_guerre.png', 100, 12.99, 2, 7, NULL),
+(45, 'L`Art de la guerre', 'Sun', 'l_art_de_la_guerre.png', 97, 12.99, 2, 7, NULL),
 (46, 'Apprendre à dessiner', 'Edwards', 'apprendre_a_dessiner.png', 100, 14.99, 4, 7, NULL),
 (47, 'Le Lean Startup', 'Ries', 'le_lean_startup.png', 100, 16.99, 4, 7, NULL),
 (48, 'Les Templiers', 'Demurger', 'les_templiers.png', 100, 18.99, 2, 8, NULL),
-(49, 'La Seconde Guerre mondiale', 'Beevor', 'la_seconde_guerre_mondiale.png', 100, 19.99, 2, 8, NULL),
+(49, 'La Seconde Guerre mondiale', 'Beevor', 'la_seconde_guerre_mondiale.png', 60, 19.99, 2, 8, NULL),
 (50, 'Napoléon : Une ambition française', 'Tulard', 'napoleon_une_ambition_francaise.png', 100, 20.99, 2, 8, NULL),
 (66, '18h06', '18h06', '18h06.png', 120, 8.90, 3, 4, 7);
 
@@ -907,7 +926,8 @@ INSERT INTO `particulier` (`idUser`, `nomUser`, `prenomUser`, `dateNaissanceUser
 (46, '16h48', '16h48', '2025-05-20', 'F'),
 (54, 'intpart', 'intpart', '2012-12-12', 'M'),
 (60, '17h35', '17h35', '2005-12-16', 'F'),
-(62, 'bil', 'orebil', '2018-09-12', 'M');
+(62, 'bil', 'orebil', '2018-09-12', 'M'),
+(64, 'okppl', 'okppl', '1212-12-12', 'M');
 
 -- --------------------------------------------------------
 
@@ -994,7 +1014,34 @@ INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`)
 (59, 'partent@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'partent', 'entreprise'),
 (60, '17h35@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '17h35', 'particulier'),
 (61, 'azd@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'azd', 'entreprise'),
-(62, 'azd@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'azd', 'particulier');
+(62, 'azd@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'azd', 'particulier'),
+(64, 'okppl@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'okppl', 'particulier'),
+(65, 'aiozjdazij@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'okppl', 'entreprise');
+
+--
+-- Déclencheurs `user`
+--
+DELIMITER $$
+CREATE TRIGGER `tInsertArchive` BEFORE DELETE ON `user` FOR EACH ROW BEGIN
+    INSERT INTO archiveCommande
+    SELECT c.idCommande, c.dateCommande, c.statutCommande, c.dateLivraisonCommande, c.idUser, NOW()
+    FROM commande c
+    WHERE c.idUser = OLD.idUser;
+
+    INSERT INTO archiveLigneCommande
+    SELECT lc.idLigneCommande, lc.idCommande, lc.idLivre, lc.quantiteLigneCommande, NOW()
+    FROM ligneCommande lc
+    JOIN commande c ON lc.idCommande = c.idCommande
+    WHERE c.idUser = OLD.idUser;
+
+    DELETE FROM ligneCommande
+    WHERE idCommande IN (SELECT idCommande FROM commande WHERE idUser = OLD.idUser);
+
+    DELETE FROM commande
+    WHERE idUser = OLD.idUser;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -1013,10 +1060,10 @@ CREATE TABLE `vcommandesenattente` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vlivresenstock` (
-`idLivre` int
+`exemplaireLivre` int
+,`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
-,`exemplaireLivre` int
 );
 
 -- --------------------------------------------------------
@@ -1039,8 +1086,8 @@ CREATE TABLE `vmeilleuresventes` (
 --
 CREATE TABLE `vmeilleursavis` (
 `idLivre` int
-,`nomLivre` varchar(50)
 ,`moyenneNote` decimal(7,4)
+,`nomLivre` varchar(50)
 );
 
 -- --------------------------------------------------------
@@ -1098,9 +1145,9 @@ CREATE TABLE `vtotallivre` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vtotallivreenattente` (
-`idLivre` int
-,`idCommande` int
+`idCommande` int
 ,`idLigneCommande` int
+,`idLivre` int
 ,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
@@ -1116,8 +1163,8 @@ CREATE TABLE `vtotallivreenattente` (
 --
 CREATE TABLE `vtotallivreexpediee` (
 `idCommande` int
-,`idUser` int
 ,`idLivre` int
+,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
 ,`quantiteLigneCommande` int
@@ -1336,7 +1383,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT pour la table `avis`
 --
 ALTER TABLE `avis`
-  MODIFY `idAvis` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `idAvis` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT pour la table `categorie`
@@ -1348,19 +1395,19 @@ ALTER TABLE `categorie`
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=516;
+  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=522;
 
 --
 -- AUTO_INCREMENT pour la table `entreprise`
 --
 ALTER TABLE `entreprise`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT pour la table `ligneCommande`
 --
 ALTER TABLE `ligneCommande`
-  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=891;
+  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=901;
 
 --
 -- AUTO_INCREMENT pour la table `livre`
@@ -1378,7 +1425,7 @@ ALTER TABLE `maisonEdition`
 -- AUTO_INCREMENT pour la table `particulier`
 --
 ALTER TABLE `particulier`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT pour la table `promotion`
@@ -1390,7 +1437,7 @@ ALTER TABLE `promotion`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- Contraintes pour les tables déchargées
@@ -1447,6 +1494,19 @@ ALTER TABLE `livre`
 --
 ALTER TABLE `particulier`
   ADD CONSTRAINT `particulier_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`);
+
+DELIMITER $$
+--
+-- Évènements
+--
+CREATE DEFINER=`root`@`localhost` EVENT `eUpdateStatutCommande` ON SCHEDULE EVERY 1 DAY STARTS '2025-05-04 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
+    UPDATE commande
+    SET statutCommande = 'arrivée'
+    WHERE statutCommande = 'expédiée'
+    AND dateLivraisonCommande < CURDATE();
+END$$
+
+DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
