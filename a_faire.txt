@@ -1,11 +1,22 @@
 A FAIRE :
-    - Vérifier que l'insertion dans les tables archiveCommande et archiveLigneCommande fonctionne bien après la suppression d'un user.
 
-    - Supprimer le "statutCommande='annulée'" s'il n'a aucune utilité dans le code.
+Tailwindcss :
+c_aboonnement
+c_authentification
+c_commande
+// c_livre (Arranger la barre de titre)
+- c_panier
+c_promotion
+c_statistique
+c_stockage
+c_user
+// home.php
 
-    - Faire un système qui va bloquer l'inscription si le email existe déjà dans la table user.
 
-    - Vérifier la logique de chaque page et s'assurer qu'il y ai pas d'incohérence avec les méthodes/$_SESSION notamment.
+    - Utiliser le système de 'TEXT 1, 2, etc...' pour tous les triggers.
+
+    - Vérifier la logique de chaque controleur de page (vue + controleur principal + modele) et s'assurer qu'il y ai pas d'incohérence avec les méthodes/$_SESSION notamment.
+        - Repasser une dernière fois sur le modele pour trier les méthodes.
 
     - Modifier les vues pour qu'elles soient plus intéressantes.
 
@@ -41,6 +52,9 @@ A FAIRE :
 
 
 Fait :
+- Utiliser des fonctions (public function ?) dans le c_panier.php
+- Faire un système qui va bloquer l'inscription si le email existe déjà dans la table user.
+- Vérifier que l'insertion dans les tables archiveCommande et archiveLigneCommande fonctionne bien après la suppression d'un user.
 - Remplacer tous les "if (isset($_SESSION['roleUser']) && $_SESSION['roleUser']!='admin')"" {"
         par  "if (isset($isAdmin) && $isAdmin == 1) {"
 - Mettre des gestions d'exceptions :

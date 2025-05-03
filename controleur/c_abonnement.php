@@ -11,31 +11,55 @@ if (!isset($_SESSION['emailUser'])) {
 
         if (isset($_POST['Abonnement1m'])) {
             if (empty($unControleur->selectDateAbonnement($idUser)['jourRestant']) || $unControleur->selectDateAbonnement($idUser)['jourRestant'] < 0) {
-                $unControleur->insertAbonnement1m($idUser);
-                echo "Vous venez de souscrire à l'abonnement de 1 mois.";
+                $resultInsertAbonnement1m = $unControleur->insertAbonnement1m($idUser);
+                if ($resultInsertAbonnement1m) {
+                    echo "<div class='alert alert-success'>Souscription réussie à l'abonnement de 1 mois.</div>";
+                } else {
+                    echo "<div class='alert alert-danger'>Erreur : Impossible de souscrire à l'abonnement de 1 mois</div>";
+                }
             } elseif ($unControleur->selectDateAbonnement($idUser)['jourRestant'] >= 0) {
-                $unControleur->updateAbonnement1m($idUser);
-                echo "Vous venez de modifier votre abonnement actuel pour l'abonnement de 1 mois.";
+                $resultUpdateAbonnement1m = $unControleur->updateAbonnement1m($idUser);
+                if ($resultUpdateAbonnement1m) {
+                    echo "<div class='alert alert-success'>Modification réussie de l'abonnement actuel pour l'abonnement de 1 mois.</div>";
+                } else {
+                    echo "<div class='alert alert-danger'>Erreur : Impossible de modifier l'abonnement actuel pour l'abonnement de 1 mois</div>";
+                }
             }
         }
 
         if (isset($_POST['Abonnement3m'])) {
             if (empty($unControleur->selectDateAbonnement($idUser)['jourRestant']) || $unControleur->selectDateAbonnement($idUser)['jourRestant'] < 0) {
-                $unControleur->insertAbonnement3m($idUser);
-                echo "Vous venez de souscrire à l'abonnement de 1 mois.";
+                $resultInsertAbonnement3m = $unControleur->insertAbonnement3m($idUser);
+                if ($resultInsertAbonnement3m) {
+                    echo "<div class='alert alert-success'>Souscription réussie à l'abonnement de 3 mois.</div>";
+                } else {
+                    echo "<div class='alert alert-danger'>Erreur : Impossible de souscrire à l'abonnement de 3 mois</div>";
+                }
             } elseif ($unControleur->selectDateAbonnement($idUser)['jourRestant'] >= 0) {
-                $unControleur->updateAbonnement3m($idUser);
-                echo "Vous venez de modifier votre abonnement actuel pour l'abonnement de 3 mois.";
+                $resultUpdateAbonnement3m = $unControleur->updateAbonnement3m($idUser);
+                if ($resultUpdateAbonnement3m) {
+                    echo "<div class='alert alert-success'>Modification réussie de l'abonnement actuel pour l'abonnement de 3 mois.</div>";
+                } else {
+                    echo "<div class='alert alert-danger'>Erreur : Impossible de modifier l'abonnement actuel pour l'abonnement de 3 mois</div>";
+                }
             }
         }
 
         if (isset($_POST['Abonnement1a'])) {
             if (empty($unControleur->selectDateAbonnement($idUser)['jourRestant']) || $unControleur->selectDateAbonnement($idUser)['jourRestant'] < 0) {
-                $unControleur->insertAbonnement1a($idUser);
-                echo "Vous venez de souscrire à l'abonnement de 1 mois.";
+                $resultInsertAbonnement1a = $unControleur->insertAbonnement1a($idUser);
+                if ($resultInsertAbonnement1a) {
+                    echo "<div class='alert alert-success'>Souscription réussie à l'abonnement de 1 an.</div>";
+                } else {
+                    echo "<div class='alert alert-danger'>Erreur : Impossible de souscrire à l'abonnement de 1 an</div>";
+                }
             } elseif ($unControleur->selectDateAbonnement($idUser)['jourRestant'] >= 0) {
-                $unControleur->updateAbonnement1a($idUser);
-                echo "Vous venez de modifier votre abonnement actuel pour l'abonnement de 1 an.";
+                $resultUpdateAbonnement1a = $unControleur->updateAbonnement1a($idUser);
+                if ($resultUpdateAbonnement1a) {
+                    echo "<div class='alert alert-success'>Modification réussie de l'abonnement actuel pour l'abonnement de 1 an.</div>";
+                } else {
+                    echo "<div class='alert alert-danger'>Erreur : Impossible de modifier l'abonnement actuel pour l'abonnement de 1 an</div>";
+                }
             }
         }
 

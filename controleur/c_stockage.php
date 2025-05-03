@@ -10,8 +10,11 @@ if (isset($isAdmin) && $isAdmin == 1) {
         $exemplaireLivre = $_POST['exemplaireLivre'];
         $nomLivre = $_POST['nomLivre'];
 
-        if ($unControleur->updateStockageLivre($exemplaireLivre, $nomLivre)) {
-            echo "<br> Modification réussie du nombre d'exemplaire. <br>";
+        $result = $unControleur->updateStockageLivre($exemplaireLivre, $nomLivre);
+        if ($result) {
+            echo "<div class='alert alert-success'>Mise à jour réussie du stockage du livre.</div>";
+        } else {
+            echo "<div class='alert alert-danger'>Erreur : Impossible de mettre à jour le stockage du livre</div>";
         }
     }
 

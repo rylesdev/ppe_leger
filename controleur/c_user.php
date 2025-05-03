@@ -25,7 +25,12 @@ if (!isset($_SESSION['emailUser'])) {
         $dateNaissanceUser = $_POST['dateNaissanceUser'];
         $sexeUser = $_POST['sexeUser'];
 
-        $unControleur->updateParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser, $idUser);
+        $resultParticulier = $unControleur->updateParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser, $idUser);
+        if ($resultParticulier) {
+            echo "<div class='alert alert-success'>Mise à jour réussie du particulier.</div>";
+        } else {
+            echo "<div class='alert alert-danger'>Erreur : Impossible de mettre à jour le particulier</div>";
+        }
     } else if (isset($_POST['UpdateEntreprise'])){
         $emailUser = $_POST['emailUser'];
         $mdpUser = $_POST['mdpUser'];
@@ -34,27 +39,39 @@ if (!isset($_SESSION['emailUser'])) {
         $raisonSocialeUser = $_POST['raisonSocialeUser'];
         $capitalSocialUser = $_POST['capitalSocialUser'];
 
-        $unControleur->updateEntreprise($emailUser, $mdpUser, $adresseUser, $siretUser, $raisonSocialeUser, $capitalSocialUser, $idUser);
+        $resultEntreprise = $unControleur->updateEntreprise($emailUser, $mdpUser, $adresseUser, $siretUser, $raisonSocialeUser, $capitalSocialUser, $idUser);
+        if ($resultEntreprise) {
+            echo "<div class='alert alert-success'>Mise à jour réussie de l'entreprise.</div>";
+        } else {
+            echo "<div class='alert alert-danger'>Erreur : Impossible de mettre à jour l'entreprise</div>";
+        }
     }
 
     if (isset($_POST['DeleteUser'])) {
         $userParticulier = $unControleur->selectParticulier($idUser);
         $userEntreprise = $unControleur->selectEntreprise($idUser);
 
-        if ($unControleur->archiverCommandeUtilisateur($idUser)) {
-
-            if ($userParticulier) {
-                $unControleur->deleteParticulier($idUser);
-            } elseif ($userEntreprise) {
-                $unControleur->deleteEntreprise($idUser);
+        if ($userParticulier) {
+            $result = $unControleur->deleteParticulier($idUser);
+            if ($result) {
+                echo "<div class='alert alert-success'>Suppression réussie du particulier.</div>";
             } else {
-                echo "Aucun utilisateur trouvé.";
+                echo "<div class='alert alert-danger'>Erreur : Impossible de supprimer le particulier</div>";
             }
+        } elseif ($userEntreprise) {
+            $result = $unControleur->deleteEntreprise($idUser);
+            if ($result) {
+                echo "<div class='alert alert-success'>Suppression réussie de l'entreprise.</div>";
+            } else {
+                echo "<div class='alert alert-danger'>Erreur : Impossible de supprimer l'entreprise</div>";
+            }
+        } else {
+            echo "Aucun utilisateur trouvé.";
+        }
 
             session_destroy();
             header("Location: index.php?message=Compte supprimé avec succès");
             exit();
-        }
     }
 } else {
     echo "<h3 style='color: red;'>Page indisponible pour le rôle admin.</h3>";

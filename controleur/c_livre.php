@@ -16,11 +16,11 @@ if (isset($_POST['action']) && $_POST['action'] == 'AjouterPanier') {
     $nomLivre = $unControleur->selectLivreById($idLivre)[0][1];
 
     if ($result == 1) {
-        echo "<div class='alert alert-success'>Article '" . $nomLivre . "' (x$quantiteLivre) ajouté à la commande " . $idCommande . "</div>";
+        echo "<div class='alert alert-success' style='background-color: #1A365D; color: white;'>Article '" . $nomLivre . "' (x$quantiteLivre) ajouté à la commande " . $idCommande . "</div>";
     } else if ($result == 2) {
-        echo "<div class='alert alert-success'>Nouvelle commande crée pour l'article '" . $nomLivre . "' (x$quantiteLivre)</div>";
+        echo "<div class='alert alert-success' style='background-color: #1A365D; color: white;'>Nouvelle commande créée pour l'article '" . $nomLivre . "' (x$quantiteLivre)</div>";
     } else if ($result == 0) {
-        echo "<div class='alert alert-danger'> Erreur : La quantité totale commandée pour '" . $nomLivre . "' est supérieure au stock disponible.<br>
+        echo "<div class='alert alert-danger' style='border-color: #1A365D; color: #1A365D;'> Erreur : La quantité totale commandée pour '" . $nomLivre . "' est supérieure au stock disponible.<br>
              Veuillez sélectionner, dans la page Panier, une quantité d'articles inférieure ou égale au nombre d'exemplaires en stock pour cet article.</div>";
     }
 }
@@ -31,7 +31,12 @@ if (isset($_REQUEST['action'])) {
 
     switch ($action) {
         case "sup":
-            $unControleur->deleteLivre($idLivre);
+            $result = $unControleur->deleteLivre($idLivre);
+            if ($result) {
+                echo "<div class='alert alert-success' style='background-color: #1A365D; color: white;'>Suppression réussie du livre.</div>";
+            } else {
+                echo "<div class='alert alert-danger' style='border-color: #1A365D; color: #1A365D;'>Erreur : Impossible de supprimer le livre</div>";
+            }
             break;
 
         case "edit":
@@ -52,9 +57,9 @@ if (isset($_POST['ValiderInsert'])) {
 
     $resultInsertLivre = $unControleur->procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition, $nomPromotion);
     if ($resultInsertLivre) {
-        echo "<div class='alert alert-success'>Insertion réussie du livre.</div>";
-    } else if ($resultInsertLivre == false){
-        echo "<div class='alert alert-danger'>Erreur : Impossible d'insérer le livre</div>";
+        echo "<div class='alert alert-success' style='background-color: #1A365D; color: white;'>Insertion réussie du livre.</div>";
+    } else {
+        echo "<div class='alert alert-danger' style='border-color: #1A365D; color: #1A365D;'>Erreur : Impossible d'insérer le livre</div>";
     }
 }
 
@@ -72,8 +77,12 @@ if (isset($_POST['Modifier'])) {
     $idLivre = $_POST['idLivre'];
     $prixLivre = $_POST['prixLivre'];
 
-    $unControleur->updateLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $idLivre, $prixLivre);
-    header("Location: index.php?page=2");
+    $result = $unControleur->updateLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $idLivre, $prixLivre);
+    if ($result) {
+        echo "<div class='alert alert-success' style='background-color: #1A365D; color: white;'>Mise à jour réussie du livre.</div>";
+    } else {
+        echo "<div class='alert alert-danger' style='border-color: #1A365D; color: #1A365D;'>Erreur : Impossible de mettre à jour le livre</div>";
+    }
 }
 
 if (isset($_POST['FiltrerLivre'])) {
@@ -83,3 +92,4 @@ if (isset($_POST['FiltrerLivre'])) {
 }
 
 require_once("vue/livre/vue_livre.php");
+?>

@@ -25,14 +25,16 @@ if (!isset($_SESSION['emailUser'])) {
 
     if (isset($_POST['ValiderAvis'])) {
         $idLivre = $_POST['idLivre'];
-        $nomLivre = $_POST['nomLivre'];
         $commentaireAvis = $_POST['commentaireAvis'];
         $noteAvis = $_POST['noteAvis'];
 
         if ($noteAvis && $commentaireAvis) {
-            $unControleur->insertAvis($idLivre, $nomLivre, $idUser, $commentaireAvis, $noteAvis);
-            header("Location: index.php?page=4");  // Redirige vers la même page en GET
-            exit();
+            $result = $unControleur->insertAvis($idLivre, $idUser, $commentaireAvis, $noteAvis);
+            if ($result) {
+                echo "<div class='alert alert-success'>Votre avis a été enregistré avec succès.</div>";
+            } else {
+                echo "<div class='alert alert-danger'>Erreur lors de l'enregistrement de votre avis.</div>";
+            }
         } else {
             echo "<h3 style='color:red'> Tous les champs doivent être remplis ! </h3>";
         }

@@ -25,8 +25,18 @@ if (isset($_POST['InscriptionParticulier'])) {
     $dateNaissanceUser = $_POST['dateNaissanceUser'];
     $sexeUser = $_POST['sexeUser'];
 
-    $unControleur->insertParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser);
-    echo "<div class='alert alert-success'>Inscription de $prenomUser $nomUser réussie !</div>";
+    $resultEmail = $unControleur->selectEmail($emailUser)[0][0];
+
+    if (empty($resultEmail)) {
+        $resultParticulier = $unControleur->insertParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser);
+        if ($resultParticulier) {
+            echo "<div class='alert alert-success'>Inscription de $prenomUser $nomUser réussie !</div>";
+        } else {
+            echo "<div class='alert alert-danger'>Erreur lors de l'inscription de $prenomUser $nomUser !</div>";
+        }
+    } else {
+        echo "<div class='alert alert-danger'>L'email $emailUser est déjà utilisé !</div>";
+    }
 }
 
 if (isset($_POST['InscriptionEntreprise'])) {
@@ -38,8 +48,18 @@ if (isset($_POST['InscriptionEntreprise'])) {
     $raisonSocialeUser = $_POST['raisonSocialeUser'];
     $capitalSocialUser = $_POST['capitalSocialUser'];
 
-    $unControleur->insertEntreprise($emailUser, $mdpUser, $adresseUser, $siretUser, $raisonSocialeUser, $capitalSocialUser);
-    echo "<div class='alert alert-success'>Inscription de $raisonSocialeUser réussie !</div>";
+    $resultEmail = $unControleur->selectEmail($emailUser)[0][0];
+
+    if (empty($resultEmail)) {
+        $resultEntreprise = $unControleur->insertEntreprise($emailUser, $mdpUser, $adresseUser, $siretUser, $raisonSocialeUser, $capitalSocialUser);
+        if ($resultEntreprise) {
+            echo "<div class='alert alert-success'>Inscription de $raisonSocialeUser réussie !</div>";
+        } else {
+            echo "<div class='alert alert-danger'>Erreur lors de l'inscription de $raisonSocialeUser !</div>";
+        }
+    } else {
+        echo "<div class='alert alert-danger'>L'email $emailUser est déjà utilisé !</div>";
+    }
 }
 
 ?>
