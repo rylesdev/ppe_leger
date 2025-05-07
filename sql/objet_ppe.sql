@@ -1,4 +1,12 @@
 VIEWS :
+create or replace view vLivresMieuxNotes as
+select a.idLivre, max(l.nomLivre) as nomLivre, round(avg(a.noteAvis), 2) as noteMoyenne
+from avis a
+inner join livre l on a.idLivre=l.idLivre
+group by idLivre
+order by noteMoyenne desc;
+
+
 create or replace view vTotalLivre AS
 SELECT li.idCommande, c.idUser, l.nomLivre, l.prixLivre, li.quantiteLigneCommande,
 (l.prixLivre * li.quantiteLigneCommande) AS totalLivre

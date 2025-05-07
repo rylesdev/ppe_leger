@@ -1,58 +1,162 @@
 <?php
 session_start();
-error_reporting(0);
+
+// Vérifier si l'utilisateur est connecté (idUser existe) avant d'appeler selectAdminPrincipal
 require_once("controleur/controleur.class.php");
-
 $unControleur = new Controleur();
+$isAdmin = 0; // Valeur par défaut
 
-$resultAdminPrincipal = $unControleur->selectAdminPrincipal($_SESSION['idUser']);
-$isAdmin = $resultAdminPrincipal[0][0];
+if (isset($_SESSION['idUser'])) {
+    $resultAdminPrincipal = $unControleur->selectAdminPrincipal($_SESSION['idUser']);
+    if (!empty($resultAdminPrincipal) && isset($resultAdminPrincipal[0][0])) {
+        $isAdmin = $resultAdminPrincipal[0][0];
+    }
+}
+
+// Gestion de la redirection avant tout output HTML
+if (isset($_GET['page']) && $_GET['page'] == 10) {
+    if (isset($_SESSION['emailUser']) && $_SESSION['emailUser'] != NULL) {
+        if (isset($_POST['ConfirmerDeconnexion'])) {
+            session_unset();
+            session_destroy();
+            header("Location: index.php?page=11");
+            exit();
+        }
+        // Si déconnexion n'est pas confirmée, continuer avec l'affichage normal
+    } else {
+        // Si l'utilisateur n'est pas connecté, rediriger directement
+        header("Location: index.php?page=11");
+        exit();
+    }
+}
+
+// Début de l'output HTML maintenant qu'on a géré les redirections
 ?>
-
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <title>PPE Book'In</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="includes/css/style.css">
 </head>
-<body>
-<center>
-    <h1>Book'In</h1>
-    <div class="relief-box">
-        <img src="images/logo.png" height="100" width="100">
+<body class="bg-gray-100">
+<header class="bg-primary-blue text-white text-center py-4 shadow-md">
+    <h1 class="text-3xl font-bold">Book'In</h1>
+    <div class="mt-2">
+        <img src="images/logo.png" alt="Book'In Logo" class="inline-block h-16 w-16">
         <?php
-        if (isset($isAdmin) && $isAdmin == 1) {
-            echo "<br>";
-            echo "<!-- Mode Admin -->";
+        if ($isAdmin == 1) {
+            echo '<p class="text-sm mt-2">Mode Admin</p>';
         }
         ?>
     </div>
+</header>
 
-    <div id="navbar" class="navbar">
-        <a href="index.php?page=1"><img src="images/logo.png" height="80" width="80" alt="Accueil"></a>
-        <a href="index.php?page=2"><img src="images/rechercher.png" height="80" width="80" alt="Livres"></a>
-        <?php if (empty($isAdmin) || $isAdmin == 0): ?>
-            <a href="index.php?page=3"><img src="images/panier.png" height="80" width="80" alt="Panier"></a>
-            <a href="index.php?page=4"><img src="images/commande.png" height="80" width="80" alt="Commande"></a>
-            <a href="index.php?page=5"><img src="images/abonnement.png" height="80" width="80" alt="Abonnement"></a>
-            <a href="index.php?page=6"><img src="images/utilisateur.png" height="80" width="80" alt="Utilisateur"></a>
-        <?php endif; ?>
-        <?php if (isset($isAdmin) && $isAdmin == 1): ?>
-            <a href="index.php?page=7"><img src="images/promotion.png" height="80" width="80" alt="Promotion"></a>
-            <a href="index.php?page=8"><img src="images/stockage.png" height="80" width="80" alt="Stockage"></a>
-            <a href="index.php?page=9"><img src="images/statistique.png" height="80" width="80" alt="Statistique"></a>
-        <?php endif; ?>
-        <a href="index.php?page=10"><img src="images/authentification.png" height="80" width="80" alt="Authentification"></a>
+<!-- Navigation Bar -->
+<nav class="bg-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex">
+                <!-- Navigation Links -->
+                <div class="hidden sm:flex sm:items-center sm:space-x-4">
+                    <a href="index.php?page=1" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
+                        <i class="fas fa-home mr-2"></i> Accueil
+                    </a>
+                    <a href="index.php?page=2" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
+                        <i class="fas fa-book mr-2"></i> Livres
+                    </a>
+                    <?php if (empty($isAdmin) || $isAdmin == 0): ?>
+                        <a href="index.php?page=3" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
+                            <i class="fas fa-shopping-cart mr-2"></i> Panier
+                        </a>
+                        <a href="index.php?page=4" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
+                            <i class="fas fa-box mr-2"></i> Commande
+                        </a>
+                        <a href="index.php?page=5" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
+                            <i class="fas fa-ticket-alt mr-2"></i> Abonnement
+                        </a>
+                        <a href="index.php?page=6" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
+                            <i class="fas fa-user mr-2"></i> Profil
+                        </a>
+                    <?php endif; ?>
+                    <?php if ($isAdmin == 1): ?>
+                        <a href="index.php?page=7" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
+                            <i class="fas fa-tags mr-2"></i> Promotion
+                        </a>
+                        <a href="index.php?page=8" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
+                            <i class="fas fa-warehouse mr-2"></i> Stockage
+                        </a>
+                        <a href="index.php?page=9" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
+                            <i class="fas fa-chart-bar mr-2"></i> Statistique
+                        </a>
+                    <?php endif; ?>
+                    <a href="index.php?page=10" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Authentification
+                    </a>
+                </div>
+            </div>
+            <!-- Hamburger Menu Button -->
+            <div class="-mr-2 flex items-center sm:hidden">
+                <button id="menu-toggle" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-white hover:bg-primary-blue focus:outline-none">
+                    <span class="sr-only">Ouvrir le menu</span>
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
     </div>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden sm:hidden bg-white shadow-md">
+        <div class="px-2 pt-2 pb-3 space-y-1">
+            <a href="index.php?page=1" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
+                <i class="fas fa-home mr-2"></i> Accueil
+            </a>
+            <a href="index.php?page=2" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
+                <i class="fas fa-book mr-2"></i> Livres
+            </a>
+            <?php if (empty($isAdmin) || $isAdmin == 0): ?>
+                <a href="index.php?page=3" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
+                    <i class="fas fa-shopping-cart mr-2"></i> Panier
+                </a>
+                <a href="index.php?page=4" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
+                    <i class="fas fa-box mr-2"></i> Commande
+                </a>
+                <a href="index.php?page=5" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
+                    <i class="fas fa-ticket-alt mr-2"></i> Abonnement
+                </a>
+                <a href="index.php?page=6" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
+                    <i class="fas fa-user mr-2"></i> Profil
+                </a>
+            <?php endif; ?>
+            <?php if ($isAdmin == 1): ?>
+                <a href="index.php?page=7" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
+                    <i class="fas fa-tags mr-2"></i> Promotion
+                </a>
+                <a href="index.php?page=8" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
+                    <i class="fas fa-warehouse mr-2"></i> Stockage
+                </a>
+                <a href="index.php?page=9" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
+                    <i class="fas fa-chart-bar mr-2"></i> Statistique
+                </a>
+            <?php endif; ?>
+            <a href="index.php?page=10" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
+                <i class="fas fa-sign-out-alt mr-2"></i> Authentification
+            </a>
+        </div>
+    </div>
+</nav>
 
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
     <?php
     if (isset($_GET['page'])) {
         $page = $_GET['page'];
     } else {
         $page = 1;
     }
+
     switch ($page) {
         case 1: require_once("controleur/home.php"); break;
         case 2: require_once("controleur/c_livre.php"); break;
@@ -64,22 +168,22 @@ $isAdmin = $resultAdminPrincipal[0][0];
         case 8: require_once("controleur/c_stockage.php"); break;
         case 9: require_once("controleur/c_statistique.php"); break;
         case 10:
+            // On affiche uniquement le formulaire de déconnexion car la redirection a déjà été traitée
             if (isset($_SESSION['emailUser']) && $_SESSION['emailUser'] != NULL) {
-                echo '<form method="post">';
-                echo '<button type="submit" name="ConfirmerDeconnexion" class="btn btn-danger">Confirmer la déconnexion</button>';
-                echo '</form>';
-
-                if (isset($_POST['ConfirmerDeconnexion'])) {
-                    session_destroy();
-                    unset($_SESSION['emailUser']);
-                    header("Location: index.php?page=11");
-                    exit();
-                }
-            } else {
-                session_destroy();
-                unset($_SESSION['emailUser']);
-                header("Location: index.php?page=11");
-                exit();
+                ?>
+                <div class="bg-white rounded-xl shadow-lg p-8 max-w-md mx-auto mt-8">
+                    <h2 class="text-2xl font-bold text-primary-blue text-center mb-6">Déconnexion</h2>
+                    <p class="text-gray-700 text-center mb-6">Voulez-vous vraiment vous déconnecter ?</p>
+                    <form method="post" class="flex justify-center space-x-4">
+                        <button type="submit" name="ConfirmerDeconnexion" class="bg-accent-red hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-xl shadow-md transition-all duration-300 transform hover:-translate-y-1 flex items-center">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Confirmer
+                        </button>
+                        <a href="index.php?page=1" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md transition-all duration-300 transform hover:-translate-y-1 flex items-center">
+                            <i class="fas fa-times mr-2"></i> Annuler
+                        </a>
+                    </form>
+                </div>
+                <?php
             }
             break;
         case 11:
@@ -87,7 +191,18 @@ $isAdmin = $resultAdminPrincipal[0][0];
             break;
     }
     ?>
-    <br><br>
-</center>
+</main>
+
+<!-- JavaScript for Hamburger Menu -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuToggle.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+    });
+</script>
 </body>
 </html>

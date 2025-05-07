@@ -78,6 +78,27 @@
             return $exec->fetchAll();
         }
 
+        public function selectCategorie() {
+            $requete = "select * from categorie;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function selectMaisonEdition() {
+            $requete = "select * from maisonEdition;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
+        public function selectPromotion() {
+            $requete = "select * from promotion;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->execute();
+            return $exec->fetchAll();
+        }
+
         public function selectLivreById($idLivre) {
             $requete =  "select * from livre
                         where idLivre = ?";
@@ -172,7 +193,9 @@
         public function selectDateAbonnement($idUser) {
             $requete = "select floor(DATEDIFF(dateFinAbonnement, CURDATE())) AS jourRestant
                         from abonnement
-                        where idUser = ?;";
+                        where idUser = ?
+                        order by idAbonnement desc
+                        limit 1;";
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
@@ -203,7 +226,7 @@
         }
 
         public function selectLivrePromotion() {
-            $requete =  "SELECT l.idLivre, l.nomLivre, l.prixLivre, p.idPromotion, p.nomPromotion,  p.reductionPromotion, 
+            $requete =  "SELECT l.*, p.*, 
                         ROUND(l.prixLivre * (1 - p.reductionPromotion/100), 2) AS prixPromo
                         FROM livre l
                         JOIN promotion p ON l.idPromotion = p.idPromotion;";
@@ -345,11 +368,6 @@
             $exec->BindValue(1, $emailUser, PDO::PARAM_STR);
             $exec->execute();
             return $exec->fetchAll();
-        }
-
-        public function executerRequete($requete) {
-            $exec = $this->unPdo->query($requete);
-            return $exec->fetchAll(PDO::FETCH_COLUMN);
         }
 
 
@@ -542,7 +560,7 @@
         public function insertAbonnement3m($idUser) {
             try {
                 $requete = "insert into abonnement
-						values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 3 MONTH)n 0);";
+						    values (null, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 3 MONTH), 0);";
                 $exec = $this->unPdo->prepare($requete);
                 $exec->BindValue(1, $idUser, PDO::PARAM_INT);
                 $exec->execute();
@@ -584,6 +602,20 @@
                 $requete = "update abonnement 
                         set dateFinAbonnement = DATE_ADD(CURDATE(), INTERVAL 1 YEAR)
                         where idUser = ?;";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $idUser, PDO::PARAM_INT);
+                $exec->execute();
+                return true;
+            } catch (PDOException $exp) {
+                return false;
+            }
+        }
+
+        public function updateAbonnement0($idUser) {
+            try {
+                $requete =  "update abonnement 
+                            set dateFinAbonnement = CURDATE()
+                            where idUser = ?;";
                 $exec = $this->unPdo->prepare($requete);
                 $exec->BindValue(1, $idUser, PDO::PARAM_INT);
                 $exec->execute();

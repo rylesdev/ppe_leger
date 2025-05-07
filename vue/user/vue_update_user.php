@@ -1,3 +1,5 @@
+// A Supprimer
+
 <link rel="stylesheet" href="includes/css/vue_user.css">
 
 <h2> Modifier vos informations </h2>
