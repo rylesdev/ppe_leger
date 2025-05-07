@@ -28,6 +28,8 @@ if (!isset($_SESSION['emailUser'])) {
         $commentaireAvis = $_POST['commentaireAvis'];
         $noteAvis = $_POST['noteAvis'];
 
+        var_dump($noteAvis, $commentaireAvis);
+
         if ($noteAvis && $commentaireAvis) {
             $result = $unControleur->insertAvis($idLivre, $idUser, $commentaireAvis, $noteAvis);
             if ($result) {

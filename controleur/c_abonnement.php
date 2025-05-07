@@ -63,12 +63,21 @@ if (!isset($_SESSION['emailUser'])) {
             }
         }
 
+        if (isset($_POST['ResilierAbonnement'])) {
+            $resultUpdateAbonnement0 = $unControleur->updateAbonnement0($idUser);
+            if ($resultUpdateAbonnement0) {
+                echo "<div class='alert alert-success'>Votre abonnement a été résilié avec succès.</div>";
+            } else {
+                echo "<div class='alert alert-danger'>Erreur : Impossible de résilier l'abonnement</div>";
+            }
+        }
 
-        $dateAbonnement = $unControleur->selectDateAbonnement($idUser);
-        if ($dateAbonnement == null || $dateAbonnement == 0) {
-            echo "<h3> Vous n'avez pas d'abonnement en cours. </h3>";
+
+        $dateAbonnement = $unControleur->selectDateAbonnement($idUser)[0];
+        if ($dateAbonnement == null || $dateAbonnement == 0 || $dateAbonnement <= 0) {
+            echo "<br> <h3> Vous n'avez pas d'abonnement en cours. </h3>";
         } elseif ($dateAbonnement !== null ) {
-            echo "<h3> Votre abonnement prend fin dans " . $dateAbonnement['jourRestant'] . " jours. </h3>";
+            echo "<h3> Votre abonnement prend fin dans " . $dateAbonnement . " jours. </h3>";
         }
 } else {
     echo "<h3 style='color: red;'>Page indisponible pour le rôle admin.</h3>";

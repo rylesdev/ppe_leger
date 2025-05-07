@@ -12,10 +12,6 @@ if (!isset($_SESSION['emailUser'])) {
 
     require_once("vue/user/vue_user.php");
 
-    require_once("vue/user/vue_update_user.php");
-
-    require_once("vue/user/vue_delete_user.php");
-
     if (isset($_POST['UpdateParticulier'])){
         $emailUser = $_POST['emailUser'];
         $mdpUser = $_POST['mdpUser'];

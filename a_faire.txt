@@ -1,17 +1,24 @@
 A FAIRE :
 
 Tailwindcss :
-c_aboonnement
+// index
+// c_abonnement (mettre en valeur le texte "Vous n'avez pas d'abonnement en cours.")
 c_authentification
 c_commande
-// c_livre (Arranger la barre de titre)
-- c_panier
+// c_livre
+c_panier
 c_promotion
 c_statistique
 c_stockage
-c_user
-// home.php
+// c_user
+// home
 
+
+    - Supprimer tous les fichier "// A Supprimer"
+
+    - Dans la page Commande, corriger le tri de prix qui se fait par le prix d'un livre et non par le prix total
+
+    - Trier les views et sélectionner les meilleures pour les statistiques.
 
     - Utiliser le système de 'TEXT 1, 2, etc...' pour tous les triggers.
 

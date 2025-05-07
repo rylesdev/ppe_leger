@@ -9,7 +9,10 @@ if (isset($_POST['Connexion'])) {
         $_SESSION['emailUser'] = $_POST['emailUser'];
         $_SESSION['mdpUser'] = $_POST['mdpUser'];
         $_SESSION['roleUser'] = $unUser['roleUser'];
-        header ("Location :index.php?page=1");
+
+        // Utiliser une redirection JavaScript au lieu de header()
+        echo "<script>window.location.href = 'index.php?page=1';</script>";
+        // Ne pas mettre de exit() ici, car nous voulons que le script JavaScript s'exécute
     } else {
         echo "<br> Vérifier les identifiants. ";
     }

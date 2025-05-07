@@ -29,6 +29,18 @@ class Controleur {
     public function selectLivre(){
         return $this->unModele->selectLivre();
     }
+    
+    public function selectCategorie() {
+        return $this->unModele->selectCategorie();
+    }
+
+    public function selectMaisonEdition() {
+        return $this->unModele->selectMaisonEdition();
+    }
+
+    public function selectPromotion() {
+        return $this->unModele->selectPromotion();
+    }
 
     public function selectLivreById($idLivre) {
         return $this->unModele->selectLivreById($idLivre);
@@ -166,6 +178,10 @@ class Controleur {
 
     public function updateAbonnement1a($idUser) {
         return $this->unModele->updateAbonnement1a($idUser);
+    }
+
+    public function updateAbonnement0($idUser) {
+        return $this->unModele->updateAbonnement0($idUser);
     }
 
     public function insertAvis($idLivre, $idUser, $commentaireAvis, $noteAvis) {
