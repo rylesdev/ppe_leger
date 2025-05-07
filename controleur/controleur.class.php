@@ -30,16 +30,28 @@ class Controleur {
         return $this->unModele->selectLivre();
     }
     
-    public function selectCategorie() {
-        return $this->unModele->selectCategorie();
+    public function selectNomCategorie() {
+        return $this->unModele->selectNomCategorie();
     }
 
-    public function selectMaisonEdition() {
-        return $this->unModele->selectMaisonEdition();
+    public function selectNomMaisonEdition() {
+        return $this->unModele->selectNomMaisonEdition();
     }
 
-    public function selectPromotion() {
-        return $this->unModele->selectPromotion();
+    public function selectNomPromotion() {
+        return $this->unModele->selectNomPromotion();
+    }
+
+    public function selectIdCategorieByNom($nomCategorie) {
+        return $this->unModele->selectIdCategorieByNom($nomCategorie);
+    }
+
+    public function selectIdMaisonEditionByNom($nomMaisonEdition) {
+        return $this->unModele->selectIdMaisonEditionByNom($nomMaisonEdition);
+    }
+
+    public function selectIdPromotionByNom($nomPromotion) {
+        return $this->unModele->selectIdPromotionByNom($nomPromotion);
     }
 
     public function selectLivreById($idLivre) {
@@ -198,8 +210,8 @@ class Controleur {
         return $this->unModele->updateEntreprise($emailUser, $mdpUser, $adresseUser, $siretUser, $raisonSocialeUser, $capitalSocialUser, $idUser);
     }
 
-    public function updateLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $idLivre, $prixLivre){
-        return $this->unModele->updateLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $idLivre, $prixLivre);
+    public function  updateLivre($nomLivre, $auteurLivre, $imageLivre, $prixLivre, $idCategorie, $idMaisonEdition, $idPromotion, $idLivre) {
+        return $this->unModele-> updateLivre($nomLivre, $auteurLivre, $imageLivre, $prixLivre, $idCategorie, $idMaisonEdition, $idPromotion, $idLivre);
     }
 
     public function updateStockageLivre($exemplaireLivre, $nomLivre) {

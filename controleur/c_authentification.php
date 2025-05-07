@@ -98,34 +98,3 @@ if (isset($_POST['InscriptionEntreprise'])) {
         ?>
     </div>
 </div>
-
-<style>
-    .auth-container {
-        display: flex;
-        justify-content: space-around;
-        margin: 20px;
-    }
-    .auth-section {
-        width: 45%;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-    }
-    .inscription-options {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    }
-    .btn-primary {
-        width: 48%;
-    }
-    .required {
-        color: red;
-    }
-    .required-hint {
-        text-align: right;
-        font-size: 0.8em;
-        color: #666;
-    }
-</style>

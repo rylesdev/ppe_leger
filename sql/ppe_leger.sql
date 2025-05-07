@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : sam. 03 mai 2025 à 22:47
+-- Généré le : mer. 07 mai 2025 à 23:06
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -186,7 +186,24 @@ INSERT INTO `abonnement` (`idAbonnement`, `idUser`, `dateDebutAbonnement`, `date
 (1, 2, '2025-01-01', '2025-12-31', 0),
 (3, 23, '2025-01-25', '2025-04-25', 0),
 (4, 15, '2025-01-26', '2025-02-28', 80),
-(26, 37, '2025-04-25', '2025-06-01', 140);
+(26, 37, '2025-04-25', '2025-05-07', 140),
+(31, 37, '2025-05-07', '2025-05-07', 0),
+(32, 37, '2025-05-07', '2025-05-07', 0),
+(33, 37, '2025-05-07', '2025-05-07', 0),
+(34, 37, '2025-05-07', '2025-05-07', 0),
+(35, 37, '2025-05-07', '2025-05-07', 0),
+(36, 37, '2025-05-07', '2025-05-07', 0),
+(37, 37, '2025-05-07', '2025-05-07', 0),
+(38, 37, '2025-05-07', '2025-05-07', 0),
+(39, 37, '2025-05-07', '2025-05-07', 0),
+(40, 37, '2025-05-07', '2025-05-07', 0),
+(41, 37, '2025-05-07', '2025-05-07', 0),
+(42, 37, '2025-05-07', '2025-05-07', 0),
+(43, 37, '2025-05-07', '2025-05-07', 0),
+(44, 37, '2025-05-07', '2025-05-07', 0),
+(45, 37, '2025-05-07', '2025-05-07', 0),
+(46, 37, '2025-05-07', '2025-05-07', 0),
+(47, 37, '2025-05-07', '2025-05-07', 0);
 
 -- --------------------------------------------------------
 
@@ -235,10 +252,10 @@ INSERT INTO `archiveCommande` (`idCommande`, `dateCommande`, `statutCommande`, `
 -- --------------------------------------------------------
 
 --
--- Structure de la table `archiveLigneCommande`
+-- Structure de la table `archivelignecommande`
 --
 
-CREATE TABLE `archiveLigneCommande` (
+CREATE TABLE `archivelignecommande` (
   `idLigneCommande` int NOT NULL,
   `idCommande` int DEFAULT NULL,
   `idLivre` int DEFAULT NULL,
@@ -247,10 +264,10 @@ CREATE TABLE `archiveLigneCommande` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Archive des lignes de commande';
 
 --
--- Déchargement des données de la table `archiveLigneCommande`
+-- Déchargement des données de la table `archivelignecommande`
 --
 
-INSERT INTO `archiveLigneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quantiteLigneCommande`, `date_archivage`) VALUES
+INSERT INTO `archivelignecommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quantiteLigneCommande`, `date_archivage`) VALUES
 (724, 457, 3, 10, '2025-04-19 20:10:36'),
 (725, 457, 5, 20, '2025-04-19 20:10:36'),
 (726, 457, 4, 30, '2025-04-19 20:10:36'),
@@ -308,7 +325,9 @@ INSERT INTO `avis` (`idAvis`, `idLivre`, `idUser`, `commentaireAvis`, `noteAvis`
 (34, 10, 37, 'nul', 5, '2025-05-01'),
 (35, 3, 37, 'test avis 16h07', 4, '2025-05-01'),
 (36, 1, 37, 'test5', 4, '2025-05-03'),
-(38, 2, 37, 'test7', 2, '2025-05-03');
+(38, 2, 37, 'test7', 2, '2025-05-03'),
+(39, 2, 37, 'top', 4, '2025-05-07'),
+(40, 9, 37, 'cool', 3, '2025-05-07');
 
 -- --------------------------------------------------------
 
@@ -473,7 +492,7 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (481, '2025-04-26', 'arrivée', '2025-05-03', 37),
 (482, '2025-04-26', 'arrivée', '2025-05-03', 37),
 (483, '2025-04-26', 'arrivée', '2025-05-03', 37),
-(484, '2025-04-27', 'expédiée', '2025-05-04', 37),
+(484, '2025-04-27', 'arrivée', '2025-05-04', 37),
 (485, '2025-05-01', 'expédiée', '2025-05-08', 37),
 (486, '2025-05-01', 'expédiée', '2025-05-08', 37),
 (487, '2025-05-01', 'expédiée', '2025-05-08', 37),
@@ -507,7 +526,7 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (515, '2025-05-03', 'expédiée', '2025-05-10', 37),
 (519, '2025-05-03', 'expédiée', '2025-05-10', 37),
 (520, '2025-05-03', 'expédiée', '2025-05-10', 37),
-(521, NULL, 'en attente', NULL, 37);
+(522, NULL, 'en attente', NULL, 37);
 
 --
 -- Déclencheurs `commande`
@@ -775,7 +794,8 @@ INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quanti
 (897, 519, 12, 1),
 (898, 520, 2, 1),
 (899, 520, 9, 1),
-(900, 521, 2, 1);
+(902, 522, 2, 1),
+(907, 522, 13, 3);
 
 --
 -- Déclencheurs `ligneCommande`
@@ -839,38 +859,39 @@ CREATE TABLE `livre` (
 INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exemplaireLivre`, `prixLivre`, `idCategorie`, `idMaisonEdition`, `idPromotion`) VALUES
 (1, 'Alcools', 'Apollinaire', 'alcools.png', 94, 12.50, 3, 1, 18),
 (2, 'Crime et Chatiment', 'Dostoïevski', 'crime_et_chatiment.png', 48, 15.00, 1, 2, 13),
-(3, 'L`Etranger', 'Camus', 'l_etranger.png', 79, 10.00, 1, 3, NULL),
+(3, 'L`Etranger', 'Camus', 'l_etranger.png', 79, 10.00, 1, 3, 10),
 (4, 'L`Odyssée', 'Homère', 'l_odyssee.png', 89, 13.50, 2, 4, 19),
 (5, 'Les Fleurs du Mal', 'Baudelaire', 'les_fleurs_du_mal.png', 100, 14.00, 3, 5, 14),
-(6, 'PHP et MySQL pour les nuls', 'Valade', 'php_et_mysql_pour_les_nuls.png', 79, 22.00, 4, 6, NULL),
-(7, 'Programmer en Java', 'Delannoy', 'programmer_en_java.png', 100, 25.00, 4, 7, NULL),
-(8, 'SPQR', 'Beard', 'spqr.png', 99, 18.00, 2, 8, NULL),
-(9, 'À la recherche du temps perdu', 'Proust', 'a_la_recherche_du_temps_perdu.png', 92, 0.00, 1, 1, NULL),
-(10, 'Les Misérables', 'Hugo', 'les_miserables_I.png', 96, 0.00, 1, 2, NULL),
-(11, '1984', 'Orwell', '1984.png', 93, 0.00, 1, 3, NULL),
-(12, 'L`Art d\'aimer', 'Ovide', 'l_art_d_aimer', 87, 0.00, 1, 4, NULL),
-(13, 'La Peste', 'Camus', 'la_peste.png', 65, 15.99, 1, 1, NULL),
-(14, 'Les Mémoires d\'Hadrien', 'Yourcenar', 'les_memoires_d_hadrien.png', 99, 12.99, 1, 1, NULL),
-(15, 'La Condition humaine', 'Malraux', 'la_condition_humaine.png', 100, 14.99, 1, 1, NULL),
-(16, 'Le Comte de Monte-Cristo', 'Dumas', 'le_comte_de_monte_cristo.png', 100, 9.99, 1, 2, NULL),
-(17, 'Orgueil et Préjugés', 'Austen', 'orgueil_et_prejuges.png', 80, 8.99, 1, 2, NULL),
-(18, 'Shining', 'King', 'shining.png', 100, 10.99, 1, 2, NULL),
-(19, 'Bel-Ami', 'Maupassant', 'bel_ami.png', 99, 11.99, 1, 3, NULL),
-(20, 'Fahrenheit 451', 'Bradbury', 'fahrenheit_451.png', 100, 9.99, 1, 3, NULL),
-(21, 'La Nuit des temps', 'Barjavel', 'la_nuit_des_temps.png', 100, 12.99, 1, 3, NULL),
-(22, 'L`Énéide', 'Virgile', 'l_eneide.png', 100, 19.99, 3, 4, NULL),
-(23, 'Les Pensées', 'Aurèle', 'les_pensees.png', 100, 18.99, 3, 4, NULL),
-(24, 'Les Métamorphoses', 'Ovide', 'les_metamorphoses.png', 100, 20.99, 3, 4, NULL),
-(25, 'Le Petit Livre des citations latines', 'Delamaire', 'le_petit_livre_des_citations_latines.png', 100, 7.99, 3, 6, NULL),
-(43, 'Le Petit Livre des grandes coïncidences', 'Chiflet', 'le_petit_livre_des_grandes_coincidences.png', 100, 7.99, 3, 6, NULL),
-(44, 'Le Petit Livre des gros mensonges', 'Chiflet', 'le_petit_livre_des_gros_mensonges.png', 100, 7.99, 3, 6, NULL),
-(45, 'L`Art de la guerre', 'Sun', 'l_art_de_la_guerre.png', 97, 12.99, 2, 7, NULL),
-(46, 'Apprendre à dessiner', 'Edwards', 'apprendre_a_dessiner.png', 100, 14.99, 4, 7, NULL),
-(47, 'Le Lean Startup', 'Ries', 'le_lean_startup.png', 100, 16.99, 4, 7, NULL),
-(48, 'Les Templiers', 'Demurger', 'les_templiers.png', 100, 18.99, 2, 8, NULL),
-(49, 'La Seconde Guerre mondiale', 'Beevor', 'la_seconde_guerre_mondiale.png', 60, 19.99, 2, 8, NULL),
-(50, 'Napoléon : Une ambition française', 'Tulard', 'napoleon_une_ambition_francaise.png', 100, 20.99, 2, 8, NULL),
-(66, '18h06', '18h06', '18h06.png', 120, 8.90, 3, 4, 7);
+(6, 'PHP et MySQL pour les nuls', 'Valade', 'php_et_mysql_pour_les_nuls.png', 79, 22.00, 4, 6, 10),
+(7, 'Programmer en Java', 'Delannoy', 'programmer_en_java.png', 100, 25.00, 4, 7, 10),
+(8, 'SPQR', 'Beard', 'spqr.png', 99, 18.00, 2, 8, 10),
+(9, 'À la recherche du temps perdu', 'Proust', 'a_la_recherche_du_temps_perdu.png', 92, 0.00, 1, 1, 10),
+(10, 'Les Misérables', 'Hugo', 'les_miserables_I.png', 96, 0.00, 1, 2, 10),
+(11, '1984', 'Orwell', '1984.png', 93, 0.00, 1, 3, 10),
+(12, 'L`Art d\'aimer', 'Ovide', 'l_art_d_aimer', 87, 0.00, 1, 4, 10),
+(13, 'La Peste', 'Camus', 'la_peste.png', 65, 15.99, 1, 1, 10),
+(14, 'Les Mémoires d\'Hadrien', 'Yourcenar', 'les_memoires_d_hadrien.png', 99, 12.99, 1, 1, 10),
+(15, 'La Condition humaine', 'Malraux', 'la_condition_humaine.png', 100, 14.99, NULL, NULL, NULL),
+(16, 'Le Comte de Monte-Cristo', 'Dumas', 'le_comte_de_monte_cristo.png', 100, 9.99, 1, 2, 10),
+(17, 'Orgueil et Préjugés', 'Austen', 'orgueil_et_prejuges.png', 80, 8.99, 1, 2, 10),
+(18, 'Shining', 'King', 'shining.png', 100, 10.99, 1, 2, 10),
+(19, 'Bel-Ami', 'Maupassant', 'bel_ami.png', 99, 11.99, 1, 3, 10),
+(20, 'Fahrenheit 451', 'Bradbury', 'fahrenheit_451.png', 100, 9.99, 1, 3, 10),
+(21, 'La Nuit des temps', 'Barjavel', 'la_nuit_des_temps.png', 100, 12.99, 1, 3, 10),
+(22, 'L`Énéide', 'Virgile', 'l_eneide.png', 100, 19.99, 3, 4, 10),
+(23, 'Les Pensées', 'Aurèle', 'les_pensees.png', 100, 18.99, 3, 4, 10),
+(24, 'Les Métamorphoses', 'Ovide', 'les_metamorphoses.png', 100, 20.99, 3, 4, 10),
+(25, 'Le Petit Livre des citations latines', 'Delamaire', 'le_petit_livre_des_citations_latines.png', 100, 7.99, 3, 6, 10),
+(43, 'Le Petit Livre des grandes coïncidences', 'Chiflet', 'le_petit_livre_des_grandes_coincidences.png', 100, 7.99, 3, 6, 10),
+(44, 'Le Petit Livre des gros mensonges', 'Chiflet', 'le_petit_livre_des_gros_mensonges.png', 100, 7.99, 3, 6, 10),
+(45, 'L`Art de la guerre', 'Sun', 'l_art_de_la_guerre.png', 97, 12.99, 2, 7, 10),
+(46, 'Apprendre à dessiner', 'Edwards', 'apprendre_a_dessiner.png', 100, 14.99, 4, 7, 10),
+(47, 'Le Lean Startup', 'Ries', 'le_lean_startup.png', 100, 16.99, 4, 3, 8),
+(48, 'Les Templiers', 'Demurger', 'les_templiers.png', 100, 18.99, 2, 8, 10),
+(49, 'La Seconde Guerre mondiale', 'Beevor', 'la_seconde_guerre_mondiale.png', 60, 19.99, 2, 8, 10),
+(50, 'Napoléon : Une ambition française', 'Tulard', 'napoleon_une_ambition_francaise.png', 100, 20.99, 2, 8, 10),
+(67, '23h52', '23h52', '23h52.png', 2, 12.10, NULL, NULL, NULL),
+(68, 'azd', 'azd', 'azd.png', 120, 12.10, 4, 4, 15);
 
 -- --------------------------------------------------------
 
@@ -1069,6 +1090,18 @@ CREATE TABLE `vlivresenstock` (
 -- --------------------------------------------------------
 
 --
+-- Doublure de structure pour la vue `vlivresmieuxnotes`
+-- (Voir ci-dessous la vue réelle)
+--
+CREATE TABLE `vlivresmieuxnotes` (
+`idLivre` int
+,`nomLivre` varchar(50)
+,`noteMoyenne` decimal(6,2)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Doublure de structure pour la vue `vmeilleuresventes`
 -- (Voir ci-dessous la vue réelle)
 --
@@ -1192,6 +1225,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
+-- Structure de la vue `vlivresmieuxnotes`
+--
+DROP TABLE IF EXISTS `vlivresmieuxnotes`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vlivresmieuxnotes`  AS SELECT `a`.`idLivre` AS `idLivre`, max(`l`.`nomLivre`) AS `nomLivre`, round(avg(`a`.`noteAvis`),2) AS `noteMoyenne` FROM (`avis` `a` join `livre` `l` on((`a`.`idLivre` = `l`.`idLivre`))) GROUP BY `a`.`idLivre` ORDER BY `noteMoyenne` DESC ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la vue `vmeilleuresventes`
 --
 DROP TABLE IF EXISTS `vmeilleuresventes`;
@@ -1288,12 +1330,13 @@ ALTER TABLE `archiveCommande`
   ADD KEY `idx_date_archivage` (`date_archivage`);
 
 --
--- Index pour la table `archiveLigneCommande`
+-- Index pour la table `archivelignecommande`
 --
-ALTER TABLE `archiveLigneCommande`
+ALTER TABLE `archivelignecommande`
   ADD PRIMARY KEY (`idLigneCommande`,`date_archivage`),
   ADD KEY `idx_commande` (`idCommande`),
-  ADD KEY `idx_date_archivage` (`date_archivage`);
+  ADD KEY `idx_date_archivage` (`date_archivage`),
+  ADD KEY `fk_idLivre_archivelignecommande` (`idLivre`);
 
 --
 -- Index pour la table `avis`
@@ -1371,7 +1414,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `abonnement`
 --
 ALTER TABLE `abonnement`
-  MODIFY `idAbonnement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `idAbonnement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT pour la table `admin`
@@ -1383,7 +1426,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT pour la table `avis`
 --
 ALTER TABLE `avis`
-  MODIFY `idAvis` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `idAvis` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT pour la table `categorie`
@@ -1395,7 +1438,7 @@ ALTER TABLE `categorie`
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=522;
+  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=523;
 
 --
 -- AUTO_INCREMENT pour la table `entreprise`
@@ -1407,13 +1450,13 @@ ALTER TABLE `entreprise`
 -- AUTO_INCREMENT pour la table `ligneCommande`
 --
 ALTER TABLE `ligneCommande`
-  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=901;
+  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=908;
 
 --
 -- AUTO_INCREMENT pour la table `livre`
 --
 ALTER TABLE `livre`
-  MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT pour la table `maisonEdition`
@@ -1454,6 +1497,12 @@ ALTER TABLE `abonnement`
 --
 ALTER TABLE `admin`
   ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`);
+
+--
+-- Contraintes pour la table `archivelignecommande`
+--
+ALTER TABLE `archivelignecommande`
+  ADD CONSTRAINT `fk_idLivre_archivelignecommande` FOREIGN KEY (`idLivre`) REFERENCES `livre` (`idLivre`);
 
 --
 -- Contraintes pour la table `avis`

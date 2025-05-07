@@ -78,25 +78,49 @@
             return $exec->fetchAll();
         }
 
-        public function selectCategorie() {
+        public function selectNomCategorie() {
             $requete = "select * from categorie;";
             $exec = $this->unPdo->prepare($requete);
             $exec->execute();
             return $exec->fetchAll();
         }
 
-        public function selectMaisonEdition() {
+        public function selectNomMaisonEdition() {
             $requete = "select * from maisonEdition;";
             $exec = $this->unPdo->prepare($requete);
             $exec->execute();
             return $exec->fetchAll();
         }
 
-        public function selectPromotion() {
+        public function selectNomPromotion() {
             $requete = "select * from promotion;";
             $exec = $this->unPdo->prepare($requete);
             $exec->execute();
             return $exec->fetchAll();
+        }
+
+        public function selectIdCategorieByNom($nomCategorie) {
+            $requete = "select idCategorie from categorie where nomCategorie = ?;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $nomCategorie, PDO::PARAM_STR);
+            $exec->execute();
+            return $exec->fetch();
+        }
+
+        public function selectIdMaisonEditionByNom($nomMaisonEdition) {
+            $requete = "select idMaisonEdition from maisonEdition where nomMaisonEdition = ?;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $nomMaisonEdition, PDO::PARAM_STR);
+            $exec->execute();
+            return $exec->fetch();
+        }
+
+        public function selectIdPromotionByNom($nomPromotion) {
+            $requete = "select idPromotion from promotion where nomPromotion = ?;";
+            $exec = $this->unPdo->prepare($requete);
+            $exec->BindValue(1, $nomPromotion, PDO::PARAM_STR);
+            $exec->execute();
+            return $exec->fetch();
         }
 
         public function selectLivreById($idLivre) {
@@ -724,22 +748,26 @@
             }
         }
 
-        public function updateLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $idLivre, $prixLivre) {
+        public function updateLivre($nomLivre, $auteurLivre, $imageLivre, $prixLivre, $idCategorie, $idMaisonEdition, $idPromotion, $idLivre) {
             try {
                 $requete =  "update livre 
 			                set nomLivre = ?, 
-			                categorieLivre = ?, 
 			                auteurLivre = ?, 
 			                imageLivre = ?, 
-			                prixLivre = ? 
+			                prixLivre = ?,
+			                idcategorie = ?,
+			                idMaisonEdition = ?,
+			                idPromotion = ? 
 			                where idLivre = ?;";
                 $exec = $this->unPdo->prepare($requete);
                 $exec->BindValue(1, $nomLivre, PDO::PARAM_STR);
-                $exec->BindValue(2, $categorieLivre, PDO::PARAM_STR);
-                $exec->BindValue(3, $auteurLivre, PDO::PARAM_STR);
-                $exec->BindValue(4, $imageLivre, PDO::PARAM_STR);
-                $exec->BindValue(5, $prixLivre, PDO::PARAM_STR);
-                $exec->BindValue(6, $idLivre, PDO::PARAM_INT);
+                $exec->BindValue(2, $auteurLivre, PDO::PARAM_STR);
+                $exec->BindValue(3, $imageLivre, PDO::PARAM_STR);
+                $exec->BindValue(4, $prixLivre, PDO::PARAM_STR);
+                $exec->BindValue(5, $idCategorie, PDO::PARAM_STR);
+                $exec->BindValue(6, $idMaisonEdition, PDO::PARAM_STR);
+                $exec->BindValue(7, $idPromotion, PDO::PARAM_STR);
+                $exec->BindValue(8, $idLivre, PDO::PARAM_INT);
                 $exec->execute();
                 return true;
             } catch (PDOException $exp) {

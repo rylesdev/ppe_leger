@@ -1,9 +1,10 @@
 A FAIRE :
 
 Tailwindcss :
+
 // index
 // c_abonnement (mettre en valeur le texte "Vous n'avez pas d'abonnement en cours.")
-c_authentification
+// c_authentification
 c_commande
 // c_livre
 c_panier
@@ -13,6 +14,8 @@ c_stockage
 // c_user
 // home
 
+
+    - Régler le problème des promotion et faire une exception lorsque nomPromotion='Aucune promotion'
 
     - Supprimer tous les fichier "// A Supprimer"
 

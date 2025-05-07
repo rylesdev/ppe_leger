@@ -45,7 +45,7 @@ if (isset($_REQUEST['action'])) {
     }
 }
 
-if (isset($_POST['ValiderInsert'])) {
+if (isset($_POST['InsertLivre'])) {
     $nomLivre = $_POST['nomLivre'];
     $auteurLivre = $_POST['auteurLivre'];
     $imageLivre = $_POST['imageLivre'];
@@ -63,15 +63,25 @@ if (isset($_POST['ValiderInsert'])) {
     }
 }
 
-if (isset($_POST['Modifier'])) {
+if (isset($_POST['UpdateLivre'])) {
     $nomLivre = $_POST['nomLivre'];
-    $categorieLivre = $_POST['categorieLivre'];
     $auteurLivre = $_POST['auteurLivre'];
     $imageLivre = $_POST['imageLivre'];
-    $idLivre = $_POST['idLivre'];
     $prixLivre = $_POST['prixLivre'];
+    $nomCategorie = $_POST['nomCategorie'];
+    $nomMaisonEdition = $_POST['nomMaisonEdition'];
+    $nomPromotion = $_POST['nomPromotion'];
 
-    $result = $unControleur->updateLivre($nomLivre, $categorieLivre, $auteurLivre, $imageLivre, $idLivre, $prixLivre);
+    $idCategorie = $unControleur->selectIdCategorieByNom($nomCategorie)[0];
+    $idMaisonEdition = $unControleur->selectIdMaisonEditionByNom($nomMaisonEdition)[0];
+    $idPromotion = $unControleur->selectIdPromotionByNom($nomPromotion)[0];
+
+
+
+
+    var_dump($nomLivre, $auteurLivre, $imageLivre, $prixLivre, $idCategorie, $idMaisonEdition, $idPromotion);
+
+    $result = $unControleur->updateLivre($nomLivre, $auteurLivre, $imageLivre, $prixLivre, $idCategorie, $idMaisonEdition, $idPromotion, $idLivre);
     if ($result) {
         echo "<div class='alert alert-success' style='background-color: #1A365D; color: white;'>Mise à jour réussie du livre.</div>";
     } else {
