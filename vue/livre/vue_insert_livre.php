@@ -5,9 +5,9 @@ require_once("includes/header.php");
 // Initialisation de $leLivre si non défini
 $leLivre = $leLivre ?? null;
 
-$categorie = $unControleur->selectCategorie();
-$maisonEdition = $unControleur->selectMaisonEdition();
-$promotion = $unControleur->selectPromotion();
+$categorie = $unControleur->selectNomCategorie();
+$maisonEdition = $unControleur->selectNomMaisonEdition();
+$promotion = $unControleur->selectNomPromotion();
 ?>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
@@ -18,11 +18,12 @@ $promotion = $unControleur->selectPromotion();
         </h3>
 
         <div class="bg-white rounded-lg shadow-lg p-6 max-w-3xl mx-auto">
-            <form method="post" class="space-y-6">
+            <form method="post" class="space-y-6" id="livreForm">
                 <?php if ($leLivre != null): ?>
+                    <input type="hidden" name="idLivre" value="<?= htmlspecialchars($leLivre['idLivre'] ?? '') ?>">
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="idLivre">ID du livre</label>
-                        <input type="text" name="idLivre" id="idLivre" value="<?= htmlspecialchars($leLivre['idLivre'] ?? '') ?>" readonly
+                        <input type="text" value="<?= htmlspecialchars($leLivre['idLivre'] ?? '') ?>" readonly
                                class="bg-gray-100 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     </div>
                 <?php endif; ?>
@@ -55,15 +56,17 @@ $promotion = $unControleur->selectPromotion();
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="exemplaireLivre">
-                            Nombre d'exemplaires <span class="text-red-500">*</span>
-                        </label>
-                        <input type="number" name="exemplaireLivre" id="exemplaireLivre" min="0" value="<?= htmlspecialchars($leLivre['exemplaireLivre'] ?? '') ?>" required
-                               class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-900">
-                    </div>
+                    <?php if ($leLivre == null): ?>
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="exemplaireLivre">
+                                Nombre d'exemplaires <span class="text-red-500">*</span>
+                            </label>
+                            <input type="number" name="exemplaireLivre" id="exemplaireLivre" min="0" value="<?= htmlspecialchars($leLivre['exemplaireLivre'] ?? '') ?>" required
+                                   class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-900">
+                        </div>
+                    <?php endif; ?>
 
-                    <div>
+                    <div class="<?= ($leLivre == null) ? '' : 'md:col-span-2' ?>">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="prixLivre">
                             Prix du livre (€) <span class="text-red-500">*</span>
                         </label>
@@ -82,7 +85,6 @@ $promotion = $unControleur->selectPromotion();
                                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-900">
                             <option value="">-- Sélectionnez --</option>
                             <?php foreach ($categorie as $uneCategorie): ?>
-
                                 <option value="<?= htmlspecialchars($uneCategorie['nomCategorie']) ?>"
                                     <?= ($leLivre != null && $leLivre['nomCategorie'] === $uneCategorie['nomCategorie']) ? 'selected' : '' ?>>
                                     <?= htmlspecialchars($uneCategorie['nomCategorie']) ?>
@@ -125,17 +127,17 @@ $promotion = $unControleur->selectPromotion();
                 </div>
 
                 <div class="flex justify-between items-center pt-4">
-                    <button type="reset" name="Annuler"
+                    <button type="button" onclick="confirmReset()" name="AnnulerLivre"
                             class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                         Annuler
                     </button>
                     <?php if ($leLivre != null): ?>
-                        <button type="submit" name="Modifier"
+                        <button type="submit" name="UpdateLivre"
                                 class="bg-blue-900 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                             Modifier
                         </button>
                     <?php else: ?>
-                        <button type="submit" name="ValiderInsert"
+                        <button type="submit" name="InsererLivre"
                                 class="bg-blue-900 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                             Valider
                         </button>
@@ -148,3 +150,40 @@ $promotion = $unControleur->selectPromotion();
             </form>
         </div>
     </div>
+
+    <script>
+        function confirmReset() {
+            if (confirm("Êtes-vous sûr de vouloir réinitialiser le formulaire ? Toutes les modifications seront perdues.")) {
+                resetForm();
+            }
+        }
+
+        function resetForm() {
+            if (<?= ($leLivre != null) ? 'true' : 'false' ?>) {
+        // Si en mode édition, rediriger vers la page sans paramètre d'édition
+        window.location.href = window.location.pathname + '?page=2';
+    } else {
+        // Si en mode ajout, réinitialiser le formulaire
+        const form = document.getElementById('livreForm');
+
+        // Réinitialiser les champs input
+        const inputs = form.querySelectorAll('input[type="text"], input[type="number"]');
+        inputs.forEach(input => {
+            input.value = '';
+        });
+
+        // Réinitialiser les selects
+        const selects = form.querySelectorAll('select');
+        selects.forEach(select => {
+            select.selectedIndex = 0;
+        });
+
+        // Remettre le focus sur le premier champ
+        document.getElementById('nomLivre').focus();
+    }
+}
+    </script>
+
+<?php
+require_once("includes/footer.php");
+?>
