@@ -12,6 +12,9 @@
     --primary-blue-dark: #0F2A4A;
     --accent-red: #E53E3E;
     --accent-green: #2E6E49;
+    --gray-light: #e2e8f0;
+    --gray-medium: #718096;
+    --gray-dark: #4a5568;
 }
 
 /* Corps de la page */
@@ -19,6 +22,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f9f9f9;
     color: #333;
+    line-height: 1.6;
 }
 
 /* Conteneur central */
@@ -484,107 +488,214 @@ a:hover {
     background-color: var(--primary-blue);
 }
 .bg-primary-blue-light {
-    background-color: --primary-blue-light);
+    background-color: var(--primary-blue-light);
 }
 .bg-accent-red {
     background-color: var(--accent-red);
 }
 
+/* ===================== */
+/* Styles d'authentification */
+/* ===================== */
 
-/* Ajoutez ceci à votre style.css */
-.auth-container {
-    max-width: 28rem;
-    margin: 2rem auto;
+.auth-main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px);
     padding: 2rem;
+    background-color: #f8fafc;
+}
+
+.auth-container {
+    display: flex;
+    width: 75%;
+    max-width: 1200px;
     background-color: white;
     border-radius: 0.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.auth-section {
+    flex: 1;
+    padding: 2.5rem;
+    position: relative;
+}
+
+.auth-section:first-child {
+    border-right: 1px solid var(--gray-light);
 }
 
 .auth-title {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 600;
-    color: #1a365d;
+    color: var(--primary-blue);
     text-align: center;
     margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.auth-title:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background-color: var(--primary-blue);
+}
+
+.inscription-options {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.auth-form-container {
+    margin-top: 1.5rem;
 }
 
 .auth-form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
 }
 
 .auth-form-label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 500;
-    color: #4a5568;
+    color: var(--gray-dark);
+    font-size: 0.9rem;
 }
 
 .auth-form-input {
     width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #e2e8f0;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--gray-light);
     border-radius: 0.375rem;
-    transition: border-color 0.2s;
+    transition: all 0.2s;
+    font-size: 0.95rem;
 }
 
 .auth-form-input:focus {
-    border-color: #4299e1;
+    border-color: var(--primary-blue);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+    box-shadow: 0 0 0 3px rgba(26, 54, 93, 0.1);
 }
 
 .auth-btn {
     display: inline-block;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1.5rem;
     border-radius: 0.375rem;
     font-weight: 500;
     transition: all 0.2s;
     cursor: pointer;
+    font-size: 1rem;
+    text-align: center;
 }
 
 .auth-btn-primary {
-    background-color: #2b6cb0;
+    background-color: var(--primary-blue);
     color: white;
     border: none;
 }
 
 .auth-btn-primary:hover {
-    background-color: #2c5282;
+    background-color: var(--primary-blue-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .auth-btn-secondary {
-    background-color: #e2e8f0;
-    color: #4a5568;
-    border: none;
+    background-color: white;
+    color: var(--primary-blue);
+    border: 1px solid var(--primary-blue);
 }
 
 .auth-btn-secondary:hover {
-    background-color: #cbd5e0;
+    background-color: #f8fafc;
 }
 
 .auth-link {
-    color: #4299e1;
+    color: var(--primary-blue);
     text-decoration: none;
+    transition: all 0.2s;
 }
 
 .auth-link:hover {
     text-decoration: underline;
+    color: var(--primary-blue-dark);
 }
 
 .auth-hint {
     font-size: 0.75rem;
-    color: #718096;
+    color: var(--gray-medium);
     margin-top: 0.25rem;
 }
 
 .auth-required {
-    color: #e53e3e;
+    color: var(--accent-red);
 }
 
 .auth-footer {
     text-align: center;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     font-size: 0.875rem;
-    color: #718096;
+    color: var(--gray-medium);
+}
+
+.auth-switch-text {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--gray-medium);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .auth-container {
+        width: 85%;
+    }
+}
+
+@media (max-width: 768px) {
+    .auth-container {
+        flex-direction: column;
+        width: 90%;
+    }
+
+    .auth-section {
+        padding: 2rem;
+    }
+
+    .auth-section:first-child {
+        border-right: none;
+        border-bottom: 1px solid var(--gray-light);
+    }
+
+    .inscription-options {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .auth-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-main-container {
+        padding: 1rem;
+    }
+
+    .auth-section {
+        padding: 1.5rem;
+    }
+
+    .auth-btn {
+        padding: 0.65rem 1.25rem;
+        font-size: 0.9rem;
+    }
 }

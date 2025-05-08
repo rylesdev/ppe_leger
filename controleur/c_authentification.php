@@ -67,15 +67,16 @@ if (isset($_POST['InscriptionEntreprise'])) {
 
 ?>
 
-<div class="auth-container">
-    <div class="auth-section">
-        <h2>Inscription</h2>
+<div class="auth-main-container">
+    <div class="auth-container">
+        <div class="auth-section">
+            <h2 class="auth-title">Inscription</h2>
 
-        <?php
-        echo '<div class="inscription-options">';
-        echo '<a href="index.php?page=11&inscription=particulier"><button class="btn btn-primary">Vous êtes un particulier</button></a>';
-        echo '<a href="index.php?page=11&inscription=entreprise"><button class="btn btn-primary">Vous êtes une entreprise</button></a>';
-        echo '</div>';
+            <?php
+            echo '<div class="inscription-options">';
+            echo '<a href="index.php?page=11&inscription=particulier"><button class="auth-btn auth-btn-primary">Particulier</button></a>';
+            echo '<a href="index.php?page=11&inscription=entreprise"><button class="auth-btn auth-btn-primary">Entreprise</button></a>';
+            echo '</div>';
 
         $inscription = isset($_GET['inscription']) ? $_GET['inscription'] : '';
 
@@ -88,13 +89,14 @@ if (isset($_POST['InscriptionEntreprise'])) {
                 break;
         }
         ?>
-    </div>
+        </div>
 
-    <div class="auth-section">
-        <h2>Connexion</h2>
-
-        <?php
-        require_once("vue/auth/vue_connexion.php");
-        ?>
+    <br>
+        <div class="auth-section">
+            <h2 class="auth-title">Connexion</h2>
+            <?php
+            require_once("vue/auth/vue_connexion.php");
+            ?>
+        </div>
     </div>
 </div>

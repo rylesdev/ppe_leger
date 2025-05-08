@@ -15,6 +15,20 @@ c_stockage
 // home
 
 
+    - Supprimer la prostock promotion et mettre une méthode "insertPromotion" qui insère dans la table promotion (mettre une gestion d'erreur qui permet d'empêcher d'insérer si un idLivre détient déjà un idPromotion, si c'est le cas alors il faut faire un update au lieu d'un insertdans la table promotion)
+            et qui modifie le idPromotion dans la table livre.
+
+    - Pareil que au-dessus pour la table maisonEdition
+
+    - URGENT : Mettre du bootstrap au moins sur une page du projet
+
+    - Remplacer la page stockage par une page qui affiche et insert les maisons d'édition
+
+    - Admin :
+        - Page Livre : Affichage de la table livre + insertion livre
+        - Page Promotion : Affichage de la table promotion + insertion promotion
+        - Page MaisonEdition : Affichage de la table maisonEdition + insertion maisonEdition
+
     - Régler le problème des promotion et faire une exception lorsque nomPromotion='Aucune promotion'
 
     - Supprimer tous les fichier "// A Supprimer"

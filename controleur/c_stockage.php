@@ -24,6 +24,6 @@ if (isset($_POST['FiltrerStockage'])){
     $lesLivres = $unControleur->selectLivre();
 }
 
-require_once("vue/stockage/vue_select_livre_stockage.php");
+require_once("vue/stockage/vue_livre_stockage.php");
 }
 ?>

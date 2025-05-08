@@ -1,6 +1,6 @@
 <?php
 $titrePage = "Bienvenue sur notre Librairie en ligne";
-$cssPage = "home";
+
 require_once("includes/header.php");
 require_once("modele/modele.class.php");
 

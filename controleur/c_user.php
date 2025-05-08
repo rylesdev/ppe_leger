@@ -65,9 +65,9 @@ if (!isset($_SESSION['emailUser'])) {
             echo "Aucun utilisateur trouvé.";
         }
 
-            session_destroy();
-            header("Location: index.php?message=Compte supprimé avec succès");
-            exit();
+        session_destroy();
+        header("Location: index.php?message=Compte supprimé avec succès");
+        exit();
     }
 } else {
     echo "<h3 style='color: red;'>Page indisponible pour le rôle admin.</h3>";

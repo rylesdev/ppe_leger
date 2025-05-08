@@ -30,16 +30,16 @@ class Controleur {
         return $this->unModele->selectLivre();
     }
     
-    public function selectNomCategorie() {
-        return $this->unModele->selectNomCategorie();
+    public function selectCategorie() {
+        return $this->unModele->selectCategorie();
     }
 
-    public function selectNomMaisonEdition() {
-        return $this->unModele->selectNomMaisonEdition();
+    public function selectMaisonEdition() {
+        return $this->unModele->selectMaisonEdition();
     }
 
-    public function selectNomPromotion() {
-        return $this->unModele->selectNomPromotion();
+    public function selectPromotion() {
+        return $this->unModele->selectPromotion();
     }
 
     public function selectIdCategorieByNom($nomCategorie) {
@@ -54,6 +54,22 @@ class Controleur {
         return $this->unModele->selectIdPromotionByNom($nomPromotion);
     }
 
+    public function selectNomCategorieById($idCategorie) {
+        return $this->unModele->selectNomCategorieById($idCategorie);
+    }
+
+    public function selectNomMaisonEditionById($idMaisonEdition) {
+        return $this->unModele->selectNomMaisonEditionById($idMaisonEdition);
+    }
+
+    public function selectNomPromotionById($idPromotion) {
+        return $this->unModele->selectNomPromotionById($idPromotion);
+    }
+
+    public function selectNbLivreByPromotion($idPromotion) {
+        return $this->unModele->selectNbLivreByPromotion($idPromotion);
+    }
+
     public function selectLivreById($idLivre) {
         return $this->unModele->selectLivreById($idLivre);
     }
@@ -62,8 +78,16 @@ class Controleur {
         return $this->unModele->selectLikeLivre($filtre);
     }
 
+    public function selectLikePromotion ($filtre){
+        return $this->unModele->selectLikePromotion($filtre);
+    }
+
     public function selectWhereLivre($idLivre){
         return $this->unModele->selectWhereLivre($idLivre);
+    }
+
+    public function selectWherePromotion($idPromotion, $idLivre){
+        return $this->unModele->selectWherePromotion($idPromotion, $idLivre);
     }
 
     public function selectFiltreLivreEnAttente($idUser, $filtre) {
@@ -137,6 +161,10 @@ class Controleur {
          return $this->unModele->deleteLivre($idLivre);
     }
 
+    public function deletePromotion($idPromotion){
+        return $this->unModele->deletePromotion($idPromotion);
+    }
+
     public function deleteLigneCommande($idLigneCommande){
         return $this->unModele->deleteLigneCommande($idLigneCommande);
     }
@@ -152,6 +180,10 @@ class Controleur {
 
 
     /**************** INSERT ****************/
+    public function insertPromotion($nomPromotion, $dateDebutPromotion, $dateFinPromotion, $reductionPromotion) {
+        return $this->unModele->insertPromotion($nomPromotion, $dateDebutPromotion, $dateFinPromotion, $reductionPromotion);
+    }
+
     public function insertParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser) {
         return $this->unModele->insertParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser);
     }
@@ -202,6 +234,10 @@ class Controleur {
 
 
     /**************** UPDATE ****************/
+    public function updatePromotion($nomPromotion, $dateDebutPromotion, $dateFinPromotion, $reductionPromotion, $idPromotion) {
+        return $this->unModele->updatePromotion($nomPromotion, $dateDebutPromotion, $dateFinPromotion, $reductionPromotion, $idPromotion);
+    }
+
     public function updateParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser, $idUser) {
         return $this->unModele->updateParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser, $idUser);
     }
