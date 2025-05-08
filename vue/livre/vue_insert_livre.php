@@ -5,9 +5,9 @@ require_once("includes/header.php");
 // Initialisation de $leLivre si non défini
 $leLivre = $leLivre ?? null;
 
-$categorie = $unControleur->selectNomCategorie();
-$maisonEdition = $unControleur->selectNomMaisonEdition();
-$promotion = $unControleur->selectNomPromotion();
+$categorie = $unControleur->selectCategorie();
+$maisonEdition = $unControleur->selectMaisonEdition();
+$promotion = $unControleur->selectPromotion();
 ?>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">

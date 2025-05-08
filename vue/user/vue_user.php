@@ -299,7 +299,7 @@ require_once("includes/header.php");
             const showEditBtn = document.getElementById('showEditBtn');
             const showDeleteBtn = document.getElementById('showDeleteBtn');
             const closeEditBtn = document.getElementById('closeEditBtn');
-            const closeDeleteBtn = document.getElement bifId('closeDeleteBtn');
+            const closeDeleteBtn = document.getElementById('closeDeleteBtn');
 
             const editSection = document.getElementById('editSection');
             const deleteSection = document.getElementById('deleteSection');
