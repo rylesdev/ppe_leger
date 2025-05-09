@@ -118,11 +118,13 @@
         }
 
         public function selectIdPromotionByNom($nomPromotion) {
-            $requete = "select idPromotion from promotion where nomPromotion = ?;";
+            $requete =  "select idPromotion from promotion where nomPromotion = ? 
+                        order by idPromotion desc 
+                        limit 1;";
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $nomPromotion, PDO::PARAM_STR);
             $exec->execute();
-            return $exec->fetch();
+            return $exec->fetchAll();
         }
 
         public function selectNomCategorieById($idCategorie) {
@@ -154,9 +156,9 @@
                         from livre
                         where idPromotion = ?;";
             $exec = $this->unPdo->prepare($requete);
-            $exec->BindValue(1, $idPromotion, PDO::PARAM_STR);
+            $exec->BindValue(1, $idPromotion, PDO::PARAM_INT);
             $exec->execute();
-            return $exec->fetch();
+            return $exec->fetchAll();
         }
 
         public function selectLivreById($idLivre) {
@@ -226,7 +228,7 @@
         }
 
         public function selectWherePromotion($idPromotion, $idLivre) {
-            $requete =  "SELECT p.*, l.nomLivre
+            $requete =  "SELECT p.*, l.idLivre, l.nomLivre
                         FROM promotion p
                         INNER JOIN livre l ON p.idPromotion = l.idPromotion
                         WHERE p.idPromotion = ? AND l.idLivre = ?;";
@@ -881,6 +883,21 @@
                 $exec->BindValue(6, $idMaisonEdition, PDO::PARAM_STR);
                 $exec->BindValue(7, $idPromotion, PDO::PARAM_STR);
                 $exec->BindValue(8, $idLivre, PDO::PARAM_INT);
+                $exec->execute();
+                return true;
+            } catch (PDOException $exp) {
+                return false;
+            }
+        }
+
+        public function updatePromotionLivre($idPromotion, $idLivre) {
+            try {
+                $requete =  "update livre 
+                            set idPromotion = ?
+                            where idLivre = ?;";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $idPromotion, PDO::PARAM_INT);
+                $exec->BindValue(2, $idLivre, PDO::PARAM_INT);
                 $exec->execute();
                 return true;
             } catch (PDOException $exp) {
