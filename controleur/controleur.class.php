@@ -247,7 +247,11 @@ class Controleur {
     }
 
     public function  updateLivre($nomLivre, $auteurLivre, $imageLivre, $prixLivre, $idCategorie, $idMaisonEdition, $idPromotion, $idLivre) {
-        return $this->unModele-> updateLivre($nomLivre, $auteurLivre, $imageLivre, $prixLivre, $idCategorie, $idMaisonEdition, $idPromotion, $idLivre);
+        return $this->unModele->updateLivre($nomLivre, $auteurLivre, $imageLivre, $prixLivre, $idCategorie, $idMaisonEdition, $idPromotion, $idLivre);
+    }
+
+    public function updatePromotionLivre($idPromotion, $idLivre) {
+        return $this->unModele->updatePromotionLivre($idPromotion, $idLivre);
     }
 
     public function updateStockageLivre($exemplaireLivre, $nomLivre) {

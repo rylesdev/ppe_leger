@@ -15,12 +15,14 @@ c_stockage
 // home
 
 
+    - Résoudre les problèmes au niveau des conditions dans la page Promotion (insertPromotion, updatePromotion, updateLivre, etc...)
+
     - Supprimer la prostock promotion et mettre une méthode "insertPromotion" qui insère dans la table promotion (mettre une gestion d'erreur qui permet d'empêcher d'insérer si un idLivre détient déjà un idPromotion, si c'est le cas alors il faut faire un update au lieu d'un insertdans la table promotion)
             et qui modifie le idPromotion dans la table livre.
 
     - Pareil que au-dessus pour la table maisonEdition
 
-    - URGENT : Mettre du bootstrap au moins sur une page du projet
+    - URGENT : Mettre du bootstrap sur une page
 
     - Remplacer la page stockage par une page qui affiche et insert les maisons d'édition
 
