@@ -27,8 +27,8 @@ body {
 
 /* Conteneur central */
 .container {
-    width: 100%;
-    max-width: 1200px;
+    width: 85vw; /* Ajusté pour occuper 85% de la largeur de l'écran */
+    max-width: 1400px; /* Augmenté légèrement la largeur maximale */
     margin: 40px auto;
     padding: 20px;
     background-color: white;
@@ -38,7 +38,7 @@ body {
 
 /* Contenu principal */
 .main-content {
-    width: 75%;
+    width: 100%; /* Ajusté pour occuper toute la largeur du conteneur */
     margin: 0 auto;
 }
 
@@ -300,8 +300,6 @@ a:hover {
 .quantity-input {
     width: 50px;
     padding: 5px;
-    font-size: 1em;
-    margin-right: 10px;
     border-radius: 5px;
 }
 .add-to-cart-button {

@@ -74,8 +74,8 @@ if (isset($_POST['InscriptionEntreprise'])) {
 
             <?php
             echo '<div class="inscription-options">';
-            echo '<a href="index.php?page=11&inscription=particulier"><button class="auth-btn auth-btn-primary">Particulier</button></a>';
-            echo '<a href="index.php?page=11&inscription=entreprise"><button class="auth-btn auth-btn-primary">Entreprise</button></a>';
+            echo '<a href="index.php?page=12&inscription=particulier"><button class="auth-btn auth-btn-primary">Particulier</button></a>';
+            echo '<a href="index.php?page=12&inscription=entreprise"><button class="auth-btn auth-btn-primary">Entreprise</button></a>';
             echo '</div>';
 
         $inscription = isset($_GET['inscription']) ? $_GET['inscription'] : '';

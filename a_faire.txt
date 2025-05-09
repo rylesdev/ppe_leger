@@ -1,35 +1,14 @@
 A FAIRE :
 
-Tailwindcss :
 
-// index
-// c_abonnement (mettre en valeur le texte "Vous n'avez pas d'abonnement en cours.")
-// c_authentification
-c_commande
-// c_livre
-c_panier
-c_promotion
-c_statistique
-c_stockage
-// c_user
-// home
+- Enlever les messages d'erreur de $idUser.
+
+- Mettre ce message "Vous devez être connecté pour accéder à cette page" sur toutes les pages (mêmes celles innaccessibles).
 
 
-    - Résoudre les problèmes au niveau des conditions dans la page Promotion (insertPromotion, updatePromotion, updateLivre, etc...)
 
-    - Supprimer la prostock promotion et mettre une méthode "insertPromotion" qui insère dans la table promotion (mettre une gestion d'erreur qui permet d'empêcher d'insérer si un idLivre détient déjà un idPromotion, si c'est le cas alors il faut faire un update au lieu d'un insertdans la table promotion)
-            et qui modifie le idPromotion dans la table livre.
-
-    - Pareil que au-dessus pour la table maisonEdition
 
     - URGENT : Mettre du bootstrap sur une page
-
-    - Remplacer la page stockage par une page qui affiche et insert les maisons d'édition
-
-    - Admin :
-        - Page Livre : Affichage de la table livre + insertion livre
-        - Page Promotion : Affichage de la table promotion + insertion promotion
-        - Page MaisonEdition : Affichage de la table maisonEdition + insertion maisonEdition
 
     - Régler le problème des promotion et faire une exception lorsque nomPromotion='Aucune promotion'
 
