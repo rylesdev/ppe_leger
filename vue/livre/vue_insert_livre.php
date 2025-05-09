@@ -137,7 +137,7 @@ $promotion = $unControleur->selectPromotion();
                             Modifier
                         </button>
                     <?php else: ?>
-                        <button type="submit" name="InsererLivre"
+                        <button type="submit" name="InsertLivre"
                                 class="bg-blue-900 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                             Valider
                         </button>

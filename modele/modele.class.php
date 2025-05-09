@@ -68,11 +68,11 @@
         public function selectLivre() {
             $requete = "select l.*, c.nomCategorie, m.nomMaisonEdition, p.nomPromotion  
 				        from livre l
-				        inner join categorie c 
+				        left join categorie c 
 				        on l.idCategorie=c.idCategorie
-				        inner join maisonEdition m 
+				        left join maisonEdition m 
 				        on l.idMaisonEdition=m.idMaisonEdition
-				        inner join promotion p
+				        left join promotion p
 				        on l.idPromotion=p.idPromotion
 				        where prixLivre != 0
 				        group by l.idLivre;";
@@ -334,7 +334,7 @@
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
-            return $exec->fetch();
+            return $exec->fetchAll();
         }
 
         public function selectPointAbonnement($idUser) {
@@ -418,18 +418,17 @@
 
         public function selectCommandeByIdTri($idCommande, $tri = null) {
             try {
-                $requete = "SELECT l.*, lc.quantiteLigneCommande 
+                $requete = "SELECT l.*, lc.quantiteLigneCommande, (l.prixLivre * lc.quantiteLigneCommande) AS totalPrix
                     FROM ligneCommande lc
                     JOIN livre l ON lc.idLivre = l.idLivre
                     WHERE lc.idCommande = ?";
 
-                // Ajout du tri
                 switch ($tri) {
                     case 'prixMin':
-                        $requete .= " ORDER BY l.prixLivre ASC";
+                        $requete .= " ORDER BY totalPrix ASC";
                         break;
                     case 'prixMax':
-                        $requete .= " ORDER BY l.prixLivre DESC";
+                        $requete .= " ORDER BY totalPrix DESC";
                         break;
                     case 'ordreCroissant':
                         $requete .= " ORDER BY l.nomLivre ASC";
@@ -450,6 +449,7 @@
                 return [];
             }
         }
+
 
         public function selectCommandeTri($idUser, $tri = null) {
             try {
@@ -490,7 +490,7 @@
         }
 
         public function countLigneCommande($idCommande) {
-            $requete = "SELECT COUNT(*) as nb FROM ligneCommande WHERE idCommande = ?";
+            $requete = "SELECT COUNT(*) as nbLigneCommande FROM ligneCommande WHERE idCommande = ?";
             $exec = $this->unPdo->prepare($requete);
             $exec->bindValue(1, $idCommande, PDO::PARAM_INT);
             $exec->execute();
@@ -1307,30 +1307,5 @@
             } catch(PDOException $exp) {
                 return false;
             }
-        }
-
-        public function procedureInsertOrUpdatePromotion($nomLivre, $reductionPromotion, $dateFinPromotion) {
-            $result = 0;
-            try {
-                $requete = "CALL pInsertOrUpdatePromotion(?, ?, ?)";
-                $exec = $this->unPdo->prepare($requete);
-                $exec->bindValue(1, $nomLivre, PDO::PARAM_STR);
-                $exec->bindValue(2, $reductionPromotion, PDO::PARAM_INT);
-                $exec->bindValue(3, $dateFinPromotion, PDO::PARAM_STR);
-                $exec->execute();
-            } catch (PDOException $e) {
-                if ($e->getCode() == '45000') {
-                    $message = $e->getMessage();
-
-                    if (strpos($message, 'TEXT 1') !== false) {
-                        $result = -1;
-                    } else if (strpos($message, 'TEXT 2') !== false) {
-                        $result = 2;
-                    } else if (strpos($message, 'TEXT 3') !== false) {
-                        $result = 3;
-                    }
-                }
-            }
-            return $result;
         }
     }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : ven. 09 mai 2025 à 02:48
+-- Généré le : ven. 09 mai 2025 à 23:26
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -75,53 +75,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `pInsertOrUpdateLigneCommande` (IN `
     END IF;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pInsertOrUpdatePromotion` (IN `in_nomLivre` VARCHAR(255), IN `in_reductionPromotion` INT, IN `in_dateFinPromotion` DATE)   BEGIN
-    DECLARE p_idLivre INT;
-    DECLARE p_newIdPromotion INT;
-    DECLARE p_message VARCHAR(255);
-
-    SELECT idLivre INTO p_idLivre
-    FROM livre
-    WHERE nomLivre = in_nomLivre
-    LIMIT 1;
-
-    IF p_idLivre IS NULL THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'TEXT 1';
-    END IF;
-
-    SELECT idPromotion INTO p_newIdPromotion
-    FROM promotion
-    WHERE reductionPromotion = in_reductionPromotion
-    ORDER BY idPromotion DESC
-    LIMIT 1;
-
-    IF p_newIdPromotion IS NOT NULL THEN
-        UPDATE promotion
-        SET dateFinPromotion = in_dateFinPromotion
-        WHERE idPromotion = p_newIdPromotion;
-
-        UPDATE livre
-        SET idPromotion = p_newIdPromotion
-        WHERE idLivre = p_idLivre;
-
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'TEXT 2';
-    ELSE
-        INSERT INTO promotion (idPromotion, nomPromotion, dateDebutPromotion, dateFinPromotion, reductionPromotion)
-        VALUES (NULL, CONCAT(in_reductionPromotion, '%'), CURDATE(), in_dateFinPromotion, in_reductionPromotion);
-
-        SELECT LAST_INSERT_ID() INTO p_newIdPromotion;
-
-        UPDATE livre
-        SET idPromotion = p_newIdPromotion
-        WHERE idLivre = p_idLivre;
-
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'TEXT 3';
-    END IF;
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `pOffrirLivre` (IN `in_idUser` INT, IN `in_chiffre` INT)   proc: BEGIN
     DECLARE p_idCommande INT;
     DECLARE p_idLivre INT;
@@ -186,25 +139,37 @@ INSERT INTO `abonnement` (`idAbonnement`, `idUser`, `dateDebutAbonnement`, `date
 (1, 2, '2025-01-01', '2025-12-31', 0),
 (3, 23, '2025-01-25', '2025-04-25', 0),
 (4, 15, '2025-01-26', '2025-02-28', 80),
-(26, 37, '2025-04-25', '2025-05-08', 140),
-(31, 37, '2025-05-07', '2025-05-08', 0),
-(32, 37, '2025-05-07', '2025-05-08', 0),
-(33, 37, '2025-05-07', '2025-05-08', 0),
-(34, 37, '2025-05-07', '2025-05-08', 0),
-(35, 37, '2025-05-07', '2025-05-08', 0),
-(36, 37, '2025-05-07', '2025-05-08', 0),
-(37, 37, '2025-05-07', '2025-05-08', 0),
-(38, 37, '2025-05-07', '2025-05-08', 0),
-(39, 37, '2025-05-07', '2025-05-08', 0),
-(40, 37, '2025-05-07', '2025-05-08', 0),
-(41, 37, '2025-05-07', '2025-05-08', 0),
-(42, 37, '2025-05-07', '2025-05-08', 0),
-(43, 37, '2025-05-07', '2025-05-08', 0),
-(44, 37, '2025-05-07', '2025-05-08', 0),
-(45, 37, '2025-05-07', '2025-05-08', 0),
-(46, 37, '2025-05-07', '2025-05-08', 0),
-(47, 37, '2025-05-07', '2025-05-08', 0),
-(48, 37, '2025-05-08', '2025-05-08', 0);
+(26, 37, '2025-04-25', '2025-05-10', 130),
+(31, 37, '2025-05-07', '2025-05-10', -10),
+(32, 37, '2025-05-07', '2025-05-10', -10),
+(33, 37, '2025-05-07', '2025-05-10', -10),
+(34, 37, '2025-05-07', '2025-05-10', -10),
+(35, 37, '2025-05-07', '2025-05-10', -10),
+(36, 37, '2025-05-07', '2025-05-10', -10),
+(37, 37, '2025-05-07', '2025-05-10', -10),
+(38, 37, '2025-05-07', '2025-05-10', -10),
+(39, 37, '2025-05-07', '2025-05-10', -10),
+(40, 37, '2025-05-07', '2025-05-10', -10),
+(41, 37, '2025-05-07', '2025-05-10', -10),
+(42, 37, '2025-05-07', '2025-05-10', -10),
+(43, 37, '2025-05-07', '2025-05-10', -10),
+(44, 37, '2025-05-07', '2025-05-10', -10),
+(45, 37, '2025-05-07', '2025-05-10', -10),
+(46, 37, '2025-05-07', '2025-05-10', -10),
+(47, 37, '2025-05-07', '2025-05-10', -10),
+(48, 37, '2025-05-08', '2025-05-10', -10),
+(49, 37, '2025-05-09', '2025-05-10', -10),
+(50, 37, '2025-05-10', '2025-05-10', 80),
+(51, 37, '2025-05-10', '2025-05-10', 50),
+(52, 37, '2025-05-10', '2025-05-10', 50),
+(53, 37, '2025-05-10', '2025-05-10', 50),
+(54, 37, '2025-05-10', '2025-05-10', 50),
+(55, 37, '2025-05-10', '2025-05-10', 50),
+(56, 37, '2025-05-10', '2025-05-10', 50),
+(57, 37, '2025-05-10', '2025-05-10', 50),
+(58, 37, '2025-05-10', '2025-05-10', 50),
+(59, 37, '2025-05-10', '2025-06-10', 30),
+(60, 37, '2025-05-10', '2025-06-10', 30);
 
 -- --------------------------------------------------------
 
@@ -248,7 +213,8 @@ INSERT INTO `archiveCommande` (`idCommande`, `dateCommande`, `statutCommande`, `
 (457, '2002-09-09 00:00:00', 'en attente', '2002-12-12 00:00:00', 40, '2025-04-19 20:10:36'),
 (516, '2025-05-03 00:00:00', 'expédiée', '2025-05-10 00:00:00', 63, '2025-05-03 16:27:39'),
 (517, '2025-05-03 00:00:00', 'expédiée', '2025-05-10 00:00:00', 68, '2025-05-03 17:29:44'),
-(518, '2025-05-03 00:00:00', 'expédiée', '2025-05-10 00:00:00', 68, '2025-05-03 17:29:44');
+(518, '2025-05-03 00:00:00', 'expédiée', '2025-05-10 00:00:00', 68, '2025-05-03 17:29:44'),
+(527, '2025-05-10 00:00:00', 'expédiée', '2025-05-17 00:00:00', 64, '2025-05-10 00:43:45');
 
 -- --------------------------------------------------------
 
@@ -276,7 +242,9 @@ INSERT INTO `archivelignecommande` (`idLigneCommande`, `idCommande`, `idLivre`, 
 (892, 516, 45, 3, '2025-05-03 16:27:39'),
 (893, 516, 49, 40, '2025-05-03 16:27:39'),
 (894, 517, 2, 27, '2025-05-03 17:29:44'),
-(895, 518, 13, 30, '2025-05-03 17:29:44');
+(895, 518, 13, 30, '2025-05-03 17:29:44'),
+(913, 527, 45, 14, '2025-05-10 00:43:45'),
+(914, 527, 48, 41, '2025-05-10 00:43:45');
 
 -- --------------------------------------------------------
 
@@ -328,7 +296,8 @@ INSERT INTO `avis` (`idAvis`, `idLivre`, `idUser`, `commentaireAvis`, `noteAvis`
 (36, 1, 37, 'test5', 4, '2025-05-03'),
 (38, 2, 37, 'test7', 2, '2025-05-03'),
 (39, 2, 37, 'top', 4, '2025-05-07'),
-(40, 9, 37, 'cool', 3, '2025-05-07');
+(40, 9, 37, 'cool', 3, '2025-05-07'),
+(41, 13, 37, 'pestoyeusement bon', 2, '2025-05-10');
 
 -- --------------------------------------------------------
 
@@ -527,7 +496,17 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (515, '2025-05-03', 'expédiée', '2025-05-10', 37),
 (519, '2025-05-03', 'expédiée', '2025-05-10', 37),
 (520, '2025-05-03', 'expédiée', '2025-05-10', 37),
-(522, NULL, 'en attente', NULL, 37);
+(522, '2025-05-09', 'expédiée', '2025-05-16', 37),
+(523, '2025-05-09', 'expédiée', '2025-05-16', 37),
+(524, '2025-05-09', 'expédiée', '2025-05-16', 37),
+(525, '2025-05-09', 'expédiée', '2025-05-16', 37),
+(526, '2025-05-09', 'expédiée', '2025-05-16', 37),
+(528, '2025-05-10', 'expédiée', '2025-05-17', 37),
+(529, '2025-05-10', 'expédiée', '2025-05-17', 37),
+(530, '2025-05-10', 'expédiée', '2025-05-17', 37),
+(531, '2025-05-10', 'expédiée', '2025-05-17', 37),
+(532, '2025-05-10', 'expédiée', '2025-05-17', 37),
+(533, '2025-05-10', 'expédiée', '2025-05-17', 37);
 
 --
 -- Déclencheurs `commande`
@@ -571,7 +550,8 @@ INSERT INTO `entreprise` (`idUser`, `siretUser`, `raisonSocialeUser`, `capitalSo
 (34, 987987, '987987', 987987.00),
 (59, 12312312312312, 'partent', 1000000.12),
 (61, 12312312312312, 'azd', 1231.10),
-(65, 13123123123, 'okppl', 123123120.00);
+(65, 13123123123, 'okppl', 123123120.00),
+(70, 12312312312312, '00h45', 123123120.00);
 
 -- --------------------------------------------------------
 
@@ -796,7 +776,19 @@ INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quanti
 (898, 520, 2, 1),
 (899, 520, 9, 1),
 (902, 522, 2, 1),
-(907, 522, 13, 3);
+(907, 522, 13, 3),
+(908, 522, 1, 2),
+(909, 523, 1, 1),
+(910, 524, 1, 1),
+(911, 525, 2, 2),
+(912, 526, 2, 1),
+(915, 528, 1, 2),
+(916, 529, 1, 1),
+(917, 530, 1, 1),
+(918, 531, 1, 1),
+(919, 532, 1, 1),
+(920, 533, 1, 2),
+(921, 533, 11, 1);
 
 --
 -- Déclencheurs `ligneCommande`
@@ -858,41 +850,38 @@ CREATE TABLE `livre` (
 --
 
 INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exemplaireLivre`, `prixLivre`, `idCategorie`, `idMaisonEdition`, `idPromotion`) VALUES
-(1, 'Alcools', 'Apollinaire', 'alcools.png', 94, 12.50, 3, 1, 10),
-(2, 'Crime et Chatiment', 'Dostoïevski', 'crime_et_chatiment.png', 48, 15.00, 1, 2, 13),
-(3, 'L`Etranger', 'Camus', 'l_etranger.png', 79, 10.00, 1, 3, 10),
-(4, 'L`Odyssée', 'Homère', 'l_odyssee.png', 89, 13.50, 2, 4, 19),
-(5, 'Les Fleurs du Mal', 'Baudelaire', 'les_fleurs_du_mal.png', 100, 14.00, 3, 5, 14),
-(6, 'PHP et MySQL pour les nuls', 'Valade', 'php_et_mysql_pour_les_nuls.png', 79, 22.00, 4, 6, 10),
-(7, 'Programmer en Java', 'Delannoy', 'programmer_en_java.png', 100, 25.00, 4, 7, 10),
-(8, 'SPQR', 'Beard', 'spqr.png', 99, 18.00, 2, 8, 1),
-(9, 'À la recherche du temps perdu', 'Proust', 'a_la_recherche_du_temps_perdu.png', 92, 0.00, 1, 1, 10),
-(10, 'Les Misérables', 'Hugo', 'les_miserables_I.png', 96, 0.00, 1, 2, 10),
-(11, '1984', 'Orwell', '1984.png', 93, 0.00, 1, 3, 10),
-(12, 'L`Art d\'aimer', 'Ovide', 'l_art_d_aimer', 87, 0.00, 1, 4, 10),
-(13, 'La Peste', 'Camus', 'la_peste.png', 65, 15.99, 1, 1, 10),
-(14, 'Les Mémoires d\'Hadrien', 'Yourcenar', 'les_memoires_d_hadrien.png', 99, 12.99, 1, 1, 10),
-(15, 'La Condition humaine', 'Malraux', 'la_condition_humaine.png', 100, 14.99, NULL, NULL, NULL),
-(16, 'Le Comte de Monte-Cristo', 'Dumas', 'le_comte_de_monte_cristo.png', 100, 9.99, 1, 2, 10),
-(17, 'Orgueil et Préjugés', 'Austen', 'orgueil_et_prejuges.png', 80, 8.99, 1, 2, 10),
-(18, 'Shining', 'King', 'shining.png', 100, 10.99, 1, 2, 10),
+(1, 'Alcools', 'Apollinaire', 'alcools.png', 82, 12.50, 1, 1, 7),
+(2, 'Crime et Chatiment', 'Dostoïevski', 'crime_et_chatiment.png', 44, 15.00, 2, 2, NULL),
+(3, 'L`Etranger', 'Camus', 'l_etranger.png', 79, 10.00, 1, 3, NULL),
+(4, 'L`Odyssée', 'Homère', 'l_odyssee.png', 89, 13.50, 2, 4, NULL),
+(5, 'Les Fleurs du Mal', 'Baudelaire', 'les_fleurs_du_mal.png', 100, 14.00, 3, 5, 3),
+(6, 'PHP et MySQL pour les nuls', 'Valade', 'php_et_mysql_pour_les_nuls.png', 79, 22.00, 4, 6, NULL),
+(7, 'Programmer en Java', 'Delannoy', 'programmer_en_java.png', 100, 25.00, 4, 7, NULL),
+(8, 'SPQR', 'Beard', 'spqr.png', 99, 18.00, 2, 8, 4),
+(9, 'À la recherche du temps perdu', 'Proust', 'a_la_recherche_du_temps_perdu.png', 92, 0.00, 1, 1, 5),
+(10, 'Les Misérables', 'Hugo', 'les_miserables_I.png', 96, 0.00, 1, 2, NULL),
+(11, '1984', 'Orwell', '1984.png', 92, 0.00, 1, 3, NULL),
+(12, 'L`Art d\'aimer', 'Ovide', 'l_art_d_aimer', 87, 0.00, 1, 4, NULL),
+(13, 'La Peste', 'Camus', 'la_peste.png', 62, 15.99, 1, 1, 1),
+(14, 'Les Mémoires d\'Hadrien', 'Yourcenar', 'les_memoires_d_hadrien.png', 99, 12.99, 1, 1, 7),
+(15, 'La Condition humaine', 'Malraux', 'la_condition_humaine.png', 100, 14.99, 2, 1, NULL),
+(16, 'Le Comte de Monte-Cristo', 'Dumas', 'le_comte_de_monte_cristo.png', 100, 9.99, 1, 2, NULL),
+(17, 'Orgueil et Préjugés', 'Austen', 'orgueil_et_prejuges.png', 80, 8.99, 1, 2, NULL),
+(18, 'Shining', 'King', 'shining.png', 100, 10.99, 1, 2, NULL),
 (19, 'Bel-Ami', 'Maupassant', 'bel_ami.png', 99, 11.99, 1, 3, 10),
-(20, 'Fahrenheit 451', 'Bradbury', 'fahrenheit_451.png', 100, 9.99, 1, 3, 10),
-(21, 'La Nuit des temps', 'Barjavel', 'la_nuit_des_temps.png', 100, 12.99, 1, 3, 10),
-(22, 'L`Énéide', 'Virgile', 'l_eneide.png', 100, 19.99, 3, 4, 10),
-(23, 'Les Pensées', 'Aurèle', 'les_pensees.png', 100, 18.99, 3, 4, 10),
-(24, 'Les Métamorphoses', 'Ovide', 'les_metamorphoses.png', 100, 20.99, 3, 4, 10),
-(25, 'Le Petit Livre des citations latines', 'Delamaire', 'le_petit_livre_des_citations_latines.png', 100, 7.99, 3, 6, 10),
-(43, 'Le Petit Livre des grandes coïncidences', 'Chiflet', 'le_petit_livre_des_grandes_coincidences.png', 100, 7.99, 3, 6, 10),
-(44, 'Le Petit Livre des gros mensonges', 'Chiflet', 'le_petit_livre_des_gros_mensonges.png', 100, 7.99, 3, 6, 10),
-(45, 'L`Art de la guerre', 'Sun', 'l_art_de_la_guerre.png', 97, 12.99, 2, 7, 10),
-(46, 'Apprendre à dessiner', 'Edwards', 'apprendre_a_dessiner.png', 100, 14.99, 4, 7, 10),
-(47, 'Le Lean Startup', 'Ries', 'le_lean_startup.png', 100, 16.99, 4, 3, 8),
-(48, 'Les Templiers', 'Demurger', 'les_templiers.png', 100, 18.99, 2, 8, 10),
-(49, 'La Seconde Guerre mondiale', 'Beevor', 'la_seconde_guerre_mondiale.png', 60, 19.99, 2, 8, 10),
-(50, 'Napoléon : Une ambition française', 'Tulard', 'napoleon_une_ambition_francaise.png', 100, 20.99, 2, 8, 10),
-(67, '23h52', '23h52', '23h52.png', 2, 12.10, NULL, NULL, NULL),
-(68, 'azd', 'azd', 'azd.png', 120, 12.10, 4, 4, 15);
+(20, 'Fahrenheit 451', 'Bradbury', 'fahrenheit_451.png', 100, 9.99, 1, 3, NULL),
+(21, 'La Nuit des temps', 'Barjavel', 'la_nuit_des_temps.png', 100, 12.99, 1, 3, 11),
+(22, 'L`Énéide', 'Virgile', 'l_eneide.png', 100, 19.99, 3, 4, NULL),
+(23, 'Les Pensées', 'Aurèle', 'les_pensees.png', 100, 18.99, 3, 4, 12),
+(24, 'Les Métamorphoses', 'Ovide', 'les_metamorphoses.png', 100, 20.99, 3, 4, NULL),
+(25, 'Le Petit Livre des citations latines', 'Delamaire', 'le_petit_livre_des_citations_latines.png', 100, 7.99, 3, 6, 13),
+(43, 'Le Petit Livre des grandes coïncidences', 'Chiflet', 'le_petit_livre_des_grandes_coincidences.png', 100, 7.99, 3, 6, NULL),
+(44, 'Le Petit Livre des gros mensonges', 'Chiflet', 'le_petit_livre_des_gros_mensonges.png', 100, 7.99, 3, 6, NULL),
+(45, 'L`Art de la guerre', 'Sun', 'l_art_de_la_guerre.png', 83, 12.99, 2, 7, NULL),
+(46, 'Apprendre à dessiner', 'Edwards', 'apprendre_a_dessiner.png', 100, 14.99, 4, 7, NULL),
+(48, 'Les Templiers', 'Demurger', 'les_templiers.png', 59, 18.99, 2, 8, NULL),
+(49, 'La Seconde Guerre mondiale', 'Beevor', 'la_seconde_guerre_mondiale.png', 60, 19.99, 2, 8, NULL),
+(50, 'Napoléon : Une ambition française', 'Tulard', 'napoleon_une_ambition_francaise.png', 100, 20.99, 2, 8, NULL);
 
 -- --------------------------------------------------------
 
@@ -942,14 +931,14 @@ INSERT INTO `particulier` (`idUser`, `nomUser`, `prenomUser`, `dateNaissanceUser
 (29, 'ryles', 'ryles', '2022-12-12', 'M'),
 (35, 'yasser', 'yasser', '2010-12-21', 'M'),
 (36, 'yasser', 'yasser', '2010-12-21', 'M'),
-(37, 'part', 'part', '2009-12-12', 'M'),
+(37, 'parto', 'parto', '2004-12-12', 'M'),
 (38, 'uy', 'uy', '2003-03-12', 'M'),
 (42, 'partauth', 'partauth', '2005-02-20', 'M'),
 (46, '16h48', '16h48', '2025-05-20', 'F'),
 (54, 'intpart', 'intpart', '2012-12-12', 'M'),
 (60, '17h35', '17h35', '2005-12-16', 'F'),
 (62, 'bil', 'orebil', '2018-09-12', 'M'),
-(64, 'okppl', 'okppl', '1212-12-12', 'M');
+(69, '00h44', '00h44', '2005-12-12', 'M');
 
 -- --------------------------------------------------------
 
@@ -970,40 +959,30 @@ CREATE TABLE `promotion` (
 --
 
 INSERT INTO `promotion` (`idPromotion`, `nomPromotion`, `dateDebutPromotion`, `dateFinPromotion`, `reductionPromotion`) VALUES
-(1, '10', '2025-05-01', '2025-08-08', 10),
-(2, '20%', '2025-02-01', '1212-12-12', 20),
-(3, '30%', '2025-03-01', '2012-12-12', 30),
-(4, '40%', '2025-03-26', '2012-12-12', 40),
-(5, '50%', '2025-03-26', '2002-12-12', 50),
-(6, '60%', '2025-02-02', '2025-02-10', 60),
-(7, '70%', '2025-03-26', '2026-12-12', 70),
-(8, '80%', '2025-03-26', '2026-12-12', 80),
-(9, '90%', '2025-01-05', '2025-01-20', 90),
-(10, '01h09', '2025-01-05', '2025-01-20', 1),
-(13, '35%', '2025-05-01', '2026-08-08', 35),
-(14, '55%', '2025-05-01', '2001-01-01', 55),
-(15, '36%', '2025-05-01', '2012-02-20', 36),
-(16, '52%', '2025-05-01', '2005-12-12', 52),
-(17, '7%', '2025-05-01', '2012-12-12', 7),
-(18, '67%', '2025-05-01', '2012-12-12', 67),
-(19, '42%', '2025-05-01', '2025-12-12', 42),
-(21, '99%', '2025-01-05', '2025-01-20', 99),
-(29, '88%', '2025-01-05', '2025-01-20', 88),
-(30, '88%', '2025-01-05', '2025-01-20', 88),
-(31, '122%', '2025-01-05', '2025-01-20', 0),
-(32, '22%', '2025-01-05', '2025-01-20', 22),
-(33, 'Nouvelle Promotion', '2025-01-05', '2025-01-20', 10),
-(34, 'Nouvelle Pr', '2025-01-05', '2025-01-20', 22),
-(35, '00h12', '2025-03-26', '2026-12-12', 80),
-(36, '00h12', '2025-03-26', '2026-12-12', 80),
-(37, '00h12', '2025-03-26', '2026-12-12', 80),
-(38, '00h12', '2025-03-26', '2026-12-12', 80),
-(39, '00h13', '2025-01-05', '2025-01-20', 22),
-(40, 'Aucune Promotion', '2025-01-05', '2026-01-20', 22),
-(41, 'Aucune Promotion', '2025-01-05', '2026-01-20', 22),
-(42, 'Aucune Promotion', '2025-01-05', '2026-01-20', 22),
-(43, 'Aucune Promotion', '2025-01-05', '2026-01-20', 22),
-(44, 'Aucune promotion', '2025-01-05', '2025-04-20', 0);
+(1, 'Promo Été 2023', '2023-07-02', '2023-07-31', 10),
+(2, 'Promo Hiver 2023', '2023-12-01', '2023-12-31', 15),
+(3, 'Promo Printemps 2024', '2024-04-01', '2024-04-30', 20),
+(4, 'Promo Automne 2024', '2024-10-01', '2024-10-31', 25),
+(5, 'Promo Spéciale Été', '2023-08-01', '2023-08-31', 30),
+(6, 'Promo Spéciale Hiver', '2023-11-01', '2023-11-30', 35),
+(7, 'Promo Spéciale Printemps', '2024-05-01', '2024-05-31', 40),
+(8, 'Promo Spéciale Automne', '2024-09-01', '2024-09-30', 45),
+(9, 'Promo Été Flash', '2023-07-15', '2023-07-20', 50),
+(10, 'Promo Hiver Flash', '2023-12-15', '2023-12-20', 55),
+(11, 'Promo Printemps Flash', '2024-04-15', '2024-04-20', 60),
+(12, 'Promo Automne Flash', '2024-10-15', '2024-10-21', 65),
+(13, 'Promo Été Mega', '2023-07-01', '2023-07-10', 10),
+(14, 'Promo Hiver Mega', '2023-12-01', '2023-12-10', 15),
+(15, 'Promo Printemps Mega', '2024-04-01', '2024-04-10', 20),
+(16, 'Promo Automne Mega', '2024-10-01', '2024-10-10', 25),
+(17, 'Promo Été Super', '2023-07-20', '2023-07-31', 30),
+(18, 'Promo Hiver Super', '2023-12-20', '2023-12-31', 35),
+(19, 'Promo Printemps Super', '2024-04-20', '2024-04-30', 40),
+(20, 'Promo Automne Super', '2024-10-20', '2024-10-31', 45),
+(85, '15h07', '2025-05-09', '2025-09-12', 14),
+(86, '15h08', '2025-05-09', '2025-05-12', 12),
+(87, '15h09', '2025-12-09', '2025-12-12', 1),
+(88, '15h10', '2025-02-20', '2025-02-21', 31);
 
 -- --------------------------------------------------------
 
@@ -1043,7 +1022,7 @@ INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`)
 (34, '987987@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '47 Allée des Chênes', 'particulier'),
 (35, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '15 Route du Soleil', 'particulier'),
 (36, 'yasser@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '63 Place du Marché', 'particulier'),
-(37, 'part@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '17 rue des moulins', 'particulier'),
+(37, 'parto@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '17 rue des moulins', 'particulier'),
 (38, 'uy@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'uy', 'particulier'),
 (42, 'partauth@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'partauth', 'particulier'),
 (43, 'entauth@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'entauth', 'entreprise'),
@@ -1054,8 +1033,9 @@ INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`)
 (60, '17h35@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '17h35', 'particulier'),
 (61, 'azd@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'azd', 'entreprise'),
 (62, 'azd@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'azd', 'particulier'),
-(64, 'okppl@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'okppl', 'particulier'),
-(65, 'aiozjdazij@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'okppl', 'entreprise');
+(65, 'aiozjdazij@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'okppl', 'entreprise'),
+(69, '00h44@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '00h44', 'particulier'),
+(70, '00h45@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '00h45', 'entreprise');
 
 --
 -- Déclencheurs `user`
@@ -1432,7 +1412,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `abonnement`
 --
 ALTER TABLE `abonnement`
-  MODIFY `idAbonnement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `idAbonnement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT pour la table `admin`
@@ -1444,61 +1424,61 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT pour la table `avis`
 --
 ALTER TABLE `avis`
-  MODIFY `idAvis` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `idAvis` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT pour la table `categorie`
 --
 ALTER TABLE `categorie`
-  MODIFY `idCategorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idCategorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=523;
+  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=534;
 
 --
 -- AUTO_INCREMENT pour la table `entreprise`
 --
 ALTER TABLE `entreprise`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT pour la table `ligneCommande`
 --
 ALTER TABLE `ligneCommande`
-  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=908;
+  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=922;
 
 --
 -- AUTO_INCREMENT pour la table `livre`
 --
 ALTER TABLE `livre`
-  MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT pour la table `maisonEdition`
 --
 ALTER TABLE `maisonEdition`
-  MODIFY `idMaisonEdition` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `idMaisonEdition` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT pour la table `particulier`
 --
 ALTER TABLE `particulier`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT pour la table `promotion`
 --
 ALTER TABLE `promotion`
-  MODIFY `idPromotion` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `idPromotion` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- Contraintes pour les tables déchargées

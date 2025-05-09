@@ -17,6 +17,28 @@ inner join commande c
 on c.idCommande=li.idCommande;
 
 
+create or replace view vTotalLivreMax as
+SELECT li.idCommande, c.idUser, l.nomLivre, l.prixLivre, li.quantiteLigneCommande,
+(l.prixLivre * li.quantiteLigneCommande) AS totalLivre
+FROM livre l
+inner JOIN ligneCommande li
+ON l.idLivre = li.idLivre
+inner join commande c
+on c.idCommande=li.idCommande
+order by totalLivre desc;
+
+
+create or replace view vTotalLivreMin as
+SELECT li.idCommande, c.idUser, l.nomLivre, l.prixLivre, li.quantiteLigneCommande,
+(l.prixLivre * li.quantiteLigneCommande) AS totalLivre
+FROM livre l
+inner JOIN ligneCommande li
+ON l.idLivre = li.idLivre
+inner join commande c
+on c.idCommande=li.idCommande
+order by totalLivre asc;
+
+
 create or replace view vTotalCommandeEnAttente as
 select c.idUser, sum(l.prixLivre * li.quantiteLigneCommande) as totalCommande
 from commande c

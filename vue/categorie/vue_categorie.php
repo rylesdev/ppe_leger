@@ -109,7 +109,7 @@ require_once("includes/header.php");
                                 </td>
                                 <td class="px-4 py-3">
                                     <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
-                                        <?= htmlspecialchars($unControleur->selectNomCategorieById($unLivre['idCategorie'])[0][0]) ?>
+                                        <?= htmlspecialchars($unControleur->selectNomCategorieById($unLivre['idCategorie'])[0][0]); ?>
                                     </span>
                                 </td>
                                 <td class="px-4 py-3">

@@ -44,13 +44,13 @@ $dateCommande = $unControleur->selectDateLivraisonCommande($idUser)[0];
                         stars.forEach(s => s.classList.remove('text-yellow-400'));
                         stars.forEach(s => s.classList.add('text-gray-300'));
 
-                        // Colorier les étoiles jusqu'à celle cliquée (incluse)
+                        // Colorier les étoiles de gauche à droite jusqu'à celle cliquée (incluse)
                         for (let i = 0; i <= index; i++) {
                             stars[i].classList.remove('text-gray-300');
                             stars[i].classList.add('text-yellow-400');
                         }
 
-                        // CORRECTION: Cocher explicitement le bouton radio correspondant
+                        // Cocher explicitement le bouton radio correspondant
                         inputs[index].checked = true;
                     });
                 });
@@ -68,7 +68,7 @@ $dateCommande = $unControleur->selectDateLivraisonCommande($idUser)[0];
                         <select name="idCommandeSelectionnee" id="idCommandeSelectionnee" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-900">
                             <option value="">Toutes mes commandes</option>
                             <?php foreach ($toutesLesCommandes as $cmd):
-                                $nbArticles = $unControleur->countLigneCommande($cmd['idCommande']);
+                                $nbArticles = $unControleur->countLigneCommande($cmd['idCommande'])[0][0];
                                 $dateFormatee = date('d/m/Y à H:i', strtotime($cmd['dateCommande']));
                                 ?>
                                 <option value="<?= $cmd['idCommande'] ?>" <?= ($cmd['idCommande'] == $idCommandeSelectionnee) ? 'selected' : '' ?>>
@@ -193,15 +193,6 @@ $dateCommande = $unControleur->selectDateLivraisonCommande($idUser)[0];
                             <p class="font-medium text-blue-900"><?= $dateCommande ?></p>
                         </div>
                     </div>
-                </div>
-
-                <div class="mt-6 text-center">
-                    <button class="bg-blue-900 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-800 transition duration-300 inline-flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                        </svg>
-                        Afficher la facture
-                    </button>
                 </div>
             </div>
         </div>
