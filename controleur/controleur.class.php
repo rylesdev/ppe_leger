@@ -228,10 +228,6 @@ class Controleur {
         return $this->unModele->insertCommande($idUser);
     }
 
-    public function procedureInsertOrUpdateLigneCommande($idCommande, $idLivre, $quantiteLigneCommande){
-        return $this->unModele->procedureInsertOrUpdateLigneCommande($idCommande, $idLivre, $quantiteLigneCommande);
-    }
-
     public function insertAbonnement1m($idUser){
         return $this->unModele->insertAbonnement1m($idUser);
     }
@@ -368,15 +364,15 @@ class Controleur {
 
 
     /**************** PROCEDURE ****************/
+    public function procedureInsertOrUpdateLigneCommande($idCommande, $idLivre, $quantiteLigneCommande){
+        return $this->unModele->procedureInsertOrUpdateLigneCommande($idCommande, $idLivre, $quantiteLigneCommande);
+    }
+
     public function procedureOffrirLivre($idUser, $chiffre) {
         return $this->unModele->procedureOffrirLivre($idUser, $chiffre);
     }
 
     public function procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition, $nomPromotion) {
         return $this->unModele->procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition, $nomPromotion);
-    }
-
-    public function procedureInsertOrUpdatePromotion($nomLivre, $reductionPromotion, $dateFinPromotion) {
-        return $this->unModele->procedureInsertOrUpdatePromotion($nomLivre, $reductionPromotion, $dateFinPromotion);
     }
 }

@@ -51,10 +51,50 @@ $livresPromotion = $unControleur->selectLivrePromotion();
 <!-- Contenu principal -->
 <div class="container d-flex justify-content-center">
     <div class="w-75">
-        <!-- Images container - on garde la structure existante -->
-        <div class="images-container">
-            <img src="images/livreOffert.png" height="500" width="450" class="image">
-            <img src="images/accueil.png" height="400" width="800" class="image">
+        <!-- Carrousel de livres à la une -->
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="d-flex justify-content-center">
+                        <img src="images/livres/programmer_en_java.png" class="d-block" alt="Programmer en Java" style="max-width: 200px; height: auto;">
+                    </div>
+                    <div class="carousel-caption d-none d-md-block" style="background: rgba(0, 0, 0, 0.5); border-radius: 10px; padding: 10px;">
+                        <h5 style="font-size: 1.2em;">Programmer en Java</h5>
+                        <p style="font-size: 0.9em;">Découvrez les bases de la programmation en Java.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex justify-content-center">
+                        <img src="images/livres/les_pensees.png" class="d-block" alt="Les Pensées" style="max-width: 200px; height: auto;">
+                    </div>
+                    <div class="carousel-caption d-none d-md-block" style="background: rgba(0, 0, 0, 0.5); border-radius: 10px; padding: 10px;">
+                        <h5 style="font-size: 1.2em;">Les Pensées</h5>
+                        <p style="font-size: 0.9em;">Explorez les pensées philosophiques.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex justify-content-center">
+                        <img src="images/livres/la_peste.png" class="d-block" alt="La Peste" style="max-width: 200px; height: auto;">
+                    </div>
+                    <div class="carousel-caption d-none d-md-block" style="background: rgba(0, 0, 0, 0.5); border-radius: 10px; padding: 10px;">
+                        <h5 style="font-size: 1.2em;">La Peste</h5>
+                        <p style="font-size: 0.9em;">Un classique de la littérature française.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
 
         <!-- Section livre offert - style mis à jour -->
@@ -232,6 +272,9 @@ $livresPromotion = $unControleur->selectLivrePromotion();
         </div>
     </div>
 </div>
+
+<!-- Ajout du script Bootstrap pour le carrousel -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <?php require_once("includes/footer.php"); ?>
 </body>

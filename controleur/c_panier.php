@@ -15,7 +15,7 @@ $idUser = $_SESSION['idUser'];
  * Offre un livre aléatoire à l'utilisateur
  */
 function fOffrirLivre($idUser, $controleur) {
-    $chiffre = rand(1, 5);
+    $chiffre = rand(5, 5);
     $result = $controleur->procedureOffrirLivre($idUser, $chiffre);
 
     if (!$result) {
@@ -44,7 +44,7 @@ function fUpdateCommande($idCommande, $controleur) {
  * Ajoute des points d'abonnement
  */
 function fAjouterPointAbonnement($idUser, $idCommande, $controleur) {
-    if ($controleur->selectDateAbonnement($idUser)[0] >= 0) {
+    if ($controleur->selectDateAbonnement($idUser)[0][0] > 0) {
         $nbArticles = $controleur->selectNbLigneCommande($idCommande)[0];
         $points = $nbArticles * 10;
         $result = $controleur->ajouterPointAbonnement($points, $idUser);
@@ -100,8 +100,6 @@ if (isset($_GET['action'])) {
                     fUpdateCommande($idCommande, $unControleur);
                     fAjouterPointAbonnement($idUser, $idCommande, $unControleur);
 
-                    header("Location: https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR");
-                    exit();
                 } else {
                     echo "<div class='alert alert-danger'>Aucune commande en cours trouvée</div>";
                 }

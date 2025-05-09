@@ -73,7 +73,7 @@ if (!isset($_SESSION['emailUser'])) {
         }
 
 
-        $dateAbonnement = $unControleur->selectDateAbonnement($idUser)[0];
+        $dateAbonnement = $unControleur->selectDateAbonnement($idUser)[0][0];
         if ($dateAbonnement == null || $dateAbonnement == 0 || $dateAbonnement <= 0) {
             echo "<br> <h3> Vous n'avez pas d'abonnement en cours. </h3>";
         } elseif ($dateAbonnement !== null ) {

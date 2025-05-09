@@ -1,57 +1,23 @@
 A FAIRE :
+    - Mettre en avant les messages suite à une action (livre offert par exemple)
 
+    - Enlever les messages d'erreur de $idUser sur les pages quand on n'est pas connecté.
 
-- Enlever les messages d'erreur de $idUser.
-
-- Mettre ce message "Vous devez être connecté pour accéder à cette page" sur toutes les pages (mêmes celles innaccessibles).
-
-
-
-
-    - URGENT : Mettre du bootstrap sur une page
-
-    - Régler le problème des promotion et faire une exception lorsque nomPromotion='Aucune promotion'
+    - Mettre ce message "Vous devez être connecté pour accéder à cette page" sur toutes les pages (mêmes celles innaccessibles).
 
     - Supprimer tous les fichier "// A Supprimer"
-
-    - Dans la page Commande, corriger le tri de prix qui se fait par le prix d'un livre et non par le prix total
 
     - Trier les views et sélectionner les meilleures pour les statistiques.
 
     - Utiliser le système de 'TEXT 1, 2, etc...' pour tous les triggers.
 
     - Vérifier la logique de chaque controleur de page (vue + controleur principal + modele) et s'assurer qu'il y ai pas d'incohérence avec les méthodes/$_SESSION notamment.
-        - Repasser une dernière fois sur le modele pour trier les méthodes.
 
     - Modifier les vues pour qu'elles soient plus intéressantes.
 
     - Trier tous les fichiers .css et supprimer ceux qui sont inutiles.
 
-    - Rendre le site plus esthétique avec tailwind.css et alpine.js en demandant à claude.
-
     - Éventuellement donner des permissions différentes entre les différents admins (principal, junior, etc...).
-
-
-
-
-    FRONT-END
-        Page Connexion :
-            - Rendre la page plus esthétique.
-            - Réduire la taille des boutons.
-            - Mettre une image ou une couleur de fond qui sera la même que sur les autres pages du site.
-            - Mettre les vues Inscription et Connexion dans un carré.
-            - Modifier les logos pour faire quelque chose de plus minimaliste.
-
-
-        Page Panier :
-            - (c_panier.php) Trouver un moyen pour que, quand le user clique sur Paypal,
-                l'utilisateur soit redirigé vers Paypal.
-                "header("Location: https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR");"
-
-            - (c_abonnement.php) Lorsque l'utilisateur clique sur l'abonnement,
-                il faut qu'il soit redirigé vers Paypal.
-                "header("Location: https://paypal.me/rylesatm?country.x=FR&locale.x=fr_FR");"
-
 
 
 

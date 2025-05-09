@@ -1,4 +1,6 @@
 <?php
+error_reporting(0);
+
 $idUser = $_SESSION['idUser'];
 
 if (isset($_POST['action']) && $_POST['action'] == 'AjouterPanier') {
