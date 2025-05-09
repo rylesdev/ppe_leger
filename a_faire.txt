@@ -1,11 +1,13 @@
 A FAIRE :
-    - Mettre en avant les messages suite à une action (livre offert par exemple)
+    - Modifier tous les enregistrements de toutes les tables pour faire quelque chose de propre.
+
+    - Mettre en avant les messages suite à une action (livre offert par exemple).
 
     - Enlever les messages d'erreur de $idUser sur les pages quand on n'est pas connecté.
 
     - Mettre ce message "Vous devez être connecté pour accéder à cette page" sur toutes les pages (mêmes celles innaccessibles).
 
-    - Supprimer tous les fichier "// A Supprimer"
+    - Supprimer tous les fichier "// A Supprimer".
 
     - Trier les views et sélectionner les meilleures pour les statistiques.
 
