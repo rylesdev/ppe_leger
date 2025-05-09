@@ -98,9 +98,9 @@ require_once("includes/header.php");
                             echo "</td>";
 
                             // Noms au lieu des IDs
-                            echo "<td class='px-4 py-4'>" . htmlspecialchars($unControleur->selectNomCategorieById($unLivre['idCategorie'])[0]) . "</td>";
-                            echo "<td class='px-4 py-4'>" . htmlspecialchars($unControleur->selectNomMaisonEditionById($unLivre['idMaisonEdition'])[0]) . "</td>";
-                            echo "<td class='px-4 py-4'>" . htmlspecialchars($unControleur->selectNomPromotionById($unLivre['idPromotion'])[0]) . "</td>";
+                            echo "<td class='px-4 py-4'>" . htmlspecialchars($unControleur->selectNomCategorieById($unLivre['idCategorie'])[0][0]) . "</td>";
+                            echo "<td class='px-4 py-4'>" . htmlspecialchars($unControleur->selectNomMaisonEditionById($unLivre['idMaisonEdition'])[0][0]) . "</td>";
+                            echo "<td class='px-4 py-4'>" . htmlspecialchars($unControleur->selectNomPromotionById($unLivre['idPromotion'])[0][0]) . "</td>";
 
                             // Opérations admin
                             echo "<td class='px-4 py-4'>";
@@ -131,14 +131,14 @@ require_once("includes/header.php");
 
                             // Catégorie
                             echo "<td class='px-4 py-4'>";
-                            echo "<span class='px-2 py-1 bg-blue-100 text-blue-900 rounded-full text-xs font-medium'>" . htmlspecialchars($unControleur->selectNomCategorieById($unLivre['idCategorie'])) . "</span>";
+                            echo "<span class='px-2 py-1 bg-blue-100 text-blue-900 rounded-full text-xs font-medium'>" . htmlspecialchars($unControleur->selectNomCategorieById($unLivre['idCategorie'])[0][0]) . "</span>";
                             echo "</td>";
 
                             // Auteur
                             echo "<td class='px-4 py-4 text-gray-700'>" . htmlspecialchars($unLivre['auteurLivre']) . "</td>";
 
                             // Maison d'édition
-                            echo "<td class='px-4 py-4 text-gray-700'>" . htmlspecialchars($unControleur->selectNomMaisonEditionById($unLivre['idMaisonEdition'])) . "</td>";
+                            echo "<td class='px-4 py-4 text-gray-700'>" . htmlspecialchars($unControleur->selectNomMaisonEditionById($unLivre['idMaisonEdition'])[0][0]) . "</td>";
 
                             // Exemplaires
                             $stockClass = '';

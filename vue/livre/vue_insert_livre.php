@@ -117,8 +117,8 @@ $promotion = $unControleur->selectPromotion();
                                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-900">
                             <option value="">-- Sélectionnez --</option>
                             <?php foreach ($promotion as $unePromotion): ?>
-                                <option value="<?= htmlspecialchars($unePromotion['nomPromotion']) ?>"
-                                    <?= ($leLivre != null && $leLivre['nomPromotion'] === $unePromotion['nomPromotion']) ? 'selected' : '' ?>>
+                                <option value="<?= htmlspecialchars($unePromotion['idPromotion']) ?>"
+                                    <?= ($leLivre != null && $leLivre['idPromotion'] === $unePromotion['idPromotion']) ? 'selected' : '' ?>>
                                     <?= htmlspecialchars($unePromotion['nomPromotion']) ?>
                                 </option>
                             <?php endforeach; ?>

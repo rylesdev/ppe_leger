@@ -304,62 +304,6 @@ END $$
 DELIMITER ;
 
 
-// Procédure qui sert à insert ou à update une promotion
-DELIMITER $$
-CREATE PROCEDURE pInsertOrUpdatePromotion(
-    IN in_nomLivre VARCHAR(255),
-    IN in_reductionPromotion INT,
-    IN in_dateFinPromotion DATE
-)
-BEGIN
-    DECLARE p_idLivre INT;
-    DECLARE p_newIdPromotion INT;
-    DECLARE p_message VARCHAR(255);
-
-    SELECT idLivre INTO p_idLivre
-    FROM livre
-    WHERE nomLivre = in_nomLivre
-    LIMIT 1;
-
-    IF p_idLivre IS NULL THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'TEXT 1';
-    END IF;
-
-    SELECT idPromotion INTO p_newIdPromotion
-    FROM promotion
-    WHERE reductionPromotion = in_reductionPromotion
-    ORDER BY idPromotion DESC
-    LIMIT 1;
-
-    IF p_newIdPromotion IS NOT NULL THEN
-        UPDATE promotion
-        SET dateFinPromotion = in_dateFinPromotion
-        WHERE idPromotion = p_newIdPromotion;
-
-        UPDATE livre
-        SET idPromotion = p_newIdPromotion
-        WHERE idLivre = p_idLivre;
-
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'TEXT 2';
-    ELSE
-        INSERT INTO promotion (idPromotion, nomPromotion, dateDebutPromotion, dateFinPromotion, reductionPromotion)
-        VALUES (NULL, CONCAT(in_reductionPromotion, '%'), CURDATE(), in_dateFinPromotion, in_reductionPromotion);
-
-        SELECT LAST_INSERT_ID() INTO p_newIdPromotion;
-
-        UPDATE livre
-        SET idPromotion = p_newIdPromotion
-        WHERE idLivre = p_idLivre;
-
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'TEXT 3';
-    END IF;
-END $$
-DELIMITER ;
-
-
 
 EVENT :
 // Event qui sert à mettre à jour le statutCommande en fonction de la dateLivraisonCommande et de la date actuelle.

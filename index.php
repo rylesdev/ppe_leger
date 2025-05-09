@@ -14,18 +14,18 @@ if (isset($_SESSION['idUser'])) {
 }
 
 // Gestion de la redirection avant tout output HTML
-if (isset($_GET['page']) && $_GET['page'] == 10) {
+if (isset($_GET['page']) && $_GET['page'] == 11) {
     if (isset($_SESSION['emailUser']) && $_SESSION['emailUser'] != NULL) {
         if (isset($_POST['ConfirmerDeconnexion'])) {
             session_unset();
             session_destroy();
-            header("Location: index.php?page=11");
+            header("Location: index.php?page=12");
             exit();
         }
         // Si déconnexion n'est pas confirmée, continuer avec l'affichage normal
     } else {
         // Si l'utilisateur n'est pas connecté, rediriger directement
-        header("Location: index.php?page=11");
+        header("Location: index.php?page=12");
         exit();
     }
 }
@@ -83,19 +83,26 @@ if (isset($_GET['page']) && $_GET['page'] == 10) {
                         </a>
                     <?php endif; ?>
                     <?php if ($isAdmin == 1): ?>
+                        <a href="index.php?page=9" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
+                            <i class="fas fa-list mr-2"></i> Catégorie
+                        </a>
+                        <a href="index.php?page=8" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h2M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
+                            Maison d'Édition
+                        </a>
                         <a href="index.php?page=7" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
                             <i class="fas fa-tags mr-2"></i> Promotion
                         </a>
-                        <a href="index.php?page=8" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
-                            <i class="fas fa-warehouse mr-2"></i> Stockage
-                        </a>
-                        <a href="index.php?page=9" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
-                            <i class="fas fa-chart-bar mr-2"></i> Statistique
+                        <a href="index.php?page=10" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
+                            <i class="fas fa-chart-bar mr-2"></i> Statistiques
                         </a>
                     <?php endif; ?>
-                    <a href="index.php?page=10" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
+                    <a href="index.php?page=11" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
                         <i class="fas fa-sign-out-alt mr-2"></i> Authentification
                     </a>
+
                 </div>
             </div>
             <!-- Hamburger Menu Button -->
@@ -131,17 +138,20 @@ if (isset($_GET['page']) && $_GET['page'] == 10) {
                 </a>
             <?php endif; ?>
             <?php if ($isAdmin == 1): ?>
+                <a href="index.php?page=9" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
+                    <i class="fas fa-list mr-2"></i> Catégorie
+                </a>
+                <a href="index.php?page=8" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
+                    <i class="fas fa-warehouse mr-2"></i> Maison d'Édition
+                </a>
                 <a href="index.php?page=7" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
                     <i class="fas fa-tags mr-2"></i> Promotion
                 </a>
-                <a href="index.php?page=8" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
-                    <i class="fas fa-warehouse mr-2"></i> Stockage
-                </a>
-                <a href="index.php?page=9" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
-                    <i class="fas fa-chart-bar mr-2"></i> Statistique
+                <a href="index.php?page=10" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
+                    <i class="fas fa-chart-bar mr-2"></i> Statistiques
                 </a>
             <?php endif; ?>
-            <a href="index.php?page=10" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
+            <a href="index.php?page=12" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
                 <i class="fas fa-sign-out-alt mr-2"></i> Authentification
             </a>
         </div>
@@ -165,10 +175,10 @@ if (isset($_GET['page']) && $_GET['page'] == 10) {
         case 5: require_once("controleur/c_abonnement.php"); break;
         case 6: require_once("controleur/c_user.php"); break;
         case 7: require_once("controleur/c_promotion.php"); break;
-        case 8: require_once("controleur/c_stockage.php"); break;
-        case 9: require_once("controleur/c_statistique.php"); break;
-        case 10:
-            // On affiche uniquement le formulaire de déconnexion car la redirection a déjà été traitée
+        case 8: require_once("controleur/c_maisonEdition.php"); break;
+        case 9: require_once("controleur/c_categorie.php"); break;
+        case 10: require_once("controleur/c_statistique.php"); break;
+        case 11:
             if (isset($_SESSION['emailUser']) && $_SESSION['emailUser'] != NULL) {
                 ?>
                 <div class="bg-white rounded-xl shadow-lg p-8 max-w-md mx-auto mt-8">
@@ -186,7 +196,7 @@ if (isset($_GET['page']) && $_GET['page'] == 10) {
                 <?php
             }
             break;
-        case 11:
+        case 12:
             require_once("controleur/c_authentification.php");
             break;
     }

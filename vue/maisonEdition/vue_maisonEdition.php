@@ -1,28 +1,28 @@
 <?php
-$titrePage = "Gestion des promotions";
+$titrePage = "Gestion des maisons d'édition";
 require_once("includes/header.php");
 ?>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
 
 <div class="container mx-auto px-4 py-6 w-full max-w-[85%]">
-    <h3 class="text-2xl font-bold text-center mb-6 text-indigo-900">Gestion des promotions</h3>
+    <h3 class="text-2xl font-bold text-center mb-6 text-indigo-900">Gestion des maisons d'édition</h3>
 
     <!-- Tableaux côte à côte -->
     <div class="flex flex-col lg:flex-row gap-8 justify-center">
-        <!-- Tableau des promotions -->
+        <!-- Tableau des maisons d'édition -->
         <div class="w-full lg:w-1/2">
             <div class="flex justify-between items-center mb-4">
                 <h4 class="text-xl font-semibold text-gray-800">
-                    Liste des promotions
+                    Liste des maisons d'édition
                     <span class="bg-blue-900 text-white px-2 py-1 rounded-full text-sm ml-2">
-                        <?= count($lesPromotions) ?>
+                        <?= count($lesMaisonsEdition) ?>
                     </span>
                 </h4>
                 <form method="post" class="flex items-center">
-                    <input type="text" name="filtrePromotion" placeholder="Filtrer..."
+                    <input type="text" name="filtreMaisonEdition" placeholder="Filtrer..."
                            class="border border-gray-300 rounded-l px-3 py-1 focus:outline-none focus:ring-1 focus:ring-blue-900 text-sm">
-                    <input type="submit" name="FiltrerPromotion" value="Filtrer"
+                    <input type="submit" name="FiltrerMaisonEdition" value="Filtrer"
                            class="bg-blue-900 hover:bg-blue-800 text-white px-3 py-1 rounded-r cursor-pointer text-sm">
                 </form>
             </div>
@@ -33,50 +33,32 @@ require_once("includes/header.php");
                     <tr class="bg-blue-900 text-white">
                         <th class="px-4 py-2 text-left">ID</th>
                         <th class="px-4 py-2 text-left">Nom</th>
-                        <th class="px-4 py-2 text-left">Début</th>
-                        <th class="px-4 py-2 text-left">Fin</th>
-                        <th class="px-4 py-2 text-left">Réduction</th>
                         <th class="px-4 py-2 text-left">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <?php if (isset($lesPromotions)): ?>
-                        <?php foreach ($lesPromotions as $unePromotion): ?>
-                            <?php
-                            $dateActuelle = date('Y-m-d');
-                            $estActive = ($dateActuelle >= $unePromotion['dateDebutPromotion'] &&
-                                $dateActuelle <= $unePromotion['dateFinPromotion']);
-                            ?>
+                    <?php if (isset($lesMaisonsEdition)): ?>
+                        <?php foreach ($lesMaisonsEdition as $uneMaisonEdition): ?>
                             <tr class="border-b hover:bg-blue-50 transition">
-                                <td class="px-4 py-3"><?= htmlspecialchars($unePromotion['idPromotion']) ?></td>
-                                <td class="px-4 py-3 font-medium">
-                                    <?= htmlspecialchars($unePromotion['nomPromotion']) ?>
-                                    <?php if ($estActive): ?>
-                                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded ml-2">Active</span>
-                                    <?php endif; ?>
-                                </td>
-                                <td class="px-4 py-3"><?= htmlspecialchars($unePromotion['dateDebutPromotion']) ?></td>
-                                <td class="px-4 py-3"><?= htmlspecialchars($unePromotion['dateFinPromotion']) ?></td>
-                                <td class="px-4 py-3 text-blue-600 font-medium">
-                                    <?= htmlspecialchars($unePromotion['reductionPromotion']) ?>%
-                                </td>
+                                <td class="px-4 py-3"><?= htmlspecialchars($uneMaisonEdition['idMaisonEdition']) ?></td>
+                                <td class="px-4 py-3 font-medium"><?= htmlspecialchars($uneMaisonEdition['nomMaisonEdition']) ?></td>
                                 <td class="px-4 py-3">
                                     <div class="flex space-x-2">
-                                        </a>
-                                        <a href="index.php?page=7&action=sup&idPromotion=<?= $unePromotion['idPromotion'] ?>"
+                                        <a href="index.php?page=8&action=sup&idMaisonEdition=<?= $uneMaisonEdition['idMaisonEdition'] ?>"
                                            class="text-red-600 hover:text-red-800" title="Supprimer">
                                             <i class="fas fa-trash-alt"></i>
-                                            <a href="index.php?page=7&action=edit&idPromotion=<?= $unePromotion['idPromotion'] ?>"
-                                               class="text-blue-600 hover:text-blue-800" title="Modifier">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                                        </a>
+                                        <a href="index.php?page=8&action=edit&idMaisonEdition=<?= $uneMaisonEdition['idMaisonEdition'] ?>"
+                                           class="text-blue-600 hover:text-blue-800" title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="6" class="px-4 py-3 text-center text-gray-500">Aucune promotion disponible</td>
+                            <td colspan="3" class="px-4 py-3 text-center text-gray-500">Aucune maison d'édition disponible</td>
                         </tr>
                     <?php endif; ?>
                     </tbody>
@@ -129,20 +111,20 @@ require_once("includes/header.php");
                                     <?= htmlspecialchars($unControleur->selectNomCategorieById($unLivre['idCategorie'])[0][0]) ?>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <?= htmlspecialchars($unControleur->selectNomMaisonEditionById($unLivre['idMaisonEdition'])[0][0]) ?>
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
+                                        <?= htmlspecialchars($unControleur->selectNomMaisonEditionById($unLivre['idMaisonEdition'])[0][0]) ?>
+                                    </span>
                                 </td>
                                 <td class="px-4 py-3">
                                     <?php if (!empty($unLivre['idPromotion'])): ?>
-                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
-                                                <?= htmlspecialchars($unLivre['idPromotion']) ?>
-                                            </span>
+                                        <?= htmlspecialchars($unLivre['idPromotion']) ?>
                                     <?php else: ?>
                                         <span class="text-gray-500 text-sm">Aucune</span>
                                     <?php endif; ?>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <a href="index.php?page=7&action=associer&idLivre=<?= $unLivre['idLivre'] ?>"
-                                       class="text-purple-600 hover:text-purple-800" title="Associer promotion">
+                                    <a href="index.php?page=8&action=associer&idLivre=<?= $unLivre['idLivre'] ?>"
+                                       class="text-purple-600 hover:text-purple-800" title="Associer maison d'édition">
                                         <i class="fas fa-tag"></i>
                                     </a>
                                 </td>
