@@ -31,8 +31,4 @@
             <small><span class="auth-required">*</span> Champs obligatoires</small>
         </div>
     </form>
-
-    <div class="text-center mt-4">
-        <a href="#" class="auth-link">Mot de passe oublié ?</a>
-    </div>
 </div>
