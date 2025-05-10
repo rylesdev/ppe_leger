@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : ven. 09 mai 2025 à 23:26
+-- Généré le : sam. 10 mai 2025 à 11:07
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -180,7 +180,7 @@ INSERT INTO `abonnement` (`idAbonnement`, `idUser`, `dateDebutAbonnement`, `date
 CREATE TABLE `admin` (
   `idAdmin` int NOT NULL,
   `idUser` int DEFAULT NULL,
-  `niveauAdmin` enum('principal','junior','superadmin') NOT NULL
+  `niveauAdmin` enum('principal','gestionnaire') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -188,7 +188,8 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`idAdmin`, `idUser`, `niveauAdmin`) VALUES
-(1, 1, 'principal');
+(1, 1, 'principal'),
+(2, 2, 'gestionnaire');
 
 -- --------------------------------------------------------
 
@@ -219,10 +220,10 @@ INSERT INTO `archiveCommande` (`idCommande`, `dateCommande`, `statutCommande`, `
 -- --------------------------------------------------------
 
 --
--- Structure de la table `archivelignecommande`
+-- Structure de la table `archiveLigneCommande`
 --
 
-CREATE TABLE `archivelignecommande` (
+CREATE TABLE `archiveLigneCommande` (
   `idLigneCommande` int NOT NULL,
   `idCommande` int DEFAULT NULL,
   `idLivre` int DEFAULT NULL,
@@ -231,10 +232,10 @@ CREATE TABLE `archivelignecommande` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Archive des lignes de commande';
 
 --
--- Déchargement des données de la table `archivelignecommande`
+-- Déchargement des données de la table `archiveLigneCommande`
 --
 
-INSERT INTO `archivelignecommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quantiteLigneCommande`, `date_archivage`) VALUES
+INSERT INTO `archiveLigneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quantiteLigneCommande`, `date_archivage`) VALUES
 (724, 457, 3, 10, '2025-04-19 20:10:36'),
 (725, 457, 5, 20, '2025-04-19 20:10:36'),
 (726, 457, 4, 30, '2025-04-19 20:10:36'),
@@ -1004,7 +1005,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`) VALUES
 (1, 'ryles@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '123 Rue des Lilas', 'admin'),
-(2, 'jean@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '45 Avenue de la République', 'particulier'),
+(2, 'jean@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '45 Avenue de la République', 'admin'),
 (12, 'm', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '78 Boulevard Haussmann', 'particulier'),
 (13, 'klza', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '9 Place de la Liberté', 'particulier'),
 (14, 'poi', '123', '56 Rue Victor Hugo', 'particulier'),
@@ -1328,9 +1329,9 @@ ALTER TABLE `archiveCommande`
   ADD KEY `idx_date_archivage` (`date_archivage`);
 
 --
--- Index pour la table `archivelignecommande`
+-- Index pour la table `archiveLigneCommande`
 --
-ALTER TABLE `archivelignecommande`
+ALTER TABLE `archiveLigneCommande`
   ADD PRIMARY KEY (`idLigneCommande`,`date_archivage`),
   ADD KEY `idx_commande` (`idCommande`),
   ADD KEY `idx_date_archivage` (`date_archivage`),
@@ -1418,7 +1419,7 @@ ALTER TABLE `abonnement`
 -- AUTO_INCREMENT pour la table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `idAdmin` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idAdmin` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `avis`
@@ -1497,9 +1498,9 @@ ALTER TABLE `admin`
   ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`);
 
 --
--- Contraintes pour la table `archivelignecommande`
+-- Contraintes pour la table `archiveLigneCommande`
 --
-ALTER TABLE `archivelignecommande`
+ALTER TABLE `archiveLigneCommande`
   ADD CONSTRAINT `fk_idLivre_archivelignecommande` FOREIGN KEY (`idLivre`) REFERENCES `livre` (`idLivre`);
 
 --
