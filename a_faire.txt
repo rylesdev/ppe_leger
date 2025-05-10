@@ -1,4 +1,7 @@
 A FAIRE :
+    - Dans toutes les pages, modifier les droits de "admin" en mettant à la place "principal".
+    (- Implémenter une foncionntalité pour que le gestionnaire puisse uniquement voir les vues admin ?)
+
     - Modifier tous les enregistrements de toutes les tables pour faire quelque chose de propre.
 
     - Mettre en avant les messages suite à une action (livre offert par exemple).
