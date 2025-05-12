@@ -2,7 +2,6 @@
 $titrePage = "Statistiques";
 require_once("includes/header.php");
 
-// Récupération avec vérification des nulls
 $idUser = $_SESSION['idUser'];
 $vCommandesEnAttente = $unControleur->viewSelectCommandesEnAttente() ?? [['nbCommandeEnAttente' => 0]];
 $vMeilleuresVentes = $unControleur->viewSelectMeilleuresVentes() ?? [];
@@ -10,7 +9,6 @@ $vLivresEnStock = $unControleur->viewSelectLivresEnStock() ?? [];
 $vMeilleursAvis = $unControleur->viewMeilleursAvis() ?? [];
 $vNbLivreAcheteUser = $unControleur->viewNbLivreAcheteUser() ?? [];
 
-// Préparation données graphiques
 $meilleuresVentesLabels = array_column($vMeilleuresVentes, 'nomLivre');
 $meilleuresVentesData = array_column($vMeilleuresVentes, 'totalVendu');
 $meilleursAvisLabels = array_column($vMeilleursAvis, 'nomLivre');
@@ -22,13 +20,11 @@ $meilleursAvisData = array_column($vMeilleursAvis, 'moyenneNote');
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <div class="statistics-container">
-        <!-- En-tête -->
         <div class="header-section">
             <h2>Tableau de Bord Statistique</h2>
             <p class="last-update">Mis à jour le <?= date('d/m/Y à H:i') ?></p>
         </div>
 
-        <!-- Section KPI -->
         <div class="kpi-grid">
             <div class="kpi-card">
                 <div class="kpi-header">
@@ -49,9 +45,7 @@ $meilleursAvisData = array_column($vMeilleursAvis, 'moyenneNote');
             </div>
         </div>
 
-        <!-- Section Graphiques -->
         <div class="chart-grid">
-            <!-- Graphique Ventes -->
             <div class="chart-card">
                 <div class="chart-header">
                     <i class="fas fa-chart-line"></i>
@@ -69,7 +63,6 @@ $meilleursAvisData = array_column($vMeilleursAvis, 'moyenneNote');
                 </div>
             </div>
 
-            <!-- Graphique Notes -->
             <div class="chart-card">
                 <div class="chart-header">
                     <i class="fas fa-star"></i>
@@ -88,9 +81,7 @@ $meilleursAvisData = array_column($vMeilleursAvis, 'moyenneNote');
             </div>
         </div>
 
-        <!-- Section Données -->
         <div class="data-grid">
-            <!-- Tableau Stocks -->
             <div class="data-card">
                 <div class="data-header">
                     <i class="fas fa-box-open"></i>
@@ -126,7 +117,6 @@ $meilleursAvisData = array_column($vMeilleursAvis, 'moyenneNote');
                 </div>
             </div>
 
-            <!-- Tableau Clients -->
             <div class="data-card">
                 <div class="data-header">
                     <i class="fas fa-users"></i>
@@ -163,7 +153,6 @@ $meilleursAvisData = array_column($vMeilleursAvis, 'moyenneNote');
 
 <?php if(!empty($meilleuresVentesData)): ?>
     <script>
-        // Graphique des ventes
         new Chart(document.getElementById('ventesChart'), {
             type: 'bar',
             data: {
@@ -199,7 +188,6 @@ $meilleursAvisData = array_column($vMeilleursAvis, 'moyenneNote');
 
 <?php if(!empty($meilleursAvisData)): ?>
     <script>
-        // Graphique des notes
         new Chart(document.getElementById('notesChart'), {
             type: 'radar',
             data: {

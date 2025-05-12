@@ -15,10 +15,8 @@ $estAbonne = $dateAbonnement !== null && $dateAbonnement[0][0] > 0;
 
 <div class="bg-gradient-to-b from-blue-50 to-indigo-100 min-h-screen py-12">
     <div class="container mx-auto px-4 max-w-5xl">
-        <!-- Bannière principale -->
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-12">
             <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-8 text-white relative overflow-hidden">
-                <!-- Cercles décoratifs -->
                 <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full -mr-32 -mt-32"></div>
                 <div class="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-10 rounded-full -ml-24 -mb-24"></div>
 
@@ -42,7 +40,6 @@ $estAbonne = $dateAbonnement !== null && $dateAbonnement[0][0] > 0;
                 </div>
             </div>
 
-            <!-- Points d'abonnement -->
             <div class="p-8">
                 <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 flex flex-col md:flex-row items-center justify-between">
                     <div class="flex items-center space-x-4 mb-4 md:mb-0">
@@ -65,7 +62,6 @@ $estAbonne = $dateAbonnement !== null && $dateAbonnement[0][0] > 0;
             </div>
         </div>
 
-        <!-- Avantages -->
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-12">
             <div class="p-8">
                 <h2 class="text-3xl font-bold text-blue-800 mb-6 flex items-center">
@@ -127,7 +123,6 @@ $estAbonne = $dateAbonnement !== null && $dateAbonnement[0][0] > 0;
             </div>
         </div>
 
-        <!-- Formules d'abonnement -->
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
             <div class="p-8">
                 <h2 class="text-3xl font-bold text-blue-800 mb-8 flex items-center">
@@ -138,7 +133,6 @@ $estAbonne = $dateAbonnement !== null && $dateAbonnement[0][0] > 0;
                 </h2>
 
                 <div class="grid md:grid-cols-3 gap-6">
-                    <!-- Offre 1 mois -->
                     <div class="bg-gradient-to-b from-blue-50 to-blue-100 rounded-xl shadow-md overflow-hidden transition transform hover:scale-105 hover:shadow-lg">
                         <div class="bg-blue-600 py-4 px-6 text-white">
                             <h3 class="text-xl font-bold">Abonnement Découverte</h3>
@@ -175,7 +169,6 @@ $estAbonne = $dateAbonnement !== null && $dateAbonnement[0][0] > 0;
                         </div>
                     </div>
 
-                    <!-- Offre 3 mois -->
                     <div class="bg-gradient-to-b from-indigo-50 to-indigo-100 rounded-xl shadow-md overflow-hidden relative transition transform hover:scale-105 hover:shadow-lg">
                         <div class="absolute top-0 right-0 bg-gradient-to-r from-yellow-400 to-yellow-500 text-yellow-900 text-xs font-bold py-1 px-3 rounded-bl-lg">
                             POPULAIRE
@@ -216,7 +209,6 @@ $estAbonne = $dateAbonnement !== null && $dateAbonnement[0][0] > 0;
                         </div>
                     </div>
 
-                    <!-- Offre 1 an -->
                     <div class="bg-gradient-to-b from-purple-50 to-purple-100 rounded-xl shadow-md overflow-hidden transition transform hover:scale-105 hover:shadow-lg">
                         <div class="bg-purple-600 py-4 px-6 text-white">
                             <h3 class="text-xl font-bold">Abonnement Premium</h3>

@@ -3,7 +3,6 @@
         <h2 class="text-2xl font-semibold text-blue-900 text-center mb-6">Inscription Entreprise</h2>
 
         <form method="post" id="entrepriseForm" class="space-y-5">
-            <!-- Email -->
             <div>
                 <label for="emailUser" class="block text-sm font-medium text-gray-700 mb-1">
                     Email <span class="text-red-500">*</span>
@@ -12,7 +11,6 @@
                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
             </div>
 
-            <!-- Mot de passe -->
             <div>
                 <label for="mdpUser" class="block text-sm font-medium text-gray-700 mb-1">
                     Mot de passe <span class="text-red-500">*</span>
@@ -21,7 +19,6 @@
                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
             </div>
 
-            <!-- Adresse -->
             <div>
                 <label for="adresseUser" class="block text-sm font-medium text-gray-700 mb-1">
                     Adresse Postale <span class="text-red-500">*</span>
@@ -30,7 +27,6 @@
                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
             </div>
 
-            <!-- SIRET -->
             <div>
                 <label for="siretUser" class="block text-sm font-medium text-gray-700 mb-1">
                     Numéro de SIRET <span class="text-red-500">*</span>
@@ -42,7 +38,6 @@
                 <p class="mt-1 text-sm text-gray-500">14 chiffres sans espace</p>
             </div>
 
-            <!-- Raison Sociale -->
             <div>
                 <label for="raisonSocialeUser" class="block text-sm font-medium text-gray-700 mb-1">
                     Raison Sociale <span class="text-red-500">*</span>
@@ -51,7 +46,6 @@
                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
             </div>
 
-            <!-- Capital Social -->
             <div>
                 <label for="capitalSocialUser" class="block text-sm font-medium text-gray-700 mb-1">
                     Capital Social (€) <span class="text-red-500">*</span>
@@ -63,7 +57,6 @@
                 <p class="mt-1 text-sm text-gray-500">Format: 15000 ou 15000.50</p>
             </div>
 
-            <!-- Boutons -->
             <div class="flex justify-end space-x-3 pt-4">
                 <button type="reset" name="Annuler"
                         class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">

@@ -13,7 +13,6 @@ $modeAssociation = isset($associerPromoLivre);
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
 
 <div class="container mx-auto px-4 py-8">
-    <!-- En-tête avec boutons -->
     <div class="text-center mb-12">
         <h1 class="text-3xl font-bold text-indigo-800 mb-2">Gestion des promotions</h1>
         <p class="text-gray-600 mb-6">Créez ou modifiez les promotions en cours</p>
@@ -31,7 +30,6 @@ $modeAssociation = isset($associerPromoLivre);
         </div>
     </div>
 
-    <!-- Formulaire dynamique pour la promotion -->
     <div id="formContainer" class="bg-white rounded-2xl shadow-xl p-8 max-w-2xl mx-auto mb-10 border border-gray-100 <?= !$modeEdition ? 'hidden' : '' ?>">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">
             <i class="fas fa-tag mr-2"></i>
@@ -49,7 +47,6 @@ $modeAssociation = isset($associerPromoLivre);
             <?php endif; ?>
 
             <div class="grid grid-cols-1 gap-6">
-                <!-- Nom Promotion -->
                 <div>
                     <label class="block text-gray-700 font-medium mb-2" for="nomPromotion">
                         <i class="fas fa-heading mr-2 text-indigo-600"></i>Nom de la promotion
@@ -60,7 +57,6 @@ $modeAssociation = isset($associerPromoLivre);
                            required>
                 </div>
 
-                <!-- Dates -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-gray-700 font-medium mb-2" for="dateDebut">
@@ -83,7 +79,6 @@ $modeAssociation = isset($associerPromoLivre);
                     </div>
                 </div>
 
-                <!-- Réduction -->
                 <div>
                     <label class="block text-gray-700 font-medium mb-2" for="reduction">
                         <i class="fas fa-percent mr-2 text-indigo-600"></i>Réduction (%)
@@ -97,7 +92,6 @@ $modeAssociation = isset($associerPromoLivre);
                 </div>
             </div>
 
-            <!-- Boutons de confirmation -->
             <div class="flex justify-end space-x-4 pt-4">
                 <button type="button" onclick="resetForm()"
                         class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
@@ -113,7 +107,6 @@ $modeAssociation = isset($associerPromoLivre);
         </form>
     </div>
 
-    <!-- Formulaire d'association de promotion à un livre -->
     <div id="associationFormContainer" class="bg-white rounded-2xl shadow-xl p-8 max-w-2xl mx-auto mb-10 border border-gray-100 <?= !$modeAssociation ? 'hidden' : '' ?>">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">
             <i class="fas fa-tag mr-2"></i>
@@ -150,7 +143,6 @@ $modeAssociation = isset($associerPromoLivre);
                 </select>
             </div>
 
-            <!-- Boutons de confirmation -->
             <div class="flex justify-end space-x-4 pt-4">
                 <button type="button" onclick="resetForm()"
                         class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
@@ -168,7 +160,6 @@ $modeAssociation = isset($associerPromoLivre);
 </div>
 
 <script>
-    // Gestion de l'affichage du formulaire
     document.getElementById('btnInsert').addEventListener('click', function() {
         const formContainer = document.getElementById('formContainer');
         formContainer.classList.remove('hidden');

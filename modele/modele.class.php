@@ -16,8 +16,7 @@
             }
         }
 
-        public function verifConnexion($emailUser, $mdpUser)
-        {
+        public function verifConnexion($emailUser, $mdpUser) {
             $requete = "select * 
                         from user u
                         where u.emailUser = ? and u.mdpUser = sha1(?);";
@@ -408,7 +407,7 @@
 
         public function selectCommandeByUser($idUser) {
             $requete = "SELECT * FROM commande 
-                WHERE idUser = ?
+                WHERE idUser = ? and statutCommande = 'expédiée'
                 ORDER BY dateCommande DESC";
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $idUser, PDO::PARAM_INT);

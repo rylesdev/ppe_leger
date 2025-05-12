@@ -1,10 +1,9 @@
 <?php
 session_start();
 
-// Vérifier si l'utilisateur est connecté (idUser existe) avant d'appeler selectAdminPrincipal
 require_once("controleur/controleur.class.php");
 $unControleur = new Controleur();
-$isAdmin = 0; // Valeur par défaut
+$isAdmin = 0;
 
 if (isset($_SESSION['idUser'])) {
     $resultAdminPrincipal = $unControleur->selectAdminPrincipal($_SESSION['idUser']);
@@ -13,7 +12,6 @@ if (isset($_SESSION['idUser'])) {
     }
 }
 
-// Gestion de la redirection avant tout output HTML
 if (isset($_GET['page']) && $_GET['page'] == 11) {
     if (isset($_SESSION['emailUser']) && $_SESSION['emailUser'] != NULL) {
         if (isset($_POST['ConfirmerDeconnexion'])) {
@@ -22,15 +20,12 @@ if (isset($_GET['page']) && $_GET['page'] == 11) {
             header("Location: index.php?page=12");
             exit();
         }
-        // Si déconnexion n'est pas confirmée, continuer avec l'affichage normal
     } else {
-        // Si l'utilisateur n'est pas connecté, rediriger directement
         header("Location: index.php?page=12");
         exit();
     }
 }
 
-// Début de l'output HTML maintenant qu'on a géré les redirections
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -55,12 +50,10 @@ if (isset($_GET['page']) && $_GET['page'] == 11) {
     </div>
 </header>
 
-<!-- Navigation Bar -->
 <nav class="bg-white shadow-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
-                <!-- Navigation Links -->
                 <div class="hidden sm:flex sm:items-center sm:space-x-4">
                     <a href="index.php?page=1" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
                         <i class="fas fa-home mr-2"></i> Accueil
@@ -83,7 +76,7 @@ if (isset($_GET['page']) && $_GET['page'] == 11) {
                         </a>
                     <?php endif; ?>
                     <?php if ($isAdmin == 1): ?>
-                        <a href="index.php?page=9" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
+                        <a href="index.php?page=7" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
                             <i class="fas fa-list mr-2"></i> Catégorie
                         </a>
                         <a href="index.php?page=8" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
@@ -92,7 +85,7 @@ if (isset($_GET['page']) && $_GET['page'] == 11) {
                             </svg>
                             Maison d'Édition
                         </a>
-                        <a href="index.php?page=7" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
+                        <a href="index.php?page=9" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
                             <i class="fas fa-tags mr-2"></i> Promotion
                         </a>
                         <a href="index.php?page=10" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md transition-colors duration-200">
@@ -105,7 +98,6 @@ if (isset($_GET['page']) && $_GET['page'] == 11) {
 
                 </div>
             </div>
-            <!-- Hamburger Menu Button -->
             <div class="-mr-2 flex items-center sm:hidden">
                 <button id="menu-toggle" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-white hover:bg-primary-blue focus:outline-none">
                     <span class="sr-only">Ouvrir le menu</span>
@@ -114,7 +106,6 @@ if (isset($_GET['page']) && $_GET['page'] == 11) {
             </div>
         </div>
     </div>
-    <!-- Mobile Menu -->
     <div id="mobile-menu" class="hidden sm:hidden bg-white shadow-md">
         <div class="px-2 pt-2 pb-3 space-y-1">
             <a href="index.php?page=1" class="flex items-center px-3 py-2 text-gray-700 hover:bg-primary-blue hover:text-white rounded-md">
@@ -158,7 +149,6 @@ if (isset($_GET['page']) && $_GET['page'] == 11) {
     </div>
 </nav>
 
-<!-- Main Content -->
 <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
     <?php
     if (isset($_GET['page'])) {
@@ -174,9 +164,9 @@ if (isset($_GET['page']) && $_GET['page'] == 11) {
         case 4: require_once("controleur/c_commande.php"); break;
         case 5: require_once("controleur/c_abonnement.php"); break;
         case 6: require_once("controleur/c_user.php"); break;
-        case 7: require_once("controleur/c_promotion.php"); break;
+        case 7: require_once("controleur/c_categorie.php"); break;
         case 8: require_once("controleur/c_maisonEdition.php"); break;
-        case 9: require_once("controleur/c_categorie.php"); break;
+        case 9: require_once("controleur/c_promotion.php"); break;
         case 10: require_once("controleur/c_statistique.php"); break;
         case 11:
             if (isset($_SESSION['emailUser']) && $_SESSION['emailUser'] != NULL) {
@@ -203,7 +193,6 @@ if (isset($_GET['page']) && $_GET['page'] == 11) {
     ?>
 </main>
 
-<!-- JavaScript for Hamburger Menu -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const menuToggle = document.getElementById('menu-toggle');

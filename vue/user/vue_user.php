@@ -7,7 +7,6 @@ require_once("includes/header.php");
     <link rel="stylesheet" href="includes/css/style.css">
 
     <div class="container mx-auto p-6 max-w-4xl">
-        <!-- Contenu principal : informations du profil -->
         <div class="bg-white rounded-xl shadow-lg p-8 transition-all duration-300 hover:shadow-xl mb-8">
             <?php
             if (isset($idUser)) {
@@ -23,7 +22,6 @@ require_once("includes/header.php");
                     echo '</div>';
 
                     echo '<div class="grid md:grid-cols-2 gap-6">';
-                    // Colonne 1
                     echo '<div class="space-y-4">';
                     echo '<div>';
                     echo '<label class="block text-sm font-medium text-gray-700 mb-2">Email</label>';
@@ -39,7 +37,6 @@ require_once("includes/header.php");
                     echo '</div>';
                     echo '</div>';
 
-                    // Colonne 2
                     echo '<div class="space-y-4">';
                     echo '<div>';
                     echo '<label class="block text-sm font-medium text-gray-700 mb-2">Nom</label>';
@@ -59,7 +56,7 @@ require_once("includes/header.php");
                     echo '</div>';
                     echo '</div>';
 
-                    echo '</div>'; // Fin du grid
+                    echo '</div>';
 
                 } else if ($userEntreprise) {
                     echo '<div class="text-center mb-8">';
@@ -70,7 +67,6 @@ require_once("includes/header.php");
                     echo '</div>';
 
                     echo '<div class="grid md:grid-cols-2 gap-6">';
-                    // Colonne 1
                     echo '<div class="space-y-4">';
                     echo '<div>';
                     echo '<label class="block text-sm font-medium text-gray-700 mb-2">Email</label>';
@@ -86,7 +82,6 @@ require_once("includes/header.php");
                     echo '</div>';
                     echo '</div>';
 
-                    // Colonne 2
                     echo '<div class="space-y-4">';
                     echo '<div>';
                     echo '<label class="block text-sm font-medium text-gray-700 mb-2">SIRET</label>';
@@ -102,7 +97,7 @@ require_once("includes/header.php");
                     echo '</div>';
                     echo '</div>';
 
-                    echo '</div>'; // Fin du grid
+                    echo '</div>';
                 } else {
                     echo '<div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 rounded-lg">';
                     echo '<p class="font-medium">Aucun utilisateur sélectionné.</p>';
@@ -121,7 +116,6 @@ require_once("includes/header.php");
             </div>
         </div>
 
-        <!-- Section Modification (cachée par défaut) -->
         <div id="editSection" class="bg-white rounded-xl shadow-lg p-8 mb-8 hidden transition-all duration-300">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-2xl font-bold text-blue-700">Modifier mon profil</h3>
@@ -243,7 +237,6 @@ require_once("includes/header.php");
             ?>
         </div>
 
-        <!-- Section Suppression (cachée par défaut) -->
         <div id="deleteSection" class="bg-white rounded-xl shadow-lg p-8 hidden transition-all duration-300">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-2xl font-bold text-red-600">Supprimer mon compte</h3>
@@ -293,7 +286,6 @@ require_once("includes/header.php");
         </div>
     </div>
 
-    <!-- Script pour la gestion des sections -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const showEditBtn = document.getElementById('showEditBtn');

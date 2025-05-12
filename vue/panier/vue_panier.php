@@ -6,37 +6,30 @@ error_reporting(0);
 
 $idUser = $_SESSION['idUser'];
 
-// Récupérer les livres en promotion
 $livresPromotion = $unControleur->selectLivrePromotion();
 
-// Récupérer les livres dans le panier
 $lesCommandes = $unControleur->viewSelectTotalLivreEnAttente($idUser);
 
-// Initialiser le montant total ajusté avec les promotions
 $sommeAPayer = 0;
 
-// Parcourir les livres dans le panier pour appliquer les promotions
 foreach ($lesCommandes as $uneCommande) {
     $idLivre = $uneCommande['idLivre'];
     $prixLivre = $uneCommande['prixLivre'];
     $quantite = $uneCommande['quantiteLigneCommande'];
 
-    // Vérifier si une promotion existe pour ce livre
     $promo = array_filter($livresPromotion, fn($p) => $p['idLivre'] == $idLivre);
     if (!empty($promo)) {
         $promo = current($promo);
-        $prix = $promo['prixPromo']; // Utiliser le prixPromo calculé
+        $prix = $promo['prixPromo'];
     } else {
         $prix = $prixLivre;
     }
     $sommeAPayer += $prix * $quantite;
 }
 
-// Récupérer l'adresse de l'utilisateur
 $adresseUser = $unControleur->selectAdresseUser($idUser);
 $adresseUser = $adresseUser['adresseUser'];
 
-// Récupérer la date de livraison
 $dateCommande = $unControleur->selectDateLivraisonCommande($idUser);
 $dateCommande = $dateCommande[0];
 ?>
@@ -69,7 +62,6 @@ $dateCommande = $dateCommande[0];
                 </thead>
                 <tbody>
                 <?php
-                // Appliquer le filtre si nécessaire
                 if (isset($_POST['FiltrerLivre']) && !empty($_POST['filtre'])) {
                     $filtre = $_POST['filtre'];
                     $lesCommandes = $unControleur->selectFiltreLivreEnAttente($idUser, $filtre);
@@ -77,7 +69,6 @@ $dateCommande = $dateCommande[0];
                     $lesCommandes = $unControleur->viewSelectTotalLivreEnAttente($idUser);
                 }
 
-                // Appliquer le tri si nécessaire
                 $tri = isset($_POST['tri']) ? $_POST['tri'] : '';
 
                 if ($tri == 'prixMin') {
@@ -92,7 +83,6 @@ $dateCommande = $dateCommande[0];
 
                 if (isset($lesCommandes) && !empty($lesCommandes)) {
                     foreach ($lesCommandes as $uneCommande) {
-                        // Vérifier si le livre a une promotion
                         $promo = array_filter($livresPromotion, fn($p) => $p['idLivre'] == $uneCommande['idLivre']);
                         $hasPromo = !empty($promo);
 
@@ -104,16 +94,15 @@ $dateCommande = $dateCommande[0];
                             $prixAffichage = $uneCommande['prixLivre'];
                         }
 
-                        // Calcul du total avec le prix promotionnel si disponible
                         $totalLivre = $prixAffichage * $uneCommande['quantiteLigneCommande'];
 
                         echo "<tr>";
                         echo "<td class='px-4 py-4'>" . $uneCommande['nomLivre'] . "</td>";
                         echo "<td class='px-4 py-4'>";
                         if ($hasPromo) {
-                            // Afficher l'ancien prix barré et le nouveau prix en promotion
-                            echo "<span class='old-price line-through'>" . number_format($uneCommande['prixLivre'], 2) . "€</span> ";
-                            echo "<span class='promo-price text-red-600'>" . number_format($prixAffichage, 2) . "€ (-" . $reduction . "%)</span>";
+                            echo "<span class='line-through text-gray-500'>" . number_format($uneCommande['prixLivre'], 2) . "€</span><br>";
+                            echo "<span class='text-red-600 font-bold'>" . number_format($prixAffichage, 2) . "€</span><br>";
+                            echo "<span class='text-xs font-medium bg-red-100 text-red-800 px-1.5 py-0.5 rounded-full'>-" . $reduction . "%</span>";
                         } else {
                             echo number_format($uneCommande['prixLivre'], 2) . "€";
                         }
@@ -123,7 +112,11 @@ $dateCommande = $dateCommande[0];
                         echo "<td class='px-4 py-4'> = </td>";
                         echo "<td class='px-4 py-4'>" . number_format($totalLivre, 2) . "€</td>";
                         echo "<td class='px-4 py-4'>";
-                        echo "<a href='index.php?page=3&action=sup&idCommande=" . $uneCommande['idCommande'] . "&idLigneCommande=" . $uneCommande['idLigneCommande'] . "'>" . "<img src='images/supprimer.png' height='30' width='30'> </a>";
+                        echo "<a href='index.php?page=3&action=sup&idCommande=" . $uneCommande['idCommande'] . "&idLigneCommande=" . $uneCommande['idLigneCommande'] . "'>";
+                        echo "<svg xmlns='http://www.w3.org/2000/svg' class='h-6 w-6 text-red-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'>";
+                        echo "<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />";
+                        echo "</svg>";
+                        echo "</a>";
                         ?>
                         <form method="post" style="display: inline-block;">
                             <input type="hidden" name="idLigneCommande" value="<?php echo $uneCommande['idLigneCommande']; ?>">
@@ -133,7 +126,9 @@ $dateCommande = $dateCommande[0];
                                        value="<?php echo $uneCommande['quantiteLigneCommande']; ?>" class="border border-gray-300 rounded w-20 p-1 text-center">
                                 <button type="submit" name="ModifierPanier" value="Confirmer"
                                         class="bg-blue-900 hover:bg-blue-800 text-white px-3 py-2 rounded transition duration-200">
-                                    Confirmer
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                    </svg>
                                 </button>
                             </div>
                         </form>
@@ -195,4 +190,3 @@ $dateCommande = $dateCommande[0];
 
 <?php
 require_once("includes/footer.php");
-?>

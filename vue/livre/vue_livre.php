@@ -45,7 +45,6 @@ require_once("includes/header.php");
                 </thead>
                 <tbody>
                 <?php
-                // Récupération des promotions indexées par idLivre pour optimisation
                 $livresPromotion = $unControleur->selectLivrePromotion();
                 $promosParId = [];
                 foreach ($livresPromotion as $promo) {
@@ -58,30 +57,28 @@ require_once("includes/header.php");
                     $rowCount = 0;
                     foreach ($lesLivres as $unLivre) {
                         $enPromotion = isset($promosParId[$unLivre['idLivre']]);
-                        $prixPromo = $enPromotion ?
-                            $unLivre['prixLivre'] * (1 - $promosParId[$unLivre['idLivre']]['reductionPromotion'] / 100) :
-                            null;
+                        if ($enPromotion) {
+                            $prixPromo = $unLivre['prixLivre'] * (1 - $promosParId[$unLivre['idLivre']]['reductionPromotion'] / 100);
+                        } else {
+                            $prixPromo = null;
+                        }
 
-                        // Alternance des couleurs de fond pour les lignes
                         $bgColor = $rowCount % 2 === 0 ? 'bg-white' : 'bg-gray-50';
                         $rowCount++;
 
                         echo "<tr class='{$bgColor} hover:bg-blue-50 transition duration-150'>";
 
                         if (isset($isAdmin) && $isAdmin == 1) {
-                            // Affichage pour admin
                             echo "<td class='px-4 py-4'>" . htmlspecialchars($unLivre['idLivre']) . "</td>";
                             echo "<td class='px-4 py-4 font-medium text-gray-800'>" . htmlspecialchars($unLivre['nomLivre']) . "</td>";
                             echo "<td class='px-4 py-4 text-gray-700'>" . htmlspecialchars($unLivre['auteurLivre']) . "</td>";
 
-                            // Image du livre
                             echo "<td class='px-4 py-4'>";
                             echo "<div class='flex justify-center'>";
                             echo "<img src='images/livres/" . htmlspecialchars($unLivre['imageLivre']) . "' class='h-36 w-24 object-cover rounded shadow' alt='Couverture du livre'>";
                             echo "</div>";
                             echo "</td>";
 
-                            // Exemplaires
                             $stockClass = '';
                             if ($unLivre['exemplaireLivre'] > 10) {
                                 $stockClass = 'text-green-600';
@@ -92,17 +89,30 @@ require_once("includes/header.php");
                             }
                             echo "<td class='px-4 py-4 text-center font-medium {$stockClass}'>" . htmlspecialchars($unLivre['exemplaireLivre']) . "</td>";
 
-                            // Prix
                             echo "<td class='px-4 py-4'>";
-                            echo "<span class='font-medium'>" . number_format($unLivre['prixLivre'], 2) . "€</span>";
+                            if ($enPromotion) {
+                                $reduction = $promosParId[$unLivre['idLivre']]['reductionPromotion'];
+                                echo "<div>";
+                                echo "<span class='line-through text-gray-500'>" . number_format($unLivre['prixLivre'], 2) . "€</span><br>";
+                                echo "<span class='text-red-600 font-bold'>" . number_format($prixPromo, 2) . "€</span><br>";
+                                echo "<span class='text-xs font-medium bg-red-100 text-red-800 px-1.5 py-0.5 rounded-full'>-" . $reduction . "%</span>";
+                                echo "</div>";
+                            } else {
+                                echo "<span class='font-medium'>" . number_format($unLivre['prixLivre'], 2) . "€</span>";
+                            }
                             echo "</td>";
 
-                            // Noms au lieu des IDs
                             echo "<td class='px-4 py-4'>" . htmlspecialchars($unControleur->selectNomCategorieById($unLivre['idCategorie'])[0][0]) . "</td>";
                             echo "<td class='px-4 py-4'>" . htmlspecialchars($unControleur->selectNomMaisonEditionById($unLivre['idMaisonEdition'])[0][0]) . "</td>";
-                            echo "<td class='px-4 py-4'>" . htmlspecialchars($unControleur->selectNomPromotionById($unLivre['idPromotion'])[0][0]) . "</td>";
 
-                            // Opérations admin
+                            echo "<td class='px-4 py-4'>";
+                            if (isset($unLivre['idPromotion'])) {
+                                echo htmlspecialchars($unControleur->selectNomPromotionById($unLivre['idPromotion'])[0][0]);
+                            } else {
+                                echo "Non définie";
+                            }
+                            echo "</td>";
+
                             echo "<td class='px-4 py-4'>";
                             echo "<div class='flex space-x-2'>";
                             echo "<a href='index.php?page=2&action=sup&idLivre=" . $unLivre['idLivre'] . "' class='bg-red-100 hover:bg-red-200 text-red-700 p-2 rounded' title='Supprimer'>";
@@ -118,29 +128,22 @@ require_once("includes/header.php");
                             echo "</div>";
                             echo "</td>";
                         } else {
-                            // Affichage pour client
-                            // Image du livre
                             echo "<td class='px-4 py-4'>";
                             echo "<div class='flex justify-center'>";
                             echo "<img src='images/livres/" . htmlspecialchars($unLivre['imageLivre']) . "' class='h-36 w-24 object-cover rounded shadow' alt='Couverture du livre'>";
                             echo "</div>";
                             echo "</td>";
 
-                            // Nom du livre
                             echo "<td class='px-4 py-4 font-medium text-gray-800'>" . htmlspecialchars($unLivre['nomLivre']) . "</td>";
 
-                            // Catégorie
                             echo "<td class='px-4 py-4'>";
                             echo "<span class='px-2 py-1 bg-blue-100 text-blue-900 rounded-full text-xs font-medium'>" . htmlspecialchars($unControleur->selectNomCategorieById($unLivre['idCategorie'])[0][0]) . "</span>";
                             echo "</td>";
 
-                            // Auteur
                             echo "<td class='px-4 py-4 text-gray-700'>" . htmlspecialchars($unLivre['auteurLivre']) . "</td>";
 
-                            // Maison d'édition
                             echo "<td class='px-4 py-4 text-gray-700'>" . htmlspecialchars($unControleur->selectNomMaisonEditionById($unLivre['idMaisonEdition'])[0][0]) . "</td>";
 
-                            // Exemplaires
                             $stockClass = '';
                             if ($unLivre['exemplaireLivre'] > 10) {
                                 $stockClass = 'text-green-600';
@@ -151,7 +154,6 @@ require_once("includes/header.php");
                             }
                             echo "<td class='px-4 py-4 text-center font-medium {$stockClass}'>" . htmlspecialchars($unLivre['exemplaireLivre']) . "</td>";
 
-                            // Prix avec gestion de la promotion
                             echo "<td class='px-4 py-4'>";
                             if ($enPromotion) {
                                 $reduction = $promosParId[$unLivre['idLivre']]['reductionPromotion'];
@@ -165,28 +167,24 @@ require_once("includes/header.php");
                             }
                             echo "</td>";
 
-                            // Opérations client
                             echo "<td class='px-4 py-4'>";
                             if (!isset($_SESSION['emailUser'])) {
                                 echo "<p class='text-red-600 font-medium'>Vous devez être connecté </p>";
                                 echo "<p class='text-red-600 font-medium'>pour acheter un livre.</p>";
                             } else {
-                                // Formulaire utilisateur
                                 echo "<form method='post' class='flex flex-col space-y-2'>";
                                 echo "<input type='hidden' name='idLivre' value='".$unLivre['idLivre']."'>";
                                 echo "<input type='hidden' name='idUser' value='".$idUser."'>";
 
-                                // Conteneur pour quantité et bouton
                                 echo "<div class='flex items-center space-x-2'>";
                                 echo "<label class='text-sm text-gray-600'>Quantité:</label>";
                                 echo "<input type='number' name='quantiteLivre' min='1' max='".$unLivre['exemplaireLivre']."' value='1' class='border border-gray-300 rounded w-20 p-1 text-center'>";
                                 echo "</div>";
 
                                 echo "<button type='submit' name='action' value='AjouterPanier' class='bg-blue-900 hover:bg-blue-800 text-white px-3 py-2 rounded flex items-center justify-center transition duration-200 w-full'>";
-                                echo "<svg xmlns='http://www.w3.org/2000/svg' class='h-4 w-4 mr-1' fill='none' viewBox='0 0 24 24' stroke='currentColor'>";
+                                echo "<svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5' fill='none' viewBox='0 0 24 24' stroke='currentColor'>";
                                 echo "<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z' />";
                                 echo "</svg>";
-                                echo "Ajouter au panier";
                                 echo "</button>";
                                 echo "</form>";
                             }

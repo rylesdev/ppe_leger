@@ -8,9 +8,7 @@ require_once("includes/header.php");
 <div class="container mx-auto px-4 py-6 w-full max-w-[85%]">
     <h3 class="text-2xl font-bold text-center mb-6 text-indigo-900">Gestion des catégories</h3>
 
-    <!-- Tableaux côte à côte -->
     <div class="flex flex-col lg:flex-row gap-8 justify-center">
-        <!-- Tableau des catégories -->
         <div class="w-full lg:w-1/2">
             <div class="flex justify-between items-center mb-4">
                 <h4 class="text-xl font-semibold text-gray-800">
@@ -66,7 +64,6 @@ require_once("includes/header.php");
             </div>
         </div>
 
-        <!-- Tableau des livres -->
         <div class="w-full lg:w-1/2">
             <div class="flex justify-between items-center mb-4">
                 <h4 class="text-xl font-semibold text-gray-800">

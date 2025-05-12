@@ -59,7 +59,6 @@ $dateCommande = $unControleur->selectDateLivraisonCommande($idUser)[0];
     </script>
 
     <div class="container mx-auto px-4 py-6 flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
-        <!-- Colonne principale - Détails des commandes -->
         <div class="w-full md:w-3/4">
             <div class="command-actions mb-6 p-4 bg-white shadow rounded-lg">
                 <form method="post" class="space-y-4">
@@ -130,7 +129,6 @@ $dateCommande = $unControleur->selectDateLivraisonCommande($idUser)[0];
                             <td class="px-4 py-4"><?= $uneCommande['quantiteLigneCommande'] ?></td>
                             <td class="px-4 py-4"><?= number_format($totalLivre, 2) ?>€</td>
                             <td class="px-4 py-4">
-                                <!-- CORRECTION: Identifier chaque formulaire de manière unique -->
                                 <form method="post" class="avis-form space-y-2" id="form_<?= $uneCommande['idLivre'] ?>">
                                     <input type="hidden" name="idLivre" value="<?= $uneCommande['idLivre'] ?>">
                                     <input type="hidden" name="nomLivre" value="<?= htmlspecialchars($uneCommande['nomLivre']) ?>">
@@ -151,7 +149,6 @@ $dateCommande = $unControleur->selectDateLivraisonCommande($idUser)[0];
             </div>
         </div>
 
-        <!-- Colonne latérale - Récapitulatif -->
         <div class="w-full md:w-1/4">
             <div class="bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-lg shadow-lg border border-blue-200 transform transition-all duration-300 hover:shadow-xl">
                 <h3 class="text-2xl font-bold mb-4 text-center text-blue-900 border-b pb-2 border-blue-200">Récapitulatif</h3>
