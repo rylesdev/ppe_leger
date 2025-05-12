@@ -1,0 +1,145 @@
+<?php
+$titrePage = "Gestion des catégories";
+require_once("includes/header.php");
+
+$laCategorie = $laCategorie ?? null;
+$modeEdition = isset($laCategorie);
+
+$associerCategorieLivre = $associerCategorieLivre ?? null;
+$modeAssociation = isset($associerCategorieLivre);
+?>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+
+<div class="container mx-auto px-4 py-8">
+    <div class="text-center mb-12">
+        <h1 class="text-3xl font-bold text-indigo-800 mb-2">Gestion des catégories</h1>
+        <p class="text-gray-600 mb-6">Créez ou modifiez les catégories</p>
+
+        <div class="flex justify-center space-x-8">
+            <button id="btnInsert"
+                    class="px-8 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105 transform flex items-center <?= $modeEdition ? 'hidden' : '' ?>">
+                <i class="fas fa-plus-circle mr-2"></i> Nouvelle Catégorie
+            </button>
+
+            <button id="btnEdit"
+                    class="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105 transform flex items-center <?= !$modeEdition ? 'hidden' : '' ?>">
+                <i class="fas fa-edit mr-2"></i> Modifier Catégorie
+            </button>
+        </div>
+    </div>
+
+    <div id="formContainer" class="bg-white rounded-2xl shadow-xl p-8 max-w-2xl mx-auto mb-10 border border-gray-100 <?= !$modeEdition ? 'hidden' : '' ?>">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">
+            <i class="fas fa-tag mr-2"></i>
+            <?= $modeEdition ? 'Modifier une catégorie' : 'Créer une catégorie' ?>
+        </h2>
+
+        <form id="categorieForm" method="post" class="space-y-6">
+            <?php if ($modeEdition): ?>
+                <input type="hidden" name="idCategorie" value="<?= htmlspecialchars($laCategorie['idCategorie'] ?? '') ?>">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="idCategorie">ID de la catégorie</label>
+                    <input type="text" value="<?= htmlspecialchars($laCategorie['idCategorie'] ?? '') ?>" readonly
+                           class="bg-gray-100 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
+            <?php endif; ?>
+
+            <div class="grid grid-cols-1 gap-6">
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2" for="nomCategorie">
+                        <i class="fas fa-heading mr-2 text-indigo-600"></i>Nom de la catégorie
+                    </label>
+                    <input type="text" id="nomCategorie" name="nomCategorie"
+                           value="<?= htmlspecialchars($laCategorie['nomCategorie'] ?? '') ?>"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                           required>
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-4 pt-4">
+                <button type="button" onclick="resetForm()"
+                        class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                    Annuler
+                </button>
+
+                <button type="submit" name="<?= $modeEdition ? 'UpdateCategorie' : 'InsertCategorie' ?>"
+                        class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition flex items-center">
+                    <i class="fas fa-check mr-2"></i>
+                    <?= $modeEdition ? 'Confirmer Modification' : 'Confirmer Création' ?>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div id="associationFormContainer" class="bg-white rounded-2xl shadow-xl p-8 max-w-2xl mx-auto mb-10 border border-gray-100 <?= !$modeAssociation ? 'hidden' : '' ?>">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">
+            <i class="fas fa-tag mr-2"></i>
+            Associer Catégorie Livre
+        </h2>
+
+        <form id="associationForm" method="post" class="space-y-6">
+            <input type="hidden" name="idLivre" value="<?= htmlspecialchars($associerCategorieLivre['idLivre'] ?? '') ?>">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="idLivre">ID du livre</label>
+                <input type="text" value="<?= htmlspecialchars($associerCategorieLivre['idLivre'] ?? '') ?>" readonly
+                       class="bg-gray-100 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="nomLivre">Nom du livre</label>
+                <input type="text" value="<?= htmlspecialchars($associerCategorieLivre['nomLivre'] ?? '') ?>" readonly
+                       class="bg-gray-100 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-medium mb-2" for="nomCategorie">
+                    <i class="fas fa-heading mr-2 text-indigo-600"></i>Nom de la catégorie
+                </label>
+                <select name="nomCategorie" id="nomCategorie"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        required>
+                    <option value="">-- Sélectionnez une catégorie --</option>
+                    <?php foreach ($lesCategories as $uneCategorie): ?>
+                        <option value="<?= htmlspecialchars($uneCategorie['idCategorie']) ?>">
+                            <?= htmlspecialchars($uneCategorie['nomCategorie']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="flex justify-end space-x-4 pt-4">
+                <button type="button" onclick="resetForm()"
+                        class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                    Annuler
+                </button>
+
+                <button type="submit" name="UpdateLivre"
+                        class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition flex items-center">
+                    <i class="fas fa-check mr-2"></i>
+                    Confirmer Association
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Gestion de l'affichage du formulaire
+    document.getElementById('btnInsert').addEventListener('click', function() {
+        const formContainer = document.getElementById('formContainer');
+        formContainer.classList.remove('hidden');
+        document.getElementById('categorieForm').reset();
+        document.getElementById('btnEdit').classList.add('hidden');
+    });
+
+    function resetForm() {
+        if (confirm("Annuler les modifications ?")) {
+            window.location.href = 'index.php?page=9';
+        }
+    }
+</script>
+
+<?php
+require_once("includes/footer.php");
