@@ -1,28 +1,13 @@
 A FAIRE :
-    - Dans toutes les pages, modifier les droits de "admin" en mettant à la place "principal".
-    (- Implémenter une foncionntalité pour que le gestionnaire puisse uniquement voir les vues admin ?)
+    - Remplir les imagesLivre manquantes dans la table livre.
 
     - Modifier tous les enregistrements de toutes les tables pour faire quelque chose de propre.
 
-    - Mettre en avant les messages suite à une action (livre offert par exemple).
 
-    - Enlever les messages d'erreur de $idUser sur les pages quand on n'est pas connecté.
-
-    - Mettre ce message "Vous devez être connecté pour accéder à cette page" sur toutes les pages (mêmes celles innaccessibles).
-
-    - Supprimer tous les fichier "// A Supprimer".
-
-    - Trier les views et sélectionner les meilleures pour les statistiques.
-
-    - Utiliser le système de 'TEXT 1, 2, etc...' pour tous les triggers.
-
-    - Vérifier la logique de chaque controleur de page (vue + controleur principal + modele) et s'assurer qu'il y ai pas d'incohérence avec les méthodes/$_SESSION notamment.
-
-    - Modifier les vues pour qu'elles soient plus intéressantes.
-
-    - Trier tous les fichiers .css et supprimer ceux qui sont inutiles.
-
-    - Éventuellement donner des permissions différentes entre les différents admins (principal, junior, etc...).
+    Détails :
+        - Trier les views et sélectionner les meilleures pour les statistiques.
+        - Vérifier la logique de chaque controleur de page (vue + controleur principal + modele) et s'assurer qu'il y ai pas d'incohérence avec les méthodes/$_SESSION notamment.
+        - Trier tous les fichiers .css et supprimer ceux qui sont inutiles.
 
 
 

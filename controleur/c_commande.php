@@ -4,22 +4,15 @@ if (!isset($_SESSION['emailUser'])) {
 } elseif (empty($isAdmin) || $isAdmin == 0) {
     $idUser = $_SESSION['idUser'];
 
-    // Initialisation
     $idCommandeSelectionnee = $_POST['idCommandeSelectionnee'] ?? null;
     $tri = $_POST['tri'] ?? null;
 
-    // Récupérer toutes les commandes pour le menu
-    $toutesLesCommandes = $unControleur->selectCommandeByUser($idUser);
-
-    // Gestion combinée sélection + tri
     if ($idCommandeSelectionnee) {
-        // Cas 1 : Commande spécifique avec tri
         $lesCommandes = $unControleur->selectCommandeByIdTri(
             $idCommandeSelectionnee,
             $tri
         );
     } else {
-        // Cas 2 : Toutes les commandes avec tri
         $lesCommandes = $unControleur->selectCommandeTri($idUser, $tri);
     }
 
@@ -27,8 +20,6 @@ if (!isset($_SESSION['emailUser'])) {
         $idLivre = $_POST['idLivre'];
         $commentaireAvis = $_POST['commentaireAvis'];
         $noteAvis = $_POST['noteAvis'];
-
-        var_dump($noteAvis, $commentaireAvis);
 
         if ($noteAvis && $commentaireAvis) {
             $result = $unControleur->insertAvis($idLivre, $idUser, $commentaireAvis, $noteAvis);

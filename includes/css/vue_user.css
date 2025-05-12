@@ -1,18 +1,15 @@
-/* Reset de base */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-/* Corps de la page */
 body {
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
     color: #333;
 }
 
-/* En-tête (barre verte) */
 .header {
     background-color: #2E6E49;
     color: white;
@@ -22,7 +19,6 @@ body {
     font-weight: bold;
 }
 
-/* Conteneur central */
 .container {
     width: 100%;
     max-width: 800px;
@@ -33,7 +29,6 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Titres secondaires */
 h2, h3 {
     text-align: center;
     margin-bottom: 20px;
@@ -41,7 +36,6 @@ h2, h3 {
     padding-top: 10px;
 }
 
-/* Style commun pour les boîtes */
 .user-info, form {
     background-color: #f5f5f5;
     border-radius: 8px;
@@ -50,7 +44,6 @@ h2, h3 {
     overflow: hidden;
 }
 
-/* Informations utilisateur */
 .user-info {
     padding: 15px;
     margin-bottom: 15px;
@@ -72,7 +65,6 @@ h2, h3 {
     border: 1px solid #ddd;
 }
 
-/* Style formulaire */
 form {
     padding: 20px;
     margin-bottom: 30px;
@@ -113,7 +105,6 @@ form input:focus, form select:focus {
     box-shadow: 0 0 5px rgba(46, 110, 73, 0.3);
 }
 
-/* Style pour le bouton de soumission */
 .btn, input[type="submit"] {
     background-color: #2E6E49 !important;
     color: white !important;
@@ -132,13 +123,11 @@ form input:focus, form select:focus {
     background-color: #1d4d30 !important;
 }
 
-/* Style tableau succès */
 .table-success {
     background-color: #2E6E49 !important;
     color: white !important;
 }
 
-/* Message d'erreur ou info */
 p {
     text-align: center;
     padding: 15px;
@@ -148,7 +137,6 @@ p {
     margin-bottom: 15px;
 }
 
-/* Pied de page */
 .footer {
     background-color: #2c6e49;
     color: white;
@@ -166,19 +154,16 @@ p {
     padding: 10px;
 }
 
-/* Bannière image du footer */
 .footer-banner-img {
     width: 100%;
     height: auto;
     border-radius: 10px;
 }
 
-/* Ajout d'espace en bas pour éviter que le contenu soit caché par le footer fixe */
 body {
     padding-bottom: 60px;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
     .container {
         margin: 20px 10px;
@@ -196,7 +181,6 @@ body {
     }
 }
 
-/* Style pour la page de suppression */
 .warning-box {
     background-color: #fff3cd;
     border-left: 5px solid #ffc107;

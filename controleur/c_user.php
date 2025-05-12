@@ -7,9 +7,6 @@ if (!isset($_SESSION['emailUser'])) {
 
     $idUser = $_SESSION['idUser'];
 
-    // A SUPPRIMER
-    var_dump($idUser);
-
     require_once("vue/user/vue_user.php");
 
     if (isset($_POST['UpdateParticulier'])){

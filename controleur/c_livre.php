@@ -73,15 +73,9 @@ if (isset($_POST['UpdateLivre'])) {
     $nomCategorie = $_POST['nomCategorie'];
     $nomMaisonEdition = $_POST['nomMaisonEdition'];
     $nomPromotion = $_POST['nomPromotion'];
-
     $idCategorie = $unControleur->selectIdCategorieByNom($nomCategorie)[0];
     $idMaisonEdition = $unControleur->selectIdMaisonEditionByNom($nomMaisonEdition)[0];
     $idPromotion = $unControleur->selectIdPromotionByNom($nomPromotion)[0];
-
-
-
-
-    var_dump($nomLivre, $auteurLivre, $imageLivre, $prixLivre, $idCategorie, $idMaisonEdition, $idPromotion);
 
     $result = $unControleur->updateLivre($nomLivre, $auteurLivre, $imageLivre, $prixLivre, $idCategorie, $idMaisonEdition, $idPromotion, $idLivre);
     if ($result) {
@@ -97,16 +91,13 @@ if (isset($_POST['FiltrerLivre'])) {
     $lesLivres = $unControleur->selectLivre();
 }
 
-// Structure modifiée pour afficher d'abord le formulaire puis la liste
 echo '<div class="container mx-auto px-4 py-6">';
 
-// Afficher d'abord le formulaire pour les admins
 if (isset($isAdmin) && $isAdmin == 1) {
     require_once("vue/livre/vue_insert_livre.php");
-    echo '<div class="my-8 border-t-2 border-gray-200"></div>'; // Séparateur visuel
+    echo '<div class="my-8 border-t-2 border-gray-200"></div>';
 }
 
-// Ensuite afficher la liste des livres
 require_once("vue/livre/vue_livre.php");
 
-echo '</div>'; // Fermeture du container
+echo '</div>';

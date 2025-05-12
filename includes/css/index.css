@@ -26,7 +26,6 @@ h1 {
             to { transform: translateY(0); opacity: 1; }
         }
 
-        /* Style pour les images dans la navbar */
         #navbar img {
             transition: transform 0.3s ease;
         }

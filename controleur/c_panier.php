@@ -11,11 +11,8 @@ if (isset($isAdmin) && $isAdmin == 1) {
 
 $idUser = $_SESSION['idUser'];
 
-/**
- * Offre un livre aléatoire à l'utilisateur
- */
 function fOffrirLivre($idUser, $controleur) {
-    $chiffre = rand(5, 5);
+    $chiffre = rand(1, 5);
     $result = $controleur->procedureOffrirLivre($idUser, $chiffre);
 
     if (!$result) {
@@ -25,9 +22,6 @@ function fOffrirLivre($idUser, $controleur) {
     return false;
 }
 
-/**
- * Valide et expédie une commande
- */
 function fUpdateCommande($idCommande, $controleur) {
     $result = $controleur->updateCommande($idCommande);
 
@@ -40,27 +34,28 @@ function fUpdateCommande($idCommande, $controleur) {
     }
 }
 
-/**
- * Ajoute des points d'abonnement
- */
 function fAjouterPointAbonnement($idUser, $idCommande, $controleur) {
-    if ($controleur->selectDateAbonnement($idUser)[0][0] > 0) {
-        $nbArticles = $controleur->selectNbLigneCommande($idCommande)[0];
-        $points = $nbArticles * 10;
-        $result = $controleur->ajouterPointAbonnement($points, $idUser);
+    $dateAbonnement = $controleur->selectDateAbonnement($idUser);
+    if (!empty($dateAbonnement) && isset($dateAbonnement[0][0]) && $dateAbonnement[0][0] > 0) {
+        $nbArticles = $controleur->selectNbLigneCommande($idCommande);
+        if (!empty($nbArticles) && isset($nbArticles[0])) {
+            $points = $nbArticles[0] * 10;
+            $result = $controleur->ajouterPointAbonnement($points, $idUser);
 
-        if ($result) {
-            echo "<div class='alert alert-success'>Vous avez gagné $points points d'abonnement !</div>";
-            return true;
-        } else {
-            echo "<div class='alert alert-danger'>Erreur : Les points d'abonnement n'ont pas pu être ajoutés</div>";
-            return false;
+            if ($result) {
+                echo "<div class='alert alert-success'>Vous avez gagné $points points d'abonnement !</div>";
+                return true;
+            } else {
+                echo "<div class='alert alert-danger'>Erreur : Les points d'abonnement n'ont pas pu être ajoutés</div>";
+                return false;
+            }
         }
+    } elseif (empty($dateAbonnement) || !isset($dateAbonnement[0][0])) {
+        echo "";
     }
     return false;
 }
 
-// Gestion de la modification du panier
 if (isset($_POST['ModifierPanier'])) {
     $idLigneCommande = $_POST['idLigneCommande'];
     $quantiteLigneCommande = $_POST['quantiteLigneCommande'];
@@ -73,7 +68,6 @@ if (isset($_POST['ModifierPanier'])) {
     }
 }
 
-// Gestion des actions (suppression, paiement)
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
     $idCommande = $_GET['idCommande'] ?? null;
@@ -92,7 +86,8 @@ if (isset($_GET['action'])) {
             break;
 
         case "payer":
-            $idCommande = $unControleur->selectCommandeEnAttente($idUser)[0][0];
+            $commandeEnAttente = $unControleur->selectCommandeEnAttente($idUser);
+            $idCommande = !empty($commandeEnAttente) && isset($commandeEnAttente[0][0]) ? $commandeEnAttente[0][0] : null;
 
             if (isset($_POST['PayerPaypal'])) {
                 if ($idCommande) {
@@ -107,7 +102,8 @@ if (isset($_GET['action'])) {
 
             if (isset($_POST['PayerPoint'])) {
                 $pointAUtiliser = $_SESSION['pointAUtiliser'];
-                $pointsDisponibles = $unControleur->selectPointAbonnement($idUser)['pointAbonnement'];
+                $pointsDisponibles = $unControleur->selectPointAbonnement($idUser);
+                $pointsDisponibles = !empty($pointsDisponibles) ? $pointsDisponibles['pointAbonnement'] : 0;
 
                 if ($pointAUtiliser > 0 && $pointsDisponibles >= $pointAUtiliser) {
                     if ($idCommande) {
@@ -128,7 +124,6 @@ if (isset($_GET['action'])) {
     }
 }
 
-// Filtrage des livres
 if (isset($_POST['FiltrerLivre'])) {
     $lesLivres = $unControleur->selectLikeLivre($_POST['filtre']);
 } else {
