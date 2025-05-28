@@ -6,10 +6,10 @@
         public function __construct()
         {
             try {
-                $serveur = "localhost";
+                $serveur = "localhost:8889";
                 $bdd = "ppe_leger";
                 $user = "root";
-                $mdp = "";
+                $mdp = "root";
                 $this->unPdo = new PDO("mysql:host=" . $serveur . ";dbname=" . $bdd, $user, $mdp);
             } catch (PDOException $exp) {
                 echo "<br> Erreur de connexion à la BDD :" . $exp->getMessage();
