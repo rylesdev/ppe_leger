@@ -1904,7 +1904,7 @@ ALTER TABLE `admin`
 -- Contraintes pour la table `archiveLigneCommande`
 --
 ALTER TABLE `archiveLigneCommande`
-  ADD CONSTRAINT `fk_idLivre_archiveligneCommande` FOREIGN KEY (`idLivre`) REFERENCES `livre` (`idLivre`);
+  ADD CONSTRAINT `fk_idLivre_archivelignecommande` FOREIGN KEY (`idLivre`) REFERENCES `livre` (`idLivre`);
 
 --
 -- Contraintes pour la table `avis`
@@ -1929,8 +1929,8 @@ ALTER TABLE `entreprise`
 -- Contraintes pour la table `ligneCommande`
 --
 ALTER TABLE `ligneCommande`
-  ADD CONSTRAINT `ligneCommande_ibfk_1` FOREIGN KEY (`idCommande`) REFERENCES `commande` (`idCommande`) ON DELETE CASCADE,
-  ADD CONSTRAINT `ligneCommande_ibfk_2` FOREIGN KEY (`idLivre`) REFERENCES `livre` (`idLivre`) ON DELETE CASCADE;
+  ADD CONSTRAINT `lignecommande_ibfk_1` FOREIGN KEY (`idCommande`) REFERENCES `commande` (`idCommande`) ON DELETE CASCADE,
+  ADD CONSTRAINT `lignecommande_ibfk_2` FOREIGN KEY (`idLivre`) REFERENCES `livre` (`idLivre`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `livre`
