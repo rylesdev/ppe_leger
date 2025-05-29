@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : lun. 12 mai 2025 à 21:29
+-- Généré le : jeu. 29 mai 2025 à 15:52
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -1246,24 +1246,24 @@ INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exempl
 (30, 'Les Templiers', 'Demurger', 'les_templiers.png', 59, 18.99, 2, 8, NULL),
 (31, 'La Seconde Guerre mondiale', 'Beevor', 'la_seconde_guerre_mondiale.png', 60, 19.99, 2, 8, NULL),
 (32, 'Napoléon : Une ambition française', 'Tulard', 'napoleon_une_ambition_francaise.png', 100, 20.99, 2, 8, NULL),
-(33, 'Le Maître et Marguerite', 'Boulgakov', 'A_REMPLIR', 75, 16.50, 1, 3, 2),
-(34, 'Le Zéro et l\'Infini', 'Koestler', 'A_REMPLIR', 88, 13.90, 1, 2, NULL),
-(35, 'Le Dieu des Petits Riens', 'Roy', 'A_REMPLIR', 62, 14.00, 2, 5, 7),
-(36, 'Les Dépossédés', 'Le Guin', 'A_REMPLIR', 100, 11.49, 1, 4, 19),
-(37, 'Ne tirez pas sur l\'oiseau moqueur', 'Lee', 'A_REMPLIR', 85, 10.00, 2, 6, 5),
-(38, 'La Promesse de l\'aube', 'Gary', 'A_REMPLIR', 73, 13.49, 3, 1, NULL),
-(39, 'La Vie mode d\'emploi', 'Perec', 'A_REMPLIR', 78, 18.50, 3, 8, 16),
-(40, 'Les Racines du ciel', 'Gary', 'A_REMPLIR', 91, 17.00, 3, 3, 10),
-(41, 'La Théorie du chaos', 'Gleick', 'A_REMPLIR', 100, 15.99, 4, 7, NULL),
-(42, 'Le Mythe de Sisyphe', 'Camus', 'A_REMPLIR', 70, 9.49, 3, 2, 6),
-(43, 'Kafka sur le rivage', 'Murakami', 'A_REMPLIR', 95, 16.99, 1, 2, 4),
-(44, 'La Route', 'McCarthy', 'A_REMPLIR', 85, 13.49, 2, 3, 8),
-(45, 'Siddhartha', 'Hesse', 'A_REMPLIR', 90, 9.99, 1, 1, NULL),
-(46, 'Brave New World', 'Huxley', 'A_REMPLIR', 100, 12.99, 2, 4, 18),
-(47, 'La Formule de Dieu', 'Rodrigues dos Santos', 'A_REMPLIR', 88, 17.90, 4, 5, 9),
-(48, 'L\'Homme-dé', 'Rheinheart', 'A_REMPLIR', 70, 11.50, 3, 6, 14),
-(49, 'Les Particules élémentaires', 'Houellebecq', 'A_REMPLIR', 92, 15.00, 3, 2, NULL),
-(50, 'La Horde du Contrevent', 'Damasio', 'A_REMPLIR', 100, 18.99, 2, 7, 12);
+(33, 'Le Maître et Marguerite', 'Boulgakov', 'le_maitre_et_marguerite.png', 75, 16.50, 1, 3, 2),
+(34, 'Le Zéro et l\'Infini', 'Koestler', 'le_zero_et_l_infini.png', 88, 13.90, 1, 2, NULL),
+(35, 'Le Dieu des Petits Riens', 'Roy', 'le_dieu_des_petits_riens.png', 62, 14.00, 2, 5, 7),
+(36, 'Les Dépossédés', 'Le Guin', 'les_depossedes.png', 100, 11.49, 1, 4, 19),
+(37, 'Ne tirez pas sur l\'oiseau moqueur', 'Lee', 'ne_tirez_pas_sur_l_oiseau_moqueur.png', 85, 10.00, 2, 6, 5),
+(38, 'La Promesse de l\'aube', 'Gary', 'la_promesse_de_l_aube.png', 73, 13.49, 3, 1, NULL),
+(39, 'La Vie mode d\'emploi', 'Perec', 'la_vie_mode_d_emploi.png', 78, 18.50, 3, 8, 16),
+(40, 'Les Racines du ciel', 'Gary', 'les_racines_du_ciel.png', 91, 17.00, 3, 3, 10),
+(41, 'La Théorie du chaos', 'Gleick', 'la_theorie_du_chaos.png', 100, 15.99, 4, 7, NULL),
+(42, 'Le Mythe de Sisyphe', 'Camus', 'le_mythe_de_sisyphe.png', 70, 9.49, 3, 2, 6),
+(43, 'Kafka sur le rivage', 'Murakami', 'kafka_sur_le_rivage.png', 95, 16.99, 1, 2, 4),
+(44, 'La Route', 'McCarthy', 'la_route.png', 85, 13.49, 2, 3, 8),
+(45, 'Siddhartha', 'Hesse', 'siddhartha.png', 90, 9.99, 1, 1, NULL),
+(46, 'Brave New World', 'Huxley', 'brave_new_world.png', 100, 12.99, 2, 4, 18),
+(47, 'La Formule de Dieu', 'Rodrigues dos Santos', 'la_formule_de_dieu.png', 88, 17.90, 4, 5, 9),
+(48, 'L\'Homme-dé', 'Rheinheart', 'l_homme_de.png', 70, 11.50, 3, 6, 14),
+(49, 'Les Particules élémentaires', 'Houellebecq', 'les_particules_elementaires.png', 92, 15.00, 3, 2, NULL),
+(50, 'La Horde du Contrevent', 'Damasio', 'la_horde_du_contrevent.png', 100, 18.99, 2, 7, 12);
 
 -- --------------------------------------------------------
 
@@ -1640,7 +1640,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vmeilleuresventes`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vmeilleuresventes`  AS SELECT `l`.`idLivre` AS `idLivre`, `l`.`nomLivre` AS `nomLivre`, sum(`li`.`quantiteLigneCommande`) AS `totalVendu` FROM (`ligneCommande` `li` join `livre` `l` on((`li`.`idLivre` = `l`.`idLivre`))) GROUP BY `l`.`idLivre`, `l`.`nomLivre` ORDER BY `totalVendu` DESC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vmeilleuresventes`  AS SELECT `l`.`idLivre` AS `idLivre`, `l`.`nomLivre` AS `nomLivre`, sum(`li`.`quantiteLigneCommande`) AS `totalVendu` FROM (`lignecommande` `li` join `livre` `l` on((`li`.`idLivre` = `l`.`idLivre`))) GROUP BY `l`.`idLivre`, `l`.`nomLivre` ORDER BY `totalVendu` DESC ;
 
 -- --------------------------------------------------------
 
@@ -1658,7 +1658,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vnblivreacheteuser`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vnblivreacheteuser`  AS SELECT `u`.`emailUser` AS `emailUser`, sum(`l`.`quantiteLigneCommande`) AS `nbLivreAchete` FROM ((`ligneCommande` `l` join `commande` `c` on((`l`.`idCommande` = `c`.`idCommande`))) join `user` `u` on((`c`.`idUser` = `u`.`idUser`))) WHERE (`c`.`statutCommande` = 'expédiée') GROUP BY `u`.`emailUser` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vnblivreacheteuser`  AS SELECT `u`.`emailUser` AS `emailUser`, sum(`l`.`quantiteLigneCommande`) AS `nbLivreAchete` FROM ((`lignecommande` `l` join `commande` `c` on((`l`.`idCommande` = `c`.`idCommande`))) join `user` `u` on((`c`.`idUser` = `u`.`idUser`))) WHERE (`c`.`statutCommande` = 'expédiée') GROUP BY `u`.`emailUser` ;
 
 -- --------------------------------------------------------
 
@@ -1667,7 +1667,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vtotalcommandeenattente`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vtotalcommandeenattente`  AS SELECT `c`.`idUser` AS `idUser`, sum((`l`.`prixLivre` * `li`.`quantiteLigneCommande`)) AS `totalCommande` FROM ((`commande` `c` join `ligneCommande` `li` on((`c`.`idCommande` = `li`.`idCommande`))) join `livre` `l` on((`li`.`idLivre` = `l`.`idLivre`))) WHERE (`c`.`statutCommande` = 'en attente') GROUP BY `c`.`idUser` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vtotalcommandeenattente`  AS SELECT `c`.`idUser` AS `idUser`, sum((`l`.`prixLivre` * `li`.`quantiteLigneCommande`)) AS `totalCommande` FROM ((`commande` `c` join `lignecommande` `li` on((`c`.`idCommande` = `li`.`idCommande`))) join `livre` `l` on((`li`.`idLivre` = `l`.`idLivre`))) WHERE (`c`.`statutCommande` = 'en attente') GROUP BY `c`.`idUser` ;
 
 -- --------------------------------------------------------
 
@@ -1676,7 +1676,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vtotalcommandeexpediee`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vtotalcommandeexpediee`  AS SELECT `c`.`idUser` AS `idUser`, sum((`l`.`prixLivre` * `li`.`quantiteLigneCommande`)) AS `totalCommande` FROM ((`commande` `c` join `ligneCommande` `li` on((`c`.`idCommande` = `li`.`idCommande`))) join `livre` `l` on((`li`.`idLivre` = `l`.`idLivre`))) WHERE (`c`.`statutCommande` = 'expédiée') GROUP BY `c`.`idUser` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vtotalcommandeexpediee`  AS SELECT `c`.`idUser` AS `idUser`, sum((`l`.`prixLivre` * `li`.`quantiteLigneCommande`)) AS `totalCommande` FROM ((`commande` `c` join `lignecommande` `li` on((`c`.`idCommande` = `li`.`idCommande`))) join `livre` `l` on((`li`.`idLivre` = `l`.`idLivre`))) WHERE (`c`.`statutCommande` = 'expédiée') GROUP BY `c`.`idUser` ;
 
 -- --------------------------------------------------------
 
@@ -1685,7 +1685,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vtotallivre`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vtotallivre`  AS SELECT `li`.`idCommande` AS `idCommande`, `c`.`idUser` AS `idUser`, `l`.`nomLivre` AS `nomLivre`, `l`.`prixLivre` AS `prixLivre`, `li`.`quantiteLigneCommande` AS `quantiteLigneCommande`, (`l`.`prixLivre` * `li`.`quantiteLigneCommande`) AS `totalLivre` FROM ((`livre` `l` join `ligneCommande` `li` on((`l`.`idLivre` = `li`.`idLivre`))) join `commande` `c` on((`c`.`idCommande` = `li`.`idCommande`))) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vtotallivre`  AS SELECT `li`.`idCommande` AS `idCommande`, `c`.`idUser` AS `idUser`, `l`.`nomLivre` AS `nomLivre`, `l`.`prixLivre` AS `prixLivre`, `li`.`quantiteLigneCommande` AS `quantiteLigneCommande`, (`l`.`prixLivre` * `li`.`quantiteLigneCommande`) AS `totalLivre` FROM ((`livre` `l` join `lignecommande` `li` on((`l`.`idLivre` = `li`.`idLivre`))) join `commande` `c` on((`c`.`idCommande` = `li`.`idCommande`))) ;
 
 -- --------------------------------------------------------
 
@@ -1694,7 +1694,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vtotallivreenattente`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vtotallivreenattente`  AS SELECT `li`.`idLivre` AS `idLivre`, `li`.`idCommande` AS `idCommande`, `li`.`idLigneCommande` AS `idLigneCommande`, `c`.`idUser` AS `idUser`, `l`.`nomLivre` AS `nomLivre`, `l`.`prixLivre` AS `prixLivre`, `li`.`quantiteLigneCommande` AS `quantiteLigneCommande`, (`l`.`prixLivre` * `li`.`quantiteLigneCommande`) AS `totalLivre` FROM ((`livre` `l` join `ligneCommande` `li` on((`l`.`idLivre` = `li`.`idLivre`))) join `commande` `c` on((`c`.`idCommande` = `li`.`idCommande`))) WHERE (`c`.`statutCommande` = 'en attente') ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vtotallivreenattente`  AS SELECT `li`.`idLivre` AS `idLivre`, `li`.`idCommande` AS `idCommande`, `li`.`idLigneCommande` AS `idLigneCommande`, `c`.`idUser` AS `idUser`, `l`.`nomLivre` AS `nomLivre`, `l`.`prixLivre` AS `prixLivre`, `li`.`quantiteLigneCommande` AS `quantiteLigneCommande`, (`l`.`prixLivre` * `li`.`quantiteLigneCommande`) AS `totalLivre` FROM ((`livre` `l` join `lignecommande` `li` on((`l`.`idLivre` = `li`.`idLivre`))) join `commande` `c` on((`c`.`idCommande` = `li`.`idCommande`))) WHERE (`c`.`statutCommande` = 'en attente') ;
 
 -- --------------------------------------------------------
 
@@ -1703,7 +1703,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vtotallivreexpediee`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vtotallivreexpediee`  AS SELECT `li`.`idCommande` AS `idCommande`, `c`.`idUser` AS `idUser`, `l`.`idLivre` AS `idLivre`, `l`.`nomLivre` AS `nomLivre`, `l`.`prixLivre` AS `prixLivre`, `li`.`quantiteLigneCommande` AS `quantiteLigneCommande`, (`l`.`prixLivre` * `li`.`quantiteLigneCommande`) AS `totalLivre` FROM ((`livre` `l` join `ligneCommande` `li` on((`l`.`idLivre` = `li`.`idLivre`))) join `commande` `c` on((`c`.`idCommande` = `li`.`idCommande`))) WHERE (`c`.`statutCommande` = 'expédiée') ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vtotallivreexpediee`  AS SELECT `li`.`idCommande` AS `idCommande`, `c`.`idUser` AS `idUser`, `l`.`idLivre` AS `idLivre`, `l`.`nomLivre` AS `nomLivre`, `l`.`prixLivre` AS `prixLivre`, `li`.`quantiteLigneCommande` AS `quantiteLigneCommande`, (`l`.`prixLivre` * `li`.`quantiteLigneCommande`) AS `totalLivre` FROM ((`livre` `l` join `lignecommande` `li` on((`l`.`idLivre` = `li`.`idLivre`))) join `commande` `c` on((`c`.`idCommande` = `li`.`idCommande`))) WHERE (`c`.`statutCommande` = 'expédiée') ;
 
 --
 -- Index pour les tables déchargées
