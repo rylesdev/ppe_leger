@@ -57,7 +57,7 @@
         public function selectAdminPrincipal($idUser) {
             $requete = "select count(*) as isAdmin 
                         from admin 
-                        where idUser = ? and niveauAdmin = 'principal';";
+                        where idUser = ?;";
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $idUser, PDO::PARAM_INT);
             $exec->execute();
@@ -1251,15 +1251,6 @@
                 $exec->BindValue(3, $quantiteLigneCommande, PDO::PARAM_INT);
                 $exec->execute();
                 return true;
-                /*} catch (PDOException $e) {
-                    $errorMessage = $e->getMessage();
-                    error_log("Erreur lors de l'insertion dans ligneCommande : " . $errorMessage);
-                    if ($e->getCode() == '45000') {
-                        echo "<div class='alert alert-danger'>
-                        Erreur : La quantité totale dépasse le nombre d'exemplaires disponibles pour ce livre.</div>";
-                    }
-                    return false;
-                }*/
             } catch (PDOException $e) {
                 if ($e->getCode() == '45000') {
                     $message = $e->getMessage();
