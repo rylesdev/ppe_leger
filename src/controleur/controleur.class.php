@@ -22,8 +22,8 @@ class Controleur {
         return $this->unModele->selectEntreprise($idUser);
     }
 
-    public function selectAdminPrincipal($idUser) {
-        return $this->unModele->selectAdminPrincipal($idUser);
+    public function selectAdmin($idUser) {
+        return $this->unModele->selectAdmin($idUser);
     }
 
     public function selectLivre(){
@@ -166,8 +166,8 @@ class Controleur {
         return $this->unModele->executerRequete($requete);
     }
 
-    public function selectEmail ($emailUser) {
-        return $this->unModele->selectEmail ($emailUser);
+    public function selectUserByEmail ($emailUser) {
+        return $this->unModele->selectUserByEmail ($emailUser);
     }
 
 

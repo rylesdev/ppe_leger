@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 $titrePage = "Bienvenue sur notre Librairie en ligne";
 
 require_once("includes/header.php");
