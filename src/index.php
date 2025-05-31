@@ -6,7 +6,7 @@ $unControleur = new Controleur();
 $isAdmin = 0;
 
 if (isset($_SESSION['idUser'])) {
-    $resultAdminPrincipal = $unControleur->selectAdminPrincipal($_SESSION['idUser']);
+    $resultAdminPrincipal = $unControleur->selectAdmin($_SESSION['idUser']);
     if (!empty($resultAdminPrincipal) && isset($resultAdminPrincipal[0][0])) {
         $isAdmin = $resultAdminPrincipal[0][0];
     }

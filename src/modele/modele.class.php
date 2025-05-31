@@ -54,7 +54,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectAdminPrincipal($idUser) {
+        public function selectAdmin($idUser) {
             $requete = "select count(*) as isAdmin 
                         from admin 
                         where idUser = ?;";
@@ -496,7 +496,7 @@
             return $exec->fetchAll();
         }
 
-        public function selectEmail($emailUser) {
+        public function selectUserByEmail($emailUser) {
             $requete = "select * from user where emailuser = ?;";
             $exec = $this->unPdo->prepare($requete);
             $exec->BindValue(1, $emailUser, PDO::PARAM_STR);
