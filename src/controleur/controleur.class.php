@@ -7,13 +7,13 @@ class Controleur {
         $this->unModele = new Modele ();
     }
 
-    public function verifConnexion ($emailUser, $mdpUser){
-        return $this->unModele->verifConnexion($emailUser, $mdpUser);
-    }
-
 
 
     /****************** SELECT  ******************/
+    public function verifConnexion ($emailUser, $mdpUser) {
+        return $this->unModele->verifConnexion($emailUser, $mdpUser);
+    }
+
     public function selectParticulier($idUser) {
         return $this->unModele->selectParticulier($idUser);
     }
@@ -26,7 +26,7 @@ class Controleur {
         return $this->unModele->selectAdmin($idUser);
     }
 
-    public function selectLivre(){
+    public function selectLivre() {
         return $this->unModele->selectLivre();
     }
     
@@ -74,12 +74,8 @@ class Controleur {
         return $this->unModele->selectLivreById($idLivre);
     }
 
-    public function selectLikeLivre ($filtre){
+    public function selectLikeLivre ($filtre) {
         return $this->unModele->selectLikeLivre($filtre);
-    }
-
-    public function selectLikePromotion ($filtre){
-        return $this->unModele->selectLikePromotion($filtre);
     }
 
     public function selectLikeMaisonEdition($filtre) {
@@ -90,11 +86,15 @@ class Controleur {
         return $this->unModele->selectLikeCategorie($filtre);
     }
 
-    public function selectWhereLivre($idLivre){
+    public function selectLikePromotion ($filtre) {
+        return $this->unModele->selectLikePromotion($filtre);
+    }
+
+    public function selectWhereLivre($idLivre) {
         return $this->unModele->selectWhereLivre($idLivre);
     }
 
-    public function selectWherePromotion($idPromotion){
+    public function selectWherePromotion($idPromotion) {
         return $this->unModele->selectWherePromotion($idPromotion);
     }
 
@@ -110,7 +110,7 @@ class Controleur {
         return $this->unModele->selectFiltreLivreEnAttente($idUser, $filtre);
     }
 
-    public function selectAdresseUser ($idUser){
+    public function selectAdresseUser($idUser) {
         return $this->unModele->selectAdresseUser($idUser);
     }
 
@@ -177,10 +177,6 @@ class Controleur {
          return $this->unModele->deleteLivre($idLivre);
     }
 
-    public function deletePromotion($idPromotion){
-        return $this->unModele->deletePromotion($idPromotion);
-    }
-
     public function deleteMaisonEdition($idMaisonEdition) {
         return $this->unModele->deleteMaisonEdition($idMaisonEdition);
     }
@@ -189,7 +185,11 @@ class Controleur {
         return $this->unModele->deleteCategorie($idCategorie);
     }
 
-    public function deleteLigneCommande($idLigneCommande){
+    public function deletePromotion($idPromotion) {
+        return $this->unModele->deletePromotion($idPromotion);
+    }
+
+    public function deleteLigneCommande($idLigneCommande) {
         return $this->unModele->deleteLigneCommande($idLigneCommande);
     }
 
@@ -204,16 +204,16 @@ class Controleur {
 
 
     /**************** INSERT ****************/
-    public function insertPromotion($nomPromotion, $dateDebutPromotion, $dateFinPromotion, $reductionPromotion) {
-        return $this->unModele->insertPromotion($nomPromotion, $dateDebutPromotion, $dateFinPromotion, $reductionPromotion);
-    }
-
     public function insertMaisonEdition($nomMaisonEdition) {
         return $this->unModele->insertMaisonEdition($nomMaisonEdition);
     }
 
     public function insertCategorie($nomCategorie) {
         return $this->unModele->insertCategorie($nomCategorie);
+    }
+
+    public function insertPromotion($nomPromotion, $dateDebutPromotion, $dateFinPromotion, $reductionPromotion) {
+        return $this->unModele->insertPromotion($nomPromotion, $dateDebutPromotion, $dateFinPromotion, $reductionPromotion);
     }
 
     public function insertParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser) {
@@ -224,11 +224,11 @@ class Controleur {
         return $this->unModele->insertEntreprise($emailUser, $mdpUser, $adresseUser, $siretUser, $raisonSocialeUser, $capitalSocialUser);
     }
 
-    public function insertCommande($idUser){
+    public function insertCommande($idUser) {
         return $this->unModele->insertCommande($idUser);
     }
 
-    public function insertAbonnement1m($idUser){
+    public function insertAbonnement1m($idUser) {
         return $this->unModele->insertAbonnement1m($idUser);
     }
 
@@ -261,19 +261,8 @@ class Controleur {
     }
 
 
+
     /**************** UPDATE ****************/
-    public function updatePromotion($nomPromotion, $dateDebutPromotion, $dateFinPromotion, $reductionPromotion, $idPromotion) {
-        return $this->unModele->updatePromotion($nomPromotion, $dateDebutPromotion, $dateFinPromotion, $reductionPromotion, $idPromotion);
-    }
-
-    public function updateMaisonEdition($nomMaisonEdition, $idMaisonEdition) {
-        return $this->unModele->updateMaisonEdition($nomMaisonEdition, $idMaisonEdition);
-    }
-
-    public function updateCategorie($nomCategorie, $idCategorie) {
-        return $this->unModele->updateCategorie($nomCategorie, $idCategorie);
-    }
-
     public function updateParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser, $idUser) {
         return $this->unModele->updateParticulier($emailUser, $mdpUser, $adresseUser, $nomUser, $prenomUser, $dateNaissanceUser, $sexeUser, $idUser);
     }
@@ -286,8 +275,16 @@ class Controleur {
         return $this->unModele->updateLivre($nomLivre, $auteurLivre, $imageLivre, $prixLivre, $idCategorie, $idMaisonEdition, $idPromotion, $idLivre);
     }
 
-    public function updatePromotionLivre($idPromotion, $idLivre) {
-        return $this->unModele->updatePromotionLivre($idPromotion, $idLivre);
+    public function updateMaisonEdition($nomMaisonEdition, $idMaisonEdition) {
+        return $this->unModele->updateMaisonEdition($nomMaisonEdition, $idMaisonEdition);
+    }
+
+    public function updateCategorie($nomCategorie, $idCategorie) {
+        return $this->unModele->updateCategorie($nomCategorie, $idCategorie);
+    }
+
+    public function updatePromotion($nomPromotion, $dateDebutPromotion, $dateFinPromotion, $reductionPromotion, $idPromotion) {
+        return $this->unModele->updatePromotion($nomPromotion, $dateDebutPromotion, $dateFinPromotion, $reductionPromotion, $idPromotion);
     }
 
     public function updateMaisonEditionLivre($idMaisonEdition, $idLivre) {
@@ -296,6 +293,10 @@ class Controleur {
 
     public function updateCategorieLivre($idCategorie, $idLivre) {
         return $this->unModele->updateCategorieLivre($idCategorie, $idLivre);
+    }
+
+    public function updatePromotionLivre($idPromotion, $idLivre) {
+        return $this->unModele->updatePromotionLivre($idPromotion, $idLivre);
     }
 
     public function updateStockageLivre($exemplaireLivre, $nomLivre) {
@@ -364,7 +365,7 @@ class Controleur {
 
 
     /**************** PROCEDURE ****************/
-    public function procedureInsertOrUpdateLigneCommande($idCommande, $idLivre, $quantiteLigneCommande){
+    public function procedureInsertOrUpdateLigneCommande($idCommande, $idLivre, $quantiteLigneCommande) {
         return $this->unModele->procedureInsertOrUpdateLigneCommande($idCommande, $idLivre, $quantiteLigneCommande);
     }
 

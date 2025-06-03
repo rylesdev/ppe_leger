@@ -16,6 +16,9 @@
             }
         }
 
+
+
+        /**************** SELECT ****************/
         public function verifConnexion($emailUser, $mdpUser) {
             $requete = "select * 
                         from user u
@@ -27,9 +30,6 @@
             return $exec->fetch();
         }
 
-
-
-        /**************** SELECT ****************/
         public function selectParticulier($idUser) {
             $requete = "select u.emailUser, u.mdpUser, u.adresseUser, p.nomUser, p.prenomUser, p.dateNaissanceUser, p.sexeUser
                         from particulier p
@@ -193,22 +193,6 @@
             return $exec->fetchAll();
         }
 
-        public function selectLikePromotion($filtre) {
-            $requete =  "SELECT p.idPromotion, p.nomPromotion, p.dateDebutPromotion, p.dateFinPromotion, p.reductionPromotion
-                        FROM promotion p
-                        WHERE (
-                            p.nomPromotion LIKE :filtre OR
-                            p.dateDebutPromotion LIKE :filtre OR
-                            p.dateFinPromotion LIKE :filtre OR
-                            p.reductionPromotion LIKE :filtre 
-                        )
-                        GROUP BY p.idPromotion, p.nomPromotion, p.dateDebutPromotion, p.dateFinPromotion, p.reductionPromotion;";
-            $exec = $this->unPdo->prepare($requete);
-            $donnees = array(":filtre" => "%" . $filtre . "%");
-            $exec->execute($donnees);
-            return $exec->fetchAll();
-        }
-
         public function selectLikeMaisonEdition($filtre) {
             $requete = "SELECT m.idMaisonEdition, m.nomMaisonEdition
                         FROM maisonEdition m
@@ -231,6 +215,22 @@
                             c.nomCategorie LIKE :filtre  
                         )
                         GROUP BY c.idCategorie, c.nomCategorie;";
+            $exec = $this->unPdo->prepare($requete);
+            $donnees = array(":filtre" => "%" . $filtre . "%");
+            $exec->execute($donnees);
+            return $exec->fetchAll();
+        }
+
+        public function selectLikePromotion($filtre) {
+            $requete =  "SELECT p.idPromotion, p.nomPromotion, p.dateDebutPromotion, p.dateFinPromotion, p.reductionPromotion
+                        FROM promotion p
+                        WHERE (
+                            p.nomPromotion LIKE :filtre OR
+                            p.dateDebutPromotion LIKE :filtre OR
+                            p.dateFinPromotion LIKE :filtre OR
+                            p.reductionPromotion LIKE :filtre 
+                        )
+                        GROUP BY p.idPromotion, p.nomPromotion, p.dateDebutPromotion, p.dateFinPromotion, p.reductionPromotion;";
             $exec = $this->unPdo->prepare($requete);
             $donnees = array(":filtre" => "%" . $filtre . "%");
             $exec->execute($donnees);
@@ -520,19 +520,6 @@
             }
         }
 
-        public function deletePromotion($idPromotion) {
-            try {
-                $requete =  "delete from promotion 
-			                where idPromotion = ?;";
-                $exec = $this->unPdo->prepare($requete);
-                $exec->BindValue(1, $idPromotion, PDO::PARAM_STR);
-                $exec->execute();
-                return true;
-            } catch (PDOException $exp) {
-                return false;
-            }
-        }
-
         public function deleteMaisonEdition($idMaisonEdition) {
             try {
                 $requete =  "delete from maisonEdition 
@@ -552,6 +539,19 @@
                             where idCategorie = ?;";
                 $exec = $this->unPdo->prepare($requete);
                 $exec->BindValue(1, $idCategorie, PDO::PARAM_STR);
+                $exec->execute();
+                return true;
+            } catch (PDOException $exp) {
+                return false;
+            }
+        }
+
+        public function deletePromotion($idPromotion) {
+            try {
+                $requete =  "delete from promotion 
+			                where idPromotion = ?;";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $idPromotion, PDO::PARAM_STR);
                 $exec->execute();
                 return true;
             } catch (PDOException $exp) {
@@ -619,22 +619,6 @@
 
 
         /**************** INSERT ****************/
-        public function insertPromotion($nomPromotion, $dateDebutPromotion, $dateFinPromotion, $reductionPromotion) {
-            try {
-                $requete = "insert into promotion
-                            values (null, ?, ?, ?, ?);";
-                $exec = $this->unPdo->prepare($requete);
-                $exec->bindValue(1, $nomPromotion, PDO::PARAM_STR);
-                $exec->bindValue(2, $dateDebutPromotion, PDO::PARAM_STR);
-                $exec->bindValue(3, $dateFinPromotion, PDO::PARAM_STR);
-                $exec->bindValue(4, $reductionPromotion, PDO::PARAM_STR);
-                $exec->execute();
-                return true;
-            } catch (PDOException $exp) {
-                return false;
-            }
-        }
-
         public function insertMaisonEdition($nomMaisonEdition) {
             try {
                 $requete = "insert into maisonEdition
@@ -654,6 +638,22 @@
                             values (null, ?);";
                 $exec = $this->unPdo->prepare($requete);
                 $exec->bindValue(1, $nomCategorie, PDO::PARAM_STR);
+                $exec->execute();
+                return true;
+            } catch (PDOException $exp) {
+                return false;
+            }
+        }
+
+        public function insertPromotion($nomPromotion, $dateDebutPromotion, $dateFinPromotion, $reductionPromotion) {
+            try {
+                $requete = "insert into promotion
+                            values (null, ?, ?, ?, ?);";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->bindValue(1, $nomPromotion, PDO::PARAM_STR);
+                $exec->bindValue(2, $dateDebutPromotion, PDO::PARAM_STR);
+                $exec->bindValue(3, $dateFinPromotion, PDO::PARAM_STR);
+                $exec->bindValue(4, $reductionPromotion, PDO::PARAM_STR);
                 $exec->execute();
                 return true;
             } catch (PDOException $exp) {
@@ -966,27 +966,6 @@
             }
         }
 
-        public function updatePromotion($nomPromotion, $dateDebutPromotion, $dateFinPromotion, $reductionPromotion, $idPromotion) {
-            try {
-                $requete =  "update promotion 
-                            set nomPromotion = ?, 
-                            dateDebutPromotion = ?, 
-                            dateFinPromotion = ?, 
-                            reductionPromotion = ?
-                            where idPromotion = ?;";
-                $exec = $this->unPdo->prepare($requete);
-                $exec->BindValue(1, $nomPromotion, PDO::PARAM_STR);
-                $exec->BindValue(2, $dateDebutPromotion, PDO::PARAM_STR);
-                $exec->BindValue(3, $dateFinPromotion, PDO::PARAM_STR);
-                $exec->BindValue(4, $reductionPromotion, PDO::PARAM_STR);
-                $exec->BindValue(5, $idPromotion, PDO::PARAM_INT);
-                $exec->execute();
-                return true;
-            } catch (PDOException $exp) {
-                return false;
-            }
-        }
-
         public function updateMaisonEdition($nomMaisonEdition, $idMaisonEdition) {
             try {
                 $requete =  "update maisonEdition 
@@ -1017,14 +996,20 @@
             }
         }
 
-        public function updatePromotionLivre($idPromotion, $idLivre) {
+        public function updatePromotion($nomPromotion, $dateDebutPromotion, $dateFinPromotion, $reductionPromotion, $idPromotion) {
             try {
-                $requete =  "update livre 
-                            set idPromotion = ?
-                            where idLivre = ?;";
+                $requete =  "update promotion 
+                            set nomPromotion = ?, 
+                            dateDebutPromotion = ?, 
+                            dateFinPromotion = ?, 
+                            reductionPromotion = ?
+                            where idPromotion = ?;";
                 $exec = $this->unPdo->prepare($requete);
-                $exec->BindValue(1, $idPromotion, PDO::PARAM_INT);
-                $exec->BindValue(2, $idLivre, PDO::PARAM_INT);
+                $exec->BindValue(1, $nomPromotion, PDO::PARAM_STR);
+                $exec->BindValue(2, $dateDebutPromotion, PDO::PARAM_STR);
+                $exec->BindValue(3, $dateFinPromotion, PDO::PARAM_STR);
+                $exec->BindValue(4, $reductionPromotion, PDO::PARAM_STR);
+                $exec->BindValue(5, $idPromotion, PDO::PARAM_INT);
                 $exec->execute();
                 return true;
             } catch (PDOException $exp) {
@@ -1054,6 +1039,21 @@
                             where idLivre = ?;";
                 $exec = $this->unPdo->prepare($requete);
                 $exec->BindValue(1, $idCategorie, PDO::PARAM_INT);
+                $exec->BindValue(2, $idLivre, PDO::PARAM_INT);
+                $exec->execute();
+                return true;
+            } catch (PDOException $exp) {
+                return false;
+            }
+        }
+
+        public function updatePromotionLivre($idPromotion, $idLivre) {
+            try {
+                $requete =  "update livre 
+                            set idPromotion = ?
+                            where idLivre = ?;";
+                $exec = $this->unPdo->prepare($requete);
+                $exec->BindValue(1, $idPromotion, PDO::PARAM_INT);
                 $exec->BindValue(2, $idLivre, PDO::PARAM_INT);
                 $exec->execute();
                 return true;
@@ -1280,7 +1280,7 @@
             }
         }
 
-        public function procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition, $nomPromotion){
+        public function procedureInsertLivre($nomLivre, $auteurLivre, $imageLivre, $exemplaireLivre, $prixLivre, $nomCategorie, $nomMaisonEdition, $nomPromotion) {
             try {
                 $requete = "CALL pInsertLivre(?, ?, ?, ?, ?, ?, ?, ?)";
                 $exec = $this->unPdo->prepare($requete);
